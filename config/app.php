@@ -13,7 +13,6 @@ return [
     */
 
     'name' => env('APP_NAME', 'Laravel'),
-    'admin_name' => 'Administrator Login',
 
     /*
     |--------------------------------------------------------------------------
@@ -177,7 +176,6 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-
     ],
 
     /*
@@ -226,7 +224,7 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-
+        'Status' => App\Constants\Status::class,
     ],
 
 ];
