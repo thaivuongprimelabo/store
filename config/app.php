@@ -176,6 +176,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class
     ],
 
     /*
@@ -225,6 +226,9 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Status' => App\Constants\Status::class,
+        'Common' => App\Constants\Common::class,
+        'Utils' => App\Helpers\Utils::class,
+        'Image' => Intervention\Image\ImageManagerStatic::class
     ],
 
 ];

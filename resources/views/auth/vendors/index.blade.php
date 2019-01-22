@@ -20,18 +20,18 @@
               <div class="box-body">
               	 <div class="col-md-2">
                     <div class="form-group">
-                      <input type="text" class="form-control" name="id_search" id="id_search" placeholder="Nhập Id"/>
+                      <input type="text" class="form-control" name="id_search" id="id_search" placeholder="{{ trans('auth.vendor.id_search_placeholder') }}"/>
                     </div>
                  </div>
                  <div class="col-md-4">
                     <div class="form-group">
-                      <input type="text" class="form-control" name="name_search" id="name_search" placeholder="Nhập tên nhà cung cấp"/>
+                      <input type="text" class="form-control" name="name_search" id="name_search" placeholder="{{ trans('auth.vendor.name_search_placeholder') }}"/>
                     </div>
                  </div>
                  <div class="col-md-3">
                     <div class="form-group">
                       <select class="form-control" name="status" id="status_search">
-                      	<option value="">Lọc theo trạng thái</option>
+                      	<option value="">{{ trans('auth.vendor.status_search') }}</option>
                       	@php
                       		$statusList = Status::getData();
                       	@endphp
@@ -42,13 +42,18 @@
                     </div>
                  </div>
                  <div class="col-md-6">
-                    <button type="submit" id="search" class="btn btn-warning pull-left">Đăng ký</button>
+                    <button type="button" id="search" class="btn btn-warning pull-left" onclick="window.location='{{ route('auth_vendor_create') }}'">{{ trans('auth.button.create') }}</button>
                   </div>
                  <div class="col-md-6">
-                    <button type="submit" id="search" class="btn btn-primary pull-right">Tìm kiếm</button>
+                    <button type="button" id="search" class="btn btn-primary pull-right">{{ trans('auth.button.search') }}</button>
                   </div>
               </div>
           </div>
+          @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+          @endif
           <div class="box">
             <div class="box-header">
               <h3 class="box-title">{{ trans('auth.vendor.list_title') }}</h3>

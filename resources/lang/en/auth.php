@@ -39,6 +39,7 @@ return [
     /*------------ Vendor page ------------------- */
     'vendor' => [
         'list_title' => 'Danh mục nhà cung cấp',
+        'create_title' => 'Đăng ký nhà cung cấp',
         'search_placeholder' => 'Mã, tên nhà cung cấp',
         'table_header' => [
             'id' => 'ID',
@@ -47,8 +48,18 @@ return [
             'status' => 'Trạng thái',
             'created_at' => 'Ngày đăng ký',
             'updated_at' => 'Ngày chỉnh sửa'
+        ],
+        'id_search_placeholder' => 'Lọc theo Id nhà cung cấp',
+        'name_search_placeholder' => 'Lọc theo tên nhà cung cấp',
+        'status_search' => 'Lọc theo trạng thái',
+        'form' => [
+            'name' => 'Tên nhà cung cấp',
+            'description' => 'Mô tả',
+            'logo' => 'Tải logo',
+            'logo_text' => 'Tập tin *.png, *.jpg, *.jpeg, *.gif. Tối đa 50KB'
         ]
     ],
+    'create_box_title' => 'Thông tin đăng ký',
     'status' => [
         'unactive' => 'Tạm dừng',
         'active' => 'Đang hoạt động'
@@ -56,6 +67,10 @@ return [
     'button' => [
         'login' => 'Đăng nhập',
         'profile' => 'Thông tin tài khoản',
-        'logout' => 'Thoát'
+        'logout' => 'Thoát',
+        'create' => 'Đăng ký',
+        'search' => 'Tìm kiếm',
+        'submit' => 'Lưu',
+        'back' => 'Quay về'
     ]
 ];
