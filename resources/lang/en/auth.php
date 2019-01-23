@@ -22,22 +22,21 @@ return [
     'email_placeholder' => 'E-mail',
     'password_placeholder' => 'Mật khẩu',
     'remember_me' => 'Duy trì đăng nhập',
-    
      /*------------ Dashboard page ------------------- */
     'dashboard_page_title' => '<b>C</b>Panel',
     
     /*------------ Sidebar ------------------- */
     'sidebar' => [
-        'product' => 'Quản lý sản phẩm',
-        'category' => 'Quản lý loại sản phẩm',
-        'vendor' => 'Quản lý nhà cung cấp',
-        'banner' => 'Quản lý banner',
-        'contact' => 'Hộp thư liên hệ',
+        'products' => 'Quản lý sản phẩm',
+        'categories' => 'Quản lý loại sản phẩm',
+        'vendors' => 'Quản lý nhà cung cấp',
+        'banners' => 'Quản lý banner',
+        'contacts' => 'Hộp thư liên hệ',
         'config' => 'Cấu hình'
     ],
     
     /*------------ Vendor page ------------------- */
-    'vendor' => [
+    'vendors' => [
         'list_title' => 'Danh mục nhà cung cấp',
         'create_title' => 'Đăng ký nhà cung cấp',
         'search_placeholder' => 'Mã, tên nhà cung cấp',
@@ -51,7 +50,7 @@ return [
         ],
         'id_search_placeholder' => 'Lọc theo Id nhà cung cấp',
         'name_search_placeholder' => 'Lọc theo tên nhà cung cấp',
-        'status_search' => 'Lọc theo trạng thái',
+        'status_search' => 'Tất cả trạng thái',
         'form' => [
             'name' => 'Tên nhà cung cấp',
             'description' => 'Mô tả',
@@ -59,6 +58,27 @@ return [
             'logo_text' => 'Tập tin *.jpg, *.jpeg, *.gif, *.png.Tối đa {0}'
         ]
     ],
+    /*------------ Category page ------------------- */
+    'categories' => [
+        'list_title' => 'Danh mục loại sản phẩm',
+        'create_title' => 'Đăng ký loại sản phẩm',
+        'search_placeholder' => 'Mã, tên loại sản phẩm',
+        'table_header' => [
+            'id' => 'ID',
+            'name' => 'Tên loại sản phẩm',
+            'status' => 'Trạng thái',
+            'created_at' => 'Ngày đăng ký',
+            'updated_at' => 'Ngày chỉnh sửa'
+        ],
+        'id_search_placeholder' => 'Lọc theo Id loại sản phẩm',
+        'name_search_placeholder' => 'Lọc theo tên loại sản phẩm',
+        'status_search' => 'Tất cả trạng thái',
+        'form' => [
+            'name' => 'Tên loại sản phẩm',
+            'description' => 'Mô tả',
+        ]
+    ],
+    'no_data_found' => '(Chưa có dữ liệu)',
     'create_box_title' => 'Thông tin đăng ký',
     'status' => [
         'unactive' => 'Tạm dừng',

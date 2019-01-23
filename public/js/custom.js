@@ -1,28 +1,43 @@
 var callAjax = function(url, data, page) {
-	var done = false;
+	var output = '';
 	$.ajax({
 	    url: url,
-	    type: 'post',
+	    type: data.type,
 	    data: data,
-	    async: true,
+	    async: data.async,
 	    headers: {
 	    	'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 	    },
 	    success: function (res) {
-	    	var res = JSON.parse(res);
 	    	if(res.code === 200) {
 		    	if(page === 'vendor_ajax_list') {
 					$('#vendor_list').html(res.data);
+		    	}
+		    	
+		    	if(page === 'update_status') {
+		    		output = res.data;
 		    	}
 	    	}
 	    }
 	});
 
-	return done;
+	return output;
 }
 
 var search = function(url, data, page) {
 	callAjax(url, data, page);
+}
+
+var checkFileSize = function(element, size) {
+	if (element.files && element.files.length) {
+		for (i = 0; i < element.files.length; i++) {
+			file = element.files[i];
+			if (file.size > Number(size)) {
+				return false;
+			}
+		}
+	}
+	return true;
 }
 
 $(document).ready(function() {
@@ -67,14 +82,7 @@ $(document).ready(function() {
     
     $.validator.addMethod( "filesize", function( value, element, param ) {
     	if ($(element).attr("type") === "file") {
-    		if (element.files && element.files.length) {
-    			for (i = 0; i < element.files.length; i++) {
-    				file = element.files[i];
-    				if (file.size > Number(param)) {
-    					return false;
-    				}
-    			}
-    		}
+    		return checkFileSize(element, param);
     	}
     	return true;
     });

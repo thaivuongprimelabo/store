@@ -33,9 +33,7 @@ class VendorsController extends Controller
     public function search(Request $request) {
         $wheres = [];
         $output = ['code' => 200, 'data' => ''];
-        $type = '';
         if($request->isMethod('post')) {
-            $type = $request->type;
             $id_search = $request->id_search;
             if(!Utils::blank($id_search)) {
                 $wheres[] = ['id', '=', $id_search];
@@ -56,9 +54,9 @@ class VendorsController extends Controller
         
         $paging = $vendors->toArray();
         
-        if($type == 'ajax') {
+        if($request->ajax()) {
             $output['data'] = view('auth.vendors.ajax_list', compact('vendors', 'paging'))->render();
-            return json_encode($output);
+            return response()->json($output);
         } else {
             return ['vendors' => $vendors, 'paging' => $paging];
         }

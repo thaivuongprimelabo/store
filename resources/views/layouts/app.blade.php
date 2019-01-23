@@ -113,7 +113,7 @@
 <script src="{{ url('admin/dist/js/adminlte.min.js') }}"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="{{ url('admin/dist/js/demo.js') }}"></script>
-
+<script src="{{ url('admin/js/jquery.validate.js') }}" type="text/javascript"></script>
 <script src="{{ url('js/custom.js') }}"></script>
 
 <script>
@@ -127,22 +127,44 @@
 
 	$(document).on('click', '.page_number', function(e) {
 		var data = {
-			type : 'ajax',
+			type : 'post',
+			async : false,
 			search_data : $('#search_data').val()
 		}
 		var page = $(this).attr('data-page');
-		search('{{ route('auth_vendor_search') }}?page=' + page, data, 'vendor_ajax_list');
+		search('{{ route('auth_vendors_search') }}?page=' + page, data, 'vendor_ajax_list');
 	});
 
 	$(document).on('click', '#search', function(e) {
 		var data = {
-			type : 'ajax',
+			type : 'post',
+			async : false,
 			id_search : $('#id_search').val(),
 			name_search : $('#name_search').val(),
-			status_search : $('#status_search').val()
+			status_search : $('#status_search').val(),
 		}
 
-		search('{{ route('auth_vendor_search') }}', data, 'vendor_ajax_list');
+		search('{{ route('auth_vendors_search') }}', data, 'vendor_ajax_list');
+	});
+
+	$(document).on('click', '.update-status', function(e) {
+		var data = {
+			type : 'post',
+			async : false,
+			id : $(this).attr('data-id'),
+			current_status: $(this).attr('data-status'),
+			table: 0
+		}
+
+		var res = callAjax('{{ route('update_status') }}', data, 'update_status');
+		console.log(res);
+		$(this).attr('data-status', res.status);
+		if(res.status === '1') {
+			$(this).find('span').attr('class', 'label label-success');
+		} else {
+			$(this).find('span').attr('class', 'label label-danger');
+		}
+		$(this).find('span').html(res.text);
 	});
 	
 

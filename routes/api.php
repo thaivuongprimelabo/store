@@ -19,5 +19,6 @@ use Illuminate\Http\Request;
 
 
 Route::post('/check_exists', 'ApiController@checkExists')->name('check_exists');
+Route::post('/update_status', 'ApiController@updateStatus')->name('update_status');
 
 

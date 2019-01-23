@@ -7,7 +7,7 @@
   </h1>
   <ol class="breadcrumb">
     <li><a href="{{ route('dashboard') }}"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
-    <li><a href="{{ route('auth_vendor') }}">{{ trans('auth.sidebar.vendor') }}</a></li>
+    <li><a href="{{ route('auth_vendors') }}">{{ trans('auth.sidebar.vendor') }}</a></li>
     <li class="active">{{ trans('auth.vendor.create_title') }}</li>
   </ol>
 </section>
@@ -25,7 +25,7 @@
                 </div>
                 <!-- /.box-header -->
                 <!-- form start -->
-                <form role="form" id="edit_form" action="{{ route('auth_vendor_edit', ['id' => $vendor->id]) }}" method="post" enctype="multipart/form-data">
+                <form role="form" id="edit_form" action="{{ route('auth_vendors_edit', ['id' => $vendor->id]) }}" method="post" enctype="multipart/form-data">
                   {{ csrf_field() }}
                   <div class="box-body">
                   	<input type="hidden" name="id" id="id" value="{{ $vendor->id }}" />
@@ -58,7 +58,7 @@
                   <!-- /.box-body -->
     
                   <div class="box-footer">
-                  	<button type="button" class="btn btn-default" onclick="window.location='{{ route('auth_vendor') }}'"><i class="fa fa-arrow-left" aria-hidden="true"></i> {{ trans('auth.button.back') }}</button>
+                  	<button type="button" class="btn btn-default" onclick="window.location='{{ route('auth_vendors') }}'"><i class="fa fa-arrow-left" aria-hidden="true"></i> {{ trans('auth.button.back') }}</button>
                     <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> {{ trans('auth.button.submit') }}</button>
                   </div>
                 </form>

@@ -37,6 +37,11 @@ class Utils {
         $resizePath = $uploadPath . 'resize/';
         $image_resize = Image::make($file->getRealPath());
         $image_resize->resize($width, $height);
+        
+        if(!file_exists(public_path($uploadPath))) {
+            mkdir(public_path($uploadPath));
+        }
+        
         if(!file_exists(public_path($resizePath))) {
             mkdir(public_path($resizePath));
         }

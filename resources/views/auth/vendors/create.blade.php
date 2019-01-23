@@ -7,7 +7,7 @@
   </h1>
   <ol class="breadcrumb">
     <li><a href="{{ route('dashboard') }}"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
-    <li><a href="{{ route('auth_vendor') }}">{{ trans('auth.sidebar.vendor') }}</a></li>
+    <li><a href="{{ route('auth_vendors') }}">{{ trans('auth.sidebar.vendor') }}</a></li>
     <li class="active">{{ trans('auth.vendor.create_title') }}</li>
   </ol>
 </section>
@@ -25,7 +25,7 @@
                 </div>
                 <!-- /.box-header -->
                 <!-- form start -->
-                <form role="form" id="create_form" action="{{ route('auth_vendor_create') }}" method="post" enctype="multipart/form-data">
+                <form role="form" id="create_form" action="{{ route('auth_vendors_create') }}" method="post" enctype="multipart/form-data">
                   {{ csrf_field() }}
                   <div class="box-body">
                     <div class="form-group @if ($errors->has('name')){{'has-error'}} @endif">
@@ -57,7 +57,7 @@
                   <!-- /.box-body -->
     
                   <div class="box-footer">
-                  	<button type="button" class="btn btn-default" onclick="window.location='{{ route('auth_vendor') }}'"><i class="fa fa-arrow-left" aria-hidden="true"></i> {{ trans('auth.button.back') }}</button>
+                  	<button type="button" class="btn btn-default" onclick="window.location='{{ route('auth_vendors') }}'"><i class="fa fa-arrow-left" aria-hidden="true"></i> {{ trans('auth.button.back') }}</button>
                     <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> {{ trans('auth.button.submit') }}</button>
                   </div>
                 </form>
@@ -68,7 +68,6 @@
 </section>
 @endsection
 @section('script')
-<script src="{{ url('admin/js/jquery.validate.js') }}" type="text/javascript"></script>
 <script type="text/javascript">
     var validatorEventSetting = $("#create_form").validate({
     	onfocusout: false,
@@ -130,11 +129,16 @@
 
     $('#logo').change(function(e) {
     	$(this).parent().removeClass('has-error');
-    	var reader = new FileReader();
-        reader.onload = function (event) {
-            $('#logo_preview').attr('src', event.target.result);
-        }
-        reader.readAsDataURL($('input[name="logo"]')[0].files[0]);
+    	var element = $('input[name="logo"]')[0];
+    	
+    	if(checkFileSize(element, '{{ Common::LOGO_MAX_SIZE }}')) {
+    		var reader = new FileReader();
+            reader.onload = function (event) {
+                $('#logo_preview').attr('src', event.target.result);
+            }
+            reader.readAsDataURL($('input[name="logo"]')[0].files[0]);
+    	}
+    	
     });
 </script>
 @endsection
