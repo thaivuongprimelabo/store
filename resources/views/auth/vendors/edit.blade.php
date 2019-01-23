@@ -25,25 +25,25 @@
                 </div>
                 <!-- /.box-header -->
                 <!-- form start -->
-                <form role="form" action="{{ route('auth_vendor_edit', ['id' => $vendor->id]) }}" method="post" enctype="multipart/form-data">
+                <form role="form" id="edit_form" action="{{ route('auth_vendor_edit', ['id' => $vendor->id]) }}" method="post" enctype="multipart/form-data">
                   {{ csrf_field() }}
                   <div class="box-body">
-                  	<input type="hidden" name="id" value="{{ $vendor->id }}" />
+                  	<input type="hidden" name="id" id="id" value="{{ $vendor->id }}" />
                     <div class="form-group @if ($errors->has('name')){{'has-error'}} @endif">
                       <label for="exampleInputEmail1">{{ trans('auth.vendor.form.name') }}</label>
                       <input type="text" class="form-control" name="name" id="name" value="{{ old('name', $vendor->name) }}" placeholder="{{ trans('auth.vendor.form.name') }}">
-                      @if ($errors->has('name'))<span class="help-block">{{ $errors->first('name') }}</span>@endif
+                      <span class="help-block">@if ($errors->has('name')){{ $errors->first('name') }}@endif</span>
                     </div>
                     <div class="form-group @if ($errors->has('description')){{'has-error'}} @endif">
                       <label for="exampleInputPassword1">{{ trans('auth.vendor.form.description') }}</label>
                       <textarea class="form-control" rows="6" name="description" placeholder="{{ trans('auth.vendor.form.description') }}">{{ old('description', $vendor->description) }}</textarea>
-                      @if ($errors->has('description'))<span class="help-block">{{ $errors->first('description') }}</span>@endif
+                      <span class="help-block">@if ($errors->has('description')){{ $errors->first('description') }}@endif</span>
                     </div>
                     <div class="form-group @if ($errors->has('logo')){{'has-error'}} @endif">
                       <label for="exampleInputFile">{{ trans('auth.vendor.form.logo') }}</label>
                       <input type="file" name="logo" id="logo">
                       <p class="help-block">{{ trans('auth.vendor.form.logo_text') }}</p>
-                      @if ($errors->has('logo'))<span class="help-block">{{ $errors->first('logo') }}</span>@endif
+                      <span class="help-block">@if ($errors->has('logo')){{ $errors->first('logo') }}@endif</span>
                     </div>
                     <div class="form-group">
                       <label for="exampleInputFile">Hình hiện tại</label>
@@ -67,4 +67,71 @@
 		</div>
 	</div>
 </section>
+@endsection
+@section('script')
+<script src="{{ url('admin/js/jquery.validate.js') }}" type="text/javascript"></script>
+<script type="text/javascript">
+    var validatorEventSetting = $("#edit_form").validate({
+    	onfocusout: false,
+    	success: function(label, element) {
+        	var jelm = $(element);
+        	jelm.parent().removeClass('has-error');
+    	},
+    	rules: {
+    		name: {
+    			required: true,
+    			maxlength: 255,
+    			remote : {
+					url : '{{ route('check_exists') }}',
+					type : 'post',
+					headers: {
+				    	'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				    },
+					data : {
+						value : function() {
+							return $('#name').val()
+						},
+						col: 'name',
+						table: 0,
+						id_check: $('#id').val()
+					}
+				}
+    		},
+    		description: {
+    			required: true,
+				maxlength: 300
+    		},
+    		logo: {
+				extension: '{{ Common::IMAGE_EXT }}',
+				filesize: '{{ Common::LOGO_MAX_SIZE }}'
+    		}
+    	},
+    	messages: {
+    		name : {
+    			required : "{{ Utils::getValidateMessage('validation.required', 'auth.vendor.form.name') }}",
+    			maxlength : "{{ Utils::getValidateMessage('validation.max.string', 'auth.vendor.form.name') }}",
+    			remote: '{{ Utils::getValidateMessage('validation.unique', 'auth.vendor.form.name') }}'
+    		},
+    		description : {
+    			required : "{{ Utils::getValidateMessage('validation.required', 'auth.vendor.form.description') }}",
+    			maxlength : "{{ Utils::getValidateMessage('validation.max.string', 'auth.vendor.form.description') }}"
+    		},
+    		logo: {
+    			extension : '{{ Utils::getValidateMessage('validation.image', 'auth.vendor.form.logo') }}',
+    			filesize: '{{ Utils::getValidateMessage('validation.size.file', 'auth.vendor.form.logo',  Utils::formatMemory(Common::LOGO_MAX_SIZE)) }}'
+    		}
+    	},
+    	errorPlacement: function(error, element) {
+    		element.parent().addClass('has-error');
+    		element.parent().find('span.help-block').html(error[0].innerHTML);
+	  	},
+    	submitHanlder: function(form) {
+    	    form.submit();
+    	}
+    });
+
+    $('#logo').change(function(e) {
+    	$(this).parent().removeClass('has-error');
+    });
+</script>
 @endsection

@@ -49,6 +49,57 @@ class Utils {
             unlink($filepath);
         }
     }
+    
+    public static function formatMemory($memory, $number = false)
+    {
+        if(!$number) {
+            if ($memory >= 1024 * 1024 * 1024) {
+                return sprintf('%.1f GB', $memory / 1024 / 1024 / 1024);
+            }
+            
+            if ($memory >= 1024 * 1024) {
+                return sprintf('%.1f MB', $memory / 1024 / 1024);
+            }
+            
+            if ($memory >= 1024) {
+                return sprintf('%d KB', $memory / 1024);
+            }
+            
+            return sprintf('%d B', $memory);
+            
+        } else {
+            if ($memory >= 1024 * 1024 * 1024) {
+                return sprintf('%.1f', $memory / 1024 / 1024 / 1024);
+            }
+            
+            if ($memory >= 1024 * 1024) {
+                return sprintf('%.1f', $memory / 1024 / 1024);
+            }
+            
+            if ($memory >= 1024) {
+                return sprintf('%d', $memory / 1024);
+            }
+            
+            return sprintf('%d', $memory);
+        }
+        
+        
+    }
+    
+    public static function getValidateMessage($key, $param, $size = '') {
+        $message = trans($key);
+        $message = str_replace(':size', trans($size), $message);
+        $message = str_replace(':attribute', trans($param), $message);
+        return $message;
+    }
+    
+    public static function replaceMessageParam($key, $params = []) {
+        $message = trans($key);
+        for($i = 0; $i < count($params); $i++) {
+            $message = str_replace('{' . $i . '}', $params[$i], $message);
+        }
+        return $message;
+    }
         
     /**
      * Determine if the given value is "blank".

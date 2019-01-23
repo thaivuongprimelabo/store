@@ -12,6 +12,16 @@ use App\Helpers\Utils;
 
 class VendorsController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     public function index(Request $request) {
         return view('auth.vendors.index', $this->search($request));
     }
@@ -66,11 +76,17 @@ class VendorsController extends Controller
         
         if($request->isMethod('post')) {
             
+            $maxSize =  Utils::formatMemory(Common::LOGO_MAX_SIZE, true);
+            
+            $messages = [
+                'size' => Utils::getValidateMessage('validation.size.file', 'auth.vendor.form.logo',  Utils::formatMemory(Common::LOGO_MAX_SIZE)),
+            ];
+            
             $validator = Validator::make($request->all(), [
                 'name' => 'required|max:255',
                 'description' => 'required|max:255',
-                'logo' => 'file|mimes:jpeg,png,gif'
-            ]);
+                'logo' => 'image|max:'.$maxSize.'|mimes:jpeg,png,gif'
+            ], $messages);
             
             if (!$validator->fails()) {
                 
@@ -161,4 +177,5 @@ class VendorsController extends Controller
             }
         }
     }
+    
 }

@@ -227,6 +227,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Status' => App\Constants\Status::class,
         'Common' => App\Constants\Common::class,
+        'Validation' => App\Constants\Validation::class,
         'Utils' => App\Helpers\Utils::class,
         'Image' => Intervention\Image\ImageManagerStatic::class
     ],

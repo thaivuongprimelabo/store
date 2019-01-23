@@ -38,6 +38,7 @@ Route::group(['prefix' => 'auth', 'namespace' => 'Auth'], function () {
     Route::match(['get', 'post'], '/search_vendor', 'VendorsController@search')->name('auth_vendor_search');
     Route::get('/vendors/remove/{id}', 'VendorsController@remove')->name('auth_vendor_remove');
     
+    
     // Registration Routes...
 //     $this->get('/register', 'RegisterController@showRegistrationForm')->name('register');
 //     $this->post('/register', 'RegisterController@register');

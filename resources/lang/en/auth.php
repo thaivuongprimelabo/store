@@ -56,7 +56,7 @@ return [
             'name' => 'Tên nhà cung cấp',
             'description' => 'Mô tả',
             'logo' => 'Tải logo',
-            'logo_text' => 'Tập tin *.png, *.jpg, *.jpeg, *.gif. Tối đa 50KB'
+            'logo_text' => 'Tập tin *.jpg, *.jpeg, *.gif, *.png.Tối đa {0}'
         ]
     ],
     'create_box_title' => 'Thông tin đăng ký',

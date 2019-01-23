@@ -113,6 +113,9 @@
 <script src="{{ url('admin/dist/js/adminlte.min.js') }}"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="{{ url('admin/dist/js/demo.js') }}"></script>
+
+<script src="{{ url('js/custom.js') }}"></script>
+
 <script>
   $(function () {
     $('input').iCheck({
@@ -122,37 +125,13 @@
     });
     $('.sidebar-menu').tree();
 
-    var callAjax = function(url, data, page) {
-		var done = false;
-		$.ajax({
-		    url: url,
-		    type: 'post',
-		    data: data,
-		    async: true,
-		    headers: {
-		    	'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-		    },
-		    success: function (res) {
-		    	var res = JSON.parse(res);
-		    	if(res.code === 200) {
-			    	if(page === 'vendor_ajax_list') {
-						$('#vendor_list').html(res.data);
-			    	}
-		    	}
-		    }
-		});
-
-		return done;
-	}
-
 	$(document).on('click', '.page_number', function(e) {
 		var data = {
 			type : 'ajax',
 			search_data : $('#search_data').val()
 		}
-
 		var page = $(this).attr('data-page');
-		callAjax('{{ route('auth_vendor_search') }}?page=' + page, data, 'vendor_ajax_list');
+		search('{{ route('auth_vendor_search') }}?page=' + page, data, 'vendor_ajax_list');
 	});
 
 	$(document).on('click', '#search', function(e) {
@@ -163,10 +142,12 @@
 			status_search : $('#status_search').val()
 		}
 
-		callAjax('{{ route('auth_vendor_search') }}', data, 'vendor_ajax_list');
+		search('{{ route('auth_vendor_search') }}', data, 'vendor_ajax_list');
 	});
+	
 
   });
 </script>
+@yield('script')
 </body>
 </html>
