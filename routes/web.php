@@ -26,8 +26,8 @@ Route::group(['prefix' => 'auth', 'namespace' => 'Auth'], function () {
     $this->get('/dashboard', 'DashboardController@index')->name('dashboard');
     
     $this->get('/products', 'DashboardController@index')->name('auth_products');
-    $this->get('/banners', 'DashboardController@index')->name('auth_banners');
-    $this->get('/contacts', 'DashboardController@index')->name('auth_contacts');
+    
+    $this->get('/news', 'DashboardController@index')->name('auth_news');
     $this->get('/config', 'DashboardController@index')->name('auth_config');
     
     // Vendors
@@ -43,6 +43,20 @@ Route::group(['prefix' => 'auth', 'namespace' => 'Auth'], function () {
     Route::match(['get', 'post'], '/categories/edit/{id}', 'CategoriesController@edit')->name('auth_categories_edit');
     Route::match(['get', 'post'], '/search_category', 'CategoriesController@search')->name('auth_categories_search');
     Route::get('/categories/remove/{id}', 'CategoriesController@remove')->name('auth_categories_remove');
+    
+    // Banners
+    $this->get('/banners', 'BannersController@index')->name('auth_banners');
+    Route::match(['get', 'post'], '/banners/create', 'BannersController@create')->name('auth_banners_create');
+    Route::match(['get', 'post'], '/banners/edit/{id}', 'BannersController@edit')->name('auth_banners_edit');
+    Route::match(['get', 'post'], '/search_banner', 'BannersController@search')->name('auth_banners_search');
+    Route::get('/banners/remove/{id}', 'BannersController@remove')->name('auth_banners_remove');
+    
+    // Contacts
+    $this->get('/contacts', 'ContactsController@index')->name('auth_contacts');
+    Route::match(['get', 'post'], '/contacts/create', 'ContactsController@create')->name('auth_contacts_create');
+    Route::match(['get', 'post'], '/contacts/edit/{id}', 'ContactsController@edit')->name('auth_contacts_edit');
+    Route::match(['get', 'post'], '/search_contact', 'ContactsController@search')->name('auth_contacts_search');
+    Route::get('/contacts/remove/{id}', 'ContactsController@remove')->name('auth_contacts_remove');
     
     
     // Registration Routes...

@@ -31,6 +31,7 @@ return [
         'categories' => 'Quản lý loại sản phẩm',
         'vendors' => 'Quản lý nhà cung cấp',
         'banners' => 'Quản lý banner',
+        'news' => 'Quản lý bài viết',
         'contacts' => 'Hộp thư liên hệ',
         'config' => 'Cấu hình'
     ],
@@ -39,6 +40,8 @@ return [
     'vendors' => [
         'list_title' => 'Danh mục nhà cung cấp',
         'create_title' => 'Đăng ký nhà cung cấp',
+        'edit_title' => 'Chỉnh sửa nhà cung cấp',
+        'edit_title' => 'Chỉnh sửa nhà cung cấp',
         'search_placeholder' => 'Mã, tên nhà cung cấp',
         'table_header' => [
             'id' => 'ID',
@@ -62,6 +65,8 @@ return [
     'categories' => [
         'list_title' => 'Danh mục loại sản phẩm',
         'create_title' => 'Đăng ký loại sản phẩm',
+        'edit_title' => 'Chỉnh sửa loại sản phẩm',
+        'edit_title' => 'Chỉnh sửa loại sản phẩm',
         'search_placeholder' => 'Mã, tên loại sản phẩm',
         'table_header' => [
             'id' => 'ID',
@@ -73,9 +78,55 @@ return [
         'id_search_placeholder' => 'Lọc theo Id loại sản phẩm',
         'name_search_placeholder' => 'Lọc theo tên loại sản phẩm',
         'status_search' => 'Tất cả trạng thái',
+        'parent_empty_text' => 'Chọn loại cha (Không chọn mặc định đây là loại cha)',
         'form' => [
             'name' => 'Tên loại sản phẩm',
+            'parent' => 'Chọn loại cha',
+        ]
+    ],
+    /*------------ Banner page ------------------- */
+    'banners' => [
+        'list_title' => 'Danh mục banner',
+        'create_title' => 'Đăng ký banner',
+        'edit_title' => 'Chỉnh sửa banner',
+        'table_header' => [
+            'id' => 'ID',
+            'banner' => 'Banner',
+            'link' => 'Đường dẫn',
             'description' => 'Mô tả',
+            'status' => 'Trạng thái',
+            'created_at' => 'Ngày đăng ký',
+            'updated_at' => 'Ngày chỉnh sửa'
+        ],
+        'status_search' => 'Tất cả trạng thái',
+        'form' => [
+            'banner' => 'Tải banner',
+            'link' => 'Đường dẫn',
+            'description' => 'Mô tả',
+            'banner_text' => 'Tập tin *.jpg, *.jpeg, *.gif, *.png.Tối đa {0}'
+        ]
+    ],
+    /*------------ Contacts page ------------------- */
+    'contacts' => [
+        'list_title' => 'Danh mục liên hệ',
+        'table_header' => [
+            'id' => 'ID',
+            'name' => 'Tên',
+            'email' => 'E-mail',
+            'phone' => 'Số điện thoại',
+            'content' => 'Nội dung',
+            'status' => 'Trạng thái',
+            'created_at' => 'Ngày gửi',
+        ],
+        'email_search_placeholder' => 'Lọc theo email',
+        'phone_search_placeholder' => 'Lọc theo số điện thoại',
+        'status_search' => 'Tất cả trạng thái',
+        'form' => [
+            'name' => 'Tên',
+            'email' => 'E-mail',
+            'phone' => 'Số điện thoại',
+            'content' => 'Nội dung',
+            'status' => 'Trạng thái',
         ]
     ],
     'no_data_found' => '(Chưa có dữ liệu)',

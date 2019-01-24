@@ -5,6 +5,7 @@ namespace App\Helpers;
 use App\Constants\Common;
 use Illuminate\Support\Facades\Storage;
 use Image;
+use App\Category;
 
 class Utils {
     
@@ -94,6 +95,7 @@ class Utils {
     public static function getValidateMessage($key, $param, $size = '') {
         $message = trans($key);
         $message = str_replace(':size', trans($size), $message);
+        $message = str_replace(':max', trans($size), $message);
         $message = str_replace(':attribute', trans($param), $message);
         return $message;
     }
@@ -127,5 +129,27 @@ class Utils {
         }
         
         return empty($value);
+    }
+    
+    public static function createSelectList($table, $selected = '') {
+        $html = '<option value="0">' . trans('auth.categories.parent_empty_text') . '</option>';
+        $data = [];
+        switch($table) {
+            case Common::CATEGORIES:
+                $data = Category::select('name', 'id')->where('parent_id', 0)->get();
+                break;
+            default:
+                break;
+        }
+        
+        foreach($data as $item) {
+            if($selected == $item->id) {
+                $html .= '<option value="'. $item->id .'" selected>'. $item->name .'</option>';
+            } else {
+                $html .= '<option value="'. $item->id .'">'. $item->name .'</option>';
+            }
+        }
+        
+        return $html;
     }
 }

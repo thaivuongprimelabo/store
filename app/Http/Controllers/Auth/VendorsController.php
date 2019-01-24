@@ -58,7 +58,7 @@ class VendorsController extends Controller
             $output['data'] = view('auth.vendors.ajax_list', compact('vendors', 'paging'))->render();
             return response()->json($output);
         } else {
-            return ['vendors' => $vendors, 'paging' => $paging];
+            return compact('vendors', 'paging');
         }
     }
     
@@ -81,9 +81,9 @@ class VendorsController extends Controller
             ];
             
             $validator = Validator::make($request->all(), [
-                'name' => 'required|max:255',
-                'description' => 'required|max:255',
-                'logo' => 'image|max:'.$maxSize.'|mimes:jpeg,png,gif'
+                'name' => 'required|max:' . Common::NAME_MAXLENGTH,
+                'description' => 'required|max:' . Common::DESC_MAXLENGTH,
+                'logo' => 'image|max:'.$maxSize.'|mimes:'. Common::IMAGE_EXT1
             ], $messages);
             
             if (!$validator->fails()) {
@@ -106,7 +106,7 @@ class VendorsController extends Controller
                 $vendor->updated_at = date('Y-m-d H:i:s');
                 
                 if($vendor->save()) {
-                    return redirect(route('auth_vendor_create'))->with('success', trans('messages.CREATE_SUCCESS'));
+                    return redirect(route('auth_vendors_create'))->with('success', trans('messages.CREATE_SUCCESS'));
                 }
             }
         }
@@ -158,7 +158,7 @@ class VendorsController extends Controller
                 $vendor->updated_at = date('Y-m-d H:i:s');
                 
                 if($vendor->save()) {
-                    return redirect(route('auth_vendor_edit', ['id' => $request->id]))->with('success', trans('messages.UPDATE_SUCCESS'));
+                    return redirect(route('auth_vendors_edit', ['id' => $request->id]))->with('success', trans('messages.UPDATE_SUCCESS'));
                 }
             }
         }
@@ -171,7 +171,7 @@ class VendorsController extends Controller
             $vendor = Vendor::find($id);
             if($vendor->delete()) {
                 Utils::removeFile($vendor->logo);
-                return redirect(route('auth_vendor'))->with('success', trans('messages.REMOVE_SUCCESS'));
+                return redirect(route('auth_vendors'))->with('success', trans('messages.REMOVE_SUCCESS'));
             }
         }
     }

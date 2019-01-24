@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Vendor;
 use App\Constants\Status;
 use App\Helpers\Utils;
+use App\Category;
 
 class ApiController extends Controller
 {
@@ -24,6 +25,16 @@ class ApiController extends Controller
                     $check = true;
                     
                     if(!Utils::blank($idCheck) && $idCheck == $vendor['id']) {
+                        $check = false;
+                    }
+                }
+                break;
+            case 1; // Categories table
+                $category = Category::select('id')->where($col, $value)->first();
+                if($category) {
+                    $check = true;
+                    
+                    if(!Utils::blank($idCheck) && $idCheck == $category['id']) {
                         $check = false;
                     }
                 }

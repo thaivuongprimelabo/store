@@ -5,7 +5,7 @@ namespace App;
 use App\Constants\Common;
 use Illuminate\Database\Eloquent\Model;
 
-class Vendor extends Model
+class Contact extends Model
 {
     //
     public $timestamps = false;
@@ -15,5 +15,5 @@ class Vendor extends Model
      *
      * @var array
      */
-    protected $table = Common::VENDORS;
+    protected $table = Common::CONTACTS;
 }

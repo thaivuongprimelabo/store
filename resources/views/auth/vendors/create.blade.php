@@ -3,12 +3,12 @@
 @section('content')
 <section class="content-header">
   <h1>
-    {{ trans('auth.vendor.create_title') }}
+    {{ trans('auth.vendors.create_title') }}
   </h1>
   <ol class="breadcrumb">
     <li><a href="{{ route('dashboard') }}"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
-    <li><a href="{{ route('auth_vendors') }}">{{ trans('auth.sidebar.vendor') }}</a></li>
-    <li class="active">{{ trans('auth.vendor.create_title') }}</li>
+    <li><a href="{{ route('auth_vendors') }}">{{ trans('auth.sidebar.vendors') }}</a></li>
+    <li class="active">{{ trans('auth.vendors.create_title') }}</li>
   </ol>
 </section>
 <section class="content">
@@ -29,19 +29,19 @@
                   {{ csrf_field() }}
                   <div class="box-body">
                     <div class="form-group @if ($errors->has('name')){{'has-error'}} @endif">
-                      <label for="exampleInputEmail1">{{ trans('auth.vendor.form.name') }}</label>
-                      <input type="text" class="form-control" name="name" id="name" value="{{ old('name') }}" placeholder="{{ trans('auth.vendor.form.name') }}">
+                      <label for="exampleInputEmail1">{{ trans('auth.vendors.form.name') }}</label>
+                      <input type="text" class="form-control" name="name" id="name" value="{{ old('name') }}" placeholder="{{ trans('auth.vendors.form.name') }}" maxlength="{{ Common::NAME_MAXLENGTH }}">
                       <span class="help-block">@if ($errors->has('name')){{ $errors->first('name') }}@endif</span>
                     </div>
                     <div class="form-group @if ($errors->has('description')){{'has-error'}} @endif">
-                      <label for="exampleInputPassword1">{{ trans('auth.vendor.form.description') }}</label>
-                      <textarea class="form-control" rows="6" name="description" placeholder="{{ trans('auth.vendor.form.description') }}">{{ old('description') }}</textarea>
+                      <label for="exampleInputPassword1">{{ trans('auth.vendors.form.description') }}</label>
+                      <textarea class="form-control" rows="6" name="description" placeholder="{{ trans('auth.vendors.form.description') }}" maxlength="{{ Common::DESC_MAXLENGTH }}">{{ old('description') }}</textarea>
                       <span class="help-block">@if ($errors->has('description')){{ $errors->first('description') }}@endif</span>
                     </div>
                     <div class="form-group @if ($errors->has('logo')){{'has-error'}} @endif">
-                      <label for="exampleInputFile">{{ trans('auth.vendor.form.logo') }}</label>
+                      <label for="exampleInputFile">{{ trans('auth.vendors.form.logo') }}</label>
                       <input type="file" name="logo" id="logo">
-                      <p class="help-block">{{ Utils::replaceMessageParam('auth.vendor.form.logo_text',[Utils::formatMemory(Common::LOGO_MAX_SIZE)]) }}</p>
+                      <p class="help-block">{{ Utils::replaceMessageParam('auth.vendors.form.logo_text',[Utils::formatMemory(Common::LOGO_MAX_SIZE)]) }}</p>
                       <span class="help-block">@if ($errors->has('logo')){{ $errors->first('logo') }}@endif</span>
                     </div>
                     <div class="form-group">
@@ -78,7 +78,7 @@
     	rules: {
     		name: {
     			required: true,
-    			maxlength: 255,
+    			maxlength: {{  Common::NAME_MAXLENGTH }},
     			remote : {
 					url : '{{ route('check_exists') }}',
 					type : 'post',
@@ -96,7 +96,7 @@
     		},
     		description: {
     			required: true,
-				maxlength: 300
+				maxlength: {{  Common::DESC_MAXLENGTH }}
     		},
     		logo: {
 				extension: '{{ Common::IMAGE_EXT }}',
@@ -105,17 +105,17 @@
     	},
     	messages: {
     		name : {
-    			required : "{{ Utils::getValidateMessage('validation.required', 'auth.vendor.form.name') }}",
-    			maxlength : "{{ Utils::getValidateMessage('validation.max.string', 'auth.vendor.form.name') }}",
-    			remote: '{{ Utils::getValidateMessage('validation.unique', 'auth.vendor.form.name') }}'
+    			required : "{{ Utils::getValidateMessage('validation.required', 'auth.vendors.form.name') }}",
+    			maxlength : "{{ Utils::getValidateMessage('validation.max.string', 'auth.vendors.form.name', Common::NAME_MAXLENGTH) }}",
+    			remote: '{{ Utils::getValidateMessage('validation.unique', 'auth.vendors.form.name') }}'
     		},
     		description : {
-    			required : "{{ Utils::getValidateMessage('validation.required', 'auth.vendor.form.description') }}",
-    			maxlength : "{{ Utils::getValidateMessage('validation.max.string', 'auth.vendor.form.description') }}"
+    			required : "{{ Utils::getValidateMessage('validation.required', 'auth.vendors.form.description') }}",
+    			maxlength : "{{ Utils::getValidateMessage('validation.max.string', 'auth.vendors.form.description', Common::DESC_MAXLENGTH) }}"
     		},
     		logo: {
-    			extension : '{{ Utils::getValidateMessage('validation.image', 'auth.vendor.form.logo') }}',
-    			filesize: '{{ Utils::getValidateMessage('validation.size.file', 'auth.vendor.form.logo',  Utils::formatMemory(Common::LOGO_MAX_SIZE)) }}'
+    			extension : '{{ Utils::getValidateMessage('validation.image', 'auth.vendors.form.logo') }}',
+    			filesize: '{{ Utils::getValidateMessage('validation.size.file', 'auth.vendors.form.logo',  Utils::formatMemory(Common::LOGO_MAX_SIZE)) }}'
     		}
     	},
     	errorPlacement: function(error, element) {

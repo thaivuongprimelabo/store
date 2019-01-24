@@ -24,8 +24,10 @@
       @endif
       <td>{{ $vendor->created_at }}</td>
       <td>{{ $vendor->updated_at }}</td>
-      <td><a href="{{ route('auth_vendors_remove',['id' => $vendor->id]) }}" title="Remove"><i class="fa fa-trash" aria-hidden="true" style="font-size: 24px"></i></a></td>
-      <td><a href="{{ route('auth_vendors_edit',['id' => $vendor->id]) }}" title="Edit"><i class="fa fa-pencil" aria-hidden="true" style="font-size: 24px"></i></a></td>
+      @include('auth.common.row_button',[
+      	'url1' => route('auth_vendors_remove',['id' => $vendor->id]),
+      	'url2' => route('auth_vendors_edit',['id' => $vendor->id])
+      ])
     </tr>
     @endforeach
     @else

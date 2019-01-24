@@ -18,36 +18,38 @@
           <div class="box">
               <!-- Box Body -->
               <div class="box-body">
-              	 <div class="col-md-3">
-                    <div class="form-group has-feedback">
-                      <input type="text" class="form-control" name="id_search" id="id_search" placeholder="{{ trans('auth.categories.id_search_placeholder') }}"/>
-                      <span class="glyphicon glyphicon-search form-control-feedback"></span>
-                    </div>
-                 </div>
-                 <div class="col-md-4">
-                    <div class="form-group has-feedback">
-                      <input type="text" class="form-control" name="name_search" id="name_search" placeholder="{{ trans('auth.categories.name_search_placeholder') }}"/>
-                      <span class="glyphicon glyphicon-search form-control-feedback"></span>	
-                    </div>
-                 </div>
-                 <div class="col-md-3">
-                    <div class="form-group">
-                      <select class="form-control" name="status" id="status_search">
-                      	<option value="">{{ trans('auth.categories.status_search') }}</option>
-                      	@php
-                      		$statusList = Status::getData();
-                      	@endphp
-                      	@foreach($statusList as $key=>$value)
-                      	<option value="{{ $key }}">{{ $value }}</option>
-                      	@endforeach
-                      </select>
-                    </div>
-                 </div>
+              	 <form id="search_form">
+                  	 <div class="col-md-3">
+                        <div class="form-group has-feedback">
+                          <input type="text" class="form-control" name="id_search" id="id_search" placeholder="{{ trans('auth.categories.id_search_placeholder') }}"/>
+                          <span class="glyphicon glyphicon-search form-control-feedback"></span>
+                        </div>
+                     </div>
+                     <div class="col-md-4">
+                        <div class="form-group has-feedback">
+                          <input type="text" class="form-control" name="name_search" id="name_search" placeholder="{{ trans('auth.categories.name_search_placeholder') }}"/>
+                          <span class="glyphicon glyphicon-search form-control-feedback"></span>	
+                        </div>
+                     </div>
+                     <div class="col-md-3">
+                        <div class="form-group">
+                          <select class="form-control" name="status_search" id="status_search">
+                          	<option value="">{{ trans('auth.categories.status_search') }}</option>
+                          	@php
+                          		$statusList = Status::getData();
+                          	@endphp
+                          	@foreach($statusList as $key=>$value)
+                          	<option value="{{ $key }}">{{ $value }}</option>
+                          	@endforeach
+                          </select>
+                        </div>
+                     </div>
+                 </form>
                  <div class="col-md-6">
                     <button type="button" id="search" class="btn btn-warning pull-left" onclick="window.location='{{ route('auth_categories_create') }}'">{{ trans('auth.button.create') }}</button>
                   </div>
                  <div class="col-md-6">
-                    <button type="button" id="search" class="btn btn-primary pull-right">{{ trans('auth.button.search') }}</button>
+                    <button type="button" id="search" class="btn btn-primary pull-right" data-url="{{ route('auth_categories_search') }}">{{ trans('auth.button.search') }}</button>
                   </div>
               </div>
           </div>
@@ -61,7 +63,7 @@
               <h3 class="box-title">{{ trans('auth.categories.list_title') }}</h3>
             </div>
             <!-- /.box-header -->
-            <div id="vendor_list">
+            <div id="ajax_list">
             @include('auth.categories.ajax_list')
             </div>
           </div>

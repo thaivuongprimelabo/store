@@ -126,25 +126,43 @@
     $('.sidebar-menu').tree();
 
 	$(document).on('click', '.page_number', function(e) {
+		var url = $('#search').attr('data-url');
 		var data = {
 			type : 'post',
 			async : false,
 			search_data : $('#search_data').val()
 		}
 		var page = $(this).attr('data-page');
-		search('{{ route('auth_vendors_search') }}?page=' + page, data, 'vendor_ajax_list');
+		url = url + '?page=' + page
+		search(url, data, 'ajax_list');
 	});
 
 	$(document).on('click', '#search', function(e) {
-		var data = {
-			type : 'post',
-			async : false,
-			id_search : $('#id_search').val(),
-			name_search : $('#name_search').val(),
-			status_search : $('#status_search').val(),
-		}
+		var url = $(this).attr('data-url');
+		var data = getFormData($('#search_form'));
+		data['type'] = 'post';
+		data['async'] = false;
+// 		var data = {
+// 			type : 'post',
+// 			async : false,
+// 			id_search : $('#id_search').val(),
+// 			name_search : $('#name_search').val(),
+// 			status_search : $('#status_search').val(),
+// 		}
 
-		search('{{ route('auth_vendors_search') }}', data, 'vendor_ajax_list');
+		search(url, data, 'ajax_list');
+	});
+
+	$(document).on('click', '.remove', function(e) {
+		if(confirmDelete('{{ trans('messages.CONFIRM_DELETE') }}')) {
+			var url = $(this).attr('data-url');
+			window.location = url;
+		}
+	});
+
+	$(document).on('click', '.edit', function(e) {
+			var url = $(this).attr('data-url');
+			window.location = url;
 	});
 
 	$(document).on('click', '.update-status', function(e) {

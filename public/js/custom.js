@@ -10,8 +10,8 @@ var callAjax = function(url, data, page) {
 	    },
 	    success: function (res) {
 	    	if(res.code === 200) {
-		    	if(page === 'vendor_ajax_list') {
-					$('#vendor_list').html(res.data);
+		    	if(page === 'ajax_list') {
+					$('#ajax_list').html(res.data);
 		    	}
 		    	
 		    	if(page === 'update_status') {
@@ -38,6 +38,24 @@ var checkFileSize = function(element, size) {
 		}
 	}
 	return true;
+}
+
+var confirmDelete = function(msg) {
+	if(confirm(msg)) {
+		return true;
+	}
+	return false;
+}
+
+var getFormData = function($form){
+    var unindexed_array = $form.serializeArray();
+    var indexed_array = {};
+
+    $.map(unindexed_array, function(n, i){
+        indexed_array[n['name']] = n['value'];
+    });
+
+    return indexed_array;
 }
 
 $(document).ready(function() {
