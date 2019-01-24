@@ -18,10 +18,10 @@
       <td>{{ $contact->name }}</td>
       <td>{{ $contact->email }}</td>
       <td>{{ $contact->phone }}</td>
-      @if($contact->status == Status::ACTIVE)
-      <td><a href="javascript:void(0)" class="update-status" data-id="{{ $contact->id }}" data-status="{{ $contact->status }}"><span class="label label-success">{{ trans('auth.status.active') }}</span></a></td>
+      @if($contact->status == Status::NEW_CONTACT)
+      <td><a href="javascript:void(0)" class="update-status" data-id="{{ $contact->id }}" data-status="{{ $contact->status }}"><span class="label label-danger">{{ trans('auth.status.new') }}</span></a></td>
       @else
-      <td><a href="javascript:void(0)" class="update-status" data-id="{{ $contact->id }}" data-status="{{ $contact->status }}"><span class="label label-danger">{{ trans('auth.status.unactive') }}</span></a></td>
+      <td><a href="javascript:void(0)" class="update-status" data-id="{{ $contact->id }}" data-status="{{ $contact->status }}"><span class="label label-success">{{ trans('auth.status.replied') }}</span></a></td>
       @endif
       <td>{{ $contact->created_at }}</td>
       @include('auth.common.row_button',[

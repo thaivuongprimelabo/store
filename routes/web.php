@@ -26,7 +26,6 @@ Route::group(['prefix' => 'auth', 'namespace' => 'Auth'], function () {
     $this->get('/dashboard', 'DashboardController@index')->name('dashboard');
     
     $this->get('/products', 'DashboardController@index')->name('auth_products');
-    
     $this->get('/news', 'DashboardController@index')->name('auth_news');
     $this->get('/config', 'DashboardController@index')->name('auth_config');
     

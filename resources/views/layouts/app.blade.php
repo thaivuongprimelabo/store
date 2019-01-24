@@ -23,6 +23,9 @@
   <link rel="stylesheet" href="{{ url('admin/plugins/iCheck/square/blue.css') }}">
   
   <link rel="stylesheet" href="{{ url('admin/dist/css/skins/_all-skins.min.css') }}">
+  
+  <!-- bootstrap wysihtml5 - text editor -->
+  <link rel="stylesheet" href="{{ url('admin/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css') }}">
 
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
@@ -113,11 +116,15 @@
 <script src="{{ url('admin/dist/js/adminlte.min.js') }}"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="{{ url('admin/dist/js/demo.js') }}"></script>
+<!-- Bootstrap WYSIHTML5 -->
+<script src="{{ url('admin/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js') }}"></script>
 <script src="{{ url('admin/js/jquery.validate.js') }}" type="text/javascript"></script>
 <script src="{{ url('js/custom.js') }}"></script>
 
 <script>
   $(function () {
+    //bootstrap WYSIHTML5 - text editor
+    $('.wysihtml_editor').wysihtml5()
     $('input').iCheck({
       checkboxClass: 'icheckbox_square-blue',
       radioClass: 'iradio_square-blue',
@@ -142,14 +149,6 @@
 		var data = getFormData($('#search_form'));
 		data['type'] = 'post';
 		data['async'] = false;
-// 		var data = {
-// 			type : 'post',
-// 			async : false,
-// 			id_search : $('#id_search').val(),
-// 			name_search : $('#name_search').val(),
-// 			status_search : $('#status_search').val(),
-// 		}
-
 		search(url, data, 'ajax_list');
 	});
 

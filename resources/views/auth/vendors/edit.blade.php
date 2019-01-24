@@ -39,12 +39,13 @@
                       <textarea class="form-control" rows="6" name="description" placeholder="{{ trans('auth.vendors.form.description') }}">{{ old('description', $vendor->description) }}</textarea>
                       <span class="help-block">@if ($errors->has('description')){{ $errors->first('description') }}@endif</span>
                     </div>
-                    <div class="form-group @if ($errors->has('logo')){{'has-error'}} @endif">
-                      <label for="exampleInputFile">{{ trans('auth.vendors.form.logo') }}</label>
-                      <input type="file" name="logo" id="logo">
-                      <p class="help-block">{{ trans('auth.vendors.form.logo_text') }}</p>
-                      <span class="help-block">@if ($errors->has('logo')){{ $errors->first('logo') }}@endif</span>
-                    </div>
+                    @include('auth.common.upload',[
+                    	'text' => trans('auth.vendors.form.logo'),
+                    	'text_small' => trans('auth.vendors.form.logo_text'),
+                    	'errors' => $errors,
+                    	'name' => 'logo',
+                    	'size' => Utils::formatMemory(Common::LOGO_MAX_SIZE)
+                    ])
                     <div class="form-group">
                       <label for="exampleInputFile">Hình hiện tại</label>
                       <img class="img img-responsive" alt="" src="{{ Utils::getImageLink($vendor->logo) }}" width="150" height="120" />

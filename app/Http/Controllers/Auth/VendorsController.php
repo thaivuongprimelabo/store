@@ -123,10 +123,7 @@ class VendorsController extends Controller
         
         $validator = [];
         
-        if($request->isMethod('get')) {
-            $id = $request->id;
-            $vendor = Vendor::find($id);
-        }
+        $vendor = Vendor::find($request->id);
         
         if($request->isMethod('post')) {
             

@@ -111,10 +111,7 @@ class CategoriesController extends Controller
         
         $validator = [];
         
-        if($request->isMethod('get')) {
-            $id = $request->id;
-            $category = Category::find($id);
-        }
+        $category = Category::find($request->id);
         
         if($request->isMethod('post')) {
             

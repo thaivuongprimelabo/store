@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Constants\Common;
+use App\Constants\Status;
 use App\Helpers\Utils;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use App\Contact;
 
 class ContactsController extends Controller
@@ -57,6 +59,65 @@ class ContactsController extends Controller
             return response()->json($output);
         } else {
             return compact('contacts', 'paging');
+        }
+    }
+    
+    /**
+     * create
+     * @param Request $request
+     */
+    public function edit(Request $request) {
+        
+        $request->flash();
+        
+        $validator = [];
+        
+        $contact = Contact::find($request->id);
+        
+        if($request->isMethod('post')) {
+            
+            $validator = Validator::make($request->all(), [
+                'reply_content' => 'required|max:' . Common::DESC_MAXLENGTH
+            ]);
+            
+            if (!$validator->fails()) {
+                
+                $filename = $contact->attachment;
+                if($request->hasFile('attachment')) {
+                    
+                    $file = $request->attachment;
+                    
+                    $filename = Utils::uploadFile($file, Common::ATTACHMENT_FOLDER, false);
+                }
+                $contact->attachment = $filename;
+                $contact->reply_content = $request->input('reply_content', '');
+                $contact->status = Status::REPLIED_CONTACT;
+                $contact->updated_at = date('Y-m-d H:i:s');
+                
+                if($contact->save()) {
+                    $config = [
+                        'msg' => ['content' => $contact->reply_content],
+                        'pathToFile' => Common::UPLOAD_FOLDER . $filename,
+                        'to' => $contact->email
+                    ];
+                    if(Utils::sendMail($config)) {
+                        return redirect(route('auth_contacts', ['id' => $request->id]))->with('success', trans('messages.UPDATE_SUCCESS'));
+                    }
+                    
+                }
+            }
+        }
+        return view('auth.contacts.edit', compact('contact'))->withErrors($validator);;
+    }
+    
+    public function remove(Request $request) {
+        if($request->isMethod('get')) {
+            $id = $request->id;
+            $contact = Contact::find($id);
+            if($contact->delete()) {
+                Utils::removeFile($contact->attachment);
+                return redirect(route('auth_contacts'))->with('success', trans('messages.REMOVE_SUCCESS'));
+            }
         }
     }
 }

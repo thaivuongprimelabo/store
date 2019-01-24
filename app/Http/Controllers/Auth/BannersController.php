@@ -122,11 +122,7 @@ class BannersController extends Controller
         
         $validator = [];
         
-        $id = $request->id;
-        
-        if($request->isMethod('get')) {
-            $banner = Banner::find($id);
-        }
+        $contact = Banner::find($request->id);
         
         if($request->isMethod('post')) {
             
@@ -143,8 +139,6 @@ class BannersController extends Controller
             ], $messages);
             
             if (!$validator->fails()) {
-                
-                $banner = Banner::find($id);
                 
                 $filename = $banner->banner;
                 if($request->hasFile('banner')) {

@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use App\Constants\Common;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Image;
 use App\Category;
@@ -19,14 +20,15 @@ class Utils {
         }
     }
     
-    public static function uploadFile($file, $destFolder) {
+    public static function uploadFile($file, $destFolder, $resize = true) {
         
         $uploadFolder = Common::UPLOAD_FOLDER;
         $uploadPath = $uploadFolder . $destFolder;
         
-        
         $filename = time() . '_' . $file->getClientOriginalName();
-        self::resizeImage($uploadPath, $file, $filename, 60, 60);
+        if($resize) {
+            self::resizeImage($uploadPath, $file, $filename, 60, 60);
+        }
         if($file->move($uploadPath, $filename)) {
             $filename = $destFolder . $filename;
         }
@@ -151,5 +153,44 @@ class Utils {
         }
         
         return $html;
+    }
+    
+    public static function sendMail($config_email = []) {
+        
+        try {
+            $from = isset($config_email['from'])?$config_email['from']:Common::ADMIN_EMAIL;
+            $from_name = isset($config_email['from_name'])?$config_email['from_name']:Common::ADMIN_NAME;
+            $to = isset($config_email['to'])?$config_email['to']:'';
+            $subject = isset($config_email['subject'])?$config_email['subject']:Common::SUBJECT;
+            $msg = isset($config_email['msg'])?$config_email['msg']:'';
+            $template = isset($config_email['template'])?$config_email['template']:Common::TEMPLATE;
+            $cc = isset($config_email['cc'])?$config_email['cc']:null;
+            $bcc = isset($config_email['bcc'])?$config_email['bcc']:null;
+            $pathToFile = isset($config_email['pathToFile'])?$config_email['pathToFile']:null;
+            
+            Mail::send($template, $msg, function ($email) use ($from, $from_name, $to, $subject, $cc, $bcc, $pathToFile) {
+                if ($from_name != '') {
+                    $email->from($from, $from_name);
+                } else {
+                    $email->from($from, $from);
+                }
+                $email->to($to);
+                if ($cc !== null) {
+                    $email->cc($cc);
+                }
+                if ($bcc !== null) {
+                    $email->bcc($bcc);
+                }
+                if ($pathToFile !== null) {
+                    $email->attach($pathToFile);
+                }
+                $email->subject($subject);
+            });
+                
+            return true;
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            return false;
+        }
     }
 }

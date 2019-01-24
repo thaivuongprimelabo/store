@@ -109,6 +109,7 @@ return [
     /*------------ Contacts page ------------------- */
     'contacts' => [
         'list_title' => 'Danh mục liên hệ',
+        'edit_title' => 'Trả lời',
         'table_header' => [
             'id' => 'ID',
             'name' => 'Tên',
@@ -126,14 +127,20 @@ return [
             'email' => 'E-mail',
             'phone' => 'Số điện thoại',
             'content' => 'Nội dung',
+            'reply' => 'Nội dung trả lời',
             'status' => 'Trạng thái',
-        ]
+            'attachment' => 'Đính kèm',
+            'attachment_text' => 'Tập tin *.jpg, *.jpeg, *.gif, *.png, *.pdf, *.doc, *.docx, *.xlsx, *.xls.Tối đa {0}'
+        ],
     ],
     'no_data_found' => '(Chưa có dữ liệu)',
     'create_box_title' => 'Thông tin đăng ký',
+    'edit_box_title' => 'Thông tin cập nhật',
     'status' => [
         'unactive' => 'Tạm dừng',
-        'active' => 'Đang hoạt động'
+        'active' => 'Đang hoạt động',
+        'new' => 'Thư mới',
+        'replied' => 'Đã trả lời'
     ],
     'button' => [
         'login' => 'Đăng nhập',
@@ -142,6 +149,7 @@ return [
         'create' => 'Đăng ký',
         'search' => 'Tìm kiếm',
         'submit' => 'Lưu',
-        'back' => 'Quay về'
+        'back' => 'Quay về',
+        'send' => 'Gửi'
     ]
 ];
