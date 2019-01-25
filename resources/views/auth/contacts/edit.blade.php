@@ -65,7 +65,8 @@
                     	'text_small' => trans('auth.contacts.form.attachment_text'),
                     	'errors' => $errors,
                     	'name' => 'attachment',
-                    	'size' => Utils::formatMemory(Common::ATTACHMENT_MAX_SIZE)
+                    	'size' => Utils::formatMemory(Common::ATTACHMENT_MAX_SIZE),
+                    	'image_using' => ''
                     ])
                   </div>
                   <!-- /.box-body -->

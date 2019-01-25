@@ -20,9 +20,9 @@
       <td>{{ $banner->link }}</td>
       <td>{{ $banner->description }}</td>
       @if($banner->status == Status::ACTIVE)
-      <td><a href="javascript:void(0)" class="update-status" data-id="{{ $banner->id }}" data-status="{{ $banner->status }}"><span class="label label-success">{{ trans('auth.status.active') }}</span></a></td>
+      <td><a href="javascript:void(0)" class="update-status" data-tbl="2" data-id="{{ $banner->id }}" data-status="{{ $banner->status }}"><span class="label label-success">{{ trans('auth.status.active') }}</span></a></td>
       @else
-      <td><a href="javascript:void(0)" class="update-status" data-id="{{ $banner->id }}" data-status="{{ $banner->status }}"><span class="label label-danger">{{ trans('auth.status.unactive') }}</span></a></td>
+      <td><a href="javascript:void(0)" class="update-status" data-tbl="2" data-id="{{ $banner->id }}" data-status="{{ $banner->status }}"><span class="label label-danger">{{ trans('auth.status.unactive') }}</span></a></td>
       @endif
       <td>{{ $banner->created_at }}</td>
       <td>{{ $banner->updated_at }}</td>

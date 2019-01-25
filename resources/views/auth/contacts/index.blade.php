@@ -35,12 +35,7 @@
                         <div class="form-group">
                           <select class="form-control" name="status_search" id="status_search">
                           	<option value="">{{ trans('auth.contacts.status_search') }}</option>
-                          	@php
-                          		$statusList = Status::getData();
-                          	@endphp
-                          	@foreach($statusList as $key=>$value)
-                          	<option value="{{ $key }}">{{ $value }}</option>
-                          	@endforeach
+                          	{!! ContactStatus::createSelectList() !!}
                           </select>
                         </div>
                      </div>
@@ -53,6 +48,11 @@
           @if (session('success'))
             <div class="alert alert-success">
                 {{ session('success') }}
+            </div>
+          @endif
+          @if (session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
             </div>
           @endif
           <div class="box">

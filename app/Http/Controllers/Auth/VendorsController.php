@@ -77,7 +77,7 @@ class VendorsController extends Controller
             $maxSize =  Utils::formatMemory(Common::LOGO_MAX_SIZE, true);
             
             $messages = [
-                'size' => Utils::getValidateMessage('validation.size.file', 'auth.vendor.form.logo',  Utils::formatMemory(Common::LOGO_MAX_SIZE)),
+                'size' => Utils::getValidateMessage('validation.size.file', 'auth.vendors.form.logo',  Utils::formatMemory(Common::LOGO_MAX_SIZE)),
             ];
             
             $validator = Validator::make($request->all(), [
@@ -127,11 +127,15 @@ class VendorsController extends Controller
         
         if($request->isMethod('post')) {
             
+            $messages = [
+                'size' => Utils::getValidateMessage('validation.size.file', 'auth.vendors.form.logo',  Utils::formatMemory(Common::LOGO_MAX_SIZE)),
+            ];
+            
             $validator = Validator::make($request->all(), [
                 'name' => 'required|max:255',
                 'description' => 'required|max:255',
                 'logo' => 'file|mimes:jpeg,png,gif'
-            ]);
+            ], $messages);
             
             if (!$validator->fails()) {
                 

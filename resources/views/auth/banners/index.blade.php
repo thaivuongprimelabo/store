@@ -23,22 +23,12 @@
                         <div class="form-group">
                           <select class="form-control" name="status_search" id="status_search">
                           	<option value="">{{ trans('auth.banners.status_search') }}</option>
-                          	@php
-                          		$statusList = Status::getData();
-                          	@endphp
-                          	@foreach($statusList as $key=>$value)
-                          	<option value="{{ $key }}">{{ $value }}</option>
-                          	@endforeach
+                          	{!! Status::createSelectList() !!}
                           </select>
                         </div>
                      </div>
                  </form>
-                 <div class="col-md-1">
-                    <button type="button" id="search" class="btn btn-primary pull-right" data-url="{{ route('auth_banners_search') }}">{{ trans('auth.button.search') }}</button>
-                  </div>
-                  <div class="col-md-1">
-                    <button type="button" id="search" class="btn btn-warning pull-left" onclick="window.location='{{ route('auth_banners_create') }}'">{{ trans('auth.button.create') }}</button>
-                  </div>
+                 @include('auth.common.group_button')
               </div>
           </div>
           @if (session('success'))

@@ -18,9 +18,9 @@
       <td>{{ $vendor->name }}</td>
       <td><img src="{{ Utils::getImageLink($vendor->logo) }}" width="200" height="100" /></td>
       @if($vendor->status == Status::ACTIVE)
-      <td><a href="javascript:void(0)" class="update-status" data-id="{{ $vendor->id }}" data-status="{{ $vendor->status }}"><span class="label label-success">{{ trans('auth.status.active') }}</span></a></td>
+      <td><a href="javascript:void(0)" class="update-status" data-tbl="0" data-id="{{ $vendor->id }}" data-status="{{ $vendor->status }}"><span class="label label-success">{{ trans('auth.status.active') }}</span></a></td>
       @else
-      <td><a href="javascript:void(0)" class="update-status" data-id="{{ $vendor->id }}" data-status="{{ $vendor->status }}"><span class="label label-danger">{{ trans('auth.status.unactive') }}</span></a></td>
+      <td><a href="javascript:void(0)" class="update-status" data-tbl="0" data-id="{{ $vendor->id }}" data-status="{{ $vendor->status }}"><span class="label label-danger">{{ trans('auth.status.unactive') }}</span></a></td>
       @endif
       <td>{{ $vendor->created_at }}</td>
       <td>{{ $vendor->updated_at }}</td>

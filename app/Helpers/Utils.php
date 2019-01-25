@@ -7,10 +7,11 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Image;
 use App\Category;
+use App\Config;
 
 class Utils {
     
-    public static function getImageLink($image) {
+    public static function getImageLink($image = '') {
         $uploadFolder = Common::UPLOAD_FOLDER;
         $nologo = Common::NO_LOGO_FILE;
         if(!self::blank($image)) {
@@ -26,9 +27,11 @@ class Utils {
         $uploadPath = $uploadFolder . $destFolder;
         
         $filename = time() . '_' . $file->getClientOriginalName();
+        
         if($resize) {
             self::resizeImage($uploadPath, $file, $filename, 60, 60);
         }
+        
         if($file->move($uploadPath, $filename)) {
             $filename = $destFolder . $filename;
         }
@@ -36,7 +39,26 @@ class Utils {
         return $filename;
     }
     
-    public static function resizeImage($uploadPath, $file, $filename, $width, $height) {
+    public static function createIcoFile($file, $filename) {
+        $uploadPath = Common::UPLOAD_FOLDER;
+        $resizePath = $uploadPath . Common::ICO_FOLDER;
+        $image_resize = Image::make($file->getRealPath());
+        $image_resize->resize(Common::ICO_WIDTH, Common::ICO_HEIGHT);
+        
+        if(!file_exists(public_path($uploadPath))) {
+            mkdir(public_path($uploadPath));
+        }
+        
+        if(!file_exists(public_path($resizePath))) {
+            mkdir(public_path($resizePath));
+        }
+        
+        $image_resize->save(public_path($resizePath . $filename));
+        
+        return Common::ICO_FOLDER . $filename;
+    }
+    
+    public static function resizeImage($uploadPath, $file, $filename, $width = '', $height = '') {
         $resizePath = $uploadPath . 'resize/';
         $image_resize = Image::make($file->getRealPath());
         $image_resize->resize($width, $height);
@@ -155,11 +177,32 @@ class Utils {
         return $html;
     }
     
+    public static function getConfig() {
+        
+        $config = Config::first();
+        return $config;
+    }
+    
+    public static function setConfigMail() {
+        
+        $config = self::getConfig();
+        \Illuminate\Support\Facades\Config::set('mail.driver', $config->mail_driver);
+        \Illuminate\Support\Facades\Config::set('mail.host', $config->mail_host);
+        \Illuminate\Support\Facades\Config::set('mail.port', $config->mail_port);
+        \Illuminate\Support\Facades\Config::set('mail.from.address', $config->mail_from);
+        \Illuminate\Support\Facades\Config::set('mail.from.name', $config->mail_name);
+        \Illuminate\Support\Facades\Config::set('mail.encryption', $config->mail_encryption);
+        \Illuminate\Support\Facades\Config::set('mail.username', $config->mail_account);
+        \Illuminate\Support\Facades\Config::set('mail.password', $config->mail_password);
+    }
+    
     public static function sendMail($config_email = []) {
         
+        self::setConfigMail();
+        
         try {
-            $from = isset($config_email['from'])?$config_email['from']:Common::ADMIN_EMAIL;
-            $from_name = isset($config_email['from_name'])?$config_email['from_name']:Common::ADMIN_NAME;
+            $from = isset($config_email['from'])?$config_email['from']: config('mail.from.address');
+            $from_name = isset($config_email['from_name'])?$config_email['from_name']: config('mail.from.name');
             $to = isset($config_email['to'])?$config_email['to']:'';
             $subject = isset($config_email['subject'])?$config_email['subject']:Common::SUBJECT;
             $msg = isset($config_email['msg'])?$config_email['msg']:'';
@@ -189,7 +232,6 @@ class Utils {
                 
             return true;
         } catch (\Exception $e) {
-            echo $e->getMessage();
             return false;
         }
     }

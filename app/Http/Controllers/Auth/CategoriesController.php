@@ -75,13 +75,9 @@ class CategoriesController extends Controller
             
             $maxSize =  Utils::formatMemory(Common::LOGO_MAX_SIZE, true);
             
-            $messages = [
-                'size' => Utils::getValidateMessage('validation.size.file', 'auth.vendor.form.logo',  Utils::formatMemory(Common::LOGO_MAX_SIZE)),
-            ];
-            
             $validator = Validator::make($request->all(), [
                 'name' => 'required|max:' . Common::NAME_MAXLENGTH,
-            ], $messages);
+            ]);
             
             if (!$validator->fails()) {
                 $category = new Category();
@@ -117,13 +113,9 @@ class CategoriesController extends Controller
             
             $maxSize =  Utils::formatMemory(Common::LOGO_MAX_SIZE, true);
             
-            $messages = [
-                'size' => Utils::getValidateMessage('validation.size.file', 'auth.vendor.form.logo',  Utils::formatMemory(Common::LOGO_MAX_SIZE)),
-            ];
-            
             $validator = Validator::make($request->all(), [
                 'name' => 'required|max:' . Common::NAME_MAXLENGTH,
-            ], $messages);
+            ]);
             
             if (!$validator->fails()) {
                 $category = Category::find($request->id);

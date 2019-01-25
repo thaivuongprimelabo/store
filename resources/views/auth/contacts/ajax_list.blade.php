@@ -1,7 +1,6 @@
-
-
   <table class="table table-hover">
     <tr>
+      <th></th>
       <th>{{ trans('auth.contacts.table_header.id') }}</th>
       <th>{{ trans('auth.contacts.table_header.name') }}</th>
       <th>{{ trans('auth.contacts.table_header.email') }}</th>
@@ -14,14 +13,15 @@
     @if($contacts->count())
     @foreach($contacts as $contact)
     <tr>
+      <td><input type="checkbox" name="check_all" value="{{ $contact->id }}"></td>
       <td>{{ $contact->id }}</td>
       <td>{{ $contact->name }}</td>
       <td>{{ $contact->email }}</td>
       <td>{{ $contact->phone }}</td>
-      @if($contact->status == Status::NEW_CONTACT)
-      <td><a href="javascript:void(0)" class="update-status" data-id="{{ $contact->id }}" data-status="{{ $contact->status }}"><span class="label label-danger">{{ trans('auth.status.new') }}</span></a></td>
+      @if($contact->status == ContactStatus::NEW_CONTACT)
+      <td><a href="javascript:void(0)" class="update-status" data-tbl="3" data-id="{{ $contact->id }}" data-status="{{ $contact->status }}"><span class="label label-danger">{{ trans('auth.status.new') }}</span></a></td>
       @else
-      <td><a href="javascript:void(0)" class="update-status" data-id="{{ $contact->id }}" data-status="{{ $contact->status }}"><span class="label label-success">{{ trans('auth.status.replied') }}</span></a></td>
+      <td><a href="javascript:void(0)" class="update-status" data-tbl="3" data-id="{{ $contact->id }}" data-status="{{ $contact->status }}"><span class="label label-success">{{ trans('auth.status.replied') }}</span></a></td>
       @endif
       <td>{{ $contact->created_at }}</td>
       @include('auth.common.row_button',[
