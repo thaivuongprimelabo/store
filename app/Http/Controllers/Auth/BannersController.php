@@ -77,7 +77,7 @@ class BannersController extends Controller
             $maxSize =  Utils::formatMemory(Common::BANNER_MAX_SIZE, true);
             
             $messages = [
-                'size' => Utils::getValidateMessage('validation.size.file', 'auth.banners.form.logo',  Utils::formatMemory(Common::LOGO_MAX_SIZE)),
+                'size' => Utils::getValidateMessage('validation.size.file', 'auth.banners.form.banner',  Utils::formatMemory(Common::BANNER_MAX_SIZE)),
             ];
             
             $validator = Validator::make($request->all(), [
@@ -129,7 +129,7 @@ class BannersController extends Controller
             $maxSize =  Utils::formatMemory(Common::BANNER_MAX_SIZE, true);
             
             $messages = [
-                'size' => Utils::getValidateMessage('validation.size.file', 'auth.banners.form.logo',  Utils::formatMemory(Common::LOGO_MAX_SIZE)),
+                'size' => Utils::getValidateMessage('validation.size.file', 'auth.banners.form.banner',  Utils::formatMemory(Common::BANNER_MAX_SIZE)),
             ];
             
             $validator = Validator::make($request->all(), [

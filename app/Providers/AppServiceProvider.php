@@ -2,8 +2,11 @@
 
 namespace App\Providers;
 
+use App\Config;
+use App\Helpers\Utils;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\View;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -16,6 +19,13 @@ class AppServiceProvider extends ServiceProvider
     {
         //
         Schema::defaultStringLength(191);
+        
+        // Config
+        $config = Config::first();
+        
+        $web_logo = Utils::getImageLink($config->web_logo);
+        
+        View::share('web_logo', $web_logo);
     }
 
     /**

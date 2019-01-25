@@ -17,6 +17,10 @@
   <link rel="stylesheet" href="{{ url('admin/bower_components/font-awesome/css/font-awesome.min.css') }}">
   <!-- Ionicons -->
   <link rel="stylesheet" href="{{ url('admin/bower_components/Ionicons/css/ionicons.min.css') }}">
+  <!-- daterange picker -->
+  <link rel="stylesheet" href="{{ url('admin/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css') }}">
+  <!-- Bootstrap time Picker -->
+  <link rel="stylesheet" href="{{ url('admin/plugins/timepicker/bootstrap-timepicker.min.css') }}">
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ url('admin/dist/css/AdminLTE.min.css') }}">
   <!-- iCheck -->
@@ -38,11 +42,11 @@
 <div class="wrapper">
 	<header class="main-header">
         <!-- Logo -->
-        <a href="../../index2.html" class="logo">
+        <a href="{{ route('dashboard') }}" class="logo">
           <!-- mini logo for sidebar mini 50x50 pixels -->
-          <span class="logo-mini"></span>
+          <span class="logo-mini"><img src="{{ $web_logo }}" width="20"  /></span>
           <!-- logo for regular state and mobile devices -->
-          <span class="logo-lg">{!! trans('auth.dashboard_page_title') !!}</span>
+          <span class="logo-lg"><img src="{{ $web_logo }}" width="60" /></span>
         </a>
         <!-- Header Navbar: style can be found in header.less -->
         <nav class="navbar navbar-static-top">
@@ -112,6 +116,12 @@
 <script src="{{ url('admin/bower_components/jquery-slimscroll/jquery.slimscroll.min.js') }}"></script>
 <!-- FastClick -->
 <script src="{{ url('admin/bower_components/fastclick/lib/fastclick.js') }}"></script>
+<!-- date-range-picker -->
+<script src="{{ url('admin/bower_components/moment/min/moment.min.js') }}"></script>
+<!-- bootstrap datepicker -->
+<script src="{{ url('admin/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
+<!-- bootstrap time picker -->
+<script src="{{ url('admin/plugins/timepicker/bootstrap-timepicker.min.js') }}"></script>
 <!-- AdminLTE App -->
 <script src="{{ url('admin/dist/js/adminlte.min.js') }}"></script>
 <!-- AdminLTE for demo purposes -->
@@ -165,12 +175,13 @@
 	});
 
 	$(document).on('click', '.update-status', function(e) {
+		var table = $(this).attr('data-tbl');
 		var data = {
 			type : 'post',
 			async : false,
 			id : $(this).attr('data-id'),
 			current_status: $(this).attr('data-status'),
-			table: 0
+			table: table
 		}
 
 		var res = callAjax('{{ route('update_status') }}', data, 'update_status');

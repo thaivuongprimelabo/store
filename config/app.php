@@ -226,6 +226,8 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Status' => App\Constants\Status::class,
+        'ContactStatus' => App\Constants\ContactStatus::class,
+        'PostStatus' => App\Constants\PostStatus::class,
         'Common' => App\Constants\Common::class,
         'Validation' => App\Constants\Validation::class,
         'Utils' => App\Helpers\Utils::class,

@@ -16,9 +16,9 @@
       <td>{{ $category->id }}</td>
       <td>{{ $category->name }}</td>
       @if($category->status == Status::ACTIVE)
-      <td><a href="javascript:void(0)" class="update-status" data-id="{{ $category->id }}" data-status="{{ $category->status }}"><span class="label label-success">{{ trans('auth.status.active') }}</span></a></td>
+      <td><a href="javascript:void(0)" class="update-status" data-tbl="1" data-id="{{ $category->id }}" data-status="{{ $category->status }}"><span class="label label-success">{{ trans('auth.status.active') }}</span></a></td>
       @else
-      <td><a href="javascript:void(0)" class="update-status" data-id="{{ $category->id }}" data-status="{{ $category->status }}"><span class="label label-danger">{{ trans('auth.status.unactive') }}</span></a></td>
+      <td><a href="javascript:void(0)" class="update-status" data-tbl="1" data-id="{{ $category->id }}" data-status="{{ $category->status }}"><span class="label label-danger">{{ trans('auth.status.unactive') }}</span></a></td>
       @endif
       <td>{{ $category->created_at }}</td>
       <td>{{ $category->updated_at }}</td>

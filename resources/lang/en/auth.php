@@ -31,7 +31,7 @@ return [
         'categories' => 'Quản lý loại sản phẩm',
         'vendors' => 'Quản lý nhà cung cấp',
         'banners' => 'Quản lý banner',
-        'news' => 'Quản lý bài viết',
+        'posts' => 'Quản lý bài viết',
         'contacts' => 'Hộp thư liên hệ',
         'config' => 'Cấu hình'
     ],
@@ -133,6 +133,56 @@ return [
             'attachment_text' => 'Tập tin *.jpg, *.jpeg, *.gif, *.png, *.pdf, *.doc, *.docx, *.xlsx, *.xls.Tối đa {0}'
         ],
     ],
+    /*------------ Posts page ------------------- */
+    'posts' => [
+        'list_title' => 'Danh mục bài viết',
+        'create_title' => 'Đăng ký bài viết',
+        'edit_title' => 'Chỉnh sửa bài viết',
+        'table_header' => [
+            'id' => 'ID',
+            'name' => 'Tựa đề',
+            'photo' => 'Hình ảnh',
+            'description' => 'Mô tả ngắn',
+            'status' => 'Trạng thái',
+            'published_at' => 'Ngày xuất bản',
+            'created_at' => 'Ngày đăng ký',
+        ],
+        'id_search_placeholder' => 'Lọc theo Id bài viết',
+        'name_search_placeholder' => 'Lọc theo tựa đề',
+        'status_search' => 'Tất cả trạng thái',
+        'form' => [
+            'name' => 'Tựa đề',
+            'photo' => 'Hình ảnh',
+            'description' => 'Mô tả ngắn',
+            'content' => 'Nội dung',
+            'status' => 'Trạng thái',
+            'published_at' => 'Ngày xuất bản',
+            'published_time_at' => 'Thời điểm xuất bản',
+            'photo_text' => 'Tập tin *.jpg, *.jpeg, *.gif, *.png.Tối đa {0}'
+        ],
+    ],
+    /*------------ Posts page ------------------- */
+    'config' => [
+        'title' => 'Cấu hình hệ thống',
+        'form' => [
+            'web_title' => 'Web name',
+            'web_logo' => 'Web logo',
+            'web_email' => 'Web mail',
+            'web_description' => 'SEO Description',
+            'web_keywords' => 'SEO Keywords',
+            'mail_driver' => 'Mail driver',
+            'mail_host' => 'Mail host',
+            'mail_port' => 'Mail port',
+            'mail_from' => 'Mail from',
+            'mail_name' => 'Mail name',
+            'mail_encryption' => 'Mail encryption',
+            'mail_account' => 'Mail account',
+            'mail_password' => 'Mail password',
+            'off' => 'Tắt hệ thống',
+        ],
+        'weblogo_text' => 'Tập tin *.jpg, *.jpeg, *.gif, *.png.Tối đa {0}'
+    ],
+    'preview_image' => 'Hình đang sử dụng',
     'no_data_found' => '(Chưa có dữ liệu)',
     'create_box_title' => 'Thông tin đăng ký',
     'edit_box_title' => 'Thông tin cập nhật',
@@ -140,7 +190,9 @@ return [
         'unactive' => 'Tạm dừng',
         'active' => 'Đang hoạt động',
         'new' => 'Thư mới',
-        'replied' => 'Đã trả lời'
+        'replied' => 'Đã trả lời',
+        'published' => 'Đã xuất bản',
+        'not_published' => 'Chưa xuất bản',
     ],
     'button' => [
         'login' => 'Đăng nhập',

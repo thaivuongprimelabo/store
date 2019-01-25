@@ -2,15 +2,15 @@
 
 namespace App\Constants;
 
-class Status {
+class PostStatus {
     
-    CONST UNACTIVE = 0;
-    CONST ACTIVE = 1;
+    CONST NOT_PUBLISHED = 0;
+    CONST PUBLISHED = 1;
     
     public static function getData($key = '') {
         $array = [
-            self::UNACTIVE => trans('auth.status.unactive'),
-            self::ACTIVE => trans('auth.status.active'),
+            self::NOT_PUBLISHED => trans('auth.status.not_published'),
+            self::PUBLISHED => trans('auth.status.published'),
         ];
 
         if($key != '') {

@@ -10,7 +10,7 @@ use App\Category;
 
 class Utils {
     
-    public static function getImageLink($image) {
+    public static function getImageLink($image = '') {
         $uploadFolder = Common::UPLOAD_FOLDER;
         $nologo = Common::NO_LOGO_FILE;
         if(!self::blank($image)) {

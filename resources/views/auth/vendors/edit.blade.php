@@ -44,12 +44,11 @@
                     	'text_small' => trans('auth.vendors.form.logo_text'),
                     	'errors' => $errors,
                     	'name' => 'logo',
-                    	'size' => Utils::formatMemory(Common::LOGO_MAX_SIZE)
+                    	'size' => Utils::formatMemory(Common::LOGO_MAX_SIZE),
+                    	'image_using' => Utils::getImageLink($vendor->logo),
+                    	'width' => Common::LOGO_WIDTH,
+                    	'height' => Common::LOGO_HEIGHT
                     ])
-                    <div class="form-group">
-                      <label for="exampleInputFile">Hình hiện tại</label>
-                      <img class="img img-responsive" alt="" src="{{ Utils::getImageLink($vendor->logo) }}" width="150" height="120" />
-                    </div>
                     <div class="checkbox">
                       <label>
                         <input type="checkbox" name="status" value="1" @if(old('status', $vendor->status)) {{ 'checked="checked"' }} @endif> {{ trans('auth.status.active') }}
@@ -133,6 +132,13 @@
 
     $('#logo').change(function(e) {
     	$(this).parent().removeClass('has-error');
+    	if(checkFileSize(element, '{{ Common::LOGO_MAX_SIZE }}')) {
+    		var reader = new FileReader();
+            reader.onload = function (event) {
+                $('#preview').attr('src', event.target.result);
+            }
+            reader.readAsDataURL($('input[name="logo"]')[0].files[0]);
+    	}
     });
 </script>
 @endsection

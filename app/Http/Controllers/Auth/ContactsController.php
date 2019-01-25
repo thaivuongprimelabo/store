@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Contact;
+use App\Constants\ContactStatus;
 
 class ContactsController extends Controller
 {
@@ -76,8 +77,15 @@ class ContactsController extends Controller
         
         if($request->isMethod('post')) {
             
+            $maxSize =  Utils::formatMemory(Common::ATTACHMENT_MAX_SIZE, true);
+            
+            $messages = [
+                'size' => Utils::getValidateMessage('validation.size.file', 'auth.contacts.form.attachment',  Utils::formatMemory(Common::ATTACHMENT_MAX_SIZE)),
+            ];
+            
             $validator = Validator::make($request->all(), [
-                'reply_content' => 'required|max:' . Common::DESC_MAXLENGTH
+                'reply_content' => 'required|max:' . Common::DESC_MAXLENGTH,
+                'banner' => 'max:'.$maxSize.'|mimes:'. Common::FILE_EXT1
             ]);
             
             if (!$validator->fails()) {
@@ -91,7 +99,7 @@ class ContactsController extends Controller
                 }
                 $contact->attachment = $filename;
                 $contact->reply_content = $request->input('reply_content', '');
-                $contact->status = Status::REPLIED_CONTACT;
+                $contact->status = ContactStatus::REPLIED_CONTACT;
                 $contact->updated_at = date('Y-m-d H:i:s');
                 
                 if($contact->save()) {

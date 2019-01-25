@@ -7,7 +7,7 @@
   </div>
   <!-- /.login-logo -->
   <div class="login-box-body">
-    <p class="login-box-msg">{{ trans('auth.login_page_top_text') }}</p>
+    <p class="login-box-msg"><img src="{{ $web_logo }}" width="90" /></p>
 
     <form action="{{ route('login') }}" method="post">
       {{ csrf_field() }}

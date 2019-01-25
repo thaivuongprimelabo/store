@@ -44,12 +44,11 @@
                     	'text_small' => trans('auth.banners.form.banner_text'),
                     	'errors' => $errors,
                     	'name' => 'banner',
-                    	'size' => Utils::formatMemory(Common::BANNER_MAX_SIZE)
+                    	'size' => Utils::formatMemory(Common::BANNER_MAX_SIZE),
+                    	'width' => Common::BANNER_WIDTH,
+                    	'height' => Common::BANNER_HEIGHT,
+                    	'image_using' => Utils::getImageLink($banner->banner)
                     ])
-                    <div class="form-group">
-                      <label for="exampleInputFile">Hình hiện tại</label>
-                      <img class="img img-responsive" id="banner_preview" alt="" src="{{ Utils::getImageLink($banner->banner) }}" width="150" height="120" />
-                    </div>
                     <div class="checkbox">
                       <label>
                         <input type="checkbox" name="status" value="1" @if(old('status', $banner->status)) {{ 'checked="checked"' }} @endif> {{ trans('auth.status.active') }}
@@ -138,7 +137,7 @@
     	if(checkFileSize(element, '{{ Common::BANNER_MAX_SIZE }}')) {
     		var reader = new FileReader();
             reader.onload = function (event) {
-                $('#banner_preview').attr('src', event.target.result);
+                $('#preview').attr('src', event.target.result);
             }
             reader.readAsDataURL($('input[name="banner"]')[0].files[0]);
     	}

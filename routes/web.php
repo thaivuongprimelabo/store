@@ -26,8 +26,6 @@ Route::group(['prefix' => 'auth', 'namespace' => 'Auth'], function () {
     $this->get('/dashboard', 'DashboardController@index')->name('dashboard');
     
     $this->get('/products', 'DashboardController@index')->name('auth_products');
-    $this->get('/news', 'DashboardController@index')->name('auth_news');
-    $this->get('/config', 'DashboardController@index')->name('auth_config');
     
     // Vendors
     $this->get('/vendors', 'VendorsController@index')->name('auth_vendors');
@@ -56,6 +54,16 @@ Route::group(['prefix' => 'auth', 'namespace' => 'Auth'], function () {
     Route::match(['get', 'post'], '/contacts/edit/{id}', 'ContactsController@edit')->name('auth_contacts_edit');
     Route::match(['get', 'post'], '/search_contact', 'ContactsController@search')->name('auth_contacts_search');
     Route::get('/contacts/remove/{id}', 'ContactsController@remove')->name('auth_contacts_remove');
+    
+    // Posts
+    $this->get('/posts', 'PostsController@index')->name('auth_posts');
+    Route::match(['get', 'post'], '/posts/create', 'PostsController@create')->name('auth_posts_create');
+    Route::match(['get', 'post'], '/posts/edit/{id}', 'PostsController@edit')->name('auth_posts_edit');
+    Route::match(['get', 'post'], '/search_post', 'PostsController@search')->name('auth_posts_search');
+    Route::get('/posts/remove/{id}', 'PostsController@remove')->name('auth_posts_remove');
+    
+    // Config
+    Route::match(['get', 'post'], '/config', 'ConfigController@index')->name('auth_config');
     
     
     // Registration Routes...

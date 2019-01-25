@@ -2,15 +2,15 @@
 
 namespace App\Constants;
 
-class Status {
+class ContactStatus {
     
-    CONST UNACTIVE = 0;
-    CONST ACTIVE = 1;
+    CONST NEW_CONTACT = 0;
+    CONST REPLIED_CONTACT = 1;
     
     public static function getData($key = '') {
         $array = [
-            self::UNACTIVE => trans('auth.status.unactive'),
-            self::ACTIVE => trans('auth.status.active'),
+            self::NEW_CONTACT => trans('auth.status.new'),
+            self::REPLIED_CONTACT => trans('auth.status.replied'),
         ];
 
         if($key != '') {

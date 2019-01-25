@@ -23,12 +23,7 @@
                         <div class="form-group">
                           <select class="form-control" name="status_search" id="status_search">
                           	<option value="">{{ trans('auth.banners.status_search') }}</option>
-                          	@php
-                          		$statusList = Status::getData();
-                          	@endphp
-                          	@foreach($statusList as $key=>$value)
-                          	<option value="{{ $key }}">{{ $value }}</option>
-                          	@endforeach
+                          	{!! Status::createSelectList() !!}
                           </select>
                         </div>
                      </div>
