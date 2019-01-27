@@ -28,9 +28,8 @@ class ConfigController extends Controller
             if($request->hasFile('web_logo')) {
                 
                 $file = $request->web_logo;
-                
+
                 $icoFileName = 'favico.png';
-                $icoFile = Utils::createIcoFile($file, $icoFileName);
                 $filename = Utils::uploadFile($file, Common::WEBLOGO_FOLDER);
             }
             $config->web_title       = $request->input('web_title', '');
