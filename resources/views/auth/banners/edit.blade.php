@@ -133,14 +133,10 @@
     $('#banner').change(function(e) {
     	$(this).parent().removeClass('has-error');
 		var element = $('input[name="banner"]')[0];
-    	
-    	if(checkFileSize(element, '{{ Common::BANNER_MAX_SIZE }}')) {
-    		var reader = new FileReader();
-            reader.onload = function (event) {
-                $('#preview').attr('src', event.target.result);
-            }
-            reader.readAsDataURL($('input[name="banner"]')[0].files[0]);
-    	}
+		var maxSize = '{{ Common::BANNER_MAX_SIZE }}';
+    	var width = '{{ Common::BANNER_WIDTH }}';
+    	var height = '{{ Common::BANNER_HEIGHT }}';
+    	previewImage(element, maxSize, width, height );
     });
 </script>
 @endsection

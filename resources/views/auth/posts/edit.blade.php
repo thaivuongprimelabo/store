@@ -165,15 +165,10 @@
     $('#photo').change(function(e) {
     	$(this).parent().removeClass('has-error');
     	var element = $('input[name="photo"]')[0];
-    	
-    	if(checkFileSize(element, '{{ Common::PHOTO_MAX_SIZE }}')) {
-    		var reader = new FileReader();
-            reader.onload = function (event) {
-                $('#preview').attr('src', event.target.result);
-            }
-            reader.readAsDataURL($('input[name="photo"]')[0].files[0]);
-    	}
-    	
+    	var maxSize = '{{ Common::PHOTO_MAX_SIZE }}';
+    	var width = '{{ Common::PHOTO_WIDTH }}';
+    	var height = '{{ Common::PHOTO_HEIGHT }}';
+    	previewImage(element, maxSize, width, height );
     });
 </script>
 @endsection

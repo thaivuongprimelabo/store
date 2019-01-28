@@ -36,6 +36,7 @@
                     <div class="form-group">
                       <label for="exampleInputEmail1">{{ trans('auth.categories.form.parent') }}</label>
                       <select class="form-control" name="parent_id" id="parent_id">
+                        <option value="0">{{ trans('auth.categories.parent_empty_text') }}</option>
                       	{!! Utils::createSelectList(Common::CATEGORIES) !!}
                       </select>
                     </div>

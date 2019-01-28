@@ -122,7 +122,7 @@ class BannersController extends Controller
         
         $validator = [];
         
-        $contact = Banner::find($request->id);
+        $banner = Banner::find($request->id);
         
         if($request->isMethod('post')) {
             

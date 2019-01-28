@@ -35,7 +35,7 @@
                         <div class="form-group">
                           <select class="form-control" name="category_search" id="status_search">
                           	<option value="">{{ trans('auth.products.category_search') }}</option>
-                          	{!! Status::createSelectList() !!}
+                          	{!! Utils::createSelectList(Common::CATEGORIES) !!}
                           </select>
                         </div>
                      </div>
@@ -43,7 +43,7 @@
                         <div class="form-group">
                           <select class="form-control" name="vendor_search" id="status_search">
                           	<option value="">{{ trans('auth.products.vendor_search') }}</option>
-                          	{!! Status::createSelectList() !!}
+                          	{!! Utils::createSelectList(Common::VENDORS) !!}
                           </select>
                         </div>
                      </div>

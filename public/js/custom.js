@@ -58,6 +58,46 @@ var getFormData = function($form){
     return indexed_array;
 }
 
+var previewImage = function(element, size, width, height) {
+	
+	for(var i = 0; i < element.files.length; i++) {
+		var input = element.files[i];
+    	if(checkFileSize(input, size)) {
+    		var div = document.getElementById('preview_list');
+    		
+    		var tagA = document.createElement('a');
+    		tagA.href = 'javascript:void(0)';
+    		tagA.target = '_blank';
+    		
+    		var image = document.createElement('img');
+    		image.className = 'img-thumbnail thumb';
+    		image.style = 'width: ' + width + 'px; height: ' + height + 'px';
+    		
+    		var hidden = document.createElement('input');
+    		hidden.type = 'hidden';
+    		hidden.name = "file_input[]";
+    		hidden.value = i;
+    		
+    		tagA.appendChild(image);
+    		tagA.appendChild(hidden);
+    		
+    		if(element.multiple) {
+    			div.appendChild(tagA);
+    			$('#remove_image').show();
+    		} else {
+    			div.innerHTML = '';
+    			div.appendChild(tagA);
+    		}
+    		
+    		var reader = new FileReader();
+            reader.onload = function (event) {
+            	image.src = event.target.result;
+            }
+            reader.readAsDataURL(input);
+    	}
+	}
+}
+
 $(document).ready(function() {
 	
 	$.validator.addMethod( "extension", function( value, element, param ) {

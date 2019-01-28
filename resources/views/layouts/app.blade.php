@@ -39,6 +39,14 @@
        padding: 0 !important;
        margin: 0 !important;
     }
+    .thumb{
+      margin-bottom: 4px;
+      margin-right:4px;
+    }
+    .selected {
+        background: #f0f0f0;
+        display: inline-block;
+    }
   </style>
 </head>
 @if(Auth::guest())
@@ -51,9 +59,9 @@
         <!-- Logo -->
         <a href="{{ route('dashboard') }}" class="logo">
           <!-- mini logo for sidebar mini 50x50 pixels -->
-          <span class="logo-mini"><img src="{{ $web_logo }}" width="{{ Common::WEB_LOGO_ADMIN_SMALL_WIDTH }}"  /></span>
+          <span class="logo-mini"><img src="{{ $web_logo }}" width="{{ Common::WEB_LOGO_ADMIN_SMALL_WIDTH }}" height="{{ Common::WEB_LOGO_ADMIN_SMALL_HEIGHT }}" /></span>
           <!-- logo for regular state and mobile devices -->
-          <span class="logo-lg"><img src="{{ $web_logo }}" width="{{ Common::WEB_LOGO_ADMIN_WIDTH }}" /></span>
+          <span class="logo-lg"><img src="{{ $web_logo }}" width="{{ Common::WEB_LOGO_ADMIN_WIDTH }}"  height="{{ Common::WEB_LOGO_ADMIN_HEIGHT }}" /></span>
         </a>
         <!-- Header Navbar: style can be found in header.less -->
         <nav class="navbar navbar-static-top">
@@ -202,6 +210,18 @@
 
 	$(document).on('click', '#remove_all', function(e) {
 
+	});
+
+	$(document).on('click', '#preview_list a', function(e) {
+		if($(this).hasClass('selected')) {
+			$(this).removeClass('selected');
+		} else {
+			$(this).addClass('selected');
+		}
+	});
+
+	$(document).on('click', '#remove_image', function(e) {
+		
 	});
 
 	$('input#check_all').on('ifChecked', function(event){

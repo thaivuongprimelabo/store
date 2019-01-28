@@ -45,7 +45,7 @@
                     	'errors' => $errors,
                     	'name' => 'logo',
                     	'size' => Utils::formatMemory(Common::LOGO_MAX_SIZE),
-                    	'image_using' => Utils::getImageLink($vendor->logo),
+                    	'image_using' => [Utils::getImageLink($vendor->logo)],
                     	'width' => Common::LOGO_WIDTH,
                     	'height' => Common::LOGO_HEIGHT
                     ])
@@ -132,13 +132,11 @@
 
     $('#logo').change(function(e) {
     	$(this).parent().removeClass('has-error');
-    	if(checkFileSize(element, '{{ Common::LOGO_MAX_SIZE }}')) {
-    		var reader = new FileReader();
-            reader.onload = function (event) {
-                $('#preview').attr('src', event.target.result);
-            }
-            reader.readAsDataURL($('input[name="logo"]')[0].files[0]);
-    	}
+    	var element = $('input[name="logo"]')[0];
+    	var maxSize = '{{ Common::LOGO_MAX_SIZE }}';
+    	var width = '{{ Common::LOGO_WIDTH }}';
+    	var height = '{{ Common::LOGO_HEIGHT }}';
+    	previewImage(element, maxSize, width, height );
     });
 </script>
 @endsection

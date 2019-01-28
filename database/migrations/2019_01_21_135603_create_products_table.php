@@ -18,7 +18,6 @@ class CreateProductsTable extends Migration
             $table->increments('id');
             $table->string('name', 255);
             $table->string('name_url', 255);
-            $table->string('image', 255);
             $table->string('price', 20);
             $table->integer('category_id', false, true);
             $table->integer('vendor_id', false, true);

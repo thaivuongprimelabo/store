@@ -3,11 +3,13 @@
 namespace App\Helpers;
 
 use App\Constants\Common;
+use App\Constants\Status;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Image;
 use App\Category;
 use App\Config;
+use App\Vendor;
 
 class Utils {
     
@@ -156,11 +158,14 @@ class Utils {
     }
     
     public static function createSelectList($table, $selected = '') {
-        $html = '<option value="0">' . trans('auth.categories.parent_empty_text') . '</option>';
+        $html = '';
         $data = [];
         switch($table) {
             case Common::CATEGORIES:
-                $data = Category::select('name', 'id')->where('parent_id', 0)->get();
+                $data = Category::select('name', 'id')->where('parent_id', 0)->where('status', Status::ACTIVE)->get();
+                break;
+            case Common::VENDORS:
+                $data = Vendor::select('name', 'id')->where('status', Status::ACTIVE)->get();
                 break;
             default:
                 break;

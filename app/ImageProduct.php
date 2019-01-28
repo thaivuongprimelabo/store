@@ -5,7 +5,7 @@ namespace App;
 use App\Constants\Common;
 use Illuminate\Database\Eloquent\Model;
 
-class Category extends Model
+class ImageProduct extends Model
 {
     //
     public $timestamps = false;
@@ -15,6 +15,5 @@ class Category extends Model
      *
      * @var array
      */
-    protected $table = Common::CATEGORIES;
-    
+    protected $table = Common::IMAGES_PRODUCT;
 }
