@@ -1,29 +1,27 @@
 @php
-   $control_name = $name;
+   $control_name = $name . '[]';
    $control_id = $name;
-   $multiple = '';
-   $display = 'display:none';
-   if($name == 'image') {
-   		$control_name = $control_name . '[]';
-   		$multiple = 'multiple';
-   }
 @endphp
 <div class="form-group @if ($errors->has($name)){{'has-error'}} @endif">
-  <label for="exampleInputFile">{{ $text }}</label>
-  <input type="file" class="form-control" name="{{ $control_name }}" id="{{ $control_id }}" multiple>
-  <p class="help-block">{{ Utils::replaceMessageParam($text_small,[$size]) }}</p>
-  <span class="help-block">@if ($errors->has($name)){{ $errors->first($name) }}@endif</span>
-</div>
-<div class="form-group">
-  <label for="exampleInputFile">{{ trans('auth.preview_image') }}</label>&nbsp;&nbsp;
-  <a id="remove_image" href="javascript:void(0)" style="{{ $display }}" ><i class="fa fa-trash" aria-hidden="true" style="font-size: 24px"></i>Xóa hình</a>
-  <br/>
+  <label for="exampleInputFile">{{ $text }}</label><br/>
   <div id="preview_list">
-  	@if(count($image_using))
-  	@foreach($image_using as $image)
-  	<a href="javascript:void(0)" target="_blank"><img class="img-thumbnail thumb" alt="" src="{{ $image }}" data-holder-rendered="true" style="width: {{ $width }}px; height: {{ $height }}px"></a>
-  	@endforeach
-  	@endif
+  	<div class="image_product" style="display: inline-block;">
+      <a href="javascript:void(0)" class="upload_image" style="width: {{ $width }}px; height: {{ $height }}px">
+      	<i class="fa fa-upload" aria-hidden="true"></i><br/>Tải hình
+      </a>
+      <input type="file" name="image[]" class="upload_image_product" style="display: none" />
+  	</div>
+  	<div class="image_product" style="display: inline-block;">
+      <a href="javascript:void(0)" class="add_image" style="width: {{ $width }}px; height: {{ $height }}px">
+      	<i class="fa fa-plus-circle" aria-hidden="true"></i><br/>Thêm hình
+      </a>
+  	</div>
   </div>
-  <input type="hidden" name="file_hidden_id" id="file_hidden_id" />
+</div>
+
+<div class="image_product_clone" style="display: none;">
+  <a href="javascript:void(0)" class="upload_image" style="width: {{ $width }}px; height: {{ $height }}px">
+  	<i class="fa fa-upload" aria-hidden="true"></i><br/>Tải hình
+  </a>
+  <input type="file" name="image[]" class="upload_image_product" style="display: none" />
 </div>

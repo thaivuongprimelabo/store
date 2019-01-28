@@ -47,6 +47,20 @@
         background: #f0f0f0;
         display: inline-block;
     }
+    .add_image, .upload_image {
+        display:table-cell;
+        background: #f0f0f0;
+        text-align: center;
+        vertical-align: middle;
+    }
+    
+    .add_image i, .upload_image i {
+        font-size: 36px;
+    }
+    
+    .image_product {
+        margin: 5px;
+    }
   </style>
 </head>
 @if(Auth::guest())
@@ -208,8 +222,15 @@
 		$(this).find('span').html(res.text);
 	});
 
-	$(document).on('click', '#remove_all', function(e) {
+	$(document).on('click', '.upload_image', function(e) {
+		$(this).next('input[type="file"]').click();
+	});
 
+	$(document).on('click', '.add_image', function(e) {
+		var clone = $('.image_product_clone').clone();
+		clone.attr('class', 'image_product');
+		clone.attr('style', 'display:inline-block');
+		$(this).parent().before(clone);
 	});
 
 	$(document).on('click', '#preview_list a', function(e) {

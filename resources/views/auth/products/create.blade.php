@@ -54,16 +54,6 @@
                       </select>
                       <span class="help-block">@if ($errors->has('vendor_id')){{ $errors->first('vendor_id') }}@endif</span>
                     </div>
-                    @include('auth.common.upload_product',[
-                    	'text' => trans('auth.products.form.image'),
-                    	'text_small' => trans('auth.products.form.image_text'),
-                    	'errors' => $errors,
-                    	'name' => 'image',
-                    	'size' => Utils::formatMemory(Common::IMAGE_MAX_SIZE),
-                    	'width' => Common::IMAGE_WIDTH,
-                    	'height' => Common::IMAGE_HEIGHT,
-                    	'image_using' => [],
-                    ])
                     <div class="form-group @if ($errors->has('description')){{'has-error'}} @endif">
                       <label for="exampleInputPassword1">{{ trans('auth.products.form.description') }}</label>
                       <textarea class="wysihtml_editor" name="description" id="description" placeholder="Place some text here"
@@ -75,6 +65,16 @@
                         <input type="checkbox" name="status" value="1" @if(old('status')) {{ 'checked="checked"' }} @endif> {{ trans('auth.status.active') }}
                       </label>
                     </div>
+                    @include('auth.common.upload_product',[
+                    	'text' => trans('auth.products.form.image'),
+                    	'text_small' => trans('auth.products.form.image_text'),
+                    	'errors' => $errors,
+                    	'name' => 'image',
+                    	'size' => Utils::formatMemory(Common::IMAGE_MAX_SIZE),
+                    	'width' => Common::IMAGE_WIDTH,
+                    	'height' => Common::IMAGE_HEIGHT,
+                    	'image_using' => [],
+                    ])
                   </div>
                   <!-- /.box-body -->
     
@@ -179,13 +179,23 @@
     	}
     });
 
-    $('#image').change(function(e) {
+    $(document).on('change', '.upload_image_product', function(e) {
     	$(this).parent().removeClass('has-error');
-    	var element = $('input#image')[0];
+    	var clone = $(this).parent().clone();
+    	var tagA = $(this).parent().find('.upload_image');
+    	var input = $(this)[0].files[0];
     	var maxSize = '{{ Common::PRODUCT_MAX_SIZE }}';
     	var width = '{{ Common::PRODUCT_WIDTH }}';
     	var height = '{{ Common::PRODUCT_HEIGHT }}';
-    	previewImage(element, maxSize, width, height);
+    	
+    	var reader = new FileReader();
+        reader.onload = function (event) {
+            var img = '<img src="' + event.target.result + '" style="width:' + width + 'px; height:' + height + 'px" />';
+            tagA.html(img);
+        }
+        reader.readAsDataURL(input);
+        
+//     	previewImageProduct(element, maxSize, width, height);
     });
 </script>
 @endsection

@@ -81,13 +81,8 @@ var previewImage = function(element, size, width, height) {
     		tagA.appendChild(image);
     		tagA.appendChild(hidden);
     		
-    		if(element.multiple) {
-    			div.appendChild(tagA);
-    			$('#remove_image').show();
-    		} else {
-    			div.innerHTML = '';
-    			div.appendChild(tagA);
-    		}
+    		div.innerHTML = '';
+			div.appendChild(tagA);
     		
     		var reader = new FileReader();
             reader.onload = function (event) {
@@ -95,6 +90,18 @@ var previewImage = function(element, size, width, height) {
             }
             reader.readAsDataURL(input);
     	}
+	}
+}
+
+var previewImageProduct = function(element, size, width, height) {
+	var input = element.files[0];
+	if(checkFileSize(input, size)) {
+		
+		var reader = new FileReader();
+        reader.onload = function (event) {
+        	image.src = event.target.result;
+        }
+        reader.readAsDataURL(input);
 	}
 }
 
