@@ -19,7 +19,7 @@ class Product extends Model
     protected $table = Common::PRODUCTS;
     
     public function getFirstImage($id) {
-        $image_url = '';
+        $image_url = Utils::getImageLink();
         $image_product = ImageProduct::select('image')->where('product_id', $id)->first();
         if($image_product) {
             $image_url = Utils::getImageLink($image_product->image);

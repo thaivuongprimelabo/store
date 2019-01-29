@@ -28,6 +28,7 @@
                 <form role="form" id="create_form" action="{{ route('auth_posts_edit', ['id' => $post->id]) }}" method="post" enctype="multipart/form-data">
                   {{ csrf_field() }}
                   <div class="box-body">
+                  	<input type="hidden" name="id" id="id" value="{{ $post->id }}" />
                     <div class="form-group @if ($errors->has('name')){{'has-error'}} @endif">
                       <label for="exampleInputEmail1">{{ trans('auth.posts.form.name') }}</label>
                       <input type="text" class="form-control" name="name" id="name" value="{{ old('name', $post->name) }}" placeholder="{{ trans('auth.posts.form.name') }}" maxlength="{{ Common::NAME_MAXLENGTH }}">
@@ -118,7 +119,8 @@
     						return $('#name').val()
     					},
     					col: 'name',
-    					table: 1
+    					table: 3,
+    					id_check: $('#id').val()
     				}
     			}
     		},

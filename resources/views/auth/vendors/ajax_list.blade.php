@@ -16,7 +16,7 @@
     <tr>
       <td>{{ $vendor->id }}</td>
       <td>{{ $vendor->name }}</td>
-      <td><img src="{{ Utils::getImageLink($vendor->logo) }}" width="200" height="100" /></td>
+      <td><img src="{{ Utils::getImageLink($vendor->logo) }}" width="{{ Common::ADMIN_IMAGE_WIDTH }}" /></td>
       @if($vendor->status == Status::ACTIVE)
       <td><a href="javascript:void(0)" class="update-status" data-tbl="0" data-id="{{ $vendor->id }}" data-status="{{ $vendor->status }}"><span class="label label-success">{{ trans('auth.status.active') }}</span></a></td>
       @else

@@ -80,7 +80,7 @@
     
                   <div class="box-footer">
                   	<button type="button" class="btn btn-default" onclick="window.location='{{ route('auth_products') }}'"><i class="fa fa-arrow-left" aria-hidden="true"></i> {{ trans('auth.button.back') }}</button>
-                    <button type="submit" id="submit" class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> {{ trans('auth.button.submit') }}</button>
+                    <button type="submit" id="save" class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> {{ trans('auth.button.submit') }}</button>
                   </div>
                 </form>
             </div>
@@ -157,7 +157,7 @@
       	},
     });
 
-    $('#submit').click(function(e) {
+    $('#save').click(function(e) {
     	$('#error_list').html('');
     	var error_msg = checkSizeMultiFile($('.upload_image_product'), '{{ Common::IMAGE_MAX_SIZE }}', '{{ trans('validation.size.file_multi') }}');
     	error_msg += checkExtMultiFile($('.upload_image_product'), '{{ Common::IMAGE_EXT }}', '{{ trans('validation.image_multi') }}');

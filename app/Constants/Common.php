@@ -18,7 +18,7 @@ class Common {
     CONST FILE_EXT1 = 'jpeg,png,gif,pdf,doc,docx,xlsx,xls';
     CONST IMAGE_MIMES = 'image/jpg, image/jpeg, image/gif, image/png';
     CONST FILE_MIMES = 'image/jpg, image/jpeg, image/gif, image/png, application/pdf, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/msword, 	application/vnd.ms-excel';
-    CONST NO_LOGO_FILE = 'no-logo.png';
+    CONST NO_LOGO_FILE = 'no-image-icon-6.png';
     CONST ROW_PER_PAGE = 9;
     CONST LOGO_MAX_SIZE = '512000';
     CONST LOGO_WIDTH = '200';
@@ -45,6 +45,7 @@ class Common {
     CONST WEB_LOGO_ADMIN_SMALL_HEIGHT = '20';
     CONST ICO_WIDTH = '16';
     CONST ICO_HEIGHT = '16';
+    CONST ADMIN_IMAGE_WIDTH = '50';
     CONST NAME_MAXLENGTH = 255;
     CONST LINK_MAXLENGTH = 255;
     CONST DESC_MAXLENGTH = 300;

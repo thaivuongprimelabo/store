@@ -33,6 +33,9 @@ class ApiController extends Controller
             case 2; // Products table
                 $data = Product::select('id')->where($col, $value)->first();
                 break;
+            case 3; // Posts table
+                $data = Post::select('id')->where($col, $value)->first();
+                break;
             default:
                 break;
         }

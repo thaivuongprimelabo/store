@@ -16,7 +16,7 @@
     <tr>
       <td>{{ $product->id }}</td>
       <td>{{ $product->name }}</td>
-      <th><img src="{{ $product->getFirstImage($product->id) }}" width="{{ Common::IMAGE_WIDTH }}" title="{{ $product->description }}" alt="{{ $product->name }}" /></th>
+      <th><img src="{{ $product->getFirstImage($product->id) }}" width="{{ Common::ADMIN_IMAGE_WIDTH }}" title="{{ $product->description }}" alt="{{ $product->name }}" /></th>
       <td>{{ $product->category_id }}</td>
       <td>{{ $product->vendor_id }}</td>
       <td>{{ $product->getPrice($product->price) }}</td>

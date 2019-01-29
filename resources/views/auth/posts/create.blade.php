@@ -122,7 +122,7 @@
     						return $('#name').val()
     					},
     					col: 'name',
-    					table: 1
+    					table: 3
     				}
     			}
     		},

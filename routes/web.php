@@ -23,7 +23,7 @@ Route::group(['prefix' => 'auth', 'namespace' => 'Auth'], function () {
     $this->get('/login', 'LoginController@showLoginForm')->name('login');
     $this->post('/login', 'LoginController@login');
     $this->get('/logout', 'LoginController@logout')->name('logout');
-    $this->get('/dashboard', 'ProductsController@index')->name('dashboard');
+    $this->get('/dashboard', 'DashboardController@index')->name('dashboard');
     
     // Products
     $this->get('/products', 'ProductsController@index')->name('auth_products');
@@ -66,6 +66,9 @@ Route::group(['prefix' => 'auth', 'namespace' => 'Auth'], function () {
     Route::match(['get', 'post'], '/posts/edit/{id}', 'PostsController@edit')->name('auth_posts_edit');
     Route::match(['get', 'post'], '/posts/search', 'PostsController@search')->name('auth_posts_search');
     Route::get('/posts/remove/{id}', 'PostsController@remove')->name('auth_posts_remove');
+    
+    // Users
+    $this->get('/users', 'ContactsController@index')->name('auth_users');
     
     // Config
     Route::match(['get', 'post'], '/config', 'ConfigController@index')->name('auth_config');

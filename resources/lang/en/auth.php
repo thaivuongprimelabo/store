@@ -33,6 +33,7 @@ return [
         'banners' => 'Quản lý banner',
         'posts' => 'Quản lý bài viết',
         'contacts' => 'Hộp thư liên hệ',
+        'users' => 'Quản lý tài khoản',
         'config' => 'Cấu hình'
     ],
     
@@ -182,7 +183,7 @@ return [
         ],
         'weblogo_text' => 'Tập tin *.jpg, *.jpeg, *.gif, *.png.Tối đa {0}'
     ],
-    /*------------ Vendor page ------------------- */
+    /*------------ Products page ------------------- */
     'products' => [
         'list_title' => 'Danh mục sản phẩm',
         'create_title' => 'Đăng ký sản phẩm',
@@ -211,6 +212,31 @@ return [
             'description' => 'Mô tả',
             'status' => 'Trạng thái',
             'image_text' => 'Tập tin *.jpg, *.jpeg, *.gif, *.png.Tối đa {0}'
+        ]
+    ],
+    /*------------ Users page ------------------- */
+    'users' => [
+        'list_title' => 'Danh mục tài khoản',
+        'create_title' => 'Đăng ký tài khoản',
+        'edit_title' => 'Chỉnh sửa tài khoản',
+        'table_header' => [
+            'id' => 'ID',
+            'name' => 'Tên',
+            'avatar' => 'Hình ảnh',
+            'email' => 'E-mail',
+            'status' => 'Trạng thái',
+            'created_at' => 'Ngày đăng ký',
+        ],
+        'id_search_placeholder' => 'Id tài khoản',
+        'name_search_placeholder' => 'Tên tài khoản',
+        'status_search' => 'Trạng thái',
+        'form' => [
+            'name' => 'Tên',
+            'avatar' => 'Hình ảnh',
+            'email' => 'E-mail',
+            'password' => 'Mật khẩu',
+            'status' => 'Trạng thái',
+            'avatar_text' => 'Tập tin *.jpg, *.jpeg, *.gif, *.png.Tối đa {0}'
         ]
     ],
     'select_empty_text' => 'Vui lòng chọn',

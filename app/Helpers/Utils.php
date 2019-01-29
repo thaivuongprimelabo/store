@@ -182,6 +182,21 @@ class Utils {
         return $html;
     }
     
+    public static function createSidebar() {
+        $sidebar = trans('auth.sidebar');
+        $html = '';
+        foreach($sidebar as $k=>$v) {
+            $html .= '<li>';
+            $html .= '<a href="'. route('auth_' . $k) . '">';
+            $html .= '<i class="fa fa-files-o"></i>';
+            $html .= '<span>'. $v .'</span>';
+            $html .= '</a>';
+            $html .= '</li>';
+        }
+        
+        return $html;
+    }
+    
     public static function getConfig() {
         
         $config = Config::first();

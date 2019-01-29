@@ -14,15 +14,7 @@
   </div>
   <!-- sidebar menu: : style can be found in sidebar.less -->
   <ul class="sidebar-menu" data-widget="tree">
-    <li class="header">MAIN NAVIGATION</li>
-    @foreach(config('master.sidebar') as $item)
-    <li>
-      <a href="{{ route('auth_' . $item) }}">
-        <i class="fa fa-files-o"></i>
-        <span>{{ trans('auth.sidebar.' . $item) }}</span>
-      </a>
-    </li>
-    @endforeach
+    {!! Utils::createSidebar() !!}
   </ul>
 </section>
 <!-- /.sidebar -->

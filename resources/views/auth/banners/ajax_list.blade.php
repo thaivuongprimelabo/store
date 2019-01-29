@@ -16,7 +16,7 @@
     @foreach($banners as $banner)
     <tr>
       <td>{{ $banner->id }}</td>
-      <td><img src="{{ Utils::getImageLink($banner->banner) }}" width="200" height="100" /></td>
+      <td><img src="{{ Utils::getImageLink($banner->banner) }}" width="{{ Common::ADMIN_IMAGE_WIDTH }}" /></td>
       <td>{{ $banner->link }}</td>
       <td>{{ $banner->description }}</td>
       @if($banner->status == Status::ACTIVE)
