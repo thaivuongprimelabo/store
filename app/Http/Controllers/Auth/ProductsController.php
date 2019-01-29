@@ -107,8 +107,10 @@ class productsController extends Controller
                         if(count($files)) {
                             for($i = 0; $i < count($files); $i++) {
                                 $file = $files[$i];
-                                $filename = Utils::uploadFile($file, Common::IMAGE_FOLDER);
-                                array_push($arrFilenames, ['product_id' => $product->id, 'image' => $filename]);
+                                if(!Utils::blank($file->getClientOriginalName())) {
+                                    $filename = Utils::uploadFile($file, Common::IMAGE_FOLDER);
+                                    array_push($arrFilenames, ['product_id' => $product->id, 'image' => $filename]);
+                                }
                             }
                             
                             DB::table(Common::IMAGES_PRODUCT)->insert($arrFilenames);
@@ -150,18 +152,8 @@ class productsController extends Controller
                 
                 $product = Product::find($request->id);
                 
-                $filename = $product->image;
-                
-                if($request->hasFile('image')) {
-                    
-                    $file = $request->image;
-                    
-                    $filename = Utils::uploadFile($file, Common::IMAGE_FOLDER);
-                }
-                
                 $product->name = $request->input('name', '');
                 $product->name_url = $request->input('name', '');
-                $product->image = $filename;
                 $product->price = $request->input('price', '0');
                 $product->category_id = $request->input('category_id', '0');
                 $product->vendor_id = $request->input('vendor_id', '0');
@@ -171,6 +163,31 @@ class productsController extends Controller
                 $product->updated_at = date('Y-m-d H:i:s');
                 
                 if($product->save()) {
+                    
+                    $arrFilenames = [];
+                    if($request->hasFile('image_upload')) {
+                        
+                        $files = $request->image_upload;
+                        $image_ids = $request->image_ids;
+                        
+                        if(count($files)) {
+                            foreach($files as $k=>$v) {
+                                $file = $files[$k];
+                                if(!Utils::blank($file->getClientOriginalName())) {
+                                    $filename = Utils::uploadFile($file, Common::IMAGE_FOLDER);
+                                    if(isset($image_ids[$k])) {
+                                        $image_id = $image_ids[$k];
+                                        DB::table(Common::IMAGES_PRODUCT)->where('id', '=', $image_id)->delete();
+                                    }
+                                    
+                                    array_push($arrFilenames, ['product_id' => $product->id, 'image' => $filename]);
+                                }
+                            }
+                            
+                            DB::table(Common::IMAGES_PRODUCT)->insert($arrFilenames);
+                        }
+                    }
+                    
                     return redirect(route('auth_products_edit', ['id' => $request->id]))->with('success', trans('messages.UPDATE_SUCCESS'));
                 }
             }
@@ -183,7 +200,6 @@ class productsController extends Controller
             $id = $request->id;
             $product = Product::find($id);
             if($product->delete()) {
-//                 Utils::removeFile($product->logo);
                 return redirect(route('auth_products'))->with('success', trans('messages.REMOVE_SUCCESS'));
             }
         }

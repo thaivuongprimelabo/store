@@ -100,7 +100,7 @@ return [
         ],
         'status_search' => 'Tất cả trạng thái',
         'form' => [
-            'banner' => 'Tải banner',
+            'banner' => 'Banner',
             'link' => 'Đường dẫn',
             'description' => 'Mô tả',
             'banner_text' => 'Tập tin *.jpg, *.jpeg, *.gif, *.png.Tối đa {0}'
@@ -236,6 +236,8 @@ return [
         'submit' => 'Lưu',
         'back' => 'Quay về',
         'send' => 'Gửi',
-        'remove' => 'Xóa'
+        'remove' => 'Xóa',
+        'add_image' => 'Thêm hình',
+        'upload_image' => 'Tải hình'
     ]
 ];

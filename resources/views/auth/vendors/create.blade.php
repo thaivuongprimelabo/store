@@ -46,7 +46,7 @@
                     	'size' => Utils::formatMemory(Common::LOGO_MAX_SIZE),
                     	'width' => Common::LOGO_WIDTH,
                     	'height' => Common::LOGO_HEIGHT,
-                    	'image_using' => []
+                    	'image_using' => ''
                     ])
                     <div class="checkbox">
                       <label>
@@ -70,6 +70,7 @@
 @section('script')
 <script type="text/javascript">
     var validatorEventSetting = $("#create_form").validate({
+    	ignore: ":hidden:not(input[type='file'])",
     	onfocusout: false,
     	success: function(label, element) {
         	var jelm = $(element);
@@ -119,8 +120,7 @@
     		}
     	},
     	errorPlacement: function(error, element) {
-    		element.parent().addClass('has-error');
-    		element.parent().find('span.help-block').html(error[0].innerHTML);
+    		customErrorValidate(error, element);
 	  	},
     	submitHanlder: function(form) {
     	    form.submit();
@@ -129,7 +129,7 @@
 
     $('#logo').change(function(e) {
     	$(this).parent().removeClass('has-error');
-    	var element = $('input[name="logo"]')[0];
+    	var element = $(this);
     	var maxSize = '{{ Common::LOGO_MAX_SIZE }}';
     	var width = '{{ Common::LOGO_WIDTH }}';
     	var height = '{{ Common::LOGO_HEIGHT }}';

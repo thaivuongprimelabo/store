@@ -46,7 +46,7 @@
                     	'size' => Utils::formatMemory(Common::BANNER_MAX_SIZE),
                     	'width' => Common::BANNER_WIDTH,
                     	'height' => Common::BANNER_HEIGHT,
-                    	'image_using' => Utils::getImageLink()
+                    	'image_using' => ''
                     ])
                     <div class="checkbox">
                       <label>
@@ -70,6 +70,7 @@
 @section('script')
 <script type="text/javascript">
     var validatorEventSetting = $("#create_form").validate({
+    	ignore: ":hidden:not(input[type='file'])",
     	onfocusout: false,
     	success: function(label, element) {
         	var jelm = $(element);
@@ -98,14 +99,13 @@
     			maxlength : "{{ Utils::getValidateMessage('validation.max.string', 'auth.banners.form.description', Common::DESC_MAXLENGTH) }}"
     		},
     		banner: {
-    			required : "{{ Utils::getValidateMessage('validation.required', 'auth.banners.form.banner') }}",
+    			required : "{{ Utils::getValidateMessage('validation.required_select', 'auth.banners.form.banner') }}",
     			extension : '{{ Utils::getValidateMessage('validation.image', 'auth.banners.form.banner') }}',
     			filesize: '{{ Utils::getValidateMessage('validation.size.file', 'auth.banners.form.banner',  Utils::formatMemory(Common::BANNER_MAX_SIZE)) }}'
     		}
     	},
     	errorPlacement: function(error, element) {
-    		element.parent().addClass('has-error');
-    		element.parent().find('span.help-block').html(error[0].innerHTML);
+    		customErrorValidate(error, element);
 	  	},
     	submitHanlder: function(form) {
     	    form.submit();
@@ -114,7 +114,7 @@
 
     $('#banner').change(function(e) {
     	$(this).parent().removeClass('has-error');
-    	var element = $('input[name="banner"]')[0];
+    	var element = $(this);
     	var maxSize = '{{ Common::BANNER_MAX_SIZE }}';
     	var width = '{{ Common::BANNER_WIDTH }}';
     	var height = '{{ Common::BANNER_HEIGHT }}';

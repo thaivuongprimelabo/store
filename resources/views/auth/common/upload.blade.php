@@ -1,24 +1,24 @@
 @php
-   $control_name = $name;
-   $control_id = $name;
-   $display = 'display:none';
 @endphp
 <div class="form-group @if ($errors->has($name)){{'has-error'}} @endif">
-  <label for="exampleInputFile">{{ $text }}</label>
-  <input type="file" class="form-control" name="{{ $control_name }}" id="{{ $control_id }}" />
+  <label for="exampleInputFile">{{ $text }}</label><br/>
+  <div id="preview_list">
+  	@if($image_using != '')
+  		<div class="image_product" style="display: inline-block;">
+          <a href="javascript:void(0)" class="upload_image" style="width: {{ $width }}px; height: {{ $height }}px">
+          	<img src="{{ $image_using }}" style="width:{{ $width }}px; height:{{ $height }}px" />
+          </a>
+          <input type="file" name="{{ $name }}" id="{{ $name }}" style="display: none" />
+      	</div>
+  	@else
+  		<div class="image_product" style="display: inline-block;">
+          <a href="javascript:void(0)" class="upload_image" style="width: {{ $width }}px; height: {{ $height }}px">
+          	<i class="fa fa-upload" aria-hidden="true"></i><br/>{{ trans('auth.button.upload_image') }}
+          </a>
+          <input type="file" name="{{ $name }}" id="{{ $name }}" style="display: none" />
+      	</div>
+  	@endif
+  </div>
   <p class="help-block">{{ Utils::replaceMessageParam($text_small,[$size]) }}</p>
   <span class="help-block">@if ($errors->has($name)){{ $errors->first($name) }}@endif</span>
 </div>
-@if($name != 'attachment')
-<div class="form-group">
-  <label for="exampleInputFile">{{ trans('auth.preview_image') }}</label>&nbsp;&nbsp;
-  <br/>
-  <div id="preview_list">
-  	@if(count($image_using))
-  	@foreach($image_using as $image)
-  	<a href="javascript:void(0)" target="_blank"><img class="img-thumbnail thumb" alt="" src="{{ $image }}" data-holder-rendered="true" style="width: {{ $width }}px; height: {{ $height }}px"></a>
-  	@endforeach
-  	@endif
-  </div>
-</div>
-@endif

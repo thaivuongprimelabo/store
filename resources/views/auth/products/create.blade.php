@@ -80,7 +80,7 @@
     
                   <div class="box-footer">
                   	<button type="button" class="btn btn-default" onclick="window.location='{{ route('auth_products') }}'"><i class="fa fa-arrow-left" aria-hidden="true"></i> {{ trans('auth.button.back') }}</button>
-                    <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> {{ trans('auth.button.submit') }}</button>
+                    <button type="submit" id="submit" class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> {{ trans('auth.button.submit') }}</button>
                   </div>
                 </form>
             </div>
@@ -91,23 +91,14 @@
 @endsection
 @section('script')
 <script type="text/javascript">
-    //Date picker
-    $('#published_at').datepicker({
-      autoclose: true,
-      format: 'dd-mm-yyyy',
-    });
-    
-    //Timepicker
-    $('.timepicker').timepicker({
-      showInputs: false
-    });
     
 	var validatorEventSetting = $("#create_form").validate({
-		ignore: ":hidden:not(textarea)",
+		ignore: ":hidden:not(textarea, input[type='file'])",
     	onfocusout: false,
     	success: function(label, element) {
         	var jelm = $(element);
         	jelm.parent().removeClass('has-error');
+        	jelm.parent().find('span.help-block').html('');
     	},
     	rules: {
     		name: {
@@ -141,11 +132,6 @@
     		description: {
     			required: true,
     		},
-    		image: {
-        		required: true,
-    			extension: '{{ Common::IMAGE_EXT }}',
-    			filesize: '{{ Common::IMAGE_MAX_SIZE }}'
-    		}
     	},
     	messages: {
     		name : {
@@ -165,37 +151,34 @@
     		description : {
     			required : "{{ Utils::getValidateMessage('validation.required', 'auth.products.form.description') }}",
     		},
-    		image: {
-    			extension : '{{ Utils::getValidateMessage('validation.image', 'auth.products.form.image') }}',
-    			filesize: '{{ Utils::getValidateMessage('validation.size.file', 'auth.products.form.image',  Utils::formatMemory(Common::IMAGE_MAX_SIZE)) }}'
-    		}
     	},
     	errorPlacement: function(error, element) {
-    		element.parent().addClass('has-error');
-    		element.parent().find('span.help-block').html(error[0].innerHTML);
+    		customErrorValidate(error, element);
       	},
-    	submitHanlder: function(form) {
-    	    form.submit();
+    });
+
+    $('#submit').click(function(e) {
+    	$('#error_list').html('');
+    	var error_msg = checkSizeMultiFile($('.upload_image_product'), '{{ Common::IMAGE_MAX_SIZE }}', '{{ trans('validation.size.file_multi') }}');
+    	error_msg += checkExtMultiFile($('.upload_image_product'), '{{ Common::IMAGE_EXT }}', '{{ trans('validation.image_multi') }}');
+    	
+    	if(error_msg !== '') {
+    		$('#error_list').parent().addClass('has-error');
+			$('#error_list').append(error_msg);
+			return false;
     	}
     });
 
+
     $(document).on('change', '.upload_image_product', function(e) {
-    	$(this).parent().removeClass('has-error');
-    	var clone = $(this).parent().clone();
-    	var tagA = $(this).parent().find('.upload_image');
-    	var input = $(this)[0].files[0];
+    	$(this).parent().parent().parent().removeClass('has-error');
+    	$(this).parent().parent().parent().find('span.help-block').html('');
+    	var input = $(this);
     	var maxSize = '{{ Common::PRODUCT_MAX_SIZE }}';
     	var width = '{{ Common::PRODUCT_WIDTH }}';
     	var height = '{{ Common::PRODUCT_HEIGHT }}';
-    	
-    	var reader = new FileReader();
-        reader.onload = function (event) {
-            var img = '<img src="' + event.target.result + '" style="width:' + width + 'px; height:' + height + 'px" />';
-            tagA.html(img);
-        }
-        reader.readAsDataURL(input);
+        previewImage(input, maxSize, width, height);
         
-//     	previewImageProduct(element, maxSize, width, height);
     });
 </script>
 @endsection

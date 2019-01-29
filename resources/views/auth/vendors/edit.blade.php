@@ -45,7 +45,7 @@
                     	'errors' => $errors,
                     	'name' => 'logo',
                     	'size' => Utils::formatMemory(Common::LOGO_MAX_SIZE),
-                    	'image_using' => [Utils::getImageLink($vendor->logo)],
+                    	'image_using' => Utils::getImageLink($vendor->logo),
                     	'width' => Common::LOGO_WIDTH,
                     	'height' => Common::LOGO_HEIGHT
                     ])
@@ -72,6 +72,7 @@
 <script src="{{ url('admin/js/jquery.validate.js') }}" type="text/javascript"></script>
 <script type="text/javascript">
     var validatorEventSetting = $("#edit_form").validate({
+    	ignore: ":hidden:not(input[type='file'])",
     	onfocusout: false,
     	success: function(label, element) {
         	var jelm = $(element);
@@ -122,8 +123,7 @@
     		}
     	},
     	errorPlacement: function(error, element) {
-    		element.parent().addClass('has-error');
-    		element.parent().find('span.help-block').html(error[0].innerHTML);
+    		customErrorValidate(error, element);
 	  	},
     	submitHanlder: function(form) {
     	    form.submit();
@@ -132,7 +132,7 @@
 
     $('#logo').change(function(e) {
     	$(this).parent().removeClass('has-error');
-    	var element = $('input[name="logo"]')[0];
+    	var element = $(this);
     	var maxSize = '{{ Common::LOGO_MAX_SIZE }}';
     	var width = '{{ Common::LOGO_WIDTH }}';
     	var height = '{{ Common::LOGO_HEIGHT }}';

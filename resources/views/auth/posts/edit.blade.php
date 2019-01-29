@@ -97,7 +97,7 @@
     });
     
 	var validatorEventSetting = $("#create_form").validate({
-		ignore: ":hidden:not(textarea)",
+		ignore: ":hidden:not(textarea, input[type='file'])",
     	onfocusout: false,
     	success: function(label, element) {
         	var jelm = $(element);
@@ -154,8 +154,7 @@
     		}
     	},
     	errorPlacement: function(error, element) {
-    		element.parent().addClass('has-error');
-    		element.parent().find('span.help-block').html(error[0].innerHTML);
+    		customErrorValidate(error, element);
       	},
     	submitHanlder: function(form) {
     	    form.submit();
@@ -164,7 +163,7 @@
 
     $('#photo').change(function(e) {
     	$(this).parent().removeClass('has-error');
-    	var element = $('input[name="photo"]')[0];
+    	var element = $(this);
     	var maxSize = '{{ Common::PHOTO_MAX_SIZE }}';
     	var width = '{{ Common::PHOTO_WIDTH }}';
     	var height = '{{ Common::PHOTO_HEIGHT }}';

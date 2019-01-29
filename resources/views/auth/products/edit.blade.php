@@ -25,7 +25,7 @@
                 </div>
                 <!-- /.box-header -->
                 <!-- form start -->
-                <form role="form" id="create_form" action="{{ route('auth_products_create') }}" method="post" enctype="multipart/form-data">
+                <form role="form" id="edit_form" action="{{ route('auth_products_edit',['id' => $product->id]) }}" method="post" enctype="multipart/form-data">
                   {{ csrf_field() }}
                   <div class="box-body">
                     <div class="form-group @if ($errors->has('name')){{'has-error'}} @endif">
@@ -54,16 +54,6 @@
                       </select>
                       <span class="help-block">@if ($errors->has('vendor_id')){{ $errors->first('vendor_id') }}@endif</span>
                     </div>
-                    @include('auth.common.upload',[
-                    	'text' => trans('auth.products.form.image'),
-                    	'text_small' => trans('auth.products.form.image_text'),
-                    	'errors' => $errors,
-                    	'name' => 'image',
-                    	'size' => Utils::formatMemory(Common::IMAGE_MAX_SIZE),
-                    	'width' => Common::IMAGE_WIDTH,
-                    	'height' => Common::IMAGE_HEIGHT,
-                    	'image_using' => $product->getAllImage($product->id),
-                    ])
                     <div class="form-group @if ($errors->has('description')){{'has-error'}} @endif">
                       <label for="exampleInputPassword1">{{ trans('auth.products.form.description') }}</label>
                       <textarea class="wysihtml_editor" name="description" id="description" placeholder="Place some text here"
@@ -75,12 +65,22 @@
                         <input type="checkbox" name="status" value="1" @if(old('status', $product->status)) {{ 'checked="checked"' }} @endif> {{ trans('auth.status.active') }}
                       </label>
                     </div>
+                    @include('auth.common.upload_product',[
+                    	'text' => trans('auth.products.form.image'),
+                    	'text_small' => trans('auth.products.form.image_text'),
+                    	'errors' => $errors,
+                    	'name' => 'image',
+                    	'size' => Utils::formatMemory(Common::IMAGE_MAX_SIZE),
+                    	'width' => Common::IMAGE_WIDTH,
+                    	'height' => Common::IMAGE_HEIGHT,
+                    	'image_using' => $product->getAllImage($product->id),
+                    ])
                   </div>
                   <!-- /.box-body -->
     
                   <div class="box-footer">
                   	<button type="button" class="btn btn-default" onclick="window.location='{{ route('auth_products') }}'"><i class="fa fa-arrow-left" aria-hidden="true"></i> {{ trans('auth.button.back') }}</button>
-                    <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> {{ trans('auth.button.submit') }}</button>
+                    <button type="submit" id="submit" class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> {{ trans('auth.button.submit') }}</button>
                   </div>
                 </form>
             </div>
@@ -91,101 +91,93 @@
 @endsection
 @section('script')
 <script type="text/javascript">
-    //Date picker
-    $('#published_at').datepicker({
-      autoclose: true,
-      format: 'dd-mm-yyyy',
-    });
-    
-    //Timepicker
-    $('.timepicker').timepicker({
-      showInputs: false
-    });
-    
-	var validatorEventSetting = $("#create_form").validate({
-		ignore: ":hidden:not(textarea)",
-    	onfocusout: false,
-    	success: function(label, element) {
-        	var jelm = $(element);
-        	jelm.parent().removeClass('has-error');
-    	},
-    	rules: {
-    		name: {
-    			required: true,
-    			maxlength: {{  Common::NAME_MAXLENGTH }},
-    			remote : {
-    				url : '{{ route('check_exists') }}',
-    				type : 'post',
-    				headers: {
-    			    	'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    			    },
-    				data : {
-    					value : function() {
-    						return $('#name').val()
-    					},
-    					col: 'name',
-    					table: 1
-    				}
-    			}
-    		},
-    		price: {
-        		required: true,
-				maxlength: {{  Common::PRICE_MAXLENGTH }},
-    		},
-    		category_id: {
-				required: true,
-    		},
-    		vendor_id: {
-				required: true
-    		},
-    		description: {
-    			required: true,
-    		},
-    		image: {
-        		required: true,
-    			extension: '{{ Common::IMAGE_EXT }}',
-    			filesize: '{{ Common::IMAGE_MAX_SIZE }}'
-    		}
-    	},
-    	messages: {
-    		name : {
-    			required : "{{ Utils::getValidateMessage('validation.required', 'auth.products.form.name') }}",
-    			maxlength : "{{ Utils::getValidateMessage('validation.max.string', 'auth.products.form.name', Common::NAME_MAXLENGTH) }}",
-    			remote: '{{ Utils::getValidateMessage('validation.unique', 'auth.products.form.name') }}'
-    		},
-    		price: {
-    			maxlength : "{{ Utils::getValidateMessage('validation.max.string', 'auth.products.form.price', Common::PRICE_MAXLENGTH) }}",
-    		},
-    		category_id: {
-    			required : "{{ Utils::getValidateMessage('validation.required', 'auth.products.form.category_id') }}",
-    		},
-    		vendor_id: {
-    			required : "{{ Utils::getValidateMessage('validation.required', 'auth.products.form.vendor_id') }}",
-    		},
-    		description : {
-    			required : "{{ Utils::getValidateMessage('validation.required', 'auth.products.form.description') }}",
-    		},
-    		image: {
-    			extension : '{{ Utils::getValidateMessage('validation.image', 'auth.products.form.image') }}',
-    			filesize: '{{ Utils::getValidateMessage('validation.size.file', 'auth.products.form.image',  Utils::formatMemory(Common::IMAGE_MAX_SIZE)) }}'
-    		}
-    	},
-    	errorPlacement: function(error, element) {
-    		element.parent().addClass('has-error');
-    		element.parent().find('span.help-block').html(error[0].innerHTML);
-      	},
-    	submitHanlder: function(form) {
-    	    form.submit();
-    	}
-    });
 
-    $('#image').change(function(e) {
-    	$(this).parent().removeClass('has-error');
-    	var element = $('input#image')[0];
-    	var maxSize = '{{ Common::PRODUCT_MAX_SIZE }}';
-    	var width = '{{ Common::PRODUCT_WIDTH }}';
-    	var height = '{{ Common::PRODUCT_HEIGHT }}';
-    	previewImage(element, maxSize, width, height);
-    });
+var validatorEventSetting = $("#edit_form").validate({
+	ignore: ":hidden:not(textarea, input[type='file'])",
+	onfocusout: false,
+	success: function(label, element) {
+    	var jelm = $(element);
+    	jelm.parent().removeClass('has-error');
+    	jelm.parent().find('span.help-block').html('');
+	},
+	rules: {
+		name: {
+			required: true,
+			maxlength: {{  Common::NAME_MAXLENGTH }},
+			remote : {
+				url : '{{ route('check_exists') }}',
+				type : 'post',
+				headers: {
+			    	'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			    },
+				data : {
+					value : function() {
+						return $('#name').val()
+					},
+					col: 'name',
+					table: 1
+				}
+			}
+		},
+		price: {
+    		required: true,
+			maxlength: {{  Common::PRICE_MAXLENGTH }},
+		},
+		category_id: {
+			required: true,
+		},
+		vendor_id: {
+			required: true
+		},
+		description: {
+			required: true,
+		},
+	},
+	messages: {
+		name : {
+			required : "{{ Utils::getValidateMessage('validation.required', 'auth.products.form.name') }}",
+			maxlength : "{{ Utils::getValidateMessage('validation.max.string', 'auth.products.form.name', Common::NAME_MAXLENGTH) }}",
+			remote: '{{ Utils::getValidateMessage('validation.unique', 'auth.products.form.name') }}'
+		},
+		price: {
+			maxlength : "{{ Utils::getValidateMessage('validation.max.string', 'auth.products.form.price', Common::PRICE_MAXLENGTH) }}",
+		},
+		category_id: {
+			required : "{{ Utils::getValidateMessage('validation.required', 'auth.products.form.category_id') }}",
+		},
+		vendor_id: {
+			required : "{{ Utils::getValidateMessage('validation.required', 'auth.products.form.vendor_id') }}",
+		},
+		description : {
+			required : "{{ Utils::getValidateMessage('validation.required', 'auth.products.form.description') }}",
+		},
+	},
+	errorPlacement: function(error, element) {
+		customErrorValidate(error, element);
+  	},
+});
+
+$('#submit').click(function(e) {
+	$('#error_list').html('');
+	var error_msg = checkSizeMultiFile($('.upload_image_product'), '{{ Common::IMAGE_MAX_SIZE }}', '{{ trans('validation.size.file_multi') }}');
+	error_msg += checkExtMultiFile($('.upload_image_product'), '{{ Common::IMAGE_EXT }}', '{{ trans('validation.image_multi') }}');
+	
+	if(error_msg !== '') {
+		$('#error_list').parent().addClass('has-error');
+		$('#error_list').append(error_msg);
+	}
+});
+
+
+$(document).on('change', '.upload_image_product', function(e) {
+	$(this).parent().parent().parent().removeClass('has-error');
+	$(this).parent().parent().parent().find('span.help-block').html('');
+	var input = $(this);
+	var maxSize = '{{ Common::PRODUCT_MAX_SIZE }}';
+	var width = '{{ Common::PRODUCT_WIDTH }}';
+	var height = '{{ Common::PRODUCT_HEIGHT }}';
+    previewImage(input, maxSize, width, height);
+    
+});
 </script>
 @endsection

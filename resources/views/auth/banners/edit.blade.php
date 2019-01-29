@@ -72,6 +72,7 @@
 <script src="{{ url('admin/js/jquery.validate.js') }}" type="text/javascript"></script>
 <script type="text/javascript">
     var validatorEventSetting = $("#edit_form").validate({
+    	ignore: ":hidden:not(input[type='file'])",
     	onfocusout: false,
     	success: function(label, element) {
         	var jelm = $(element);
@@ -122,8 +123,7 @@
     		}
     	},
     	errorPlacement: function(error, element) {
-    		element.parent().addClass('has-error');
-    		element.parent().find('span.help-block').html(error[0].innerHTML);
+    		customErrorValidate(error, element);
 	  	},
     	submitHanlder: function(form) {
     	    form.submit();
@@ -132,7 +132,7 @@
 
     $('#banner').change(function(e) {
     	$(this).parent().removeClass('has-error');
-		var element = $('input[name="banner"]')[0];
+    	var element = $(this);
 		var maxSize = '{{ Common::BANNER_MAX_SIZE }}';
     	var width = '{{ Common::BANNER_WIDTH }}';
     	var height = '{{ Common::BANNER_HEIGHT }}';

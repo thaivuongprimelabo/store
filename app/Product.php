@@ -29,10 +29,10 @@ class Product extends Model
     
     public function getAllImage($id) {
         $output = [];
-        $image_product = ImageProduct::select('image')->where('product_id', $id)->get();
+        $image_product = ImageProduct::select('id', 'image')->where('product_id', $id)->get();
         foreach($image_product as $image) {
             $image_url = Utils::getImageLink($image->image);
-            array_push($output, $image_url);
+            $output[$image->id] = $image_url;
         }
         return $output;
     }

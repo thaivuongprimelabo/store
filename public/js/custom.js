@@ -29,13 +29,8 @@ var search = function(url, data, page) {
 }
 
 var checkFileSize = function(element, size) {
-	if (element.files && element.files.length) {
-		for (i = 0; i < element.files.length; i++) {
-			file = element.files[i];
-			if (file.size > Number(size)) {
-				return false;
-			}
-		}
+	if (element.size > Number(size)) {
+		return false;
 	}
 	return true;
 }
@@ -60,49 +55,74 @@ var getFormData = function($form){
 
 var previewImage = function(element, size, width, height) {
 	
-	for(var i = 0; i < element.files.length; i++) {
-		var input = element.files[i];
-    	if(checkFileSize(input, size)) {
-    		var div = document.getElementById('preview_list');
-    		
-    		var tagA = document.createElement('a');
-    		tagA.href = 'javascript:void(0)';
-    		tagA.target = '_blank';
-    		
-    		var image = document.createElement('img');
-    		image.className = 'img-thumbnail thumb';
-    		image.style = 'width: ' + width + 'px; height: ' + height + 'px';
-    		
-    		var hidden = document.createElement('input');
-    		hidden.type = 'hidden';
-    		hidden.name = "file_input[]";
-    		hidden.value = i;
-    		
-    		tagA.appendChild(image);
-    		tagA.appendChild(hidden);
-    		
-    		div.innerHTML = '';
-			div.appendChild(tagA);
-    		
-    		var reader = new FileReader();
-            reader.onload = function (event) {
-            	image.src = event.target.result;
-            }
-            reader.readAsDataURL(input);
-    	}
+	var tagA = element.parent().find('.upload_image');
+	var input = element[0].files[0];
+//	if(checkFileSize(input, size)) {
+		var reader = new FileReader();
+	    reader.onload = function (event) {
+	        var img = '<img src="' + event.target.result + '" style="width:' + width + 'px; height:' + height + 'px" />';
+	        tagA.html(img);
+	    }
+	    reader.readAsDataURL(input);
+//	}
+}
+
+var customErrorValidate = function(error, element) {
+	if(error[0].innerHTML !== '') {
+		if(element[0].type !== 'file') {
+			element.parent().addClass('has-error');
+			element.parent().find('span.help-block').html(error[0].innerHTML);
+		} else {
+			element.parent().parent().parent().addClass('has-error');
+			element.parent().parent().parent().find('span.help-block').html(error[0].innerHTML);
+		}
 	}
 }
 
-var previewImageProduct = function(element, size, width, height) {
-	var input = element.files[0];
-	if(checkFileSize(input, size)) {
+var checkSizeMultiFile = function(element, param, input_message) {
+	var message = '';
+	if (element.attr("type") === "file") {
 		
-		var reader = new FileReader();
-        reader.onload = function (event) {
-        	image.src = event.target.result;
-        }
-        reader.readAsDataURL(input);
+		var element = document.getElementsByName(element.attr('name'));
+		if (element.length) {
+    		for (i = 0; i < element.length; i++) {
+				file = element[i].files[0];
+				// Grab the mimetype from the loaded file, verify it matches
+				if(file) {
+					if(!checkFileSize(file, param)) {
+						var msg = input_message.replace(':file', file.name);
+						message += '<span class="help-block">' + msg + '</span>';
+					}
+				}
+				
+			}
+		}
 	}
+	return message;
+}
+
+var checkExtMultiFile = function(element, param, input_message) {
+	var message = '';
+	if (element.attr("type") === "file") {
+		
+		var element = document.getElementsByName(element.attr('name'));
+		if (element.length) {
+    		for (i = 0; i < element.length; i++) {
+				file = element[i].files[0];
+				// Grab the mimetype from the loaded file, verify it matches
+				if(file) {
+					var param = typeof param === "string" ? param.replace( /,/g, "|" ) : "png|jpe?g|gif";
+					var check = file.name.match( new RegExp( "\\.(" + param + ")$", "i" ) );
+					if(!check) {
+						var msg = input_message.replace(':file', file.name);
+						message += '<span class="help-block">' + msg + '</span>';
+					}
+				}
+				
+			}
+		}
+	}
+	return message;
 }
 
 $(document).ready(function() {
@@ -147,9 +167,89 @@ $(document).ready(function() {
     
     $.validator.addMethod( "filesize", function( value, element, param ) {
     	if ($(element).attr("type") === "file") {
-    		return checkFileSize(element, param);
+    		var input = element.files[0];
+    		return checkFileSize(input, param);
     	}
     	return true;
     });
-
+    
+    $.validator.addMethod("filesize_multi", function( value, element, params ) {
+    	var param = params.split(',');
+    	var check = true;
+    	if ($(element).attr("type") === "file") {
+    		var element = document.getElementsByName($(element).attr('name'));
+    		if (element.length) {
+	    		for (i = 0; i < element.length; i++) {
+					file = element[i].files[0];
+					// Grab the mimetype from the loaded file, verify it matches
+					if(file && check) {
+						check = checkFileSize(file, param[0]);
+					}
+				}
+    		}
+    	}
+    	return check;
+    }, function(params, element) {
+    	var param = params.split(',');
+    	var message = '';
+    	if ($(element).attr("type") === "file") {
+    		var element = document.getElementsByName($(element).attr('name'));
+    		if (element.length) {
+	    		for (i = 0; i < element.length; i++) {
+					file = element[i].files[0];
+					// Grab the mimetype from the loaded file, verify it matches
+					if(file) {
+						if(!checkFileSize(file, param[0])) {
+							var msg = param[1].replace(':file', file.name);
+							message += '<span class="help-block">' + msg + '</span>';
+						}
+					}
+					
+				}
+    		}
+    	}
+    	return message;
+    });
+    
+    $.validator.addMethod("extension_multi", function( value, element, params ) {
+    	var param = params.split(',');
+    	var check = true;
+    	if ($(element).attr("type") === "file") {
+    		var element = document.getElementsByName($(element).attr('name'));
+    		if (element.length) {
+	    		for (i = 0; i < element.length; i++) {
+					file = element[i].files[0];
+					// Grab the mimetype from the loaded file, verify it matches
+					if(file && check) {
+						var param1 = typeof param[0] === "string" ? param[0].replace( /,/g, "|" ) : "png|jpe?g|gif";
+						check = value.match( new RegExp( "\\.(" + param1 + ")$", "i" ) );
+					}
+				}
+    		}
+    	}
+    	return check;
+    }, function(params, element) {
+    	var param = params.split(',');
+    	var message = '';
+    	if ($(element).attr("type") === "file") {
+    		var element = document.getElementsByName($(element).attr('name'));
+    		if (element.length) {
+	    		for (i = 0; i < element.length; i++) {
+					file = element[i].files[0];
+					// Grab the mimetype from the loaded file, verify it matches
+					if(file) {
+						var param1 = typeof param[0] === "string" ? param[0].replace( /,/g, "|" ) : "png|jpe?g|gif";
+						var check = file.name.match( new RegExp( "\\.(" + param1 + ")$", "i" ) );
+						if(!check) {
+							var msg = param[1].replace(':file', file.name);
+							message += '<span class="help-block">' + msg + '</span>';
+						}
+					}
+					
+				}
+    		}
+    	}
+    	return message;
+    });
+    
 });
