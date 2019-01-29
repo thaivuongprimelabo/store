@@ -59,7 +59,20 @@
     }
     
     .image_product {
+        position: relative;
         margin: 5px;
+    }
+    
+    .image_product:hover .remove {
+        display: block;
+    }
+    
+    .remove {
+        position: absolute;
+        top: 4px;
+        right: 4px;
+        font-size: 18px;
+        display: none;
     }
   </style>
 </head>
@@ -189,16 +202,17 @@
 		search(url, data, 'ajax_list');
 	});
 
-	$(document).on('click', '.remove', function(e) {
-		if(confirmDelete('{{ trans('messages.CONFIRM_DELETE') }}')) {
-			var url = $(this).attr('data-url');
-			window.location = url;
-		}
-	});
-
 	$(document).on('click', '.edit', function(e) {
 			var url = $(this).attr('data-url');
 			window.location = url;
+	});
+
+	$(document).on('click', '.remove', function(e) {
+		if(confirmDelete('{{ trans('messages.CONFIRM_DELETE') }}')) {
+			$(this).parent().remove();
+			return true;
+		}
+		return false;
 	});
 
 	$(document).on('click', '.update-status', function(e) {
@@ -231,18 +245,6 @@
 		clone.attr('class', 'image_product');
 		clone.attr('style', 'display:inline-block');
 		$(this).parent().before(clone);
-	});
-
-	$(document).on('click', '#preview_list a', function(e) {
-		if($(this).hasClass('selected')) {
-			$(this).removeClass('selected');
-		} else {
-			$(this).addClass('selected');
-		}
-	});
-
-	$(document).on('click', '#remove_image', function(e) {
-		
 	});
 
 	$('input#check_all').on('ifChecked', function(event){

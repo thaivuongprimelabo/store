@@ -12,6 +12,7 @@
           	<img src="{{ $image }}" style="width:{{ $width }}px; height:{{ $height }}px" />
           </a>
           <input type="file" name="image_upload[]" class="upload_image_product" style="display: none" />
+          <a href="javascript:void(0)" class="remove"><i class="fa fa-trash" aria-hidden="true"></i></a>
       	</div>
   		@endforeach
   	@else

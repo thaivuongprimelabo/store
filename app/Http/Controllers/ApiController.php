@@ -10,6 +10,7 @@ use App\Helpers\Utils;
 use App\Category;
 use App\Contact;
 use App\Post;
+use App\Product;
 
 class ApiController extends Controller
 {
@@ -23,27 +24,25 @@ class ApiController extends Controller
         $check = false;
         switch($table) {
             case 0; // Vendors table
-                $vendor = Vendor::select('id')->where($col, $value)->first();
-                if($vendor) {
-                    $check = true;
-                    
-                    if(!Utils::blank($idCheck) && $idCheck == $vendor['id']) {
-                        $check = false;
-                    }
-                }
+                $data = Vendor::select('id')->where($col, $value)->first();
+                
                 break;
             case 1; // Categories table
-                $category = Category::select('id')->where($col, $value)->first();
-                if($category) {
-                    $check = true;
-                    
-                    if(!Utils::blank($idCheck) && $idCheck == $category['id']) {
-                        $check = false;
-                    }
-                }
+                $data = Category::select('id')->where($col, $value)->first();
+                break;
+            case 2; // Products table
+                $data = Product::select('id')->where($col, $value)->first();
                 break;
             default:
                 break;
+        }
+        
+        if($data) {
+            $check = true;
+            
+            if(!Utils::blank($idCheck) && $idCheck == $data['id']) {
+                $check = false;
+            }
         }
         
         if(!$check) {

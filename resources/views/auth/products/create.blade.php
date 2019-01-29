@@ -115,7 +115,7 @@
     						return $('#name').val()
     					},
     					col: 'name',
-    					table: 1
+    					table: 2
     				}
     			}
     		},
@@ -167,6 +167,7 @@
 			$('#error_list').append(error_msg);
 			return false;
     	}
+    	return true;
     });
 
 

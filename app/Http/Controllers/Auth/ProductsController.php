@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use App\ImageProduct;
 
 class productsController extends Controller
 {
@@ -170,6 +171,8 @@ class productsController extends Controller
                         $files = $request->image_upload;
                         $image_ids = $request->image_ids;
                         
+                        ImageProduct::destroy($image_ids);
+                        
                         if(count($files)) {
                             foreach($files as $k=>$v) {
                                 $file = $files[$k];
@@ -185,6 +188,8 @@ class productsController extends Controller
                             }
                             
                             DB::table(Common::IMAGES_PRODUCT)->insert($arrFilenames);
+                        } else {
+                            
                         }
                     }
                     

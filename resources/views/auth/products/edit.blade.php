@@ -28,6 +28,7 @@
                 <form role="form" id="edit_form" action="{{ route('auth_products_edit',['id' => $product->id]) }}" method="post" enctype="multipart/form-data">
                   {{ csrf_field() }}
                   <div class="box-body">
+                  	<input type="hidden" name="id" id="id" value="{{ $product->id }}" />
                     <div class="form-group @if ($errors->has('name')){{'has-error'}} @endif">
                       <label for="exampleInputEmail1">{{ trans('auth.products.form.name') }}</label>
                       <input type="text" class="form-control" name="name" id="name" value="{{ old('name', $product->name) }}" placeholder="{{ trans('auth.products.form.name') }}" maxlength="{{ Common::NAME_MAXLENGTH }}">
@@ -115,7 +116,8 @@ var validatorEventSetting = $("#edit_form").validate({
 						return $('#name').val()
 					},
 					col: 'name',
-					table: 1
+					table: 2,
+					id_check: $('#id').val()
 				}
 			}
 		},
@@ -131,7 +133,7 @@ var validatorEventSetting = $("#edit_form").validate({
 		},
 		description: {
 			required: true,
-		},
+		}
 	},
 	messages: {
 		name : {
@@ -150,11 +152,14 @@ var validatorEventSetting = $("#edit_form").validate({
 		},
 		description : {
 			required : "{{ Utils::getValidateMessage('validation.required', 'auth.products.form.description') }}",
-		},
+		}
 	},
 	errorPlacement: function(error, element) {
 		customErrorValidate(error, element);
   	},
+  	submitHanlder: function(form) {
+	    form.submit();
+	}
 });
 
 $('#submit').click(function(e) {
@@ -165,7 +170,11 @@ $('#submit').click(function(e) {
 	if(error_msg !== '') {
 		$('#error_list').parent().addClass('has-error');
 		$('#error_list').append(error_msg);
+		return false;
 	}
+
+	return true;
+
 });
 
 
