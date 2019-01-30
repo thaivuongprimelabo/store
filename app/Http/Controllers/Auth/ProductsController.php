@@ -77,15 +77,10 @@ class productsController extends Controller
             
             $maxSize =  Utils::formatMemory(Common::LOGO_MAX_SIZE, true);
             
-            $messages = [
-                'size' => Utils::getValidateMessage('validation.size.file', 'auth.products.form.image',  Utils::formatMemory(Common::IMAGE_MAX_SIZE)),
-            ];
-            
             $validator = Validator::make($request->all(), [
                 'name' => 'required|max:' . Common::NAME_MAXLENGTH,
                 'description' => 'required|max:' . Common::DESC_MAXLENGTH,
-                'image[]' => 'image|max:'.$maxSize.'|mimes:'. Common::IMAGE_EXT1
-            ], $messages);
+            ]);
             
             if (!$validator->fails()) {
                 
@@ -120,6 +115,8 @@ class productsController extends Controller
                     
                     return redirect(route('auth_products_create'))->with('success', trans('messages.CREATE_SUCCESS'));
                 }
+            } else {
+                return redirect(route('auth_products_create'))->with('error', trans('messages.ERROR'));
             }
         }
         return view('auth.products.create')->withErrors($validator);

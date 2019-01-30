@@ -11,6 +11,7 @@ use App\Category;
 use App\Contact;
 use App\Post;
 use App\Product;
+use App\User;
 
 class ApiController extends Controller
 {
@@ -35,6 +36,9 @@ class ApiController extends Controller
                 break;
             case 3; // Posts table
                 $data = Post::select('id')->where($col, $value)->first();
+                break;
+            case 4; // Users table
+                $data = User::select('id')->where($col, $value)->first();
                 break;
             default:
                 break;
@@ -80,6 +84,14 @@ class ApiController extends Controller
                 
             case 4; // Posts table
                 $object = Post::find($id);
+                break;
+                
+            case 5; // Users table
+                $object = User::find($id);
+                break;
+                
+            case 6; // Products table
+                $object = Product::find($id);
                 break;
             
             default:

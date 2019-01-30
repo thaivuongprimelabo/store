@@ -168,7 +168,9 @@ $(document).ready(function() {
     $.validator.addMethod( "filesize", function( value, element, param ) {
     	if ($(element).attr("type") === "file") {
     		var input = element.files[0];
-    		return checkFileSize(input, param);
+    		if(input) {
+    			return checkFileSize(input, param);
+    		}
     	}
     	return true;
     });

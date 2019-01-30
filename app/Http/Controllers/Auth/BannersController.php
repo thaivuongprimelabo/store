@@ -76,15 +76,11 @@ class BannersController extends Controller
             
             $maxSize =  Utils::formatMemory(Common::BANNER_MAX_SIZE, true);
             
-            $messages = [
-                'size' => Utils::getValidateMessage('validation.size.file', 'auth.banners.form.banner',  Utils::formatMemory(Common::BANNER_MAX_SIZE)),
-            ];
-            
             $validator = Validator::make($request->all(), [
                 'link' => 'max:' . Common::LINK_MAXLENGTH,
                 'description' => 'max:' . Common::DESC_MAXLENGTH,
                 'banner' => 'required|image|max:'.$maxSize.'|mimes:'. Common::IMAGE_EXT1
-            ], $messages);
+            ]);
             
             if (!$validator->fails()) {
                 
@@ -107,6 +103,8 @@ class BannersController extends Controller
                 if($banner->save()) {
                     return redirect(route('auth_banners_create'))->with('success', trans('messages.CREATE_SUCCESS'));
                 }
+            } else {
+                return redirect(route('auth_banners_create'))->with('error', trans('messages.ERROR'));
             }
         }
         return view('auth.banners.create')->withErrors($validator);
@@ -158,6 +156,8 @@ class BannersController extends Controller
                 if($banner->save()) {
                     return redirect(route('auth_banners_edit', ['id' => $request->id]))->with('success', trans('messages.UPDATE_SUCCESS'));
                 }
+            } else {
+                return redirect(route('auth_banners_edit', ['id' => $request->id]))->with('error', trans('messages.ERROR'));
             }
         }
         return view('auth.banners.edit', compact('banner'))->withErrors($validator);

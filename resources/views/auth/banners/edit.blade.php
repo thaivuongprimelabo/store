@@ -26,36 +26,7 @@
                 <!-- /.box-header -->
                 <!-- form start -->
                 <form role="form" id="edit_form" action="{{ route('auth_banners_edit', ['id' => $banner->id]) }}" method="post" enctype="multipart/form-data">
-                  {{ csrf_field() }}
-                  <div class="box-body">
-                  	<input type="hidden" name="id" id="id" value="{{ $banner->id }}" />
-                    <div class="form-group @if ($errors->has('link')){{'has-error'}} @endif">
-                      <label for="exampleInputEmail1">{{ trans('auth.banners.form.link') }}</label>
-                      <input type="text" class="form-control" name="link" id="link" value="{{ old('link', $banner->link) }}" placeholder="{{ trans('auth.banners.form.link') }}">
-                      <span class="help-block">@if ($errors->has('link')){{ $errors->first('link') }}@endif</span>
-                    </div>
-                    <div class="form-group @if ($errors->has('description')){{'has-error'}} @endif">
-                      <label for="exampleInputPassword1">{{ trans('auth.banners.form.description') }}</label>
-                      <textarea class="form-control" rows="6" name="description" placeholder="{{ trans('auth.banners.form.description') }}">{{ old('description', $banner->description) }}</textarea>
-                      <span class="help-block">@if ($errors->has('description')){{ $errors->first('description') }}@endif</span>
-                    </div>
-                    @include('auth.common.upload',[
-                    	'text' => trans('auth.banners.form.banner'),
-                    	'text_small' => trans('auth.banners.form.banner_text'),
-                    	'errors' => $errors,
-                    	'name' => 'banner',
-                    	'size' => Utils::formatMemory(Common::BANNER_MAX_SIZE),
-                    	'width' => Common::BANNER_WIDTH,
-                    	'height' => Common::BANNER_HEIGHT,
-                    	'image_using' => Utils::getImageLink($banner->banner)
-                    ])
-                    <div class="checkbox">
-                      <label>
-                        <input type="checkbox" name="status" value="1" @if(old('status', $banner->status)) {{ 'checked="checked"' }} @endif> {{ trans('auth.status.active') }}
-                      </label>
-                    </div>
-                  </div>
-                  <!-- /.box-body -->
+                  @include('auth.common.edit_form',['forms' => trans('auth.banners.form'), 'data' => $banner])
     
                   <div class="box-footer">
                   	<button type="button" class="btn btn-default" onclick="window.location='{{ route('auth_banners') }}'"><i class="fa fa-arrow-left" aria-hidden="true"></i> {{ trans('auth.button.back') }}</button>
@@ -114,12 +85,12 @@
     			remote: '{{ Utils::getValidateMessage('validation.unique', 'auth.banners.form.name') }}'
     		},
     		description : {
-    			required : "{{ Utils::getValidateMessage('validation.required', 'auth.banners.form.description') }}",
-    			maxlength : "{{ Utils::getValidateMessage('validation.max.string', 'auth.banners.form.description') }}"
+    			required : "{{ Utils::getValidateMessage('validation.required', 'auth.banners.form.description.text') }}",
+    			maxlength : "{{ Utils::getValidateMessage('validation.max.string', 'auth.banners.form.description.text') }}"
     		},
     		banner: {
-    			extension : '{{ Utils::getValidateMessage('validation.image', 'auth.banners.form.banner') }}',
-    			filesize: '{{ Utils::getValidateMessage('validation.size.file', 'auth.banners.form.banner',  Utils::formatMemory(Common::BANNER_MAX_SIZE)) }}'
+    			extension : '{{ Utils::getValidateMessage('validation.image', 'auth.banners.form.banner.text') }}',
+    			filesize: '{{ Utils::getValidateMessage('validation.size.file', 'auth.banners.form.banner.text',  Utils::formatMemory(Common::BANNER_MAX_SIZE)) }}'
     		}
     	},
     	errorPlacement: function(error, element) {

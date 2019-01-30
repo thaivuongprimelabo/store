@@ -5,6 +5,8 @@ namespace App\Helpers;
 use App\Constants\Common;
 use App\Constants\Status;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Image;
 use App\Category;
@@ -15,11 +17,12 @@ class Utils {
     
     public static function getImageLink($image = '') {
         $uploadFolder = Common::UPLOAD_FOLDER;
-        $nologo = Common::NO_LOGO_FILE;
+        //$nologo = Common::NO_LOGO_FILE;
         if(!self::blank($image)) {
             return url($uploadFolder . $image);
         } else {
-            return url($uploadFolder . $nologo);
+            //return url($uploadFolder . $nologo);
+            return '';
         }
     }
     
@@ -118,11 +121,12 @@ class Utils {
         
     }
     
-    public static function getValidateMessage($key, $param, $size = '') {
+    public static function getValidateMessage($key, $param, $param2 = '') {
         $message = trans($key);
-        $message = str_replace(':size', trans($size), $message);
-        $message = str_replace(':max', trans($size), $message);
+        $message = str_replace(':size', trans($param2), $message);
+        $message = str_replace(':max', trans($param2), $message);
         $message = str_replace(':attribute', trans($param), $message);
+        $message = str_replace(':equal', trans($param2), $message);
         return $message;
     }
     
@@ -157,7 +161,7 @@ class Utils {
         return empty($value);
     }
     
-    public static function createSelectList($table, $selected = '') {
+    public static function createSelectList($table = '', $selected = '') {
         $html = '';
         $data = [];
         switch($table) {
@@ -168,14 +172,18 @@ class Utils {
                 $data = Vendor::select('name', 'id')->where('status', Status::ACTIVE)->get();
                 break;
             default:
+                $data = [
+                    ['id' => Common::ADMIN, 'name' => trans('auth.role.admin')],
+                    ['id' => Common::MEMBER, 'name' => trans('auth.role.member')]
+                ];
                 break;
         }
         
         foreach($data as $item) {
-            if($selected == $item->id) {
-                $html .= '<option value="'. $item->id .'" selected>'. $item->name .'</option>';
+            if($selected == $item['id']) {
+                $html .= '<option value="'. $item['id'] .'" selected>'. $item['name'] .'</option>';
             } else {
-                $html .= '<option value="'. $item->id .'">'. $item->name .'</option>';
+                $html .= '<option value="'. $item['id'] .'">'. $item['name'] .'</option>';
             }
         }
         
@@ -185,13 +193,55 @@ class Utils {
     public static function createSidebar() {
         $sidebar = trans('auth.sidebar');
         $html = '';
+        $routes = Route::getRoutes();
+        $currentRoute = Route::currentRouteName();
+        $nameList = $routes->getRoutesByName();
+        
         foreach($sidebar as $k=>$v) {
-            $html .= '<li>';
-            $html .= '<a href="'. route('auth_' . $k) . '">';
-            $html .= '<i class="fa fa-files-o"></i>';
-            $html .= '<span>'. $v .'</span>';
-            $html .= '</a>';
-            $html .= '</li>';
+            
+            if($routes->hasNamedRoute('auth_' . $k) && $routes->hasNamedRoute('auth_' . $k . '_create')) {
+                $open = '';
+                $treemenu = '';
+                $route = 'auth_' . $k;
+                $active = '';
+                if(strpos($currentRoute, $route) > -1) {
+                    $open = 'menu-open';
+                    $treemenu = 'style="display:block"';
+                    $active = 'active';
+                }
+                
+                $html .= '<li class="treeview '. $open . '">';
+                $html .= '<a href="javascript:void(0)">';
+                $html .= '<i class="fa fa-files-o"></i>';
+                $html .= '<span>'. $v .'</span>';
+                $html .= '<span class="pull-right-container">';
+                $html .= '<i class="fa fa-angle-left pull-right"></i>';
+                $html .= '</span>';
+                $html .= '</a>';
+                $html .= '<ul class="treeview-menu" ' . $treemenu . '>';
+                
+                if($currentRoute == $route) {
+                    $html .= '<li class="active"><a href="'. route($route) . '"><i class="fa fa-circle-o"></i> '. trans('auth.sidebar_node.list') .'</a></li>';
+                } else {
+                    $html .= '<li><a href="'. route($route) . '"><i class="fa fa-circle-o"></i> '. trans('auth.sidebar_node.list') .'</a></li>';
+                }
+                
+                if($currentRoute == ($route . '_create')) {
+                    $html .= '<li class="active"><a href="'. route($route . '_create') . '"><i class="fa fa-circle-o"></i> '. trans('auth.sidebar_node.create') .'</a></li>';
+                } else {
+                    $html .= '<li><a href="'. route($route . '_create') . '"><i class="fa fa-circle-o"></i> '. trans('auth.sidebar_node.create') .'</a></li>';
+                }
+                $html .= '</ul>';
+                $html .= '</li>';
+            } else {
+                $html .= '<li>';
+                $html .= '<a href="' . route('auth_' . $k) .'">';
+                $html .= '<i class="fa fa-files-o"></i>';
+                $html .= '<span>'. $v .'</span>';
+                $html .= '</a>';
+                $html .= '</li>';
+            }
+            
         }
         
         return $html;

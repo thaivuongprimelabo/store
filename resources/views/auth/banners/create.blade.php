@@ -26,34 +26,7 @@
                 <!-- /.box-header -->
                 <!-- form start -->
                 <form role="form" id="create_form" action="{{ route('auth_banners_create') }}" method="post" enctype="multipart/form-data">
-                  {{ csrf_field() }}
-                  <div class="box-body">
-                    <div class="form-group @if ($errors->has('name')){{'has-error'}} @endif">
-                      <label for="exampleInputEmail1">{{ trans('auth.banners.form.link') }}</label>
-                      <input type="text" class="form-control" name="link" id="link" value="{{ old('link') }}" placeholder="{{ trans('auth.banners.form.link') }}" maxlength="{{ Common::LINK_MAXLENGTH }}">
-                      <span class="help-block">@if ($errors->has('link')){{ $errors->first('link') }}@endif</span>
-                    </div>
-                    <div class="form-group @if ($errors->has('description')){{'has-error'}} @endif">
-                      <label for="exampleInputPassword1">{{ trans('auth.banners.form.description') }}</label>
-                      <textarea class="form-control" rows="6" name="description" placeholder="{{ trans('auth.banners.form.description') }}" maxlength="{{ Common::DESC_MAXLENGTH }}">{{ old('description') }}</textarea>
-                      <span class="help-block">@if ($errors->has('description')){{ $errors->first('description') }}@endif</span>
-                    </div>
-                    @include('auth.common.upload',[
-                    	'text' => trans('auth.banners.form.banner'),
-                    	'text_small' => trans('auth.banners.form.banner_text'),
-                    	'errors' => $errors,
-                    	'name' => 'banner',
-                    	'size' => Utils::formatMemory(Common::BANNER_MAX_SIZE),
-                    	'width' => Common::BANNER_WIDTH,
-                    	'height' => Common::BANNER_HEIGHT,
-                    	'image_using' => ''
-                    ])
-                    <div class="checkbox">
-                      <label>
-                        <input type="checkbox" name="status" value="1" @if(old('status')) {{ 'checked="checked"' }} @endif> {{ trans('auth.status.active') }}
-                      </label>
-                    </div>
-                  </div>
+                  @include('auth.common.create_form',['forms' => trans('auth.banners.form')])
                   <!-- /.box-body -->
     
                   <div class="box-footer">
@@ -95,13 +68,13 @@
     			maxlength : "{{ Utils::getValidateMessage('validation.max.string', 'auth.banners.form.link', Common::LINK_MAXLENGTH) }}",
     		},
     		description : {
-    			required : "{{ Utils::getValidateMessage('validation.required', 'auth.banners.form.description') }}",
-    			maxlength : "{{ Utils::getValidateMessage('validation.max.string', 'auth.banners.form.description', Common::DESC_MAXLENGTH) }}"
+    			required : "{{ Utils::getValidateMessage('validation.required', 'auth.banners.form.description.text') }}",
+    			maxlength : "{{ Utils::getValidateMessage('validation.max.string', 'auth.banners.form.description.text', Common::DESC_MAXLENGTH) }}"
     		},
     		banner: {
-    			required : "{{ Utils::getValidateMessage('validation.required_select', 'auth.banners.form.banner') }}",
-    			extension : '{{ Utils::getValidateMessage('validation.image', 'auth.banners.form.banner') }}',
-    			filesize: '{{ Utils::getValidateMessage('validation.size.file', 'auth.banners.form.banner',  Utils::formatMemory(Common::BANNER_MAX_SIZE)) }}'
+    			required : "{{ Utils::getValidateMessage('validation.required_select', 'auth.banners.form.banner.text') }}",
+    			extension : '{{ Utils::getValidateMessage('validation.image', 'auth.banners.form.banner.text') }}',
+    			filesize: '{{ Utils::getValidateMessage('validation.size.file', 'auth.banners.form.banner.text',  Utils::formatMemory(Common::BANNER_MAX_SIZE)) }}'
     		}
     	},
     	errorPlacement: function(error, element) {

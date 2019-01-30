@@ -108,6 +108,8 @@ class VendorsController extends Controller
                 if($vendor->save()) {
                     return redirect(route('auth_vendors_create'))->with('success', trans('messages.CREATE_SUCCESS'));
                 }
+            } else {
+                return redirect(route('auth_vendors_create'))->with('error', trans('messages.ERROR'));
             }
         }
         return view('auth.vendors.create')->withErrors($validator);
@@ -161,6 +163,8 @@ class VendorsController extends Controller
                 if($vendor->save()) {
                     return redirect(route('auth_vendors_edit', ['id' => $request->id]))->with('success', trans('messages.UPDATE_SUCCESS'));
                 }
+            } else {
+                return redirect(route('auth_vendors_create'))->with('error', trans('messages.ERROR'));
             }
         }
         return view('auth.vendors.edit', compact('vendor'))->withErrors($validator);;

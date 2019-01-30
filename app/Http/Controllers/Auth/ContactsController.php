@@ -79,10 +79,6 @@ class ContactsController extends Controller
             
             $maxSize =  Utils::formatMemory(Common::ATTACHMENT_MAX_SIZE, true);
             
-            $messages = [
-                'size' => Utils::getValidateMessage('validation.size.file', 'auth.contacts.form.attachment',  Utils::formatMemory(Common::ATTACHMENT_MAX_SIZE)),
-            ];
-            
             $validator = Validator::make($request->all(), [
                 'reply_content' => 'required|max:' . Common::DESC_MAXLENGTH,
                 'banner' => 'max:'.$maxSize.'|mimes:'. Common::FILE_EXT1
@@ -116,8 +112,8 @@ class ContactsController extends Controller
                 } else {
                     return redirect(route('auth_contacts'))->with('error', trans('messages.ERROR'));
                 }
-                
-                
+            } else {
+                return redirect(route('auth_contacts'))->with('error', trans('messages.ERROR'));
             }
         }
         return view('auth.contacts.edit', compact('contact'))->withErrors($validator);;

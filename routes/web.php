@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('home');
 
 Route::group(['prefix' => 'auth', 'namespace' => 'Auth'], function () {
     
@@ -68,11 +68,17 @@ Route::group(['prefix' => 'auth', 'namespace' => 'Auth'], function () {
     Route::get('/posts/remove/{id}', 'PostsController@remove')->name('auth_posts_remove');
     
     // Users
-    $this->get('/users', 'ContactsController@index')->name('auth_users');
+    $this->get('/users', 'UsersController@index')->name('auth_users');
+    Route::match(['get', 'post'], '/users/create', 'UsersController@create')->name('auth_users_create');
+    Route::match(['get', 'post'], '/users/edit/{id}', 'UsersController@edit')->name('auth_users_edit');
+    Route::match(['get', 'post'], '/users/search', 'UsersController@search')->name('auth_users_search');
+    Route::get('/users/remove/{id}', 'UsersController@remove')->name('auth_users_remove');
     
     // Config
-    Route::match(['get', 'post'], '/config', 'ConfigController@index')->name('auth_config');
+    Route::match(['get', 'post'], '/config', 'ConfigController@index')->name('auth_config_edit');
     
+    // Profile
+    Route::match(['get', 'post'], '/profile', 'UsersController@profile')->name('auth_profile');
     
     // Registration Routes...
 //     $this->get('/register', 'RegisterController@showRegistrationForm')->name('register');

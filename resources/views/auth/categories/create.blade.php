@@ -26,27 +26,7 @@
                 <!-- /.box-header -->
                 <!-- form start -->
                 <form role="form" id="create_form" action="{{ route('auth_categories_create') }}" method="post" enctype="multipart/form-data">
-                  {{ csrf_field() }}
-                  <div class="box-body">
-                    <div class="form-group @if ($errors->has('name')){{'has-error'}} @endif">
-                      <label for="exampleInputEmail1">{{ trans('auth.categories.form.name') }}</label>
-                      <input type="text" class="form-control" name="name" id="name" value="{{ old('name') }}" placeholder="{{ trans('auth.categories.form.name') }}" maxlength="{{ Common::NAME_MAXLENGTH }}">
-                      <span class="help-block">@if ($errors->has('name')){{ $errors->first('name') }}@endif</span>
-                    </div>
-                    <div class="form-group">
-                      <label for="exampleInputEmail1">{{ trans('auth.categories.form.parent') }}</label>
-                      <select class="form-control" name="parent_id" id="parent_id">
-                        <option value="0">{{ trans('auth.categories.parent_empty_text') }}</option>
-                      	{!! Utils::createSelectList(Common::CATEGORIES) !!}
-                      </select>
-                    </div>
-                    <div class="checkbox">
-                      <label>
-                        <input type="checkbox" name="status" value="1" @if(old('status')) {{ 'checked="checked"' }} @endif> {{ trans('auth.status.active') }}
-                      </label>
-                    </div>
-                  </div>
-                  <!-- /.box-body -->
+                  @include('auth.common.create_form',['forms' => trans('auth.categories.form')])
     
                   <div class="box-footer">
                   	<button type="button" class="btn btn-default" onclick="window.location='{{ route('auth_categories') }}'"><i class="fa fa-arrow-left" aria-hidden="true"></i> {{ trans('auth.button.back') }}</button>
@@ -95,8 +75,7 @@
     		},
     	},
     	errorPlacement: function(error, element) {
-    		element.parent().addClass('has-error');
-    		element.parent().find('span.help-block').html(error[0].innerHTML);
+    		customErrorValidate(error, element);
 	  	},
     	submitHanlder: function(form) {
     	    form.submit();

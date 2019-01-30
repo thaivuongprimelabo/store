@@ -87,10 +87,12 @@ class CategoriesController extends Controller
                 $category->status = $request->input('status', 0);
                 $category->created_at = date('Y-m-d H:i:s');
                 $category->updated_at = date('Y-m-d H:i:s');
-            }
-            
-            if($category->save()) {
-                return redirect(route('auth_categories_create'))->with('success', trans('messages.CREATE_SUCCESS'));
+                
+                if($category->save()) {
+                    return redirect(route('auth_categories_create'))->with('success', trans('messages.CREATE_SUCCESS'));
+                }
+            } else {
+                return redirect(route('auth_categories_create'))->with('error', trans('messages.ERROR'));
             }
         }
         

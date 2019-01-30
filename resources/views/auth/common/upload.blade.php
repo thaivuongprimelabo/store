@@ -1,5 +1,3 @@
-@php
-@endphp
 <div class="form-group @if ($errors->has($name)){{'has-error'}} @endif">
   <label for="exampleInputFile">{{ $text }}</label><br/>
   <div id="preview_list">

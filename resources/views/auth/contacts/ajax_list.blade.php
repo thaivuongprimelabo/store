@@ -1,6 +1,5 @@
   <table class="table table-hover">
     <tr>
-      <th></th>
       <th>{{ trans('auth.contacts.table_header.id') }}</th>
       <th>{{ trans('auth.contacts.table_header.name') }}</th>
       <th>{{ trans('auth.contacts.table_header.email') }}</th>
@@ -13,7 +12,6 @@
     @if($contacts->count())
     @foreach($contacts as $contact)
     <tr>
-      <td><input type="checkbox" name="check_all" value="{{ $contact->id }}"></td>
       <td>{{ $contact->id }}</td>
       <td>{{ $contact->name }}</td>
       <td>{{ $contact->email }}</td>

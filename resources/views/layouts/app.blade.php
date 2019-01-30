@@ -67,7 +67,7 @@
         display: block;
     }
     
-    .remove {
+    .image_product .remove {
         position: absolute;
         top: 4px;
         right: 4px;
@@ -105,13 +105,13 @@
               <!-- User Account: style can be found in dropdown.less -->
               <li class="dropdown user user-menu">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                  <img src="{{ url('admin/dist/img/user2-160x160.jpg') }}" class="user-image" alt="User Image">
+                  <img src="{{ Utils::getImageLink(Auth::user()->avatar) }}" class="user-image" alt="User Image">
                   <span class="hidden-xs">{{ Auth::user()->name }}</span>
                 </a>
                 <ul class="dropdown-menu">
                   <!-- User image -->
                   <li class="user-header">
-                    <img src="{{ url('admin/dist/img/user2-160x160.jpg') }}" class="img-circle" alt="User Image">
+                    <img src="{{ Utils::getImageLink(Auth::user()->avatar) }}" class="img-circle" alt="User Image">
     
                     <p>
                       {{ Auth::user()->name }}
@@ -120,7 +120,7 @@
                   <!-- Menu Footer-->
                   <li class="user-footer">
                     <div class="pull-left">
-                      <a href="#" class="btn btn-default btn-flat">{{ trans('auth.button.profile') }}</a>
+                      <a href="{{ route('auth_profile') }}" class="btn btn-default btn-flat">{{ trans('auth.button.profile') }}</a>
                     </div>
                     <div class="pull-right">
                       <a href="{{ route('logout') }}" class="btn btn-default btn-flat">{{ trans('auth.button.logout') }}</a>
@@ -175,6 +175,10 @@
 
 <script>
   $(function () {
+	setTimeout(function(){ 
+		$('.alert').fadeOut();
+	}, 3000);
+	  
     //bootstrap WYSIHTML5 - text editor
     $('.wysihtml_editor').wysihtml5()
     $('input').iCheck({

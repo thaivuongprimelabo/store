@@ -11,6 +11,7 @@ class Common {
     CONST ATTACHMENT_FOLDER = 'attachment/';
     CONST ICO_FOLDER = 'ico/';
     CONST WEBLOGO_FOLDER = 'web_logo/';
+    CONST AVATAR_FOLDER = 'avatar/';
     CONST IMAGE_FOLDER = 'image/';
     CONST IMAGE_EXT = 'png|jpe?g|gif';
     CONST IMAGE_EXT1 = 'jpeg,png,gif';
@@ -30,12 +31,17 @@ class Common {
     CONST BANNER_WIDTH = '780';
     CONST BANNER_HEIGHT = '350';
     CONST ATTACHMENT_MAX_SIZE = '102400';
+    CONST ATTACHMENT_WIDTH = '90';
+    CONST ATTACHMENT_HEIGHT = '90';
     CONST PHOTO_MAX_SIZE = '102400';
     CONST PHOTO_WIDTH = '150';
     CONST PHOTO_HEIGHT = '100';
     CONST IMAGE_MAX_SIZE = '102400';
     CONST IMAGE_WIDTH = '150';
     CONST IMAGE_HEIGHT = '100';
+    CONST AVATAR_MAX_SIZE = '102400';
+    CONST AVATAR_WIDTH = '150';
+    CONST AVATAR_HEIGHT = '100';
     CONST WEB_LOGO_MAX_SIZE = '102400';
     CONST WEB_LOGO_WIDTH = '150';
     CONST WEB_LOGO_HEIGHT = '100';
@@ -50,6 +56,7 @@ class Common {
     CONST LINK_MAXLENGTH = 255;
     CONST DESC_MAXLENGTH = 300;
     CONST PRICE_MAXLENGTH = 11;
+    CONST PASSWORD_MAXLENGTH = 40;
     
     /** Table **/
     CONST USERS = 'users';
@@ -61,6 +68,11 @@ class Common {
     CONST CONFIG = 'config';
     CONST PRODUCTS = 'products';
     CONST IMAGES_PRODUCT = 'images_product';
+    
+    /** Role **/
+    CONST SUPER_ADMIN = '0';
+    CONST ADMIN = '1';
+    CONST MEMBER = '2';
     
     /** Mail **/
     CONST ADMIN_EMAIL = 'thaivuong1503@gmail.com';

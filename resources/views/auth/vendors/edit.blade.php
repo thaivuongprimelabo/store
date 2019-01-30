@@ -26,36 +26,7 @@
                 <!-- /.box-header -->
                 <!-- form start -->
                 <form role="form" id="edit_form" action="{{ route('auth_vendors_edit', ['id' => $vendor->id]) }}" method="post" enctype="multipart/form-data">
-                  {{ csrf_field() }}
-                  <div class="box-body">
-                  	<input type="hidden" name="id" id="id" value="{{ $vendor->id }}" />
-                    <div class="form-group @if ($errors->has('name')){{'has-error'}} @endif">
-                      <label for="exampleInputEmail1">{{ trans('auth.vendors.form.name') }}</label>
-                      <input type="text" class="form-control" name="name" id="name" value="{{ old('name', $vendor->name) }}" placeholder="{{ trans('auth.vendors.form.name') }}">
-                      <span class="help-block">@if ($errors->has('name')){{ $errors->first('name') }}@endif</span>
-                    </div>
-                    <div class="form-group @if ($errors->has('description')){{'has-error'}} @endif">
-                      <label for="exampleInputPassword1">{{ trans('auth.vendors.form.description') }}</label>
-                      <textarea class="form-control" rows="6" name="description" placeholder="{{ trans('auth.vendors.form.description') }}">{{ old('description', $vendor->description) }}</textarea>
-                      <span class="help-block">@if ($errors->has('description')){{ $errors->first('description') }}@endif</span>
-                    </div>
-                    @include('auth.common.upload',[
-                    	'text' => trans('auth.vendors.form.logo'),
-                    	'text_small' => trans('auth.vendors.form.logo_text'),
-                    	'errors' => $errors,
-                    	'name' => 'logo',
-                    	'size' => Utils::formatMemory(Common::LOGO_MAX_SIZE),
-                    	'image_using' => Utils::getImageLink($vendor->logo),
-                    	'width' => Common::LOGO_WIDTH,
-                    	'height' => Common::LOGO_HEIGHT
-                    ])
-                    <div class="checkbox">
-                      <label>
-                        <input type="checkbox" name="status" value="1" @if(old('status', $vendor->status)) {{ 'checked="checked"' }} @endif> {{ trans('auth.status.active') }}
-                      </label>
-                    </div>
-                  </div>
-                  <!-- /.box-body -->
+                  @include('auth.common.edit_form',['forms' => trans('auth.vendors.form'), 'data' => $vendor])
     
                   <div class="box-footer">
                   	<button type="button" class="btn btn-default" onclick="window.location='{{ route('auth_vendors') }}'"><i class="fa fa-arrow-left" aria-hidden="true"></i> {{ trans('auth.button.back') }}</button>
@@ -114,12 +85,12 @@
     			remote: '{{ Utils::getValidateMessage('validation.unique', 'auth.vendors.form.name') }}'
     		},
     		description : {
-    			required : "{{ Utils::getValidateMessage('validation.required', 'auth.vendors.form.description') }}",
-    			maxlength : "{{ Utils::getValidateMessage('validation.max.string', 'auth.vendors.form.description') }}"
+    			required : "{{ Utils::getValidateMessage('validation.required', 'auth.vendors.form.description.text') }}",
+    			maxlength : "{{ Utils::getValidateMessage('validation.max.string', 'auth.vendors.form.description.text') }}"
     		},
     		logo: {
-    			extension : '{{ Utils::getValidateMessage('validation.image', 'auth.vendors.form.logo') }}',
-    			filesize: '{{ Utils::getValidateMessage('validation.size.file', 'auth.vendors.form.logo',  Utils::formatMemory(Common::LOGO_MAX_SIZE)) }}'
+    			extension : '{{ Utils::getValidateMessage('validation.image', 'auth.vendors.form.logo.text') }}',
+    			filesize: '{{ Utils::getValidateMessage('validation.size.file', 'auth.vendors.form.logo.text',  Utils::formatMemory(Common::LOGO_MAX_SIZE)) }}'
     		}
     	},
     	errorPlacement: function(error, element) {

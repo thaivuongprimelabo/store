@@ -24,12 +24,14 @@ class ConfigController extends Controller
     public function index(Request $request) {
         $config = Config::first();
         if($request->isMethod('post')) {
+            $icoFile = $config->web_ico;
             $filename = $config->web_logo;
             if($request->hasFile('web_logo')) {
                 
                 $file = $request->web_logo;
 
                 $icoFileName = 'favico.png';
+                $icoFile = Utils::createIcoFile($file, $icoFileName);
                 $filename = Utils::uploadFile($file, Common::WEBLOGO_FOLDER);
             }
             $config->web_title       = $request->input('web_title', '');
@@ -49,7 +51,7 @@ class ConfigController extends Controller
             $config->off             = $request->input('off', 0);
             
             if($config->save()) {
-                return redirect(route('auth_config'))->with('success', trans('messages.UPDATE_SUCCESS'));
+                return redirect(route('auth_config_edit'))->with('success', trans('messages.UPDATE_SUCCESS'));
             }
         }
         return view('auth.config.index', compact('config'));

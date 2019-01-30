@@ -73,16 +73,12 @@ class PostsController extends Controller
         
         if($request->isMethod('post')) {
             
-            $maxSize =  Utils::formatMemory(Common::LOGO_MAX_SIZE, true);
-            
-            $messages = [
-                'size' => Utils::getValidateMessage('validation.size.file', 'auth.posts.form.photo',  Utils::formatMemory(Common::PHOTO_MAX_SIZE)),
-            ];
+            $maxSize =  Utils::formatMemory(Common::PHOTO_MAX_SIZE, true);
             
             $validator = Validator::make($request->all(), [
                 'name' => 'required|max:' . Common::NAME_MAXLENGTH,
                 'content' => 'required'
-            ], $messages);
+            ]);
             
             if (!$validator->fails()) {
                 
@@ -94,8 +90,8 @@ class PostsController extends Controller
                     $filename = Utils::uploadFile($file, Common::PHOTO_FOLDER);
                 }
                 
-                $published_at = $request->input('published_at', date('Y-m-d')) . ' ' . $request->input('published_time_at', date('H:i:s'));
-                $published_at = date('Y-m-d H:i:s', strtotime($published_at));
+                $published_at = date('Ymd', strtotime($request->input('published_at', date('Ymd'))));
+                $published_time_at = date('Hi', strtotime($request->input('published_time_at', date('H:i'))));
                 
                 $post = new Post();
                 $post->name = $request->input('name', '');
@@ -104,13 +100,17 @@ class PostsController extends Controller
                 $post->content = $request->input('content', '');
                 $post->photo = $filename;
                 $post->published_at = $published_at;
+                $post->published_time_at = $published_time_at;
                 $post->status = $request->input('status', 0);
                 $post->created_at = date('Y-m-d H:i:s');
                 $post->updated_at = date('Y-m-d H:i:s');
-            }
-            
-            if($post->save()) {
-                return redirect(route('auth_posts_create'))->with('success', trans('messages.CREATE_SUCCESS'));
+                
+                if($post->save()) {
+                    return redirect(route('auth_posts_create'))->with('success', trans('messages.CREATE_SUCCESS'));
+                }
+                
+            } else {
+                return redirect(route('auth_posts_create'))->with('error', trans('messages.ERROR'));
             }
         }
         
@@ -133,14 +133,10 @@ class PostsController extends Controller
             
             $maxSize =  Utils::formatMemory(Common::PHOTO_MAX_SIZE, true);
             
-            $messages = [
-                'size' => Utils::getValidateMessage('validation.size.file', 'auth.posts.form.photo',  Utils::formatMemory(Common::PHOTO_MAX_SIZE)),
-            ];
-            
             $validator = Validator::make($request->all(), [
                 'name' => 'required|max:' . Common::NAME_MAXLENGTH,
                 'photo' => 'image|max:'.$maxSize.'|mimes:'. Common::IMAGE_EXT1
-            ], $messages);
+            ]);
             
             if (!$validator->fails()) {
                 $post = Post::find($request->id);
@@ -153,8 +149,8 @@ class PostsController extends Controller
                     $filename = Utils::uploadFile($file, Common::PHOTO_FOLDER);
                 }
                 
-                $published_at = $request->input('published_at', date('Y-m-d')) . ' ' . $request->input('published_time_at', date('H:i:s'));
-                $published_at = date('Y-m-d H:i:s', strtotime($published_at));
+                $published_at = date('Ymd', strtotime($request->input('published_at', date('Ymd'))));
+                $published_time_at = date('Hi', strtotime($request->input('published_time_at', date('H:i'))));
                 
                 $post->name = $request->input('name', '');
                 $post->name_url = $request->input('name', '');
@@ -162,13 +158,17 @@ class PostsController extends Controller
                 $post->content = $request->input('content', '');
                 $post->photo = $filename;
                 $post->published_at = $published_at;
+                $post->published_time_at = $published_time_at;
                 $post->status = $request->input('status', 0);
                 $post->created_at = date('Y-m-d H:i:s');
                 $post->updated_at = date('Y-m-d H:i:s');
-            }
-            
-            if($post->save()) {
-                return redirect(route('auth_posts_edit', ['id' => $request->id]))->with('success', trans('messages.UPDATE_SUCCESS'));
+                
+                if($post->save()) {
+                    return redirect(route('auth_posts_edit', ['id' => $request->id]))->with('success', trans('messages.UPDATE_SUCCESS'));
+                }
+                
+            } else {
+                return redirect(route('auth_posts_edit', ['id' => $request->id]))->with('error', trans('messages.ERROR'));
             }
         }
         
