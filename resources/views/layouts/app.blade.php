@@ -177,8 +177,10 @@
 	}, 3000);
 	  
     //bootstrap WYSIHTML5 - text editor
-    CKEDITOR.replace('editor1');
-    CKEDITOR.config.height = 400;
+    if($("#editor1").length > 0){
+        CKEDITOR.replace('editor1');
+        CKEDITOR.config.height = 400;
+    }
     $('input').iCheck({
       checkboxClass: 'icheckbox_square-blue',
       radioClass: 'iradio_square-blue',
