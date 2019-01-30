@@ -37,8 +37,7 @@
     	@if($value['type'] == 'editor')
     		<div class="form-group @if ($errors->has($key)){{'has-error'}} @endif">
               <label for="exampleInputPassword1">{{ $value['text'] }}</label>
-              <textarea class="wysihtml_editor" name="{{ $key }}" id="{{ $key }}" placeholder="Place some text here"
-                          style="width: 100%; height: 300px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;">{{ old($key) }}</textarea>
+              <textarea name="{{ $key }}" id="editor1" placeholder="Place some text here">{{ old($key) }}</textarea>
               <span class="help-block">@if ($errors->has($key)){{ $errors->first($key) }}@endif</span>
             </div>
     	@endif
