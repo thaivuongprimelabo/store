@@ -279,6 +279,10 @@
 		$('input[name="check_remove"]').parent().removeClass('checked');
 	});
 
+    $('button[type="submit"]').click(function(e) {
+		$('form').submit();
+    });
+
   });
 </script>
 @yield('script')

@@ -15,22 +15,11 @@
 	<div class="row">
 		<div class="col-md-12">
 			@include('auth.common.alert')
-			<div class="box box-primary">
-                <div class="box-header with-border">
-                  <h3 class="box-title">{{ trans('auth.create_box_title') }}</h3>
-                </div>
-                <!-- /.box-header -->
-                <!-- form start -->
-                <form role="form" id="create_form" action="{{ route('auth_categories_create') }}" method="post" enctype="multipart/form-data">
-                  @include('auth.common.create_form',['forms' => trans('auth.categories.form')])
-    
-                  <div class="box-footer">
-                  	<button type="button" class="btn btn-default" onclick="window.location='{{ route('auth_categories') }}'"><i class="fa fa-arrow-left" aria-hidden="true"></i> {{ trans('auth.button.back') }}</button>
-                    <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> {{ trans('auth.button.submit') }}</button>
-                  </div>
-                </form>
+			@include('auth.common.create_form',['forms' => trans('auth.categories.form')])
+			<div class="box-footer">
+              	<button type="button" class="btn btn-default" onclick="window.location='{{ route('auth_categories') }}'"><i class="fa fa-arrow-left" aria-hidden="true"></i> {{ trans('auth.button.back') }}</button>
+                <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> {{ trans('auth.button.submit') }}</button>
             </div>
-            <!-- /.box -->
 		</div>
 	</div>
 </section>
@@ -78,18 +67,5 @@
     	}
     });
 
-    $('#logo').change(function(e) {
-    	$(this).parent().removeClass('has-error');
-    	var element = $('input[name="logo"]')[0];
-    	
-    	if(checkFileSize(element, '{{ Common::LOGO_MAX_SIZE }}')) {
-    		var reader = new FileReader();
-            reader.onload = function (event) {
-                $('#logo_preview').attr('src', event.target.result);
-            }
-            reader.readAsDataURL($('input[name="logo"]')[0].files[0]);
-    	}
-    	
-    });
 </script>
 @endsection

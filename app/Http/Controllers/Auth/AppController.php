@@ -31,14 +31,18 @@ class AppController extends Controller
                 'config' => [
                     'web_logo' => $web_logo,
                     'web_ico' => $web_ico,
-                    'banner_maximum_upload' => $config->banner_maximum_upload,
-                    'logo_maximum_upload' => $config->vendor_maximum_upload,
-                    'image_maximum_upload' => $config->product_maximum_upload,
-                    'photo_maximum_upload'   => $config->post_maximum_upload,
-                    'banner_image_size' => $config->banner_image_size,
-                    'logo_image_size' => $config->vendor_image_size,
-                    'image_image_size' => $config->product_image_size,
-                    'photo_image_size'   => $config->post_image_size
+                    'banner_maximum_upload' => Utils::cnvNull($config->banner_maximum_upload, 51200),
+                    'logo_maximum_upload' => Utils::cnvNull($config->logo_maximum_upload, 51200),
+                    'image_maximum_upload' => Utils::cnvNull($config->image_maximum_upload, 51200),
+                    'photo_maximum_upload'   => Utils::cnvNull($config->photo_maximum_upload, 51200),
+                    'web_logo_maximum_upload'   => Utils::cnvNull($config->web_logo_maximum_upload, 51200),
+                    'avatar_maximum_upload'   => Utils::cnvNull($config->avatar_maximum_upload, '100x100'),
+                    'banner_image_size' => Utils::cnvNull($config->banner_image_size, '100x100'),
+                    'logo_image_size' => Utils::cnvNull($config->logo_image_size, '100x100'),
+                    'image_image_size' => Utils::cnvNull($config->image_image_size, '100x100'),
+                    'photo_image_size'   => Utils::cnvNull($config->photo_image_size, '100x100'),
+                    'web_logo_image_size'   => Utils::cnvNull($config->web_logo_image_size, '100x100'),
+                    'avatar_image_size'   => Utils::cnvNull($config->avatar_image_size, '100x100'),
                 ]
             ];
             View::share($this->config);

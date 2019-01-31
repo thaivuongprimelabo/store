@@ -15,22 +15,11 @@
 	<div class="row">
 		<div class="col-md-12">
 			@include('auth.common.alert')
-			<div class="box box-primary">
-                <div class="box-header with-border">
-                  <h3 class="box-title">{{ trans('auth.edit_box_title') }}</h3>
-                </div>
-                <!-- /.box-header -->
-                <!-- form start -->
-                <form role="form" id="create_form" action="{{ route('auth_users_edit', ['id' => $user->id]) }}" method="post" enctype="multipart/form-data">
-                  @include('auth.common.edit_form',['forms' => trans('auth.users.form'), 'data' => $user])
-    
-                  <div class="box-footer">
-                  	<button type="button" class="btn btn-default" onclick="window.location='{{ route('auth_users') }}'"><i class="fa fa-arrow-left" aria-hidden="true"></i> {{ trans('auth.button.back') }}</button>
-                    <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> {{ trans('auth.button.submit') }}</button>
-                  </div>
-                </form>
+			@include('auth.common.edit_form',['forms' => trans('auth.users.form'), 'data' => $user])
+			<div class="box-footer">
+              	<button type="button" class="btn btn-default" onclick="window.location='{{ route('auth_users') }}'"><i class="fa fa-arrow-left" aria-hidden="true"></i> {{ trans('auth.button.back') }}</button>
+                <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> {{ trans('auth.button.send') }}</button>
             </div>
-            <!-- /.box -->
 		</div>
 	</div>
 </section>

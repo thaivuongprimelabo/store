@@ -32,7 +32,7 @@ class Utils {
         if(!self::blank($image)) {
             return url($uploadFolder . $image);
         } else {
-            return url($uploadFolder . $noavatar);
+            return url($noavatar);
         }
     }
     

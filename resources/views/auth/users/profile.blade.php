@@ -14,25 +14,11 @@
 <section class="content">
 	<div class="row">
 		<div class="col-md-12">
-			@if (session('success'))
-                <div class="alert alert-success">
-                    {{ session('success') }}
-                </div>
-            @endif
-			<div class="box box-primary">
-                <div class="box-header with-border">
-                  <h3 class="box-title">{{ trans('auth.edit_box_title') }}</h3>
-                </div>
-                <!-- /.box-header -->
-                <!-- form start -->
-                <form role="form" id="create_form" action="{{ route('auth_profile') }}" method="post" enctype="multipart/form-data">
-                  @include('auth.common.edit_form',['forms' => trans('auth.profile.form'), 'data' => Auth::user()])
-    
-                  <div class="box-footer">
-                  	<button type="button" class="btn btn-default" onclick="window.location='{{ route('auth_users') }}'"><i class="fa fa-arrow-left" aria-hidden="true"></i> {{ trans('auth.button.back') }}</button>
-                    <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> {{ trans('auth.button.submit') }}</button>
-                  </div>
-                </form>
+			@include('auth.common.alert')
+            @include('auth.common.edit_form',['forms' => trans('auth.profile.form'), 'data' => Auth::user()])
+			<div class="box-footer">
+              	<button type="button" class="btn btn-default" onclick="window.location='{{ route('auth_users') }}'"><i class="fa fa-arrow-left" aria-hidden="true"></i> {{ trans('auth.button.back') }}</button>
+                <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> {{ trans('auth.button.submit') }}</button>
             </div>
             <!-- /.box -->
 		</div>
@@ -62,7 +48,7 @@
     		},
     		avatar: {
 				extension: '{{ Common::IMAGE_EXT }}',
-				filesize: '{{ Common::AVATAR_MAX_SIZE }}'
+				filesize: '{{ $config['avatar_maximum_upload'] }}'
     		}
     	},
     	messages: {
@@ -81,7 +67,7 @@
     		},
     		avatar: {
     			extension : '{{ Utils::getValidateMessage('validation.image', 'auth.vendors.form.avatar.text') }}',
-    			filesize: '{{ Utils::getValidateMessage('validation.size.file', 'auth.vendors.form.avatar.text',  Utils::formatMemory(Common::AVATAR_MAX_SIZE)) }}'
+    			filesize: '{{ Utils::getValidateMessage('validation.size.file', 'auth.vendors.form.avatar.text',  Utils::formatMemory($config['avatar_maximum_upload'])) }}'
     		}
     	},
     	errorPlacement: function(error, element) {
@@ -95,10 +81,9 @@
     $('#avatar').change(function(e) {
     	$(this).parent().removeClass('has-error');
     	var element = $(this);
-    	var maxSize = '{{ Common::AVATAR_MAX_SIZE }}';
-    	var width = '{{ Common::AVATAR_WIDTH }}';
-    	var height = '{{ Common::AVATAR_HEIGHT }}';
-    	previewImage(element, maxSize, width, height );
+    	var maxSize = '{{ $config['avatar_maximum_upload'] }}';
+    	var demension = '{{ $config['avatar_image_size'] }}';
+    	previewImage(element, maxSize, demension);
     	
     });
 </script>

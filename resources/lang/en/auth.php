@@ -62,9 +62,6 @@ return [
             'logo' => [
                 'type' => 'file',
                 'text' => 'Hình ảnh',
-                'size' => \App\Constants\Common::LOGO_MAX_SIZE,
-                'width' => \App\Constants\Common::LOGO_WIDTH,
-                'height' => \App\Constants\Common::LOGO_HEIGHT
             ],
         ]
     ],
@@ -115,9 +112,6 @@ return [
             'banner' => [
                 'type' => 'file', 
                 'text' => 'Banner',
-//                 'size' => \App\Constants\Common::BANNER_MAX_SIZE,
-//                 'width' => \App\Constants\Common::BANNER_WIDTH,
-//                 'height' => \App\Constants\Common::BANNER_HEIGHT
             ],
             'link' => 'Đường dẫn',
             'description' => ['type' => 'textarea', 'text' => 'Mô tả'],
@@ -149,9 +143,6 @@ return [
             'attachment' => [
                 'type' => 'file',
                 'text' => 'Đính kèm',
-                'size' => \App\Constants\Common::ATTACHMENT_MAX_SIZE,
-                'width' => \App\Constants\Common::ATTACHMENT_WIDTH,
-                'height' => \App\Constants\Common::ATTACHMENT_HEIGHT,
                 'note_text' => 'Tập tin *.jpg, *.jpeg, *.gif, *.png, *.pdf, *.doc, *.docx, *.xlsx, *.xls.Tối đa {0}'
             ]
         ],
@@ -178,9 +169,6 @@ return [
             'photo' => [
                 'type' => 'file',
                 'text' => 'Hình ảnh',
-                'size' => \App\Constants\Common::PHOTO_MAX_SIZE,
-                'width' => \App\Constants\Common::PHOTO_WIDTH,
-                'height' => \App\Constants\Common::PHOTO_HEIGHT
             ],
             'description' => ['type' => 'textarea', 'text' => 'Mô tả ngắn'],
             'content' => ['type' => 'editor', 'text' => 'Nội dung'],
@@ -193,35 +181,42 @@ return [
     'config' => [
         'title' => 'Cấu hình hệ thống',
         'form' => [
-            'web_title' => 'Web name',
-            'web_logo' => [
-                'type' => 'file', 
-                'text' => 'Web logo',
-                'size' => \App\Constants\Common::WEB_LOGO_MAX_SIZE,
-                'width' => \App\Constants\Common::WEB_LOGO_WIDTH,
-                'height' => \App\Constants\Common::WEB_LOGO_HEIGHT
+            'Website informations' => [
+                'web_title' => 'Web name',
+                'web_logo' => [
+                    'type' => 'file', 
+                    'text' => 'Web logo',
+                ],
+                'web_email' => 'Web mail',
+                'web_description' => ['type' => 'textarea', 'text' => 'SEO Description'],
+                'web_keywords' => 'SEO Keywords',
             ],
-            'web_email' => 'Web mail',
-            'web_description' => ['type' => 'textarea', 'text' => 'SEO Description'],
-            'web_keywords' => 'SEO Keywords',
-            'mail_driver' => 'Mail driver',
-            'mail_host' => 'Mail host',
-            'mail_port' => 'Mail port',
-            'mail_from' => 'Mail from',
-            'mail_name' => 'Mail name',
-            'mail_encryption' => 'Mail encryption',
-            'mail_account' => 'Mail account',
-            'mail_password' => 'Mail password',
-            'banner_maximum_upload' => 'Maximum upload file (Banner) KB',
-            'vendor_maximum_upload' => 'Maximum upload file (Nhà cung cấp) KB',
-            'product_maximum_upload' => 'Maximum upload file (Sản phẩm) KB',
-            'post_maximum_upload' => 'Maximum upload file (Bài viết) KB',
-            'attachment_maximum_upload' => 'Maximum upload file (Đính kèm) KB',
-            'banner_image_size' => 'Kích thước banner (dài x rộng)',
-            'vendor_image_size' => 'Kích thước logo nhà cung cấp (dài x rộng)',
-            'product_image_size' => 'Kích thước hình sản phẩm (dài x rộng)',
-            'post_image_size' => 'Kích thước hình bài viết (dài x rộng)',
-            'off' => ['type' => 'checkbox', 'text' => 'Tắt hệ thống'],
+            'Mail settings' => [
+                'mail_driver' => 'Mail driver',
+                'mail_host' => 'Mail host',
+                'mail_port' => 'Mail port',
+                'mail_from' => 'Mail from',
+                'mail_name' => 'Mail name',
+                'mail_encryption' => 'Mail encryption',
+                'mail_account' => 'Mail account',
+                'mail_password' => 'Mail password',
+            ],
+            'Upload settings' => [
+                'banner_maximum_upload' => 'Maximum upload file (Banner) KB',
+                'logo_maximum_upload' => 'Maximum upload file (Nhà cung cấp) KB',
+                'image_maximum_upload' => 'Maximum upload file (Sản phẩm) KB',
+                'photo_maximum_upload' => 'Maximum upload file (Bài viết) KB',
+                'web_logo_maximum_upload' => 'Maximum upload file (Web logo) KB',
+                'attachment_maximum_upload' => 'Maximum upload file (Đính kèm) KB',
+                'avatar_maximum_upload' => 'Maximum upload file (Ảnh đại diện) KB',
+                'banner_image_size' => 'Kích thước banner (dài x rộng)',
+                'logo_image_size' => 'Kích thước logo nhà cung cấp (dài x rộng)',
+                'image_image_size' => 'Kích thước hình sản phẩm (dài x rộng)',
+                'photo_image_size' => 'Kích thước hình bài viết (dài x rộng)',
+                'web_logo_image_size' => 'Kích thước web logo (dài x rộng)',
+                'avatar_image_size' => 'Kích thước ảnh đại diện (dài x rộng)',
+                'off' => ['type' => 'checkbox', 'text' => 'Tắt hệ thống'],
+            ]
             
         ],
     ],

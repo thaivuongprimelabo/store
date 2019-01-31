@@ -15,25 +15,12 @@
 	<div class="row">
 		<div class="col-md-12">
 			@include('auth.common.alert')
-			<div class="box box-primary">
-                <div class="box-header with-border">
-                  <h3 class="box-title">{{ trans('auth.create_box_title') }}</h3>
-                </div>
-                <!-- /.box-header -->
-                <!-- form start -->
-                <form role="form" id="create_form" action="{{ route('auth_banners_create') }}" method="post" enctype="multipart/form-data">
-                  @include('auth.common.create_form',[
-                  	'forms' => trans('auth.banners.form'),
-                  ])
-                  <!-- /.box-body -->
-    
-                  <div class="box-footer">
-                  	<button type="button" class="btn btn-default" onclick="window.location='{{ route('auth_banners') }}'"><i class="fa fa-arrow-left" aria-hidden="true"></i> {{ trans('auth.button.back') }}</button>
-                    <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> {{ trans('auth.button.submit') }}</button>
-                  </div>
-                </form>
-            </div>
+			@include('auth.common.create_form',['forms' => trans('auth.banners.form')])
             <!-- /.box -->
+            <div class="box-footer">
+              	<button type="button" class="btn btn-default" onclick="window.location='{{ route('auth_banners') }}'"><i class="fa fa-arrow-left" aria-hidden="true"></i> {{ trans('auth.button.back') }}</button>
+                <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> {{ trans('auth.button.submit') }}</button>
+            </div>
 		</div>
 	</div>
 </section>

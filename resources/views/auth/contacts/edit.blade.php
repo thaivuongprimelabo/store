@@ -15,23 +15,11 @@
 	<div class="row">
 		<div class="col-md-12">
 			@include('auth.common.alert')
-			<div class="box box-primary">
-                <div class="box-header with-border">
-                  <h3 class="box-title">To: {{ $contact->name }} - {{ $contact->email }}</h3>
-                </div>
-                <!-- /.box-header -->
-                <!-- form start -->
-                <form role="form" id="edit_form" action="{{ route('auth_contacts_edit', ['id' => $contact->id]) }}" method="post" enctype="multipart/form-data">
-                  @include('auth.common.edit_form',['forms' => trans('auth.contacts.form'), 'data' => $contact])
-                  <!-- /.box-body -->
-    
-                  <div class="box-footer">
-                  	<button type="button" class="btn btn-default" onclick="window.location='{{ route('auth_contacts') }}'"><i class="fa fa-arrow-left" aria-hidden="true"></i> {{ trans('auth.button.back') }}</button>
-                    <button type="submit" class="btn btn-primary"><i class="fa fa-reply" aria-hidden="true"></i> {{ trans('auth.button.send') }}</button>
-                  </div>
-                </form>
+			@include('auth.common.edit_form',['forms' => trans('auth.contacts.form'), 'data' => $contact])
+			<div class="box-footer">
+              	<button type="button" class="btn btn-default" onclick="window.location='{{ route('auth_contacts') }}'"><i class="fa fa-arrow-left" aria-hidden="true"></i> {{ trans('auth.button.back') }}</button>
+                <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> {{ trans('auth.button.send') }}</button>
             </div>
-            <!-- /.box -->
 		</div>
 	</div>
 </section>

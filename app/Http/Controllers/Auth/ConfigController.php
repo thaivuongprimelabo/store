@@ -50,14 +50,18 @@ class ConfigController extends Controller
             $config->mail_password   = Utils::cnvNull($request->mail_password, '');
             $config->off             = Utils::cnvNull($request->off, 0);
             $config->banner_maximum_upload = Utils::cnvNull($request->banner_maximum_upload, '');
-            $config->vendor_maximum_upload = Utils::cnvNull($request->vendor_maximum_upload, '');
-            $config->product_maximum_upload = Utils::cnvNull($request->product_maximum_upload, '');
-            $config->post_maximum_upload    = Utils::cnvNull($request->post_maximum_upload, '');
+            $config->logo_maximum_upload = Utils::cnvNull($request->logo_maximum_upload, '');
+            $config->image_maximum_upload = Utils::cnvNull($request->image_maximum_upload, '');
+            $config->photo_maximum_upload    = Utils::cnvNull($request->photo_maximum_upload, '');
+            $config->web_logo_maximum_upload    = Utils::cnvNull($request->web_logo_maximum_upload, '');
             $config->attachment_maximum_upload = Utils::cnvNull($request->attachment_maximum_upload, '');
+            $config->avatar_maximum_upload = Utils::cnvNull($request->avatar_maximum_upload, '');
             $config->banner_image_size = Utils::cnvNull($request->banner_image_size, '');
-            $config->vendor_image_size = Utils::cnvNull($request->vendor_image_size, '');
-            $config->product_image_size = Utils::cnvNull($request->product_image_size, '');
-            $config->post_image_size = Utils::cnvNull($request->post_image_size, '');
+            $config->logo_image_size = Utils::cnvNull($request->logo_image_size, '');
+            $config->image_image_size = Utils::cnvNull($request->image_image_size, '');
+            $config->photo_image_size = Utils::cnvNull($request->photo_image_size, '');
+            $config->web_logo_image_size = Utils::cnvNull($request->web_logo_image_size, '');
+            $config->avatar_image_size = Utils::cnvNull($request->avatar_image_size, '');
             
             if($config->save()) {
                 return redirect(route('auth_config_edit'))->with('success', trans('messages.UPDATE_SUCCESS'));
