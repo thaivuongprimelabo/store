@@ -53,14 +53,15 @@ var getFormData = function($form){
     return indexed_array;
 }
 
-var previewImage = function(element, size, width, height) {
+var previewImage = function(element, size, demension) {
 	
+	var arr = demension.split('x');
 	var tagA = element.parent().find('.upload_image');
 	var input = element[0].files[0];
 //	if(checkFileSize(input, size)) {
 		var reader = new FileReader();
 	    reader.onload = function (event) {
-	        var img = '<img src="' + event.target.result + '" style="width:' + width + 'px; height:' + height + 'px" />';
+	        var img = '<img src="' + event.target.result + '" style="width:' + arr[0] + 'px; height:' + arr[1] + 'px" />';
 	        tagA.html(img);
 	    }
 	    reader.readAsDataURL(input);

@@ -7,7 +7,9 @@
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link rel="shortcut icon" href="{{ $web_ico . '?t=' . time() }}">
+    @if(!Utils::blank($config['web_ico']))
+    <link rel="shortcut icon" href="{{ $config['web_ico'] . '?t=' . time() }}">
+    @endif
 
     <title>{{ trans('auth.title') }}</title>
 
@@ -83,9 +85,17 @@
         <!-- Logo -->
         <a href="{{ route('dashboard') }}" class="logo">
           <!-- mini logo for sidebar mini 50x50 pixels -->
-          <span class="logo-mini"><img src="{{ $web_logo }}" width="{{ Common::WEB_LOGO_ADMIN_SMALL_WIDTH }}" height="{{ Common::WEB_LOGO_ADMIN_SMALL_HEIGHT }}" /></span>
+          <span class="logo-mini">
+          	@if(!Utils::blank($config['web_logo']))
+          	<img src="{{ $config['web_logo'] }}" width="{{ Common::WEB_LOGO_ADMIN_SMALL_WIDTH }}" height="{{ Common::WEB_LOGO_ADMIN_SMALL_HEIGHT }}" />
+          	@endif
+          </span>
           <!-- logo for regular state and mobile devices -->
-          <span class="logo-lg"><img src="{{ $web_logo }}" width="{{ Common::WEB_LOGO_ADMIN_WIDTH }}"  height="{{ Common::WEB_LOGO_ADMIN_HEIGHT }}" /></span>
+          <span class="logo-lg">
+          @if(!Utils::blank($config['web_logo']))
+          <img src="{{ $config['web_logo'] }}" width="{{ Common::WEB_LOGO_ADMIN_WIDTH }}"  height="{{ Common::WEB_LOGO_ADMIN_HEIGHT }}" />
+          @endif
+          </span>
         </a>
         <!-- Header Navbar: style can be found in header.less -->
         <nav class="navbar navbar-static-top">
@@ -102,13 +112,13 @@
               <!-- User Account: style can be found in dropdown.less -->
               <li class="dropdown user user-menu">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                  <img src="{{ Utils::getImageLink(Auth::user()->avatar) }}" class="user-image" alt="User Image">
+                  <img src="{{ Utils::getAvatar(Auth::user()->avatar) }}" class="user-image" alt="User Image">
                   <span class="hidden-xs">{{ Auth::user()->name }}</span>
                 </a>
                 <ul class="dropdown-menu">
                   <!-- User image -->
                   <li class="user-header">
-                    <img src="{{ Utils::getImageLink(Auth::user()->avatar) }}" class="img-circle" alt="User Image">
+                    <img src="{{ Utils::getAvatar(Auth::user()->avatar) }}" class="img-circle" alt="User Image">
     
                     <p>
                       {{ Auth::user()->name }}
@@ -214,6 +224,14 @@
 	$(document).on('click', '.remove', function(e) {
 		if(confirmDelete('{{ trans('messages.CONFIRM_DELETE') }}')) {
 			$(this).parent().remove();
+			return true;
+		}
+		return false;
+	});
+
+	$(document).on('click', '.remove-row', function(e) {
+		if(confirmDelete('{{ trans('messages.CONFIRM_DELETE') }}')) {
+			window.location = $(this).attr('data-url');
 			return true;
 		}
 		return false;

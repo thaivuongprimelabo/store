@@ -9,8 +9,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Category;
 
-class CategoriesController extends Controller
+class CategoriesController extends AppController
 {
+    
+    public $rules = [];
+    
     /**
      * Create a new controller instance.
      *
@@ -18,7 +21,14 @@ class CategoriesController extends Controller
      */
     public function __construct()
     {
+        
+        parent::__construct();
+        
         $this->middleware('auth');
+        
+        $this->rules = [
+            'name' => 'required|max:' . Common::NAME_MAXLENGTH,
+        ];
     }
     
     public function index(Request $request) {
@@ -73,20 +83,16 @@ class CategoriesController extends Controller
         
         if($request->isMethod('post')) {
             
-            $maxSize =  Utils::formatMemory(Common::LOGO_MAX_SIZE, true);
-            
-            $validator = Validator::make($request->all(), [
-                'name' => 'required|max:' . Common::NAME_MAXLENGTH,
-            ]);
+            $validator = Validator::make($request->all(), $this->rules);
             
             if (!$validator->fails()) {
                 $category = new Category();
-                $category->name = $request->input('name', '');
-                $category->name_url = $request->input('name', '');
-                $category->parent_id = $request->input('parent_id', 0);
-                $category->status = $request->input('status', 0);
-                $category->created_at = date('Y-m-d H:i:s');
-                $category->updated_at = date('Y-m-d H:i:s');
+                $category->name         = Utils::cnvNull($request->name, '');
+                $category->name_url     = Utils::cnvNull($request->name, '');
+                $category->parent_id    = Utils::cnvNull($request->parent_id, 0);
+                $category->status       = Utils::cnvNull($request->status, 0);
+                $category->created_at   = date('Y-m-d H:i:s');
+                $category->updated_at   = date('Y-m-d H:i:s');
                 
                 if($category->save()) {
                     return redirect(route('auth_categories_create'))->with('success', trans('messages.CREATE_SUCCESS'));
@@ -115,18 +121,15 @@ class CategoriesController extends Controller
             
             $maxSize =  Utils::formatMemory(Common::LOGO_MAX_SIZE, true);
             
-            $validator = Validator::make($request->all(), [
-                'name' => 'required|max:' . Common::NAME_MAXLENGTH,
-            ]);
+            $validator = Validator::make($request->all(), $this->rules);
             
             if (!$validator->fails()) {
                 $category = Category::find($request->id);
-                $category->name = $request->input('name', '');
-                $category->name_url = $request->input('name', '');
-                $category->parent_id = $request->input('parent_id', 0);
-                $category->status = $request->input('status', 0);
-                $category->created_at = date('Y-m-d H:i:s');
-                $category->updated_at = date('Y-m-d H:i:s');
+                $category->name         = Utils::cnvNull($request->name, '');
+                $category->name_url     = Utils::cnvNull($request->name, '');
+                $category->parent_id    = Utils::cnvNull($request->parent_id, 0);
+                $category->status       = Utils::cnvNull($request->status, 0);
+                $category->updated_at   = date('Y-m-d H:i:s');
             }
             
             if($category->save()) {

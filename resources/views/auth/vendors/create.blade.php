@@ -14,11 +14,7 @@
 <section class="content">
 	<div class="row">
 		<div class="col-md-12">
-			@if (session('success'))
-                <div class="alert alert-success">
-                    {{ session('success') }}
-                </div>
-            @endif
+			@include('auth.common.alert')
 			<div class="box box-primary">
                 <div class="box-header with-border">
                   <h3 class="box-title">{{ trans('auth.create_box_title') }}</h3>
@@ -73,7 +69,7 @@
     		},
     		logo: {
 				extension: '{{ Common::IMAGE_EXT }}',
-				filesize: '{{ Common::LOGO_MAX_SIZE }}'
+				filesize: '{{ $config['logo_image_size'] }}'
     		}
     	},
     	messages: {
@@ -88,7 +84,7 @@
     		},
     		logo: {
     			extension : '{{ Utils::getValidateMessage('validation.image', 'auth.vendors.form.logo.text') }}',
-    			filesize: '{{ Utils::getValidateMessage('validation.size.file', 'auth.vendors.form.logo.text',  Utils::formatMemory(Common::LOGO_MAX_SIZE)) }}'
+    			filesize: '{{ Utils::getValidateMessage('validation.size.file', 'auth.vendors.form.logo.text',  Utils::formatMemory($config['logo_image_size'])) }}'
     		}
     	},
     	errorPlacement: function(error, element) {
@@ -102,10 +98,9 @@
     $('#logo').change(function(e) {
     	$(this).parent().removeClass('has-error');
     	var element = $(this);
-    	var maxSize = '{{ Common::LOGO_MAX_SIZE }}';
-    	var width = '{{ Common::LOGO_WIDTH }}';
-    	var height = '{{ Common::LOGO_HEIGHT }}';
-    	previewImage(element, maxSize, width, height );
+    	var maxSize = '{{ $config['logo_maximum_upload'] }}';
+    	var demension = '{{ $config['logo_image_size'] }}';
+    	previewImage(element, maxSize, demension);
     });
 </script>
 @endsection

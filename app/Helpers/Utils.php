@@ -26,7 +26,17 @@ class Utils {
         }
     }
     
-    public static function uploadFile($file, $destFolder, $resize = true) {
+    public static function getAvatar($image = '') {
+        $uploadFolder = Common::UPLOAD_FOLDER;
+        $noavatar = Common::NO_AVATAR;
+        if(!self::blank($image)) {
+            return url($uploadFolder . $image);
+        } else {
+            return url($uploadFolder . $noavatar);
+        }
+    }
+    
+    public static function uploadFile($file, $destFolder, $resize = false, $maxWidth = 0, $maxHeight = 0) {
         
         $uploadFolder = Common::UPLOAD_FOLDER;
         $uploadPath = $uploadFolder . $destFolder;
@@ -34,12 +44,12 @@ class Utils {
         $filename = time() . '_' . $file->getClientOriginalName();
         
         if($resize) {
-            self::resizeImage($uploadPath, $file, $filename, 60, 60);
+            self::resizeImage($uploadPath, $file, $filename, $maxWidth, $maxHeight);
+        } else {
+            $file->move($uploadPath, $filename);
         }
         
-        if($file->move($uploadPath, $filename)) {
-            $filename = $destFolder . $filename;
-        }
+        $filename = $destFolder . $filename;
         
         return $filename;
     }
@@ -64,7 +74,7 @@ class Utils {
     }
     
     public static function resizeImage($uploadPath, $file, $filename, $width = '', $height = '') {
-        $resizePath = $uploadPath . 'resize/';
+        
         $image_resize = Image::make($file->getRealPath());
         $image_resize->resize($width, $height);
         
@@ -72,10 +82,7 @@ class Utils {
             mkdir(public_path($uploadPath));
         }
         
-        if(!file_exists(public_path($resizePath))) {
-            mkdir(public_path($resizePath));
-        }
-        $image_resize->save(public_path($resizePath . $filename));
+        $image_resize->save(public_path($uploadPath . $filename));
     }
     
     public static function removeFile($file) {
@@ -161,6 +168,13 @@ class Utils {
         return empty($value);
     }
     
+    public static function cnvNull($value, $default = '') {
+        if(self::blank($value)) {
+            return $default;
+        }
+        return $value;
+    }
+    
     public static function createSelectList($table = '', $selected = '') {
         $html = '';
         $data = [];
@@ -199,7 +213,7 @@ class Utils {
         
         foreach($sidebar as $k=>$v) {
             
-            if($routes->hasNamedRoute('auth_' . $k) && $routes->hasNamedRoute('auth_' . $k . '_create')) {
+            if($routes->hasNamedRoute('auth_' . $k) || $routes->hasNamedRoute('auth_' . $k . '_create')) {
                 $open = '';
                 $treemenu = '';
                 $route = 'auth_' . $k;
@@ -220,16 +234,22 @@ class Utils {
                 $html .= '</a>';
                 $html .= '<ul class="treeview-menu" ' . $treemenu . '>';
                 
-                if($currentRoute == $route) {
-                    $html .= '<li class="active"><a href="'. route($route) . '"><i class="fa fa-circle-o"></i> '. trans('auth.sidebar_node.list') .'</a></li>';
-                } else {
-                    $html .= '<li><a href="'. route($route) . '"><i class="fa fa-circle-o"></i> '. trans('auth.sidebar_node.list') .'</a></li>';
+                $list_name_node = trans('auth.sidebar_node')[0];
+                if($routes->hasNamedRoute($route)) {
+                    if($currentRoute == $route) {
+                        $html .= '<li class="active"><a href="'. route($route) . '"><i class="fa fa-circle-o"></i> '. $list_name_node .'</a></li>';
+                    } else {
+                        $html .= '<li><a href="'. route($route) . '"><i class="fa fa-circle-o"></i> '. $list_name_node .'</a></li>';
+                    }
                 }
                 
-                if($currentRoute == ($route . '_create')) {
-                    $html .= '<li class="active"><a href="'. route($route . '_create') . '"><i class="fa fa-circle-o"></i> '. trans('auth.sidebar_node.create') .'</a></li>';
-                } else {
-                    $html .= '<li><a href="'. route($route . '_create') . '"><i class="fa fa-circle-o"></i> '. trans('auth.sidebar_node.create') .'</a></li>';
+                $create_name_node = trans('auth.sidebar_node')[1];
+                if($routes->hasNamedRoute(($route . '_create'))) {
+                    if($currentRoute == ($route . '_create')) {
+                        $html .= '<li class="active"><a href="'. route($route . '_create') . '"><i class="fa fa-circle-o"></i> '. $create_name_node .'</a></li>';
+                    } else {
+                        $html .= '<li><a href="'. route($route . '_create') . '"><i class="fa fa-circle-o"></i> '. $create_name_node .'</a></li>';
+                    }
                 }
                 $html .= '</ul>';
                 $html .= '</li>';
@@ -303,6 +323,12 @@ class Utils {
             return true;
         } catch (\Exception $e) {
             return false;
+        }
+    }
+    
+    public static function createValidateRule($site = 'server', $rules) {
+        if($site == 'client') {
+            
         }
     }
 }

@@ -14,11 +14,7 @@
 <section class="content">
 	<div class="row">
 		<div class="col-md-12">
-			@if (session('success'))
-                <div class="alert alert-success">
-                    {{ session('success') }}
-                </div>
-            @endif
+			@include('auth.common.alert')
 			<div class="box box-primary">
                 <div class="box-header with-border">
                   <h3 class="box-title">{{ trans('auth.create_box_title') }}</h3>
@@ -26,7 +22,9 @@
                 <!-- /.box-header -->
                 <!-- form start -->
                 <form role="form" id="create_form" action="{{ route('auth_banners_create') }}" method="post" enctype="multipart/form-data">
-                  @include('auth.common.create_form',['forms' => trans('auth.banners.form')])
+                  @include('auth.common.create_form',[
+                  	'forms' => trans('auth.banners.form'),
+                  ])
                   <!-- /.box-body -->
     
                   <div class="box-footer">
@@ -51,6 +49,7 @@
     	},
     	rules: {
     		link: {
+        		url: true,
     			maxlength: {{  Common::LINK_MAXLENGTH }},
     		},
     		description: {
@@ -59,12 +58,12 @@
     		banner: {
     			required: true,
 				extension: '{{ Common::IMAGE_EXT }}',
-				filesize: '{{ Common::BANNER_MAX_SIZE }}'
+				filesize: '{{ $config['banner_maximum_upload'] }}'
     		}
     	},
     	messages: {
     		link : {
-    			required : "{{ Utils::getValidateMessage('validation.required', 'auth.banners.form.link') }}",
+    			url : "{{ Utils::getValidateMessage('validation.url', 'auth.banners.form.link') }}",
     			maxlength : "{{ Utils::getValidateMessage('validation.max.string', 'auth.banners.form.link', Common::LINK_MAXLENGTH) }}",
     		},
     		description : {
@@ -74,7 +73,7 @@
     		banner: {
     			required : "{{ Utils::getValidateMessage('validation.required_select', 'auth.banners.form.banner.text') }}",
     			extension : '{{ Utils::getValidateMessage('validation.image', 'auth.banners.form.banner.text') }}',
-    			filesize: '{{ Utils::getValidateMessage('validation.size.file', 'auth.banners.form.banner.text',  Utils::formatMemory(Common::BANNER_MAX_SIZE)) }}'
+    			filesize: '{{ Utils::getValidateMessage('validation.size.file', 'auth.banners.form.banner.text',  Utils::formatMemory($config['banner_maximum_upload'])) }}'
     		}
     	},
     	errorPlacement: function(error, element) {
@@ -88,10 +87,9 @@
     $('#banner').change(function(e) {
     	$(this).parent().removeClass('has-error');
     	var element = $(this);
-    	var maxSize = '{{ Common::BANNER_MAX_SIZE }}';
-    	var width = '{{ Common::BANNER_WIDTH }}';
-    	var height = '{{ Common::BANNER_HEIGHT }}';
-    	previewImage(element, maxSize, width, height );
+    	var maxSize = '{{ $config['banner_maximum_upload'] }}';
+    	var demension = '{{ $config['banner_image_size'] }}';
+    	previewImage(element, maxSize, demension);
     });
 </script>
 @endsection

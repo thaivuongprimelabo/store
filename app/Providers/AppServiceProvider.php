@@ -19,18 +19,6 @@ class AppServiceProvider extends ServiceProvider
     {
         //
         Schema::defaultStringLength(191);
-        
-        // Config
-        $config = Utils::getConfig();
-        
-        if($config) {
-            $web_logo = Utils::getImageLink($config->web_logo);
-            $web_ico = Utils::getImageLink($config->web_ico);
-            View::share([
-                'web_logo' => $web_logo,
-                'web_ico'  => $web_ico
-            ]);
-        }
     }
 
     /**

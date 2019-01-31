@@ -36,10 +36,7 @@ return [
         'users' => 'Quản lý tài khoản',
         'config_edit' => 'Cấu hình'
     ],
-    'sidebar_node' => [
-        'list' => 'Danh sách',
-        'create' => 'Đăng ký'
-    ],
+    'sidebar_node' => ['Danh sách', 'Đăng ký'],
     
     /*------------ Vendor page ------------------- */
     'vendors' => [
@@ -118,9 +115,9 @@ return [
             'banner' => [
                 'type' => 'file', 
                 'text' => 'Banner',
-                'size' => \App\Constants\Common::BANNER_MAX_SIZE,
-                'width' => \App\Constants\Common::BANNER_WIDTH,
-                'height' => \App\Constants\Common::BANNER_HEIGHT
+//                 'size' => \App\Constants\Common::BANNER_MAX_SIZE,
+//                 'width' => \App\Constants\Common::BANNER_WIDTH,
+//                 'height' => \App\Constants\Common::BANNER_HEIGHT
             ],
             'link' => 'Đường dẫn',
             'description' => ['type' => 'textarea', 'text' => 'Mô tả'],
@@ -215,7 +212,17 @@ return [
             'mail_encryption' => 'Mail encryption',
             'mail_account' => 'Mail account',
             'mail_password' => 'Mail password',
+            'banner_maximum_upload' => 'Maximum upload file (Banner) KB',
+            'vendor_maximum_upload' => 'Maximum upload file (Nhà cung cấp) KB',
+            'product_maximum_upload' => 'Maximum upload file (Sản phẩm) KB',
+            'post_maximum_upload' => 'Maximum upload file (Bài viết) KB',
+            'attachment_maximum_upload' => 'Maximum upload file (Đính kèm) KB',
+            'banner_image_size' => 'Kích thước banner (dài x rộng)',
+            'vendor_image_size' => 'Kích thước logo nhà cung cấp (dài x rộng)',
+            'product_image_size' => 'Kích thước hình sản phẩm (dài x rộng)',
+            'post_image_size' => 'Kích thước hình bài viết (dài x rộng)',
             'off' => ['type' => 'checkbox', 'text' => 'Tắt hệ thống'],
+            
         ],
     ],
     /*------------ Products page ------------------- */
@@ -243,13 +250,13 @@ return [
             'price' => 'Giá bán',
             'category_id' => [
                 'type' => 'select',
-                'text' => 'Chọn loại sản phẩm',
+                'text' => 'Loại sản phẩm',
                 'empty_text' => 'Chọn loại sản phẩm',
                 'table' => \App\Constants\Common::CATEGORIES
             ],
             'vendor_id' => [
                 'type' => 'select',
-                'text' => 'Chọn nhà cung cấp',
+                'text' => 'Nhà cung cấp',
                 'empty_text' => 'Chọn nhà cung cấp',
                 'table' => \App\Constants\Common::VENDORS
             ],

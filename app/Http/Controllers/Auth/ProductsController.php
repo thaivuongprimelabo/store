@@ -11,8 +11,11 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\ImageProduct;
 
-class productsController extends Controller
+class productsController extends AppController
 {
+    
+    public $rules = [];
+    
     /**
      * Create a new controller instance.
      *
@@ -20,7 +23,17 @@ class productsController extends Controller
      */
     public function __construct()
     {
+        parent::__construct();
+        
         $this->middleware('auth');
+        
+        $this->rules = [
+            'name' => 'required|max:' . Common::NAME_MAXLENGTH,
+            'price' => 'required|max:' . Common::PRICE_MAXLENGTH,
+            'category_id' => 'required',
+            'vendor_id' => 'required',
+            'image' => 'image|max:' . Utils::formatMemory(Common::IMAGE_MAX_SIZE, true) . '|mimes:'. Common::IMAGE_EXT1
+        ];
     }
     
     public function index(Request $request) {
@@ -75,24 +88,19 @@ class productsController extends Controller
         
         if($request->isMethod('post')) {
             
-            $maxSize =  Utils::formatMemory(Common::LOGO_MAX_SIZE, true);
-            
-            $validator = Validator::make($request->all(), [
-                'name' => 'required|max:' . Common::NAME_MAXLENGTH,
-                'description' => 'required|max:' . Common::DESC_MAXLENGTH,
-            ]);
+            $validator = Validator::make($request->all(), $this->rules);
             
             if (!$validator->fails()) {
                 
                 $product = new Product();
-                $product->name = $request->input('name', '');
-                $product->name_url = $request->input('name', '');
-                $product->price = $request->input('price', '0');
-                $product->category_id = $request->input('category_id', '0');
-                $product->vendor_id = $request->input('vendor_id', '0');
-                $product->description = $request->input('description', '');
-                $product->status = $request->input('status', 0);
-                $product->created_at = date('Y-m-d H:i:s');
+                $product->name          = Utils::cnvNull($request->name, '');
+                $product->name_url      = Utils::cnvNull($request->name, '');
+                $product->price         = Utils::cnvNull($request->price, '0');
+                $product->category_id   = Utils::cnvNull($request->category_id, '0');
+                $product->vendor_id     = Utils::cnvNull($request->vendor_id, '0');
+                $product->description   = Utils::cnvNull($request->description, '');
+                $product->status        = Utils::cnvNull($request->status, 0);
+                $product->created_at    = date('Y-m-d H:i:s');
                 
                 if($product->save()) {
                     $arrFilenames = [];
@@ -136,29 +144,21 @@ class productsController extends Controller
         
         if($request->isMethod('post')) {
             
-            $messages = [
-                'size' => Utils::getValidateMessage('validation.size.file', 'auth.products.form.image',  Utils::formatMemory(Common::IMAGE_MAX_SIZE)),
-            ];
-            
-            $validator = Validator::make($request->all(), [
-                'name' => 'required|max:255',
-                'description' => 'required|max:255',
-                'image' => 'file|mimes:jpeg,png,gif'
-            ], $messages);
+            $validator = Validator::make($request->all(), $this->rules);
             
             if (!$validator->fails()) {
                 
                 $product = Product::find($request->id);
                 
-                $product->name = $request->input('name', '');
-                $product->name_url = $request->input('name', '');
-                $product->price = $request->input('price', '0');
-                $product->category_id = $request->input('category_id', '0');
-                $product->vendor_id = $request->input('vendor_id', '0');
-                $product->description = $request->input('description', '');
-                $product->status = $request->input('status', 0);
-                $product->created_at = date('Y-m-d H:i:s');
-                $product->updated_at = date('Y-m-d H:i:s');
+                $product->name          = Utils::cnvNull($request->name, '');
+                $product->name_url      = Utils::cnvNull($request->name, '');
+                $product->price         = Utils::cnvNull($request->price, '0');
+                $product->category_id   = Utils::cnvNull($request->category_id, '0');
+                $product->vendor_id     = Utils::cnvNull($request->vendor_id, '0');
+                $product->description   = Utils::cnvNull($request->description, '');
+                $product->status        = Utils::cnvNull($request->status, 0);
+                $product->created_at    = date('Y-m-d H:i:s');
+                $product->updated_at    = date('Y-m-d H:i:s');
                 
                 if($product->save()) {
                     

@@ -89,7 +89,7 @@ return [
     'timezone'             => 'The :attribute must be a valid zone.',
     'unique'               => ':attribute đang được sử dụng.',
     'uploaded'             => 'The :attribute failed to upload.',
-    'url'                  => 'The :attribute format is invalid.',
+    'url'                  => ':attribute không hợp lệ.',
 
     /*
     |--------------------------------------------------------------------------

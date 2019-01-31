@@ -14,11 +14,7 @@
 <section class="content">
 	<div class="row">
 		<div class="col-md-12">
-			@if (session('success'))
-                <div class="alert alert-success">
-                    {{ session('success') }}
-                </div>
-            @endif
+			@include('auth.common.alert')
 			<div class="box box-primary">
                 <div class="box-header with-border">
                   <h3 class="box-title">{{ trans('auth.create_box_title') }}</h3>
@@ -26,7 +22,7 @@
                 <!-- /.box-header -->
                 <!-- form start -->
                 <form role="form" id="create_form" action="{{ route('auth_products_create') }}" method="post" enctype="multipart/form-data">
-                  @include('auth.common.create_form',['forms' => trans('auth.products.form')])
+                  @include('auth.common.create_form',['forms' => trans('auth.products.form'), 'multiple' => true])
     
                   <div class="box-footer">
                   	<button type="button" class="btn btn-default" onclick="window.location='{{ route('auth_products') }}'"><i class="fa fa-arrow-left" aria-hidden="true"></i> {{ trans('auth.button.back') }}</button>
@@ -79,9 +75,6 @@
     		vendor_id: {
 				required: true
     		},
-    		description: {
-    			required: true,
-    		},
     	},
     	messages: {
     		name : {
@@ -94,13 +87,10 @@
     			maxlength : "{{ Utils::getValidateMessage('validation.max.string', 'auth.products.form.price', Common::PRICE_MAXLENGTH) }}",
     		},
     		category_id: {
-    			required : "{{ Utils::getValidateMessage('validation.required', 'auth.products.form.category_id.text') }}",
+    			required : "{{ Utils::getValidateMessage('validation.required_select', 'auth.products.form.category_id.text') }}",
     		},
     		vendor_id: {
-    			required : "{{ Utils::getValidateMessage('validation.required', 'auth.products.form.vendor_id.text') }}",
-    		},
-    		description : {
-    			required : "{{ Utils::getValidateMessage('validation.required', 'auth.products.form.description.text') }}",
+    			required : "{{ Utils::getValidateMessage('validation.required_select', 'auth.products.form.vendor_id.text') }}",
     		},
     	},
     	errorPlacement: function(error, element) {
@@ -126,10 +116,9 @@
     	$(this).parent().parent().parent().removeClass('has-error');
     	$(this).parent().parent().parent().find('span.help-block').html('');
     	var input = $(this);
-    	var maxSize = '{{ Common::PRODUCT_MAX_SIZE }}';
-    	var width = '{{ Common::PRODUCT_WIDTH }}';
-    	var height = '{{ Common::PRODUCT_HEIGHT }}';
-        previewImage(input, maxSize, width, height);
+    	var maxSize = '{{ $config['image_maximum_upload'] }}';
+    	var demension = '{{ $config['image_image_size'] }}';
+    	previewImage(input, maxSize, demension);
         
     });
 </script>

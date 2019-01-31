@@ -12,15 +12,18 @@
     	@endif
     	
     	@if($value['type'] == 'file')
+    		@php
+    			$split = explode('x', $config[$key . Common::S]);
+    		@endphp
     		@if($key != 'image')
         		@include('auth.common.upload',[
                 	'text' => $value['text'],
                 	'text_small' => isset($value['note_text']) ? $value['note_text'] : trans('auth.text_image_small'),
                 	'errors' => $errors,
                 	'name' => $key,
-                	'size' => Utils::formatMemory($value['size']),
-                	'width' => $value['width'],
-                	'height' => $value['height'],
+                	'size' => Utils::formatMemory($config[$key . Common::U]),
+                	'width' => $split[0],
+                	'height' => $split[1],
                 	'image_using' => Utils::getImageLink($data->$key)
                 ])
             @else
@@ -29,9 +32,9 @@
                 	'text_small' => isset($value['note_text']) ? $value['note_text'] : trans('auth.text_image_small'),
                 	'errors' => $errors,
                 	'name' => $key,
-                	'size' => Utils::formatMemory($value['size']),
-                	'width' => $value['width'],
-                	'height' => $value['height'],
+                	'size' => Utils::formatMemory($config[$key . Common::U]),
+                	'width' => $split[0],
+                	'height' => $split[1],
                 	'image_using' => $data->getAllImage($data->id)
                 ])
             @endif

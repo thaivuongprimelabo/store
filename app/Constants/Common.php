@@ -20,6 +20,7 @@ class Common {
     CONST IMAGE_MIMES = 'image/jpg, image/jpeg, image/gif, image/png';
     CONST FILE_MIMES = 'image/jpg, image/jpeg, image/gif, image/png, application/pdf, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/msword, 	application/vnd.ms-excel';
     CONST NO_LOGO_FILE = 'no-image-icon-6.png';
+    CONST NO_AVATAR = 'user2-160x160.jpg';
     CONST ROW_PER_PAGE = 9;
     CONST LOGO_MAX_SIZE = '512000';
     CONST LOGO_WIDTH = '200';
@@ -27,9 +28,9 @@ class Common {
     CONST PRODUCT_MAX_SIZE = '512000';
     CONST PRODUCT_WIDTH = '150';
     CONST PRODUCT_HEIGHT = '100';
-    CONST BANNER_MAX_SIZE = '512000';
-    CONST BANNER_WIDTH = '780';
-    CONST BANNER_HEIGHT = '350';
+//     CONST BANNER_MAX_SIZE = '1024000';
+//     CONST BANNER_WIDTH = '780';
+//     CONST BANNER_HEIGHT = '350';
     CONST ATTACHMENT_MAX_SIZE = '102400';
     CONST ATTACHMENT_WIDTH = '90';
     CONST ATTACHMENT_HEIGHT = '90';
@@ -58,6 +59,9 @@ class Common {
     CONST PRICE_MAXLENGTH = 11;
     CONST PASSWORD_MAXLENGTH = 40;
     
+    CONST U = '_maximum_upload';
+    CONST S = '_image_size';
+    
     /** Table **/
     CONST USERS = 'users';
     CONST VENDORS = 'vendors';
@@ -79,5 +83,9 @@ class Common {
     CONST ADMIN_NAME = 'System';
     CONST SUBJECT = '【CPanel】 Test send mail';
     CONST TEMPLATE = 'auth.emails.template';
+    
+    public static function getValue($key) {
+        return constant('Common::' . $key);
+    }
     
 }

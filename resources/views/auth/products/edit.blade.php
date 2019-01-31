@@ -14,11 +14,7 @@
 <section class="content">
 	<div class="row">
 		<div class="col-md-12">
-			@if (session('success'))
-                <div class="alert alert-success">
-                    {{ session('success') }}
-                </div>
-            @endif
+			@include('auth.common.alert')
 			<div class="box box-primary">
                 <div class="box-header with-border">
                   <h3 class="box-title">{{ trans('auth.create_box_title') }}</h3>
@@ -131,10 +127,9 @@ $(document).on('change', '.upload_image_product', function(e) {
 	$(this).parent().parent().parent().removeClass('has-error');
 	$(this).parent().parent().parent().find('span.help-block').html('');
 	var input = $(this);
-	var maxSize = '{{ Common::PRODUCT_MAX_SIZE }}';
-	var width = '{{ Common::PRODUCT_WIDTH }}';
-	var height = '{{ Common::PRODUCT_HEIGHT }}';
-    previewImage(input, maxSize, width, height);
+	var maxSize = '{{ $config['image_maximum_upload'] }}';
+	var demension = '{{ $config['image_image_size'] }}';
+	previewImage(element, maxSize, demension);
     
 });
 </script>

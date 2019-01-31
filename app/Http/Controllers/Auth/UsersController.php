@@ -11,8 +11,11 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\User;
 
-class UsersController extends Controller
+class UsersController extends AppController
 {
+    
+    public $rules = [];
+    
     /**
      * Create a new controller instance.
      *
@@ -20,7 +23,17 @@ class UsersController extends Controller
      */
     public function __construct()
     {
+        parent::__construct();
+        
         $this->middleware('auth');
+        
+        $this->rules = [
+            'name' => 'required|max:' . Common::NAME_MAXLENGTH,
+            'email' => 'required|email',
+            'password' => 'required|max:' . Common::PASSWORD_MAXLENGTH,
+            'role_id' => 'required',
+            'avatar' => 'image|max:' . Utils::formatMemory(Common::AVATAR_MAX_SIZE, true) . '|mimes:'. Common::IMAGE_EXT1
+        ];
     }
     
     public function index(Request $request) {
@@ -80,11 +93,7 @@ class UsersController extends Controller
         
         if($request->isMethod('post')) {
             
-            $maxSize =  Utils::formatMemory(Common::LOGO_MAX_SIZE, true);
-            
-            $validator = Validator::make($request->all(), [
-                'name' => 'required|max:' . Common::NAME_MAXLENGTH,
-            ]);
+            $validator = Validator::make($request->all(), $this->rules);
             
             if (!$validator->fails()) {
                 
@@ -97,14 +106,14 @@ class UsersController extends Controller
                 }
                 
                 $user = new User();
-                $user->name = $request->input('name', '');
-                $user->email = $request->input('email', '');
-                $user->password = Hash::make($request->input('password', ''));
-                $user->avatar = $filename;
-                $user->role_id = $request->input('role_id', '');;
-                $user->status = $request->input('status', 0);
-                $user->created_at = date('Y-m-d H:i:s');
-                $user->updated_at = date('Y-m-d H:i:s');
+                $user->name         = Utils::cnvNull($request->name, '');
+                $user->email        = Utils::cnvNull($request->email, '');
+                $user->password     = Hash::make(Utils::cnvNull($request->password, ''));
+                $user->avatar       = $filename;
+                $user->role_id      = Utils::cnvNull($request->role_id, '');;
+                $user->status       = Utils::cnvNull($request->status, 0);
+                $user->created_at   = date('Y-m-d H:i:s');
+                $user->updated_at   = date('Y-m-d H:i:s');
                 
                 if($user->save()) {
                     return redirect(route('auth_users_create'))->with('success', trans('messages.CREATE_SUCCESS'));
@@ -133,9 +142,7 @@ class UsersController extends Controller
             
             $maxSize =  Utils::formatMemory(Common::LOGO_MAX_SIZE, true);
             
-            $validator = Validator::make($request->all(), [
-                'name' => 'required|max:' . Common::NAME_MAXLENGTH,
-            ]);
+            $validator = Validator::make($request->all(), $this->rules);
             
             if (!$validator->fails()) {
                 $user = User::find($request->id);
@@ -149,15 +156,15 @@ class UsersController extends Controller
                     $filename = Utils::uploadFile($file, Common::AVATAR_FOLDER);
                 }
                 
-                $user->name = $request->input('name', '');
-                $user->email = $request->input('email', '');
+                $user->name         = Utils::cnvNull($request->name, '');
+                $user->email        = Utils::cnvNull($request->email, '');
                 if(!Utils::blank($request->password)) {
-                    $user->password = $request->input('password', '');
+                    $user->password = Utils::cnvNull($request->password, '');
                 }
-                $user->avatar = $filename;
-                $user->role_id = $request->input('role_id', '');;
-                $user->status = $request->input('status', 0);
-                $user->updated_at = date('Y-m-d H:i:s');
+                $user->avatar       = $filename;
+                $user->role_id      = Utils::cnvNull($request->role_id, '');;
+                $user->status       = Utils::cnvNull($request->status, 0);
+                $user->updated_at   = date('Y-m-d H:i:s');
                 
                 if($user->save()) {
                     return redirect(route('auth_users_edit', ['id' => $request->id]))->with('success', trans('messages.UPDATE_SUCCESS'));
@@ -190,12 +197,12 @@ class UsersController extends Controller
                     $filename = Utils::uploadFile($file, Common::AVATAR_FOLDER);
                 }
                 
-                $user->name = $request->input('name', '');
+                $user->name         = Utils::cnvNull($request->name, '');
                 if(!Utils::blank($request->password)) {
-                    $user->password = $request->input('password', '');
+                    $user->password = Utils::cnvNull($request->password, '');
                 }
-                $user->avatar = $filename;
-                $user->updated_at = date('Y-m-d H:i:s');
+                $user->avatar       = $filename;
+                $user->updated_at   = date('Y-m-d H:i:s');
                 
                 if($user->save()) {
                     return redirect(route('auth_profile'))->with('success', trans('messages.UPDATE_SUCCESS'));

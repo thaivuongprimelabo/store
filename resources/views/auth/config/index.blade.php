@@ -14,11 +14,7 @@
 <section class="content">
 	<div class="row">
 		<div class="col-md-12">
-			@if (session('success'))
-                <div class="alert alert-success">
-                    {{ session('success') }}
-                </div>
-            @endif
+			@include('auth.common.alert')
 			<div class="box box-primary">
                 <div class="box-header with-border">
                   <h3 class="box-title">{{ trans('auth.edit_box_title') }}</h3>

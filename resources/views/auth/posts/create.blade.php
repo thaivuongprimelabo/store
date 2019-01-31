@@ -14,11 +14,7 @@
 <section class="content">
 	<div class="row">
 		<div class="col-md-12">
-			@if (session('success'))
-                <div class="alert alert-success">
-                    {{ session('success') }}
-                </div>
-            @endif
+			@include('auth.common.alert')
 			<div class="box box-primary">
                 <div class="box-header with-border">
                   <h3 class="box-title">{{ trans('auth.create_box_title') }}</h3>
@@ -87,7 +83,7 @@
     		},
     		photo: {
     			extension: '{{ Common::IMAGE_EXT }}',
-    			filesize: '{{ Common::PHOTO_MAX_SIZE }}'
+    			filesize: '{{ $config['photo_maximum_upload'] }}'
     		}
     	},
     	messages: {
@@ -105,7 +101,7 @@
     		},
     		photo: {
     			extension : '{{ Utils::getValidateMessage('validation.image', 'auth.posts.form.photo.text') }}',
-    			filesize: '{{ Utils::getValidateMessage('validation.size.file', 'auth.posts.form.photo.text',  Utils::formatMemory(Common::PHOTO_MAX_SIZE)) }}'
+    			filesize: '{{ Utils::getValidateMessage('validation.size.file', 'auth.posts.form.photo.text',  Utils::formatMemory($config['photo_maximum_upload'])) }}'
     		}
     	},
     	errorPlacement: function(error, element) {
@@ -119,10 +115,9 @@
     $('#photo').change(function(e) {
     	$(this).parent().removeClass('has-error');
     	var element = $(this);
-    	var maxSize = '{{ Common::PHOTO_MAX_SIZE }}';
-    	var width = '{{ Common::PHOTO_WIDTH }}';
-    	var height = '{{ Common::PHOTO_HEIGHT }}';
-    	previewImage(element, maxSize, width, height );
+    	var maxSize = '{{ $config['photo_maximum_upload'] }}';
+    	var demension = '{{ $config['photo_image_size'] }}';
+    	previewImage(element, maxSize, demension );
     	
     });
 </script>

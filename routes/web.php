@@ -55,7 +55,6 @@ Route::group(['prefix' => 'auth', 'namespace' => 'Auth'], function () {
     
     // Contacts
     $this->get('/contacts', 'ContactsController@index')->name('auth_contacts');
-    Route::match(['get', 'post'], '/contacts/create', 'ContactsController@create')->name('auth_contacts_create');
     Route::match(['get', 'post'], '/contacts/edit/{id}', 'ContactsController@edit')->name('auth_contacts_edit');
     Route::match(['get', 'post'], '/contacts/search', 'ContactsController@search')->name('auth_contacts_search');
     Route::get('/contacts/remove/{id}', 'ContactsController@remove')->name('auth_contacts_remove');

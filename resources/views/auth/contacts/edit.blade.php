@@ -14,11 +14,7 @@
 <section class="content">
 	<div class="row">
 		<div class="col-md-12">
-			@if (session('success'))
-                <div class="alert alert-success">
-                    {{ session('success') }}
-                </div>
-            @endif
+			@include('auth.common.alert')
 			<div class="box box-primary">
                 <div class="box-header with-border">
                   <h3 class="box-title">To: {{ $contact->name }} - {{ $contact->email }}</h3>
@@ -55,7 +51,7 @@ var validatorEventSetting = $("#edit_form").validate({
 		},
 		attachment: {
 			extension: '{{ Common::FILE_EXT }}',
-			filesize: '{{ Common::ATTACHMENT_MAX_SIZE }}'
+			filesize: '{{ $config['attachment_maximum_upload'] }}'
 		}
 	},
 	messages: {
@@ -64,7 +60,7 @@ var validatorEventSetting = $("#edit_form").validate({
 		},
 		attachment: {
 			extension : '{{ Utils::getValidateMessage('validation.file', 'auth.contacts.form.attachment.text') }}',
-			filesize: '{{ Utils::getValidateMessage('validation.size.file', 'auth.contacts.form.attachment.text',  Utils::formatMemory(Common::ATTACHMENT_MAX_SIZE)) }}'
+			filesize: '{{ Utils::getValidateMessage('validation.size.file', 'auth.contacts.form.attachment.text',  Utils::formatMemory($config['attachment_maximum_upload'])) }}'
 		}
 	},
 	errorPlacement: function(error, element) {
@@ -75,9 +71,9 @@ var validatorEventSetting = $("#edit_form").validate({
 	}
 });
 
-$('#attachment').change(function(e) {
-	$(this).parent().removeClass('has-error');
-	var element = $('input[name="logo"]')[0];
-});
+// $('#attachment').change(function(e) {
+// 	$(this).parent().removeClass('has-error');
+// 	var element = $('input[name="logo"]')[0];
+// });
 </script>
 @endsection

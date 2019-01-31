@@ -11,16 +11,32 @@
     	@endif
     	
     	@if($value['type'] == 'file')
-    		@include('auth.common.upload',[
+    		@php
+    			$split = explode('x', $config[$key . Common::S]);
+    		@endphp
+    		@if(!isset($multiple))
+        		@include('auth.common.upload',[
+                	'text' => $value['text'],
+                	'text_small' => trans('auth.text_image_small'),
+                	'errors' => $errors,
+                	'name' => $key,
+                	'size' => Utils::formatMemory($config[$key . Common::U]),
+                	'width' => $split[0],
+                	'height' => $split[1],
+                	'image_using' => ''
+                ])
+            @else
+            	@include('auth.common.upload_product',[
             	'text' => $value['text'],
             	'text_small' => trans('auth.text_image_small'),
             	'errors' => $errors,
             	'name' => $key,
-            	'size' => Utils::formatMemory($value['size']),
-            	'width' => $value['width'],
-            	'height' => $value['height'],
-            	'image_using' => ''
+            	'size' => Utils::formatMemory($config[$key . Common::U]),
+            	'width' => $split[0],
+            	'height' => $split[1],
+            	'image_using' => []
             ])
+            @endif
     	@endif
     	
     	@if($value['type'] == 'select')

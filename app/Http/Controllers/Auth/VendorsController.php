@@ -10,8 +10,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Helpers\Utils;
 
-class VendorsController extends Controller
+class VendorsController extends AppController
 {
+    public $rules = [];
+    
     /**
      * Create a new controller instance.
      *
@@ -19,7 +21,15 @@ class VendorsController extends Controller
      */
     public function __construct()
     {
+        parent::__construct();
+        
         $this->middleware('auth');
+        
+        $this->rules = [
+            'name' => 'required|max:' . Common::NAME_MAXLENGTH,
+            'description' => 'required|max:' . Common::DESC_MAXLENGTH,
+            'logo' => 'image|max:' . Utils::formatMemory(Common::LOGO_MAX_SIZE, true) . '|mimes:'. Common::IMAGE_EXT1
+        ];
     }
     
     public function index(Request $request) {
@@ -74,17 +84,7 @@ class VendorsController extends Controller
         
         if($request->isMethod('post')) {
             
-            $maxSize =  Utils::formatMemory(Common::LOGO_MAX_SIZE, true);
-            
-            $messages = [
-                'size' => Utils::getValidateMessage('validation.size.file', 'auth.vendors.form.logo',  Utils::formatMemory(Common::LOGO_MAX_SIZE)),
-            ];
-            
-            $validator = Validator::make($request->all(), [
-                'name' => 'required|max:' . Common::NAME_MAXLENGTH,
-                'description' => 'required|max:' . Common::DESC_MAXLENGTH,
-                'logo' => 'image|max:'.$maxSize.'|mimes:'. Common::IMAGE_EXT1
-            ], $messages);
+            $validator = Validator::make($request->all(), $this->rules);
             
             if (!$validator->fails()) {
                 
@@ -97,13 +97,13 @@ class VendorsController extends Controller
                 }
                 
                 $vendor = new Vendor();
-                $vendor->name = $request->input('name', '');
-                $vendor->name_url = $request->input('name', '');
-                $vendor->logo = $filename;
-                $vendor->description = $request->input('description', '');
-                $vendor->status = $request->input('status', 0);
-                $vendor->created_at = date('Y-m-d H:i:s');
-                $vendor->updated_at = date('Y-m-d H:i:s');
+                $vendor->name           = Utils::cnvNull($request->name, '');
+                $vendor->name_url       = Utils::cnvNull($request->name, '');
+                $vendor->logo           = $filename;
+                $vendor->description    = Utils::cnvNull($request->description, '');
+                $vendor->status         = Utils::cnvNull($request->status, 0);
+                $vendor->created_at     = date('Y-m-d H:i:s');
+                $vendor->updated_at     = date('Y-m-d H:i:s');
                 
                 if($vendor->save()) {
                     return redirect(route('auth_vendors_create'))->with('success', trans('messages.CREATE_SUCCESS'));
@@ -129,15 +129,7 @@ class VendorsController extends Controller
         
         if($request->isMethod('post')) {
             
-            $messages = [
-                'size' => Utils::getValidateMessage('validation.size.file', 'auth.vendors.form.logo',  Utils::formatMemory(Common::LOGO_MAX_SIZE)),
-            ];
-            
-            $validator = Validator::make($request->all(), [
-                'name' => 'required|max:255',
-                'description' => 'required|max:255',
-                'logo' => 'file|mimes:jpeg,png,gif'
-            ], $messages);
+            $validator = Validator::make($request->all(), $this->rules);
             
             if (!$validator->fails()) {
                 
@@ -152,13 +144,13 @@ class VendorsController extends Controller
                     $filename = Utils::uploadFile($file, Common::VENDOR_FOLDER);
                 }
                 
-                $vendor->name = $request->input('name', '');
-                $vendor->name_url = $request->input('name', '');
-                $vendor->logo = $filename;
-                $vendor->description = $request->input('description', '');
-                $vendor->status = $request->input('status', 0);
-                $vendor->created_at = date('Y-m-d H:i:s');
-                $vendor->updated_at = date('Y-m-d H:i:s');
+                $vendor->name           = Utils::cnvNull($request->name, '');
+                $vendor->name_url       = Utils::cnvNull($request->name, '');
+                $vendor->logo           = $filename;
+                $vendor->description    = Utils::cnvNull($request->description, '');
+                $vendor->status         = Utils::cnvNull($request->status, 0);
+                $vendor->created_at     = date('Y-m-d H:i:s');
+                $vendor->updated_at     = date('Y-m-d H:i:s');
                 
                 if($vendor->save()) {
                     return redirect(route('auth_vendors_edit', ['id' => $request->id]))->with('success', trans('messages.UPDATE_SUCCESS'));

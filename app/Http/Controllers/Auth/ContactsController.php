@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Contact;
 use App\Constants\ContactStatus;
 
-class ContactsController extends Controller
+class ContactsController extends AppController
 {
     /**
      * Create a new controller instance.
@@ -20,6 +20,8 @@ class ContactsController extends Controller
      */
     public function __construct()
     {
+        parent::__construct();
+        
         $this->middleware('auth');
     }
     
@@ -81,7 +83,7 @@ class ContactsController extends Controller
             
             $validator = Validator::make($request->all(), [
                 'reply_content' => 'required|max:' . Common::DESC_MAXLENGTH,
-                'banner' => 'max:'.$maxSize.'|mimes:'. Common::FILE_EXT1
+                'attachment' => 'file|max:' . $maxSize .'|mimes:'. Common::FILE_EXT1
             ]);
             
             if (!$validator->fails()) {
@@ -93,10 +95,10 @@ class ContactsController extends Controller
                     
                     $filename = Utils::uploadFile($file, Common::ATTACHMENT_FOLDER, false);
                 }
-                $contact->attachment = $filename;
-                $contact->reply_content = $request->input('reply_content', '');
-                $contact->status = ContactStatus::REPLIED_CONTACT;
-                $contact->updated_at = date('Y-m-d H:i:s');
+                $contact->attachment    = $filename;
+                $contact->reply_content = Utils::cnvNull($request->reply_content, '');
+                $contact->status        = ContactStatus::REPLIED_CONTACT;
+                $contact->updated_at    = date('Y-m-d H:i:s');
                 
                 // Config mail
                 $config = [

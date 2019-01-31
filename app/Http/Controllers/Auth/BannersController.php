@@ -9,8 +9,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class BannersController extends Controller
+class BannersController extends AppController
 {
+    public $rules = [];
+    
     //
     /**
      * Create a new controller instance.
@@ -19,7 +21,13 @@ class BannersController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        parent::__construct();
+        
+        $this->rules = [
+            'link' => 'url|max:' . Common::LINK_MAXLENGTH,
+            'description' => 'max:' . Common::DESC_MAXLENGTH,
+            'banner' => 'required|image|max:' . Utils::formatMemory($this->config['config']['banner_maximum_upload'], true) .'|mimes:'. Common::IMAGE_EXT1,
+        ];
     }
     
     public function index(Request $request) {
@@ -74,13 +82,7 @@ class BannersController extends Controller
         
         if($request->isMethod('post')) {
             
-            $maxSize =  Utils::formatMemory(Common::BANNER_MAX_SIZE, true);
-            
-            $validator = Validator::make($request->all(), [
-                'link' => 'max:' . Common::LINK_MAXLENGTH,
-                'description' => 'max:' . Common::DESC_MAXLENGTH,
-                'banner' => 'required|image|max:'.$maxSize.'|mimes:'. Common::IMAGE_EXT1
-            ]);
+            $validator = Validator::make($request->all(), $this->rules);
             
             if (!$validator->fails()) {
                 
@@ -93,12 +95,12 @@ class BannersController extends Controller
                 }
                 
                 $banner = new Banner();
-                $banner->link = $request->input('link', '');
-                $banner->banner = $filename;
-                $banner->description = $request->input('description', '');
-                $banner->status = $request->input('status', 0);
-                $banner->created_at = date('Y-m-d H:i:s');
-                $banner->updated_at = date('Y-m-d H:i:s');
+                $banner->link           = Utils::cnvNull($request->link, '');
+                $banner->banner         = $filename;
+                $banner->description    = Utils::cnvNull($request->description, '');
+                $banner->status         = Utils::cnvNull($request->status, 0);
+                $banner->created_at     = date('Y-m-d H:i:s');
+                $banner->updated_at     = date('Y-m-d H:i:s');
                 
                 if($banner->save()) {
                     return redirect(route('auth_banners_create'))->with('success', trans('messages.CREATE_SUCCESS'));
@@ -124,17 +126,7 @@ class BannersController extends Controller
         
         if($request->isMethod('post')) {
             
-            $maxSize =  Utils::formatMemory(Common::BANNER_MAX_SIZE, true);
-            
-            $messages = [
-                'size' => Utils::getValidateMessage('validation.size.file', 'auth.banners.form.banner',  Utils::formatMemory(Common::BANNER_MAX_SIZE)),
-            ];
-            
-            $validator = Validator::make($request->all(), [
-                'link' => 'max:' . Common::LINK_MAXLENGTH,
-                'description' => 'max:' . Common::DESC_MAXLENGTH,
-                'banner' => 'image|max:'.$maxSize.'|mimes:'. Common::IMAGE_EXT1
-            ], $messages);
+            $validator = Validator::make($request->all(), $this->rules);
             
             if (!$validator->fails()) {
                 
@@ -146,12 +138,11 @@ class BannersController extends Controller
                     $filename = Utils::uploadFile($file, Common::BANNER_FOLDER);
                 }
                 
-                $banner->link = $request->input('link', '');
-                $banner->banner = $filename;
-                $banner->description = $request->input('description', '');
-                $banner->status = $request->input('status', 0);
-                $banner->created_at = date('Y-m-d H:i:s');
-                $banner->updated_at = date('Y-m-d H:i:s');
+                $banner->link           = Utils::cnvNull($request->link, '');
+                $banner->banner         = $filename;
+                $banner->description    = Utils::cnvNull($request->description, '');
+                $banner->status         = Utils::cnvNull($request->status, 0);
+                $banner->updated_at     = date('Y-m-d H:i:s');
                 
                 if($banner->save()) {
                     return redirect(route('auth_banners_edit', ['id' => $request->id]))->with('success', trans('messages.UPDATE_SUCCESS'));

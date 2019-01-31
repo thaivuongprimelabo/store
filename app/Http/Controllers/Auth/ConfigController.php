@@ -34,21 +34,30 @@ class ConfigController extends Controller
                 $icoFile = Utils::createIcoFile($file, $icoFileName);
                 $filename = Utils::uploadFile($file, Common::WEBLOGO_FOLDER);
             }
-            $config->web_title       = $request->input('web_title', '');
-            $config->web_description = $request->input('web_description', '');
-            $config->web_keywords    = $request->input('web_keywords', '');
+            $config->web_title       = Utils::cnvNull($request->web_title, '');
+            $config->web_description = Utils::cnvNull($request->web_description, '');
+            $config->web_keywords    = Utils::cnvNull($request->web_keywords, '');
             $config->web_logo        = $filename;
             $config->web_ico         = $icoFile;
-            $config->web_email       = $request->input('web_email', '');
-            $config->mail_driver     = $request->input('mail_driver', '');
-            $config->mail_host       = $request->input('mail_host', '');
-            $config->mail_port       = $request->input('mail_port', '');
-            $config->mail_from       = $request->input('mail_from', '');
-            $config->mail_name       = $request->input('mail_name', '');
-            $config->mail_encryption = $request->input('mail_encryption', '');
-            $config->mail_account    = $request->input('mail_account', '');
-            $config->mail_password   = $request->input('mail_password', '');
-            $config->off             = $request->input('off', 0);
+            $config->web_email       = Utils::cnvNull($request->web_email, '');
+            $config->mail_driver     = Utils::cnvNull($request->mail_driver, '');
+            $config->mail_host       = Utils::cnvNull($request->mail_host, '');
+            $config->mail_port       = Utils::cnvNull($request->mail_port, '');
+            $config->mail_from       = Utils::cnvNull($request->mail_from, '');
+            $config->mail_name       = Utils::cnvNull($request->mail_name, '');
+            $config->mail_encryption = Utils::cnvNull($request->mail_encryption, '');
+            $config->mail_account    = Utils::cnvNull($request->mail_account, '');
+            $config->mail_password   = Utils::cnvNull($request->mail_password, '');
+            $config->off             = Utils::cnvNull($request->off, 0);
+            $config->banner_maximum_upload = Utils::cnvNull($request->banner_maximum_upload, '');
+            $config->vendor_maximum_upload = Utils::cnvNull($request->vendor_maximum_upload, '');
+            $config->product_maximum_upload = Utils::cnvNull($request->product_maximum_upload, '');
+            $config->post_maximum_upload    = Utils::cnvNull($request->post_maximum_upload, '');
+            $config->attachment_maximum_upload = Utils::cnvNull($request->attachment_maximum_upload, '');
+            $config->banner_image_size = Utils::cnvNull($request->banner_image_size, '');
+            $config->vendor_image_size = Utils::cnvNull($request->vendor_image_size, '');
+            $config->product_image_size = Utils::cnvNull($request->product_image_size, '');
+            $config->post_image_size = Utils::cnvNull($request->post_image_size, '');
             
             if($config->save()) {
                 return redirect(route('auth_config_edit'))->with('success', trans('messages.UPDATE_SUCCESS'));

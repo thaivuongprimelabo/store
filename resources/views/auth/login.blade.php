@@ -7,7 +7,8 @@
   </div>
   <!-- /.login-logo -->
   <div class="login-box-body">
-    <p class="login-box-msg"><img src="{{ $web_logo }}" width="{{ Common::WEB_LOGO_WIDTH }}" /></p>
+    <p class="login-box-msg">
+    </p>
 
     <form action="{{ route('login') }}" method="post">
       {{ csrf_field() }}

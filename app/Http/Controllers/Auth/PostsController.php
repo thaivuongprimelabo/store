@@ -9,8 +9,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class PostsController extends Controller
+class PostsController extends AppController
 {
+    
+    public $rules = [];
+    
     /**
      * Create a new controller instance.
      *
@@ -18,7 +21,13 @@ class PostsController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        parent::__construct();
+        
+        $this->rules = [
+            'name' => 'required|max:' . Common::NAME_MAXLENGTH,
+            'content' => 'required',
+            'photo' => 'image|max:' . Utils::formatMemory(Common::PHOTO_MAX_SIZE, true) . '|mimes:'. Common::IMAGE_EXT1
+        ];
     }
     
     public function index(Request $request) {
@@ -73,12 +82,7 @@ class PostsController extends Controller
         
         if($request->isMethod('post')) {
             
-            $maxSize =  Utils::formatMemory(Common::PHOTO_MAX_SIZE, true);
-            
-            $validator = Validator::make($request->all(), [
-                'name' => 'required|max:' . Common::NAME_MAXLENGTH,
-                'content' => 'required'
-            ]);
+            $validator = Validator::make($request->all(), $this->rules);
             
             if (!$validator->fails()) {
                 
@@ -94,16 +98,16 @@ class PostsController extends Controller
                 $published_time_at = date('Hi', strtotime($request->input('published_time_at', date('H:i'))));
                 
                 $post = new Post();
-                $post->name = $request->input('name', '');
-                $post->name_url = $request->input('name', '');
-                $post->description = $request->input('description', 0);
-                $post->content = $request->input('content', '');
-                $post->photo = $filename;
-                $post->published_at = $published_at;
+                $post->name              = Utils::cnvNull($request->name, '');
+                $post->name_url          = Utils::cnvNull($request->name, '');
+                $post->description       = Utils::cnvNull($request->description, 0);
+                $post->content           = Utils::cnvNull($request->content, '');
+                $post->photo             = $filename;
+                $post->published_at      = $published_at;
                 $post->published_time_at = $published_time_at;
-                $post->status = $request->input('status', 0);
-                $post->created_at = date('Y-m-d H:i:s');
-                $post->updated_at = date('Y-m-d H:i:s');
+                $post->status            = Utils::cnvNull($request->status, 0);
+                $post->created_at        = date('Y-m-d H:i:s');
+                $post->updated_at        = date('Y-m-d H:i:s');
                 
                 if($post->save()) {
                     return redirect(route('auth_posts_create'))->with('success', trans('messages.CREATE_SUCCESS'));
@@ -131,12 +135,7 @@ class PostsController extends Controller
         
         if($request->isMethod('post')) {
             
-            $maxSize =  Utils::formatMemory(Common::PHOTO_MAX_SIZE, true);
-            
-            $validator = Validator::make($request->all(), [
-                'name' => 'required|max:' . Common::NAME_MAXLENGTH,
-                'photo' => 'image|max:'.$maxSize.'|mimes:'. Common::IMAGE_EXT1
-            ]);
+            $validator = Validator::make($request->all(), $this->rules);
             
             if (!$validator->fails()) {
                 $post = Post::find($request->id);
@@ -152,16 +151,16 @@ class PostsController extends Controller
                 $published_at = date('Ymd', strtotime($request->input('published_at', date('Ymd'))));
                 $published_time_at = date('Hi', strtotime($request->input('published_time_at', date('H:i'))));
                 
-                $post->name = $request->input('name', '');
-                $post->name_url = $request->input('name', '');
-                $post->description = $request->input('description', 0);
-                $post->content = $request->input('content', '');
-                $post->photo = $filename;
-                $post->published_at = $published_at;
-                $post->published_time_at = $published_time_at;
-                $post->status = $request->input('status', 0);
-                $post->created_at = date('Y-m-d H:i:s');
-                $post->updated_at = date('Y-m-d H:i:s');
+                $post->name                 = Utils::cnvNull($request->name, '');
+                $post->name_url             = Utils::cnvNull($request->name, '');
+                $post->description          = Utils::cnvNull($request->description, 0);
+                $post->content              = Utils::cnvNull($request->content, '');
+                $post->photo                = $filename;
+                $post->published_at         = $published_at;
+                $post->published_time_at    = $published_time_at;
+                $post->status               = Utils::cnvNull($request->status, 0);
+                $post->created_at           = date('Y-m-d H:i:s');
+                $post->updated_at           = date('Y-m-d H:i:s');
                 
                 if($post->save()) {
                     return redirect(route('auth_posts_edit', ['id' => $request->id]))->with('success', trans('messages.UPDATE_SUCCESS'));
