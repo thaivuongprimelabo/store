@@ -14,12 +14,14 @@
 <section class="content">
 	<div class="row">
 		<div class="col-md-12">
+			<form role="form" id="edit_form" action="?" method="post" enctype="multipart/form-data">
 			@include('auth.common.alert')
 			@include('auth.common.edit_form',['forms' => trans('auth.posts.form'), 'data' => $post])
 			<div class="box-footer">
               	<button type="button" class="btn btn-default" onclick="window.location='{{ route('auth_posts') }}'"><i class="fa fa-arrow-left" aria-hidden="true"></i> {{ trans('auth.button.back') }}</button>
                 <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> {{ trans('auth.button.send') }}</button>
             </div>
+            </form>
 		</div>
 	</div>
 </section>
@@ -37,7 +39,7 @@
       showInputs: false
     });
     
-	var validatorEventSetting = $("#create_form").validate({
+	var validatorEventSetting = $("#edit_form").validate({
 		ignore: ":hidden:not(textarea, input[type='file'])",
     	onfocusout: false,
     	success: function(label, element) {
@@ -72,9 +74,8 @@
     			required: true
     		},
     		photo: {
-        		required: true,
     			extension: '{{ Common::IMAGE_EXT }}',
-    			filesize: '{{ $photo_maximum_upload }}'
+    			filesize: '{{ $config['photo_maximum_upload'] }}'
     		}
     	},
     	messages: {
@@ -92,7 +93,7 @@
     		},
     		photo: {
     			extension : '{{ Utils::getValidateMessage('validation.image', 'auth.posts.form.photo.text') }}',
-    			filesize: '{{ Utils::getValidateMessage('validation.size.file', 'auth.posts.form.photo.text',  Utils::formatMemory($photo_maximum_upload)) }}'
+    			filesize: '{{ Utils::getValidateMessage('validation.size.file', 'auth.posts.form.photo.text',  Utils::formatMemory($config['photo_maximum_upload'])) }}'
     		}
     	},
     	errorPlacement: function(error, element) {

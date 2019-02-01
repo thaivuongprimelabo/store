@@ -62,7 +62,11 @@ var previewImage = function(element, size, demension) {
 		var reader = new FileReader();
 	    reader.onload = function (event) {
 	        var img = '<img src="' + event.target.result + '" style="width:' + arr[0] + 'px; height:' + arr[1] + 'px" />';
+	        //if(element.name == 'image_upload[]') {
+	        	var remove = '<a href="javascript:void(0)" class="remove"><i class="fa fa-trash" aria-hidden="true"></i></a>';
+	        //}
 	        tagA.html(img);
+	        tagA.parent().append(remove);
 	    }
 	    reader.readAsDataURL(input);
 //	}

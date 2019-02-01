@@ -26,7 +26,7 @@ class BannersController extends AppController
         $this->rules = [
             'link' => 'url|max:' . Common::LINK_MAXLENGTH,
             'description' => 'max:' . Common::DESC_MAXLENGTH,
-            'banner' => 'required|image|max:' . Utils::formatMemory($this->config['config']['banner_maximum_upload'], true) .'|mimes:'. Common::IMAGE_EXT1,
+            'banner' => 'image|max:' . Utils::formatMemory($this->config['config']['banner_maximum_upload'], true) .'|mimes:'. Common::IMAGE_EXT1,
         ];
     }
     

@@ -14,12 +14,14 @@
 <section class="content">
 	<div class="row">
 		<div class="col-md-12">
+			<form role="form" id="create_form" action="?" method="post" enctype="multipart/form-data">
 			@include('auth.common.alert')
 			@include('auth.common.create_form',['forms' => trans('auth.categories.form')])
 			<div class="box-footer">
               	<button type="button" class="btn btn-default" onclick="window.location='{{ route('auth_categories') }}'"><i class="fa fa-arrow-left" aria-hidden="true"></i> {{ trans('auth.button.back') }}</button>
                 <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> {{ trans('auth.button.submit') }}</button>
             </div>
+            </form>
 		</div>
 	</div>
 </section>

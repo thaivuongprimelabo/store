@@ -14,12 +14,14 @@
 <section class="content">
 	<div class="row">
 		<div class="col-md-12">
+			<form role="form" id="create_form" action="?" method="post" enctype="multipart/form-data">
 			@include('auth.common.alert')
 			@include('auth.common.create_form',['forms' => trans('auth.posts.form')])
 			<div class="box-footer">
               	<button type="button" class="btn btn-default" onclick="window.location='{{ route('auth_posts') }}'"><i class="fa fa-arrow-left" aria-hidden="true"></i> {{ trans('auth.button.back') }}</button>
-                <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> {{ trans('auth.button.send') }}</button>
+                <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> {{ trans('auth.button.submit') }}</button>
             </div>
+            </form>
 		</div>
 	</div>
 </section>
@@ -68,7 +70,11 @@
     			maxlength: {{  Common::DESC_MAXLENGTH }}
     		},
     		content: {
-    			required: true
+    			required: function(textarea) {
+			       CKEDITOR.instances[textarea.id].updateElement();
+			       var editorcontent = textarea.value.replace(/<[^>]*>/gi, '');
+			       return editorcontent.length === 0;
+				}
     		},
     		photo: {
     			extension: '{{ Common::IMAGE_EXT }}',

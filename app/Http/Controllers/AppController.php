@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers;
 
 use App\Helpers\Utils;
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use View;
 class AppController extends Controller
@@ -18,8 +17,6 @@ class AppController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth')->except('showLoginForm', 'login');
-        
         // Config
         $config = Utils::getConfig();
         

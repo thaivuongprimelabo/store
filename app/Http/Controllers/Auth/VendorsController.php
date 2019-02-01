@@ -27,7 +27,7 @@ class VendorsController extends AppController
         
         $this->rules = [
             'name' => 'required|max:' . Common::NAME_MAXLENGTH,
-            'description' => 'required|max:' . Common::DESC_MAXLENGTH,
+            'description' => 'max:' . Common::DESC_MAXLENGTH,
             'logo' => 'image|max:' . Utils::formatMemory(Common::LOGO_MAX_SIZE, true) . '|mimes:'. Common::IMAGE_EXT1
         ];
     }

@@ -6,6 +6,9 @@ class Status {
     
     CONST UNACTIVE = 0;
     CONST ACTIVE = 1;
+    CONST IS_NEW = 1;
+    CONST IS_POPULAR = 1;
+    CONST IS_BEST_SELLING = 1;
     
     public static function getData($key = '') {
         $array = [

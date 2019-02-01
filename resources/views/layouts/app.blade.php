@@ -86,16 +86,10 @@
         <a href="{{ route('dashboard') }}" class="logo">
           <!-- mini logo for sidebar mini 50x50 pixels -->
           <span class="logo-mini">
-          	@if(!Utils::blank($config['web_logo']))
-          	<img src="{{ $config['web_logo'] }}" width="{{ Common::WEB_LOGO_ADMIN_SMALL_WIDTH }}" height="{{ Common::WEB_LOGO_ADMIN_SMALL_HEIGHT }}" />
-          	@endif
+          	<b>C</b>P
           </span>
           <!-- logo for regular state and mobile devices -->
-          <span class="logo-lg">
-          @if(!Utils::blank($config['web_logo']))
-          <img src="{{ $config['web_logo'] }}" width="{{ Common::WEB_LOGO_ADMIN_WIDTH }}"  height="{{ Common::WEB_LOGO_ADMIN_HEIGHT }}" />
-          @endif
-          </span>
+          <span class="logo-lg"><b>C</b>Panel</span>
         </a>
         <!-- Header Navbar: style can be found in header.less -->
         <nav class="navbar navbar-static-top">
@@ -187,8 +181,8 @@
 	}, 3000);
 	  
     //bootstrap WYSIHTML5 - text editor
-    if($("#editor1").length > 0){
-        CKEDITOR.replace('editor1');
+    if($(".ckeditor").length > 0){
+    	CKEDITOR.replaceClass = 'ckeditor';
         CKEDITOR.config.height = 400;
     }
     $('input').iCheck({

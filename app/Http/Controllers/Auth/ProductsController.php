@@ -100,6 +100,9 @@ class productsController extends AppController
                 $product->vendor_id     = Utils::cnvNull($request->vendor_id, '0');
                 $product->description   = Utils::cnvNull($request->description, '');
                 $product->status        = Utils::cnvNull($request->status, 0);
+                $product->is_new        = Utils::cnvNull($request->is_new, 0);
+                $product->is_popular        = Utils::cnvNull($request->is_popular, 0);
+                $product->is_best_selling   = Utils::cnvNull($request->is_best_selling, 0);
                 $product->created_at    = date('Y-m-d H:i:s');
                 
                 if($product->save()) {
@@ -157,7 +160,9 @@ class productsController extends AppController
                 $product->vendor_id     = Utils::cnvNull($request->vendor_id, '0');
                 $product->description   = Utils::cnvNull($request->description, '');
                 $product->status        = Utils::cnvNull($request->status, 0);
-                $product->created_at    = date('Y-m-d H:i:s');
+                $product->is_new        = Utils::cnvNull($request->is_new, 0);
+                $product->is_popular        = Utils::cnvNull($request->is_popular, 0);
+                $product->is_best_selling   = Utils::cnvNull($request->is_best_selling, 0);
                 $product->updated_at    = date('Y-m-d H:i:s');
                 
                 if($product->save()) {

@@ -22,7 +22,8 @@ class CreatePostsTable extends Migration
             $table->string('description', 255);
             $table->text('content');
             $table->string('photo', 255);
-            $table->timestamp('published_at')->nullable();
+            $table->string('published_at', 12)->nullable();
+            $table->string('published_time_at', 4)->nullable();
             $table->integer('avail_flg', false, true)->nullable()->default('1');
             $table->integer('status', false, true)->nullable()->default('0');
             $table->timestamps();

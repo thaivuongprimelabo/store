@@ -14,16 +14,18 @@
 <section class="content">
 	<div class="row">
 		<div class="col-md-12">
-			@include('auth.common.alert')
-			@php
-              	$forms = trans('auth.config.form');
-            @endphp
-            @foreach($forms as $key=>$form)
-            @include('auth.common.edit_form', ['forms' => $form, 'data' => $config, 'title' => $key])
-            @endforeach
-            <div class="box-footer">
-                <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> {{ trans('auth.button.submit') }}</button>
-            </div>
+			<form role="form" id="create_form" action="?" method="post" enctype="multipart/form-data">
+    			@include('auth.common.alert')
+    			@php
+                  	$forms = trans('auth.config.form');
+                @endphp
+                @foreach($forms as $key=>$form)
+                @include('auth.common.edit_form', ['forms' => $form, 'data' => $config_data])
+                @endforeach
+                <div class="box-footer">
+                    <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> {{ trans('auth.button.submit') }}</button>
+                </div>
+            </form>
 		</div>
 	</div>
 </section>
@@ -33,8 +35,8 @@
 $('#web_logo').change(function(e) {
 	$(this).parent().removeClass('has-error');
 	var element = $(this);
-	var maxSize = '{{ $config['weblogo_maximum_upload'] }}';
-	var demension = '{{ $config['weblogo_image_size'] }}';
+	var maxSize = '{{ $config['web_logo_maximum_upload'] }}';
+	var demension = '{{ $config['web_logo_image_size'] }}';
 	previewImage(element, maxSize, demension );
 	
 });

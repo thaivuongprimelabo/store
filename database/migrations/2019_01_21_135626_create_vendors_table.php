@@ -18,7 +18,7 @@ class CreateVendorsTable extends Migration
             $table->string('name', 255);
             $table->string('name_url', 255);
             $table->string('logo', 255);
-            $table->string('description', 300);
+            $table->string('description', 300)->nullable();
             $table->integer('avail_flg', false, true)->nullable()->default('1');
             $table->integer('status', false, true)->nullable()->default('0');
             $table->timestamps();

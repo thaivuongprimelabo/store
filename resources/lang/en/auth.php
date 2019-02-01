@@ -63,6 +63,7 @@ return [
                 'type' => 'file',
                 'text' => 'Hình ảnh',
             ],
+            'status' => ['type' => 'checkbox', 'text' => 'Đang hoạt động']
         ]
     ],
     /*------------ Category page ------------------- */
@@ -115,6 +116,7 @@ return [
             ],
             'link' => 'Đường dẫn',
             'description' => ['type' => 'textarea', 'text' => 'Mô tả'],
+            'status' => ['type' => 'checkbox', 'text' => 'Đang hoạt động']
         ]
     ],
     /*------------ Contacts page ------------------- */
@@ -134,17 +136,24 @@ return [
         'phone_search_placeholder' => 'Lọc theo số điện thoại',
         'status_search' => 'Tất cả trạng thái',
         'form' => [
-            'name' => 'Tên',
-            'email' => 'E-mail',
-            'phone' => 'Số điện thoại',
-            'content' => 'Nội dung',
-            'reply' => ['type' => 'editor', 'text' => 'Nội dung trả lời'],
-            'status' => ['type' => 'checkbox', 'text' => 'Đang hoạt động'],
-            'attachment' => [
-                'type' => 'file',
-                'text' => 'Đính kèm',
-                'note_text' => 'Tập tin *.jpg, *.jpeg, *.gif, *.png, *.pdf, *.doc, *.docx, *.xlsx, *.xls.Tối đa {0}'
+            'contact_content' => [
+                'text' => 'Nội dung thư',
+                'name' => ['type' => 'text', 'text' => 'Tên', 'disabled' => true],
+                'email' => ['type' => 'text', 'text' => 'E-mail', 'disabled' => true],
+                'phone' => ['type' => 'text', 'text' => 'Số điện thoại', 'disabled' => true],
+                'content' => ['type' => 'editor', 'text' => 'Nội dung', 'disabled' => true],
+            ],
+            'reply' => [
+                'text' => 'Trả lời',
+                'subject' => 'Tựa đề',
+                'reply_content' => ['type' => 'editor', 'text' => 'Nội dung trả lời'],
+                'attachment' => [
+                    'type' => 'file',
+                    'text' => 'Đính kèm',
+                    'note_text' => 'Tập tin *.jpg, *.jpeg, *.gif, *.png, *.pdf, *.doc, *.docx, *.xlsx, *.xls.Tối đa {0}'
+                ]
             ]
+            
         ],
     ],
     /*------------ Posts page ------------------- */
@@ -181,7 +190,8 @@ return [
     'config' => [
         'title' => 'Cấu hình hệ thống',
         'form' => [
-            'Website informations' => [
+            'web_info' => [
+                'text' => 'Website informations',
                 'web_title' => 'Web name',
                 'web_logo' => [
                     'type' => 'file', 
@@ -190,8 +200,10 @@ return [
                 'web_email' => 'Web mail',
                 'web_description' => ['type' => 'textarea', 'text' => 'SEO Description'],
                 'web_keywords' => 'SEO Keywords',
+                'url_ext' => 'URL Extension'
             ],
-            'Mail settings' => [
+            'mail_settings' => [
+                'text' => 'Mail settings',
                 'mail_driver' => 'Mail driver',
                 'mail_host' => 'Mail host',
                 'mail_port' => 'Mail port',
@@ -201,7 +213,8 @@ return [
                 'mail_account' => 'Mail account',
                 'mail_password' => 'Mail password',
             ],
-            'Upload settings' => [
+            'upload_settings' => [
+                'text' => 'Upload settings',
                 'banner_maximum_upload' => 'Maximum upload file (Banner) KB',
                 'logo_maximum_upload' => 'Maximum upload file (Nhà cung cấp) KB',
                 'image_maximum_upload' => 'Maximum upload file (Sản phẩm) KB',
@@ -264,6 +277,9 @@ return [
                 'height' => \App\Constants\Common::IMAGE_HEIGHT
             ],
             'status' => ['type' => 'checkbox', 'text' => 'Đang hoạt động'],
+            'is_new' => ['type' => 'checkbox', 'text' => 'Sản phẩm mới'],
+            'is_popular' => ['type' => 'checkbox', 'text' => 'Sản phẩm được quan tâm'],
+            'is_best_selling' => ['type' => 'checkbox', 'text' => 'Sản phẩm bán chạy'],
         ]
     ],
     /*------------ Users page ------------------- */
@@ -344,7 +360,7 @@ return [
         'back' => 'Quay về',
         'send' => 'Gửi',
         'remove' => 'Xóa',
-        'add_image' => 'Thêm hình',
-        'upload_image' => 'Tải hình'
+        'add_image' => 'Thêm file',
+        'upload_image' => 'Chọn file'
     ]
 ];

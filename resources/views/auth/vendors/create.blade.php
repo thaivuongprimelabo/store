@@ -14,12 +14,14 @@
 <section class="content">
 	<div class="row">
 		<div class="col-md-12">
+			<form role="form" id="create_form" action="?" method="post" enctype="multipart/form-data">
 			@include('auth.common.alert')
 			@include('auth.common.create_form',['forms' => trans('auth.vendors.form')])
 			<div class="box-footer">
               	<button type="button" class="btn btn-default" onclick="window.location='{{ route('auth_vendors') }}'"><i class="fa fa-arrow-left" aria-hidden="true"></i> {{ trans('auth.button.back') }}</button>
                 <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> {{ trans('auth.button.send') }}</button>
             </div>
+            </form>
 		</div>
 	</div>
 </section>
@@ -53,7 +55,6 @@
 				}
     		},
     		description: {
-    			required: true,
 				maxlength: {{  Common::DESC_MAXLENGTH }}
     		},
     		logo: {
@@ -68,7 +69,6 @@
     			remote: '{{ Utils::getValidateMessage('validation.unique', 'auth.vendors.form.name') }}'
     		},
     		description : {
-    			required : "{{ Utils::getValidateMessage('validation.required', 'auth.vendors.form.description.text') }}",
     			maxlength : "{{ Utils::getValidateMessage('validation.max.string', 'auth.vendors.form.description.text', Common::DESC_MAXLENGTH) }}"
     		},
     		logo: {

@@ -204,12 +204,22 @@ class Utils {
         return $html;
     }
     
-    public static function createSidebar() {
+    public static function createSidebar($site = 'auth', $url_ext = '') {
+        
         $sidebar = trans('auth.sidebar');
         $html = '';
         $routes = Route::getRoutes();
         $currentRoute = Route::currentRouteName();
         $nameList = $routes->getRoutesByName();
+        
+        if($site == 'shop') {
+            $categories = Category::select('name_url','id','name')->where('status', Status::ACTIVE)->get();
+            foreach($categories as $category) {
+                $html .= '<li><a href="' . $category['name_url'] . $url_ext . '"><span class="icon-chevron-right"></span>' . Utils::cnvNull($category['name'], '') . '</a></li>';
+            }
+            
+            return $html;
+        }
         
         foreach($sidebar as $k=>$v) {
             
@@ -276,14 +286,16 @@ class Utils {
     public static function setConfigMail() {
         
         $config = self::getConfig();
-        \Illuminate\Support\Facades\Config::set('mail.driver', $config->mail_driver);
-        \Illuminate\Support\Facades\Config::set('mail.host', $config->mail_host);
-        \Illuminate\Support\Facades\Config::set('mail.port', $config->mail_port);
-        \Illuminate\Support\Facades\Config::set('mail.from.address', $config->mail_from);
-        \Illuminate\Support\Facades\Config::set('mail.from.name', $config->mail_name);
-        \Illuminate\Support\Facades\Config::set('mail.encryption', $config->mail_encryption);
-        \Illuminate\Support\Facades\Config::set('mail.username', $config->mail_account);
-        \Illuminate\Support\Facades\Config::set('mail.password', $config->mail_password);
+        if(!self::blank($config->mail_account)) {
+            \Illuminate\Support\Facades\Config::set('mail.driver', $config->mail_driver);
+            \Illuminate\Support\Facades\Config::set('mail.host', $config->mail_host);
+            \Illuminate\Support\Facades\Config::set('mail.port', $config->mail_port);
+            \Illuminate\Support\Facades\Config::set('mail.from.address', $config->mail_from);
+            \Illuminate\Support\Facades\Config::set('mail.from.name', $config->mail_name);
+            \Illuminate\Support\Facades\Config::set('mail.encryption', $config->mail_encryption);
+            \Illuminate\Support\Facades\Config::set('mail.username', $config->mail_account);
+            \Illuminate\Support\Facades\Config::set('mail.password', $config->mail_password);
+        }
     }
     
     public static function sendMail($config_email = []) {
@@ -315,20 +327,33 @@ class Utils {
                     $email->bcc($bcc);
                 }
                 if ($pathToFile !== null) {
-                    $email->attach($pathToFile);
+                    if(count($pathToFile)) {
+                        foreach($pathToFile as $attach) {
+                            $email->attach($attach);
+                        }
+                    }
                 }
                 $email->subject($subject);
             });
                 
             return true;
         } catch (\Exception $e) {
+            echo $e->getMessage();
             return false;
         }
     }
     
-    public static function createValidateRule($site = 'server', $rules) {
-        if($site == 'client') {
-            
+    public static function createMainNav() {
+        $mainNav = trans('shop.main_nav');
+        $html = '';
+        foreach($mainNav as $key=>$nav) {
+            if($key == Route::currentRouteName()) {
+                $html .= '<li class="active"><a href="'. route($key) .'">'. $nav . ' </a></li>';
+            } else {
+                $html .= '<li><a href="'. route($key) .'">'. $nav . ' </a></li>';
+            }
         }
+        
+        return $html;
     }
 }

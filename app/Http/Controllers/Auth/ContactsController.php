@@ -88,22 +88,37 @@ class ContactsController extends AppController
             
             if (!$validator->fails()) {
                 
-                $filename = $contact->attachment;
-                if($request->hasFile('attachment')) {
+                $filename = '';
+                $arrAttachments = [];
+                
+                if($request->hasFile('image_upload')) {
                     
-                    $file = $request->attachment;
+                    $files = $request->image_upload;
                     
-                    $filename = Utils::uploadFile($file, Common::ATTACHMENT_FOLDER, false);
+                    if(count($files)) {
+                        foreach($files as $k=>$v) {
+                            $file = $files[$k];
+                            if(!Utils::blank($file->getClientOriginalName())) {
+                                $filename = Utils::uploadFile($file, Common::ATTACHMENT_FOLDER);
+                                
+                                array_push($arrAttachments, Common::UPLOAD_FOLDER . $filename);
+                            }
+                        }
+                    }
+                    
                 }
-                $contact->attachment    = $filename;
+                
+                $contact->subject       = Utils::cnvNull($request->subject, '');
+                $contact->attachment    = implode(',', $arrAttachments);
                 $contact->reply_content = Utils::cnvNull($request->reply_content, '');
                 $contact->status        = ContactStatus::REPLIED_CONTACT;
                 $contact->updated_at    = date('Y-m-d H:i:s');
                 
                 // Config mail
                 $config = [
+                    'subject' => $request->subject,
                     'msg' => ['content' => $contact->reply_content],
-                    'pathToFile' => Common::UPLOAD_FOLDER . $filename,
+                    'pathToFile' => $arrAttachments,
                     'to' => $contact->email
                 ];
                 
@@ -112,7 +127,7 @@ class ContactsController extends AppController
                         return redirect(route('auth_contacts'))->with('success', trans('messages.UPDATE_SUCCESS'));
                     }
                 } else {
-                    return redirect(route('auth_contacts'))->with('error', trans('messages.ERROR'));
+                    //return redirect(route('auth_contacts'))->with('error', trans('messages.ERROR'));
                 }
             } else {
                 return redirect(route('auth_contacts'))->with('error', trans('messages.ERROR'));

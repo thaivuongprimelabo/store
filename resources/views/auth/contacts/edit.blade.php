@@ -14,12 +14,18 @@
 <section class="content">
 	<div class="row">
 		<div class="col-md-12">
+			<form role="form" id="edit_form" action="?" method="post" enctype="multipart/form-data">
 			@include('auth.common.alert')
-			@include('auth.common.edit_form',['forms' => trans('auth.contacts.form'), 'data' => $contact])
-			<div class="box-footer">
-              	<button type="button" class="btn btn-default" onclick="window.location='{{ route('auth_contacts') }}'"><i class="fa fa-arrow-left" aria-hidden="true"></i> {{ trans('auth.button.back') }}</button>
-                <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> {{ trans('auth.button.send') }}</button>
+			@php
+              	$forms = trans('auth.contacts.form');
+            @endphp
+            @foreach($forms as $key=>$form)
+            @include('auth.common.edit_form', ['forms' => $form, 'data' => $contact])
+            @endforeach
+            <div class="box-footer">
+                <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> {{ trans('auth.button.submit') }}</button>
             </div>
+            </form>
 		</div>
 	</div>
 </section>
@@ -35,7 +41,11 @@ var validatorEventSetting = $("#edit_form").validate({
 	},
 	rules: {
 		reply_content: {
-			required: true
+			required: function(textarea) {
+		       CKEDITOR.instances[textarea.id].updateElement();
+		       var editorcontent = textarea.value.replace(/<[^>]*>/gi, '');
+		       return editorcontent.length === 0;
+			}
 		},
 		attachment: {
 			extension: '{{ Common::FILE_EXT }}',
@@ -44,11 +54,11 @@ var validatorEventSetting = $("#edit_form").validate({
 	},
 	messages: {
 		reply_content: {
-			required : "{{ Utils::getValidateMessage('validation.required', 'auth.contacts.form.reply.text') }}",
+			required : "{{ Utils::getValidateMessage('validation.required', 'auth.contacts.form.reply.reply_content.text') }}",
 		},
 		attachment: {
-			extension : '{{ Utils::getValidateMessage('validation.file', 'auth.contacts.form.attachment.text') }}',
-			filesize: '{{ Utils::getValidateMessage('validation.size.file', 'auth.contacts.form.attachment.text',  Utils::formatMemory($config['attachment_maximum_upload'])) }}'
+			extension : '{{ Utils::getValidateMessage('validation.file', 'auth.contacts.form.reply.attachment.text') }}',
+			filesize: '{{ Utils::getValidateMessage('validation.size.file', 'auth.contacts.form.reply.attachment.text',  Utils::formatMemory($config['attachment_maximum_upload'])) }}'
 		}
 	},
 	errorPlacement: function(error, element) {
@@ -59,9 +69,14 @@ var validatorEventSetting = $("#edit_form").validate({
 	}
 });
 
-// $('#attachment').change(function(e) {
-// 	$(this).parent().removeClass('has-error');
-// 	var element = $('input[name="logo"]')[0];
-// });
+$(document).on('change', '.upload_image_product', function(e) {
+	$(this).parent().parent().parent().removeClass('has-error');
+	$(this).parent().parent().parent().find('span.help-block').html('');
+	var input = $(this);
+	var maxSize = '{{ $config['attachment_maximum_upload'] }}';
+	var demension = '100x100';
+	previewImage(input, maxSize, demension);
+    
+});
 </script>
 @endsection

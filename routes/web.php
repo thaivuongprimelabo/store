@@ -13,9 +13,14 @@
 
 use Illuminate\Support\Facades\Auth;
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
+Route::group(['prefix' => '/'], function () {
+    $this->get('/', 'HomeController@index')->name('home');
+    $this->get('/{slug}', 'HomeController@category')->name('category');
+    $this->get('/about', 'HomeController@index')->name('about');
+    $this->get('/products', 'HomeController@index')->name('products');
+    $this->get('/news', 'HomeController@index')->name('news');
+    $this->get('/contact', 'HomeController@index')->name('contact');
+});
 
 Route::group(['prefix' => 'auth', 'namespace' => 'Auth'], function () {
     

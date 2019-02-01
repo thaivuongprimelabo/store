@@ -24,6 +24,9 @@ class CreateProductsTable extends Migration
             $table->text('description');
             $table->integer('avail_flg', false, true)->nullable()->default('1');
             $table->integer('status', false, true)->nullable()->default('0');
+            $table->integer('is_new', false, true)->nullable()->default('0');
+            $table->integer('is_popular', false, true)->nullable()->default('0');
+            $table->integer('is_best_selling', false, true)->nullable()->default('0');
             $table->timestamps();
         });
     }

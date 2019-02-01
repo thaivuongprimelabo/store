@@ -21,8 +21,9 @@ class CreateContactsTable extends Migration
             $table->string('email', 255);
             $table->string('phone', 255);
             $table->text('content');
+            $table->text('subject')->nullable();
             $table->text('reply_content')->nullable();
-            $table->string('attachment')->nullable();
+            $table->string('attachment', 255)->nullable();
             $table->integer('avail_flg', false, true)->nullable()->default('1');
             $table->integer('status', false, true)->nullable()->default('0');
             $table->timestamps();
