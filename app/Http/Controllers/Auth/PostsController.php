@@ -99,7 +99,7 @@ class PostsController extends AppController
                 
                 $post = new Post();
                 $post->name              = Utils::cnvNull($request->name, '');
-                $post->name_url          = Utils::cnvNull($request->name, '');
+                $post->name_url          = Utils::createNameUrl(Utils::cnvNull($request->name, ''));
                 $post->description       = Utils::cnvNull($request->description, 0);
                 $post->content           = Utils::cnvNull($request->content, '');
                 $post->photo             = $filename;
@@ -152,7 +152,7 @@ class PostsController extends AppController
                 $published_time_at = date('Hi', strtotime($request->input('published_time_at', date('H:i'))));
                 
                 $post->name                 = Utils::cnvNull($request->name, '');
-                $post->name_url             = Utils::cnvNull($request->name, '');
+                $post->name_url             = Utils::createNameUrl(Utils::cnvNull($request->name, ''));
                 $post->description          = Utils::cnvNull($request->description, 0);
                 $post->content              = Utils::cnvNull($request->content, '');
                 $post->photo                = $filename;

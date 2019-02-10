@@ -24,19 +24,29 @@ return [
     'remember_me' => 'Duy trì đăng nhập',
      /*------------ Dashboard page ------------------- */
     'dashboard_page_title' => '<b>C</b>Panel',
+    'back_to_home' => 'Xem trang chính',
     
     /*------------ Sidebar ------------------- */
     'sidebar' => [
         'products' => 'Quản lý sản phẩm',
         'categories' => 'Quản lý loại sản phẩm',
         'vendors' => 'Quản lý nhà cung cấp',
+        'orders' => 'Quản lý đơn hàng',
         'banners' => 'Quản lý banner',
         'posts' => 'Quản lý bài viết',
+        'pages' => 'Quản lý trang',
         'contacts' => 'Hộp thư liên hệ',
         'users' => 'Quản lý tài khoản',
         'config_edit' => 'Cấu hình'
     ],
-    'sidebar_node' => ['Danh sách', 'Đăng ký'],
+    'sidebar_node' => [
+        '_list' => 'Danh sách',
+        '_create' => 'Đăng ký', 
+        '_sizes' => 'Kích cỡ',
+        '_colors' => 'Màu sắc',
+        '_about' => 'Giới thiệu',
+        '_delivery' => 'Phương thức giao hàng'
+    ],
     
     /*------------ Vendor page ------------------- */
     'vendors' => [
@@ -186,7 +196,54 @@ return [
             'published_time_at' => ['type' => 'timepicker', 'text' => 'Thời điểm xuất bản'],
         ],
     ],
-    /*------------ Posts page ------------------- */
+    'about' => [
+        'edit_title' => 'Giới thiệu',
+        'form' => [
+            'content' => ['type' => 'editor', 'text' => 'Nội dung'],
+        ]
+    ],
+    'delivery' => [
+        'edit_title' => 'Phương thức giao hàng',
+        'form' => [
+            'content' => ['type' => 'editor', 'text' => 'Nội dung'],
+        ],
+    ],
+    /*------------ Orders page ------------------- */
+    'orders' => [
+        'list_title' => 'Danh mục đơn hàng',
+        'edit_title' => 'Cập nhật đơn hàng',
+        'table_header' => [
+            'id' => 'ID',
+            'name' => 'Tên khách hàng',
+            'email' => 'E-mail',
+            'address' => 'Địa chỉ',
+            'phone' => 'Điện thoại',
+            'status' => 'Trạng thái',
+            'created_at' => 'Ngày đặt hàng',
+            
+            'images' => 'Hình ảnh',
+            'products' => 'Sản phẩm',
+            'qty' => 'Số lượng',
+            'price' => 'Đơn giá',
+            'cost' => 'Thành tiền'
+        ],
+        'id_search_placeholder' => 'Mã đơn hàng',
+        'name_search_placeholder' => 'Tên khách hàng',
+        'phone_search_placeholder' => 'Số điện thoại',
+        'date_search_placeholder' => 'Ngày đặt hàng',
+        'status_search' => 'Tất cả trạng thái',
+        'form' => [
+            'customer_info' => [
+                'text' => 'Thông tin đặt hàng',
+                'customer_name' => ['type' => 'label', 'text' => 'Tên khách hàng: '],
+                'customer_email' => ['type' => 'label', 'text' => 'E-mail: '],
+                'customer_address' => ['type' => 'label', 'text' => 'Địa chỉ giao hàng: '],
+                'customer_phone' => ['type' => 'label', 'text' => 'Số điện thoại: '],
+                'status' => ['type' => 'select_status_order', 'text' => 'Trạng thái đơn hàng']
+            ],
+         ]
+    ],
+    /*------------ Config page ------------------- */
     'config' => [
         'title' => 'Cấu hình hệ thống',
         'form' => [
@@ -229,6 +286,11 @@ return [
                 'web_logo_image_size' => 'Kích thước web logo (dài x rộng)',
                 'avatar_image_size' => 'Kích thước ảnh đại diện (dài x rộng)',
                 'off' => ['type' => 'checkbox', 'text' => 'Tắt hệ thống'],
+            ],
+            'payment_method' => [
+                'text' => 'Phương thức thanh toán',
+                'bank_info' => ['type' => 'editor', 'text' => 'Chuyển khoản ngân hàng'],
+                'cash_info' => ['type' => 'editor', 'text' => 'Tiền mặt'],
             ]
             
         ],
@@ -256,6 +318,7 @@ return [
         'form' => [
             'name' => 'Tên sản phẩm',
             'price' => 'Giá bán',
+            'discount' => 'Tỷ lệ giảm giá (%)',
             'category_id' => [
                 'type' => 'select',
                 'text' => 'Loại sản phẩm',
@@ -268,7 +331,9 @@ return [
                 'empty_text' => 'Chọn nhà cung cấp',
                 'table' => \App\Constants\Common::VENDORS
             ],
-            'description' => ['type' => 'editor', 'text' => 'Mô tả'],
+            'description' => ['type' => 'editor', 'text' => 'Chi tiết'],
+            'sizes' => ['type' => 'checkbox_multi', 'text' => 'Kích cỡ', 'table' => \App\Constants\Common::SIZES],
+            'colors' => ['type' => 'checkbox_color_multi', 'text' => 'Màu sắc', 'table' => \App\Constants\Common::COLORS],
             'image' => [
                 'type' => 'file',
                 'text' => 'Hình ảnh',
@@ -280,6 +345,38 @@ return [
             'is_new' => ['type' => 'checkbox', 'text' => 'Sản phẩm mới'],
             'is_popular' => ['type' => 'checkbox', 'text' => 'Sản phẩm được quan tâm'],
             'is_best_selling' => ['type' => 'checkbox', 'text' => 'Sản phẩm bán chạy'],
+        ]
+    ],
+    /*------------ Sizes page ------------------- */
+    'sizes' => [
+        'list_title' => 'Danh mục kích cỡ',
+        'edit_create_title' => 'Đăng ký / Chỉnh sửa',
+        'table_header' => [
+            'id' => 'ID',
+            'name' => 'Tên gọi',
+            'status' => 'Trạng thái',
+            'created_at' => 'Ngày đăng ký',
+            'updated_at' => 'Ngày chỉnh sửa'
+        ],
+        'form' => [
+            'name' => 'Tên gọi',
+            'status' => ['type' => 'checkbox', 'text' => 'Đang hoạt động'],
+        ]
+    ],
+    /*------------ Colors page ------------------- */
+    'colors' => [
+        'list_title' => 'Danh mục màu sắc',
+        'edit_create_title' => 'Đăng ký / Chỉnh sửa',
+        'table_header' => [
+            'id' => 'ID',
+            'name' => 'Màu sắc',
+            'status' => 'Trạng thái',
+            'created_at' => 'Ngày đăng ký',
+            'updated_at' => 'Ngày chỉnh sửa'
+        ],
+        'form' => [
+            'name' => 'Màu sắc',
+            'status' => ['type' => 'checkbox', 'text' => 'Đang hoạt động'],
         ]
     ],
     /*------------ Users page ------------------- */
@@ -344,6 +441,9 @@ return [
         'replied' => 'Đã trả lời',
         'published' => 'Đã xuất bản',
         'not_published' => 'Chưa xuất bản',
+        'order_new' => 'Đơn hàng mới',
+        'order_shipping' => 'Đang giao hàng',
+        'order_done' => 'Hoàn tất'
     ],
     'role' => [
         'super_admin' => 'Quản trị hệ thống',
@@ -361,6 +461,7 @@ return [
         'send' => 'Gửi',
         'remove' => 'Xóa',
         'add_image' => 'Thêm file',
-        'upload_image' => 'Chọn file'
+        'upload_image' => 'Chọn file',
+        'close' => 'Đóng'
     ]
 ];

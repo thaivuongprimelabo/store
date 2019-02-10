@@ -1,17 +1,11 @@
 @extends('layouts.shop')
 
 @section('content')
-@include('shop.common.carousel')
-	<!--
-New Products
--->
-	@include('shop.common.new_product')
-	<!--
-Featured Products
--->
-	@include('shop.common.feature_product')
-	
-	@include('shop.common.popular_product')
-	<hr>
-	@include('shop.common.best_selling_product')
+<!-- container -->
+<div class="container">
+	@include('shop.common.product',['title' => trans('shop.new_products'), 'data' => $new_products])
+	@include('shop.common.product',['title' => trans('shop.discount_products'), 'data' => $discount_products])
+	@include('shop.common.product',['title' => trans('shop.best_selling'), 'data' => $best_selling_products])
+</div>
+<!-- /container -->
 @endsection

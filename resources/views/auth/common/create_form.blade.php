@@ -97,6 +97,36 @@
                   </label>
                 </div>
         	@endif
+        	
+        	@if($value['type'] == 'text')
+        		<div class="form-group @if ($errors->has($key)){{'has-error'}} @endif">
+                  <label for="exampleInputEmail1">{{ $value['text'] }}</label>
+                  <input type="text" class="form-control" name="{{ $key }}" id="{{ $key }}" value="{{ old($key) }}" placeholder="{{ $value['text'] }}" maxlength="{{ Common::NAME_MAXLENGTH }}" {{ isset($value['disabled']) ? 'disabled=true' : '' }}>
+                  <span class="help-block">@if ($errors->has($key)){{ $errors->first($key) }}@endif</span>
+                </div>
+            @endif
+        	
+        	@if($value['type'] == 'checkbox_multi')
+        		<div class="form-group">
+        			<label>{{ $value['text'] }}</label>
+            		<div class="checkbox">
+                      <label>
+                        {!! Utils::createCheckboxList($value['table']) !!}
+                      </label>
+                    </div>
+                </div>
+        	@endif
+        	
+        	@if($value['type'] == 'checkbox_color_multi')
+        		<div class="form-group">
+        			<label>{{ $value['text'] }}</label>
+            		<div class="checkbox">
+                      <label>
+                        {!! Utils::createCheckboxList($value['table']) !!}
+                      </label>
+                    </div>
+                </div>
+        	@endif
         @else
         	<div class="form-group @if ($errors->has($key)){{'has-error'}} @endif">
               <label for="exampleInputEmail1">{{ $value }}</label>

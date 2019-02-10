@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Utils;
+use App\Helpers\Cart;
 use Illuminate\Http\Request;
+use Illuminate\Session\SessionManager;
 use View;
 class AppController extends Controller
 {
@@ -19,13 +21,14 @@ class AppController extends Controller
     {
         // Config
         $config = Utils::getConfig();
-        
+
         if($config) {
             $web_logo = Utils::getImageLink($config->web_logo);
             $web_ico = Utils::getImageLink($config->web_ico);
             
             $this->config = [
                 'config' => [
+                    'web_name' => Utils::cnvNull($config->web_name, 'E-shop'),
                     'web_logo' => $web_logo,
                     'web_ico' => $web_ico,
                     'banner_maximum_upload' => Utils::cnvNull($config->banner_maximum_upload, 51200),
@@ -44,6 +47,9 @@ class AppController extends Controller
                     'avatar_image_size'   => Utils::cnvNull($config->avatar_image_size, '100x100'),
                     
                     'url_ext' => Utils::cnvNull($config->url_ext, '.html'),
+                    
+                    'bank_info' => Utils::cnvNull($config->bank_info, ''),
+                    'cash_info' => Utils::cnvNull($config->cash_info, '')
                 ]
             ];
             View::share($this->config);

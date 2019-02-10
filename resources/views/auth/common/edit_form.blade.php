@@ -116,6 +116,43 @@
                   <span class="help-block">@if ($errors->has($key)){{ $errors->first($key) }}@endif</span>
                 </div>
             @endif
+            
+            @if($value['type'] == 'checkbox_multi')
+        		<div class="form-group">
+        			<label>{{ $value['text'] }}</label>
+            		<div class="checkbox">
+                      <label>
+                        {!! Utils::createCheckboxList($value['table'], $data->$key) !!}
+                      </label>
+                    </div>
+                </div>
+        	@endif
+        	
+        	@if($value['type'] == 'checkbox_color_multi')
+        		<div class="form-group">
+        			<label>{{ $value['text'] }}</label>
+            		<div class="checkbox">
+                      <label>
+                        {!! Utils::createCheckboxList($value['table'], $data->$key) !!}
+                      </label>
+                    </div>
+                </div>
+        	@endif
+        	@if($value['type'] == 'label')
+        		<div class="form-group">
+                  <label>{{ $value['text'] }}</label>
+                  <span>{{ $data->$key }}</span>
+                </div>
+        	@endif
+        	
+        	@if($value['type'] == 'select_status_order')
+        		<div class="form-group">
+                  <label for="exampleInputEmail1">{{ $value['text'] }}</label>
+                  <select class="form-control" name="{{ $key }}" id="{{ $key }}">
+                  	{!! Status::createSelectList(1, $data->$key) !!}
+                  </select>
+                </div>
+        	@endif
         @else
         	<div class="form-group @if ($errors->has($key)){{'has-error'}} @endif">
               <label for="exampleInputEmail1">{{ $value }}</label>

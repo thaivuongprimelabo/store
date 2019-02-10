@@ -231,6 +231,7 @@ return [
         'Common' => App\Constants\Common::class,
         'Validation' => App\Constants\Validation::class,
         'Utils' => App\Helpers\Utils::class,
+        'Cart' => App\Helpers\Cart::class,
         'Image' => Intervention\Image\ImageManagerStatic::class
     ],
 

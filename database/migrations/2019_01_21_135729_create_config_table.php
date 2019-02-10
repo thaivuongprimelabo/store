@@ -45,6 +45,9 @@ class CreateConfigTable extends Migration
             $table->string('web_logo_maximum_upload', 20)->nullable()->default('51200');
             $table->string('avatar_maximum_upload', 20)->nullable()->default('51200');
             $table->integer('off')->nullable()->default(1);
+            $table->string('url_ext', 20)->nullable()->default('.html');
+            $table->string('bank_info', 255)->nullable()->default('');
+            $table->string('cash_info', 255)->nullable()->default('');
             $table->timestamps();
         });
     }

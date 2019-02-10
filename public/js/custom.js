@@ -17,11 +17,29 @@ var callAjax = function(url, data, page) {
 		    	if(page === 'update_status') {
 		    		output = res.data;
 		    	}
+		    	
+		    	if(page === 'add-size' || page === 'add-color') {
+		    		output = res.data;
+				}
+				
+				if(page == 'product-list') {
+					output = res.data;
+				}
 	    	}
 	    }
 	});
 
 	return output;
+}
+
+var loadProducts = function(url) {
+	var data = {
+		type : 'post',
+		async : false,
+		sort: $('#sort').val()	
+	}
+	var data = callAjax(url, data, 'product-list');
+	$('#product_list').html(data);
 }
 
 var search = function(url, data, page) {

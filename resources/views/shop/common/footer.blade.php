@@ -1,30 +1,97 @@
-<footer class="footer">
-	<div class="row-fluid">
-		<div class="span2">
-			<h5>Your Account</h5>
-			<a href="#">YOUR ACCOUNT</a><br> <a href="#">PERSONAL INFORMATION</a><br>
-			<a href="#">ADDRESSES</a><br> <a href="#">DISCOUNT</a><br> <a
-				href="#">ORDER HISTORY</a><br>
+<!-- FOOTER -->
+<footer id="footer" class="section section-grey">
+	<!-- container -->
+	<div class="container">
+		<!-- row -->
+		<div class="row">
+			<!-- footer widget -->
+			<div class="col-md-3 col-sm-6 col-xs-6">
+				<div class="footer">
+					<!-- footer logo -->
+					<div class="footer-logo">
+						<a class="logo" href="#">
+	            <img src="{{ $config['web_logo'] }}" alt="">
+	          </a>
+					</div>
+					<!-- /footer logo -->
+
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna</p>
+
+					<!-- footer social -->
+					<ul class="footer-social">
+						<li><a href="#"><i class="fa fa-facebook"></i></a></li>
+						<li><a href="#"><i class="fa fa-twitter"></i></a></li>
+						<li><a href="#"><i class="fa fa-instagram"></i></a></li>
+						<li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+						<li><a href="#"><i class="fa fa-pinterest"></i></a></li>
+					</ul>
+					<!-- /footer social -->
+				</div>
+			</div>
+			<!-- /footer widget -->
+
+			<!-- footer widget -->
+			<div class="col-md-3 col-sm-6 col-xs-6">
+				<div class="footer">
+					<h3 class="footer-header">My Account</h3>
+					<ul class="list-links">
+						<li><a href="#">My Account</a></li>
+						<li><a href="#">My Wishlist</a></li>
+						<li><a href="#">Compare</a></li>
+						<li><a href="#">Checkout</a></li>
+						<li><a href="#">Login</a></li>
+					</ul>
+				</div>
+			</div>
+			<!-- /footer widget -->
+
+			<div class="clearfix visible-sm visible-xs"></div>
+
+			<!-- footer widget -->
+			<div class="col-md-3 col-sm-6 col-xs-6">
+				<div class="footer">
+					<h3 class="footer-header">Customer Service</h3>
+					<ul class="list-links">
+						<li><a href="#">About Us</a></li>
+						<li><a href="#">Shiping & Return</a></li>
+						<li><a href="#">Shiping Guide</a></li>
+						<li><a href="#">FAQ</a></li>
+					</ul>
+				</div>
+			</div>
+			<!-- /footer widget -->
+
+			<!-- footer subscribe -->
+			<div class="col-md-3 col-sm-6 col-xs-6">
+				<div class="footer">
+					<h3 class="footer-header">Stay Connected</h3>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor.</p>
+					<form>
+						<div class="form-group">
+							<input class="input" placeholder="Enter Email Address">
+						</div>
+						<button class="primary-btn">Join Newslatter</button>
+					</form>
+				</div>
+			</div>
+			<!-- /footer subscribe -->
 		</div>
-		<div class="span2">
-			<h5>Iinformation</h5>
-			<a href="contact.html">CONTACT</a><br> <a href="#">SITEMAP</a><br> <a
-				href="#">LEGAL NOTICE</a><br> <a href="#">TERMS AND CONDITIONS</a><br>
-			<a href="#">ABOUT US</a><br>
+		<!-- /row -->
+		<hr>
+		<!-- row -->
+		<div class="row">
+			<div class="col-md-8 col-md-offset-2 text-center">
+				<!-- footer copyright -->
+				<div class="footer-copyright">
+					<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+					Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+					<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+				</div>
+				<!-- /footer copyright -->
+			</div>
 		</div>
-		<div class="span2">
-			<h5>Our Offer</h5>
-			<a href="#">NEW PRODUCTS</a> <br> <a href="#">TOP SELLERS</a><br> <a
-				href="#">SPECIALS</a><br> <a href="#">MANUFACTURERS</a><br> <a
-				href="#">SUPPLIERS</a> <br />
-		</div>
-		<div class="span6">
-			<h5>The standard chunk of Lorem</h5>
-			The standard chunk of Lorem Ipsum used since the 1500s is reproduced
-			below for those interested. Sections 1.10.32 and 1.10.33 from "de
-			Finibus Bonorum et Malorum" by Cicero are also reproduced in their
-			exact original form, accompanied by English versions from the 1914
-			translation by H. Rackham.
-		</div>
+		<!-- /row -->
 	</div>
+	<!-- /container -->
 </footer>
+<!-- /FOOTER -->

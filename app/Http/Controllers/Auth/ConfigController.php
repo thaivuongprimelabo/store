@@ -64,6 +64,8 @@ class ConfigController extends AppController
             $config_data->web_logo_image_size = Utils::cnvNull($request->web_logo_image_size, '');
             $config_data->avatar_image_size = Utils::cnvNull($request->avatar_image_size, '');
             
+            $config_data->bank_info = Utils::cnvNull($request->bank_info, '');
+            $config_data->cash_info = Utils::cnvNull($request->cash_info, '');
             if($config_data->save()) {
                 return redirect(route('auth_config_edit'))->with('success', trans('messages.UPDATE_SUCCESS'));
             }

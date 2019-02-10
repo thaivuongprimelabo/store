@@ -12,15 +12,7 @@
 */
 
 use Illuminate\Support\Facades\Auth;
-
-Route::group(['prefix' => '/'], function () {
-    $this->get('/', 'HomeController@index')->name('home');
-    $this->get('/{slug}', 'HomeController@category')->name('category');
-    $this->get('/about', 'HomeController@index')->name('about');
-    $this->get('/products', 'HomeController@index')->name('products');
-    $this->get('/news', 'HomeController@index')->name('news');
-    $this->get('/contact', 'HomeController@index')->name('contact');
-});
+use App\Config;
 
 Route::group(['prefix' => 'auth', 'namespace' => 'Auth'], function () {
     
@@ -36,6 +28,12 @@ Route::group(['prefix' => 'auth', 'namespace' => 'Auth'], function () {
     Route::match(['get', 'post'], '/products/edit/{id}', 'ProductsController@edit')->name('auth_products_edit');
     Route::match(['get', 'post'], '/products/search', 'ProductsController@search')->name('auth_products_search');
     Route::get('/products/remove/{id}', 'ProductsController@remove')->name('auth_products_remove');
+    
+    Route::get('/products/sizes', 'ProductsController@sizes')->name('auth_products_sizes');
+    Route::get('/products/sizes/remove/{id}', 'ProductsController@removeSize')->name('auth_products_sizes_remove');
+    
+    Route::get('/products/colors', 'ProductsController@colors')->name('auth_products_colors');
+    Route::get('/products/colors/remove/{id}', 'ProductsController@removeColor')->name('auth_products_colors_remove');
     
     // Vendors
     $this->get('/vendors', 'VendorsController@index')->name('auth_vendors');
@@ -71,6 +69,11 @@ Route::group(['prefix' => 'auth', 'namespace' => 'Auth'], function () {
     Route::match(['get', 'post'], '/posts/search', 'PostsController@search')->name('auth_posts_search');
     Route::get('/posts/remove/{id}', 'PostsController@remove')->name('auth_posts_remove');
     
+    // Orders
+    $this->get('/orders', 'OrdersController@index')->name('auth_orders');
+    Route::match(['get', 'post'], '/orders/edit/{id}', 'OrdersController@edit')->name('auth_orders_edit');
+    Route::match(['get', 'post'], '/orders/search', 'OrdersController@search')->name('auth_orders_search');
+    
     // Users
     $this->get('/users', 'UsersController@index')->name('auth_users');
     Route::match(['get', 'post'], '/users/create', 'UsersController@create')->name('auth_users_create');
@@ -84,6 +87,11 @@ Route::group(['prefix' => 'auth', 'namespace' => 'Auth'], function () {
     // Profile
     Route::match(['get', 'post'], '/profile', 'UsersController@profile')->name('auth_profile');
     
+    // Pages
+//     $this->get('/pages', 'PagesController@index')->name('auth_pages');
+    Route::match(['get', 'post'], '/pages/about', 'PagesController@about')->name('auth_pages_about');
+    Route::match(['get', 'post'], '/pages/delivery', 'PagesController@delivery')->name('auth_pages_delivery');
+    
     // Registration Routes...
 //     $this->get('/register', 'RegisterController@showRegistrationForm')->name('register');
 //     $this->post('/register', 'RegisterController@register');
@@ -95,6 +103,20 @@ Route::group(['prefix' => 'auth', 'namespace' => 'Auth'], function () {
 //     $this->post('/password/reset', 'ResetPasswordController@reset');
     
 });
+
+Route::group(['middleware' => 'web', 'prefix' => ''], function () {
+    $config = Config::first();
+    Route::get('/', 'HomeController@index')->name('home');
+    Route::get('/about' . $config['url_ext'], 'HomeController@about')->name('about');
+    Route::get('/delivery' . $config['url_ext'], 'HomeController@delivery')->name('delivery');
+    Route::match(['get', 'post'], '/products' . $config['url_ext'], 'HomeController@products')->name('products');
+    Route::get('/posts' . $config['url_ext'], 'HomeController@index')->name('posts');
+    Route::get('/contact' . $config['url_ext'], 'HomeController@contact')->name('contact');
+    
+    Route::get('/{slug}' . $config['url_ext'], 'HomeController@category')->name('category');
+    Route::get('/{slug}/{slug2}' . $config['url_ext'], 'HomeController@productDetails')->name('product_details');
+});
+
 
 
 

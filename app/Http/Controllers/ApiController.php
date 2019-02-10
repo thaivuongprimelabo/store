@@ -8,10 +8,13 @@ use App\Vendor;
 use App\Constants\Status;
 use App\Helpers\Utils;
 use App\Category;
+use App\Color;
 use App\Contact;
 use App\Post;
 use App\Product;
 use App\User;
+use App\Size;
+use App\Helpers\Cart;
 
 class ApiController extends Controller
 {
@@ -93,6 +96,14 @@ class ApiController extends Controller
             case 6; // Products table
                 $object = Product::find($id);
                 break;
+                
+            case 7; // Sizes table
+                $object = Size::find($id);
+                break;
+                
+            case 8; // Colors table
+                $object = Color::find($id);
+                break;
             
             default:
                 break;
@@ -103,6 +114,83 @@ class ApiController extends Controller
             $this->output['code'] = 200;
             $this->output['data'] = ['status' => $object->status, 'text' => Status::getData($object->status)];
         }
+        return response()->json($this->output);
+    }
+    
+    public function sizes(Request $request) {
+        $id = $request->id;
+        if(Utils::blank($id)) {
+            $size = new Size();
+            $size->created_at = date('Y-m-d H:i:s');
+        } else {
+            $size = Size::find($id);
+        }
+        
+        $size->name = Utils::cnvNull($request->name, '');
+        $size->status = Utils::cnvNull($request->status, 1);
+        $size->updated_at = date('Y-m-d H:i:s');
+        
+        if($size->save()) {
+            $this->output['code'] = 200;
+            $this->output['data'] = $size;
+        }
+        
+        return response()->json($this->output);
+    }
+    
+    public function colors(Request $request) {
+        $id = $request->id;
+        if(Utils::blank($id)) {
+            $color = new Color();
+            $color->created_at = date('Y-m-d H:i:s');
+        } else {
+            $color = Color::find($id);
+        }
+        
+        $color->name = Utils::cnvNull($request->name, '');
+        $color->status = Utils::cnvNull($request->status, 1);
+        $color->updated_at = date('Y-m-d H:i:s');
+        
+        if($color->save()) {
+            $this->output['code'] = 200;
+            $this->output['data'] = $color;
+        }
+        
+        return response()->json($this->output);
+    }
+    
+    public function addItem(Request $request) {
+        $item = $request->item;
+        $cart = Cart::addItem($item);
+        $this->output['code'] = 200;
+        $this->output['top_cart'] = Cart::topCart($cart);
+        $this->output['main_cart'] = Cart::mainCart($cart);
+        return response()->json($this->output);
+    }
+    
+    public function removeItem(Request $request) {
+        $id = $request->id;
+        $cart = Cart::removeItem($id);
+        $this->output['code'] = 200;
+        $this->output['top_cart'] = Cart::topCart($cart);
+        $this->output['main_cart'] = Cart::mainCart($cart);
+        return response()->json($this->output);
+    }
+    
+    public function updateItem(Request $request) {
+        $items = $request->items;
+        $cart = Cart::updateItem($items);
+        $this->output['code'] = 200;
+        $this->output['top_cart'] = Cart::topCart($cart);
+        $this->output['main_cart'] = Cart::mainCart($cart);
+        return response()->json($this->output);
+    }
+    
+    public function checkout(Request $request) {
+        $checkout = $request->checkout;
+        $orderId = Cart::checkout($checkout);
+        $this->output['code'] = 200;
+        $this->output['order_id'] = $orderId;
         return response()->json($this->output);
     }
 }

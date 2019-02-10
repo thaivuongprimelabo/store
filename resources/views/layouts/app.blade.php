@@ -28,6 +28,8 @@
   <link rel="stylesheet" href="{{ url('admin/dist/css/AdminLTE.min.css') }}">
   <!-- iCheck -->
   <link rel="stylesheet" href="{{ url('admin/plugins/iCheck/square/blue.css') }}">
+  <!-- Bootstrap Color Picker -->
+  <link rel="stylesheet" href="{{ url('admin/bower_components/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css') }}">
   
   <link rel="stylesheet" href="{{ url('admin/dist/css/skins/_all-skins.min.css') }}">
   
@@ -165,6 +167,8 @@
 <script src="{{ url('admin/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
 <!-- bootstrap time picker -->
 <script src="{{ url('admin/plugins/timepicker/bootstrap-timepicker.min.js') }}"></script>
+<!-- bootstrap color picker -->
+<script src="{{ url('admin/bower_components/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js') }}"></script>
 <!-- AdminLTE App -->
 <script src="{{ url('admin/dist/js/adminlte.min.js') }}"></script>
 <!-- AdminLTE for demo purposes -->
@@ -178,7 +182,7 @@
   $(function () {
 	setTimeout(function(){ 
 		$('.alert').fadeOut();
-	}, 3000);
+	}, 1000);
 	  
     //bootstrap WYSIHTML5 - text editor
     if($(".ckeditor").length > 0){

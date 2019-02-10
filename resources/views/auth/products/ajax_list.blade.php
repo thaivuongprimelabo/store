@@ -21,9 +21,9 @@
       <td>{{ $product->vendor_id }}</td>
       <td>{{ $product->getPrice($product->price) }}</td>
       @if($product->status == Status::ACTIVE)
-      <td><a href="javascript:void(0)" class="update-status" data-tbl="6" data-id="{{ $product->id }}" data-status="{{ $product->status }}"><span class="label label-success">{{ trans('auth.status.published') }}</span></a></td>
+      <td><a href="javascript:void(0)" class="update-status" data-tbl="6" data-id="{{ $product->id }}" data-status="{{ $product->status }}"><span class="label label-success">{{ trans('auth.status.active') }}</span></a></td>
       @else
-      <td><a href="javascript:void(0)" class="update-status" data-tbl="6" data-id="{{ $product->id }}" data-status="{{ $product->status }}"><span class="label label-danger">{{ trans('auth.status.not_published') }}</span></a></td>
+      <td><a href="javascript:void(0)" class="update-status" data-tbl="6" data-id="{{ $product->id }}" data-status="{{ $product->status }}"><span class="label label-danger">{{ trans('auth.status.unactive') }}</span></a></td>
       @endif
       <td>{{ $product->created_at }}</td>
       @include('auth.common.row_button',[
@@ -40,4 +40,5 @@
   </table>
 <!-- /.box-body -->
 <div class="box-footer clearfix">
+	{{ $products->links('auth.common.paging', ['paging' => $paging]) }}
 </div>

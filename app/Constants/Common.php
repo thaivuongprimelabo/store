@@ -22,6 +22,7 @@ class Common {
     CONST NO_LOGO_FILE = 'upload/no-image-icon-6.png';
     CONST NO_AVATAR = 'admin/dist/img/user2-160x160.jpg';
     CONST ROW_PER_PAGE = 9;
+    CONST LIMIT_PRODUCT_SHOW = 12;
     CONST LOGO_MAX_SIZE = '512000';
     CONST LOGO_WIDTH = '200';
     CONST LOGO_HEIGHT = '100';
@@ -72,6 +73,11 @@ class Common {
     CONST CONFIG = 'config';
     CONST PRODUCTS = 'products';
     CONST IMAGES_PRODUCT = 'images_product';
+    CONST SIZES = 'sizes';
+    CONST COLORS = 'colors';
+    CONST PAGES = 'pages';
+    CONST ORDERS = 'orders';
+    CONST ORDER_DETAILS = 'order_details';
     
     /** Role **/
     CONST SUPER_ADMIN = '0';

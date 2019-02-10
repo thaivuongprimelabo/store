@@ -1,91 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="utf-8">
-<title>Twitter Bootstrap shopping cart</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="">
-<meta name="author" content="">
-<!-- Bootstrap styles -->
-<link href="{{ url('shop/assets/css/bootstrap.css') }}" rel="stylesheet" />
-<!-- Customize styles -->
-<link href="{{ url('shop/assets/css/style.css') }}" rel="stylesheet" />
-<!-- font awesome styles -->
-<link href="{{ url('shop/assets/font-awesome/css/font-awesome.css') }}"
-	rel="stylesheet">
-<!--[if IE 7]>
-			<link href="css/font-awesome-ie7.min.css" rel="stylesheet">
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+	<title>{{ $config['web_name'] }}</title>
+
+	<!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+	<!-- Google font -->
+	<link href="https://fonts.googleapis.com/css?family=Hind:400,700" rel="stylesheet">
+
+	<!-- Bootstrap -->
+	<link type="text/css" rel="stylesheet" href="{{ url('shop/css/bootstrap.min.css') }}" />
+
+	<!-- Slick -->
+	<link type="text/css" rel="stylesheet" href="{{ url('shop/css/slick.css') }}" />
+	<link type="text/css" rel="stylesheet" href="{{ url('shop/css/slick-theme.css') }}" />
+
+	<!-- nouislider -->
+	<link type="text/css" rel="stylesheet" href="{{ url('shop/css/nouislider.min.css') }}" />
+
+	<!-- Font Awesome Icon -->
+	<link rel="stylesheet" href="{{ url('shop/css/font-awesome.min.css') }}">
+
+	<!-- Custom stlylesheet -->
+	<link type="text/css" rel="stylesheet" href="{{ url('shop/css/style.css') }}" />
+
+	<!-- HTML5 shim and Respond.js') }} for IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js') }} doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+		  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js') }}"></script>
+		  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js') }}"></script>
 		<![endif]-->
 
-<!--[if lt IE 9]>
-			<script src="http://html5shim.googlecode.com/svn/trunk/html5.js') }}"></script>
-		<![endif]-->
-
-<!-- Favicons -->
-<link rel="shortcut icon"
-	href="{{ url('shop/assets/ico/favicon.ico') }}">
 </head>
+
 <body>
-	<!-- 
-	Upper Header Section 
--->
-	@include('shop.common.top_nav')
+	@include('shop.common.header')
 
-	<!--
-Lower Header Section 
--->
-	<div class="container">
-		@include('shop.common.header')
-
-		<!--
-Navigation Bar Section 
--->
-		@include('shop.common.main_nav')
-		<!-- 
-Body Section 
--->
-		<div class="row">
-			@include('shop.common.sidebar')
-			<div class="span9">
-				@yield('content')
-				
-			</div>
-		</div>
-		<!-- 
-Clients 
--->
-		@include('shop.common.vendor')
-
-		<!--
-Footer
--->
-		@include('shop.common.footer')
+	@include('shop.common.main_nav', ['showOnClick' => isset($showOnClick) ? true : false])
+	
+	@if(Route::currentRouteName() == 'home')
+	@include('shop.common.carousel')
+	@endif
+	
+	@include('shop.common.breadcrumb', ['data' => isset($breadcrumb) ? $breadcrumb : []])
+	
+	<!-- section -->
+	<div class="section">
+		@yield('content')
 	</div>
-	<!-- /container -->
+	<!-- /section -->
 
-	<div class="copyright">
-		<div class="container">
-			<p class="pull-right">
-				<a href="#"><img src="{{ url('shop/assets/img/maestro.png') }}"
-					alt="payment"></a> <a href="#"><img
-					src="{{ url('shop/assets/img/mc.png') }}" alt="payment"></a> <a
-					href="#"><img src="{{ url('shop/assets/img/pp.png') }}"
-					alt="payment"></a> <a href="#"><img
-					src="{{ url('shop/assets/img/visa.png') }}" alt="payment"></a> <a
-					href="#"><img src="{{ url('shop/assets/img/disc.png') }}"
-					alt="payment"></a>
-			</p>
-			<span>Copyright &copy; 2013<br> bootstrap ecommerce shopping template
-			</span>
-		</div>
-	</div>
-	<a href="#" class="gotop"><i class="icon-double-angle-up"></i></a>
-	<!-- Placed at the end of the document so the pages load faster -->
-	<script src="{{ url('shop/assets/js/jquery.js') }}"></script>
-	<script src="{{ url('shop/assets/js/bootstrap.min.js') }}"></script>
-	<script src="{{ url('shop/assets/js/jquery.easing-1.3.min.js') }}"></script>
-	<script
-		src="{{ url('shop/assets/js/jquery.scrollTo-1.4.3.1-min.js') }}"></script>
-	<script src="{{ url('shop/assets/js/shop.js') }}"></script>
+	@include('shop.common.footer')
+
+	<!-- jQuery Plugins -->
+	<script src="{{ url('shop/js/jquery.min.js') }}"></script>
+	<script src="{{ url('shop/js/bootstrap.min.js') }}"></script>
+	<script src="{{ url('shop/js/slick.min.js') }}"></script>
+	<script src="{{ url('shop/js/nouislider.min.js') }}"></script>
+	<script src="{{ url('shop/js/jquery.zoom.min.js') }}"></script>
+	<script src="{{ url('shop/js/main.js') }}"></script>
+	<script src="{{ url('admin/js/jquery.validate.js') }}"></script>
+	<script src="{{ url('js/custom.shop.js') }}"></script>
+	<script src="{{ url('js/custom.shop.js') }}"></script>
+	@yield('script')
 </body>
+
 </html>

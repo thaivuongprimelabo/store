@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Color;
 use App\Product;
+use App\Size;
 use App\Constants\Common;
 use App\Helpers\Utils;
 use App\Http\Controllers\Controller;
@@ -47,7 +49,7 @@ class productsController extends AppController
     public function search(Request $request) {
         $wheres = [];
         $output = ['code' => 200, 'data' => ''];
-        if($request->isMethod('Product')) {
+        if($request->isMethod('post')) {
             $id_search = $request->id_search;
             if(!Utils::blank($id_search)) {
                 $wheres[] = ['id', '=', $id_search];
@@ -94,10 +96,13 @@ class productsController extends AppController
                 
                 $product = new Product();
                 $product->name          = Utils::cnvNull($request->name, '');
-                $product->name_url      = Utils::cnvNull($request->name, '');
+                $product->name_url      = Utils::createNameUrl(Utils::cnvNull($request->name, ''));
                 $product->price         = Utils::cnvNull($request->price, '0');
                 $product->category_id   = Utils::cnvNull($request->category_id, '0');
                 $product->vendor_id     = Utils::cnvNull($request->vendor_id, '0');
+                $product->discount      = Utils::cnvNull($request->discount, '');
+                $product->sizes         = implode(',', $request->sizes);
+                $product->colors        = implode(',', $request->colors);
                 $product->description   = Utils::cnvNull($request->description, '');
                 $product->status        = Utils::cnvNull($request->status, 0);
                 $product->is_new        = Utils::cnvNull($request->is_new, 0);
@@ -151,13 +156,14 @@ class productsController extends AppController
             
             if (!$validator->fails()) {
                 
-                $product = Product::find($request->id);
-                
                 $product->name          = Utils::cnvNull($request->name, '');
-                $product->name_url      = Utils::cnvNull($request->name, '');
+                $product->name_url      = Utils::createNameUrl(Utils::cnvNull($request->name, ''));
                 $product->price         = Utils::cnvNull($request->price, '0');
                 $product->category_id   = Utils::cnvNull($request->category_id, '0');
                 $product->vendor_id     = Utils::cnvNull($request->vendor_id, '0');
+                $product->discount      = Utils::cnvNull($request->discount, '');
+                $product->sizes         = !Utils::blank($request->sizes) ? implode(',', $request->sizes) : '';
+                $product->colors        = !Utils::blank($request->colors) ? implode(',', $request->colors) : '';
                 $product->description   = Utils::cnvNull($request->description, '');
                 $product->status        = Utils::cnvNull($request->status, 0);
                 $product->is_new        = Utils::cnvNull($request->is_new, 0);
@@ -168,32 +174,33 @@ class productsController extends AppController
                 if($product->save()) {
                     
                     $arrFilenames = [];
-                    if($request->hasFile('image_upload')) {
-                        
-                        $files = $request->image_upload;
-                        $image_ids = $request->image_ids;
-                        
-                        ImageProduct::destroy($image_ids);
-                        
-                        if(count($files)) {
-                            foreach($files as $k=>$v) {
-                                $file = $files[$k];
-                                if(!Utils::blank($file->getClientOriginalName())) {
-                                    $filename = Utils::uploadFile($file, Common::IMAGE_FOLDER);
-                                    if(isset($image_ids[$k])) {
-                                        $image_id = $image_ids[$k];
-                                        DB::table(Common::IMAGES_PRODUCT)->where('id', '=', $image_id)->delete();
-                                    }
-                                    
-                                    array_push($arrFilenames, ['product_id' => $product->id, 'image' => $filename]);
-                                }
+                    $files = $request->image_upload;
+                    $image_ids = $request->image_ids;
+                    $imagesProduct = ImageProduct::where('product_id', $product->id)->get()->keyBy('id')->toArray();
+                    $count = count($image_ids);
+                    if($count) {
+                        for($i = 0; $i < $count; $i++) {
+                            $id = $image_ids[$i];
+                            if($id != 9999) {
+                                $image = ['product_id' => $product->id, 'image' => $imagesProduct[$id]['image']];
+                            } else {
+                                $image = ['product_id' => $product->id, 'image' => ''];
                             }
                             
-                            DB::table(Common::IMAGES_PRODUCT)->insert($arrFilenames);
-                        } else {
+                            if(isset($files[$i])) {
+                                $file = $files[$i];
+                                $filename = Utils::uploadFile($file, Common::IMAGE_FOLDER);
+                                $image['image'] = $filename;
+                            }
                             
+                            if(!Utils::blank($image['image'])) {
+                                array_push($arrFilenames, $image);
+                            }
                         }
                     }
+                    
+                    ImageProduct::where('product_id', $product->id)->delete();
+                    DB::table(Common::IMAGES_PRODUCT)->insert($arrFilenames);
                     
                     return redirect(route('auth_products_edit', ['id' => $request->id]))->with('success', trans('messages.UPDATE_SUCCESS'));
                 }
@@ -211,4 +218,58 @@ class productsController extends AppController
             }
         }
     }
+    
+    public function sizes(Request $request) {
+        return view('auth.products.sizes.index', $this->searchSizeColor($request, Common::SIZES));
+    }
+    
+    public function colors(Request $request) {
+        return view('auth.products.colors.index', $this->searchSizeColor($request, Common::COLORS));
+    }
+    
+    public function removeSize(Request $request) {
+        if($request->isMethod('get')) {
+            $id = $request->id;
+            $size = Size::find($id);
+            if($size->delete()) {
+                return redirect(route('auth_products_sizes'))->with('success', trans('messages.REMOVE_SUCCESS'));
+            }
+        }
+    }
+    
+    public function removeColor(Request $request) {
+        if($request->isMethod('get')) {
+            $id = $request->id;
+            $color = Color::find($id);
+            if($color->delete()) {
+                return redirect(route('auth_products_colors'))->with('success', trans('messages.REMOVE_SUCCESS'));
+            }
+        }
+    }
+    
+    public function searchSizeColor(Request $request, $table = '') {
+        $wheres = [];
+        $output = ['code' => 200, 'data' => ''];
+        
+        if($table == Common::COLORS) {
+            $colors = Color::where($wheres)->get();
+            
+            if($request->ajax()) {
+                $output['data'] = view('auth.colors.ajax_list', compact('colors', 'paging'))->render();
+                return response()->json($output);
+            } else {
+                return compact('colors');
+            }
+        } else {
+            $sizes = Size::where($wheres)->get();
+            
+            if($request->ajax()) {
+                $output['data'] = view('auth.sizes.ajax_list', compact('sizes', 'paging'))->render();
+                return response()->json($output);
+            } else {
+                return compact('sizes');
+            }
+        }
+    }
+    
 }

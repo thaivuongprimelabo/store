@@ -1,24 +1,23 @@
-<div class="well np">
-	<div id="myCarousel" class="carousel slide homCar">
-		<div class="carousel-inner">
-			@php
-				$first = 0;
-			@endphp
-			@foreach($banners as $banner)
-			<div class="item {{ $first == 0 ? 'active' : '' }}">
-				<img style="width: 100%"
-					src="{{ Utils::getImageLink($banner->banner) }}"
-					alt="bootstrap ecommerce templates">
-				<div class="carousel-caption">
-					<h4>{{ $banner->description }}</h4>
+<!-- HOME -->
+<div id="home">
+	<!-- container -->
+	<div class="container">
+		<!-- home wrap -->
+		<div class="home-wrap">
+			<!-- home slick -->
+			<div id="home-slick">
+				@foreach($banners as $banner)
+				<!-- banner -->
+				<div class="banner banner-1">
+					<img src="{{ Utils::getImageLink($banner->banner) }}" alt="">
 				</div>
+				<!-- /banner -->
+				@endforeach
 			</div>
-			@php
-				$first++;
-			@endphp
-			@endforeach
+			<!-- /home slick -->
 		</div>
-		<a class="left carousel-control" href="#myCarousel" data-slide="prev">&lsaquo;</a>
-		<a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>
+		<!-- /home wrap -->
 	</div>
+	<!-- /container -->
 </div>
+<!-- /HOME -->

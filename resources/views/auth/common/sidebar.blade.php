@@ -13,9 +13,7 @@
     </div>
   </div>
   <!-- sidebar menu: : style can be found in sidebar.less -->
-  <ul class="sidebar-menu" data-widget="tree">
     {!! Utils::createSidebar() !!}
-  </ul>
 </section>
 <!-- /.sidebar -->
 </aside>

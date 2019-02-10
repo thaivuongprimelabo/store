@@ -88,7 +88,7 @@ class CategoriesController extends AppController
             if (!$validator->fails()) {
                 $category = new Category();
                 $category->name         = Utils::cnvNull($request->name, '');
-                $category->name_url     = Utils::cnvNull($request->name, '');
+                $category->name_url     = Utils::createNameUrl(Utils::cnvNull($request->name, ''));
                 $category->parent_id    = Utils::cnvNull($request->parent_id, 0);
                 $category->status       = Utils::cnvNull($request->status, 0);
                 $category->created_at   = date('Y-m-d H:i:s');
@@ -126,7 +126,7 @@ class CategoriesController extends AppController
             if (!$validator->fails()) {
                 $category = Category::find($request->id);
                 $category->name         = Utils::cnvNull($request->name, '');
-                $category->name_url     = Utils::cnvNull($request->name, '');
+                $category->name_url     = Utils::createNameUrl(Utils::cnvNull($request->name, ''));
                 $category->parent_id    = Utils::cnvNull($request->parent_id, 0);
                 $category->status       = Utils::cnvNull($request->status, 0);
                 $category->updated_at   = date('Y-m-d H:i:s');

@@ -98,7 +98,7 @@ class VendorsController extends AppController
                 
                 $vendor = new Vendor();
                 $vendor->name           = Utils::cnvNull($request->name, '');
-                $vendor->name_url       = Utils::cnvNull($request->name, '');
+                $vendor->name_url       = Utils::createNameUrl(Utils::cnvNull($request->name, ''));
                 $vendor->logo           = $filename;
                 $vendor->description    = Utils::cnvNull($request->description, '');
                 $vendor->status         = Utils::cnvNull($request->status, 0);
@@ -145,7 +145,7 @@ class VendorsController extends AppController
                 }
                 
                 $vendor->name           = Utils::cnvNull($request->name, '');
-                $vendor->name_url       = Utils::cnvNull($request->name, '');
+                $vendor->name_url       = Utils::createNameUrl(Utils::cnvNull($request->name, ''));
                 $vendor->logo           = $filename;
                 $vendor->description    = Utils::cnvNull($request->description, '');
                 $vendor->status         = Utils::cnvNull($request->status, 0);

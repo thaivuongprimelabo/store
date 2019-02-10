@@ -4,8 +4,9 @@ namespace App\Helpers;
 
 use App\Constants\Common;
 use App\Constants\Status;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Image;
@@ -16,6 +17,11 @@ use App\Vendor;
 class Utils {
     
     public static function getImageLink($image = '') {
+        if(strpos($image, ',') != -1) {
+            $arrImage = explode(',', $image);
+            $image = $arrImage[0];
+        }
+        
         $uploadFolder = Common::UPLOAD_FOLDER;
         //$nologo = Common::NO_LOGO_FILE;
         if(!self::blank($image)) {
@@ -183,7 +189,8 @@ class Utils {
                 $data = Category::select('name', 'id')->where('parent_id', 0)->where('status', Status::ACTIVE)->get();
                 break;
             case Common::VENDORS:
-                $data = Vendor::select('name', 'id')->where('status', Status::ACTIVE)->get();
+            case Common::SIZES:
+                $data = DB::table($table)->select('name', 'id')->where('status', Status::ACTIVE)->get();
                 break;
             default:
                 $data = [
@@ -194,10 +201,51 @@ class Utils {
         }
         
         foreach($data as $item) {
-            if($selected == $item['id']) {
-                $html .= '<option value="'. $item['id'] .'" selected>'. $item['name'] .'</option>';
+            if($selected == $item->id) {
+                $html .= '<option value="'. $item->id .'" selected>'. $item->name .'</option>';
             } else {
-                $html .= '<option value="'. $item['id'] .'">'. $item['name'] .'</option>';
+                $html .= '<option value="'. $item->id .'">'. $item->name .'</option>';
+            }
+        }
+        
+        return $html;
+    }
+    
+    public static function createCheckboxList($table = '', $selected = '') {
+        $html = '';
+        $data = [];
+        switch($table) {
+            case Common::CATEGORIES:
+                $data = Category::select('name', 'id')->where('parent_id', 0)->where('status', Status::ACTIVE)->get();
+                break;
+            case Common::VENDORS:
+            case Common::SIZES:
+            case Common::COLORS:
+                $data = DB::table($table)->select('name', 'id')->where('status', Status::ACTIVE)->get();
+                break;
+            default:
+                $data = [
+                ['id' => Common::ADMIN, 'name' => trans('auth.role.admin')],
+                ['id' => Common::MEMBER, 'name' => trans('auth.role.member')]
+                ];
+                break;
+        }
+        
+        $selectedId = explode(',', $selected);
+        
+        foreach($data as $item) {
+            if($table != Common::COLORS) {
+                if(in_array($item->id, $selectedId)) {
+                    $html .= '<label><input type="checkbox" name="'. $table . '[]" value="'. $item->id .'" checked="checked" /> '. $item->name .'</option></label>';
+                } else {
+                    $html .= '<label><input type="checkbox" name="'. $table . '[]" value="'. $item->id .'" /> '. $item->name .'</option></label>';
+                }
+            } else {
+                if(in_array($item->id, $selectedId)) {
+                    $html .= '<label><input type="checkbox" name="'. $table . '[]" value="'. $item->id .'" checked="checked" /><a href="#" style="display:inline-block; width:21px; height:21px; margin-left:5px; margin-bottom:-6px; background-color:'. $item->name .'"></a></label>';
+                } else {
+                    $html .= '<label><input type="checkbox" name="'. $table . '[]" value="'. $item->id .'" /><a href="#" style="display:inline-block; width:21px; height:21px; margin-left:5px; margin-bottom:-6px; background-color:'. $item->name .'"></a></label>';
+                }
             }
         }
         
@@ -215,15 +263,22 @@ class Utils {
         if($site == 'shop') {
             $categories = Category::select('name_url','id','name')->where('status', Status::ACTIVE)->get();
             foreach($categories as $category) {
-                $html .= '<li><a href="' . $category['name_url'] . $url_ext . '"><span class="icon-chevron-right"></span>' . Utils::cnvNull($category['name'], '') . '</a></li>';
+                $html .= '<li><a href="' . route('category',['slug' => $category['name_url']]) . '">' . Utils::cnvNull($category['name'], '') . '</a></li>';
             }
             
             return $html;
         }
+        $html .= '<ul class="sidebar-menu" data-widget="tree">';
+        $html .= '<li>';
+        $html .= '<a href="' . route('home') .'" target="_blank">';
+        $html .= '<i class="fa fa-files-o"></i>';
+        $html .= '<span>' . trans('auth.back_to_home') . '</span>';
+        $html .= '</a>';
+        $html .= '</li>';
         
         foreach($sidebar as $k=>$v) {
             
-            if($routes->hasNamedRoute('auth_' . $k) || $routes->hasNamedRoute('auth_' . $k . '_create')) {
+            if($k == 'pages' || $routes->hasNamedRoute('auth_' . $k) || $routes->hasNamedRoute('auth_' . $k . '_create')) {
                 $open = '';
                 $treemenu = '';
                 $route = 'auth_' . $k;
@@ -244,23 +299,18 @@ class Utils {
                 $html .= '</a>';
                 $html .= '<ul class="treeview-menu" ' . $treemenu . '>';
                 
-                $list_name_node = trans('auth.sidebar_node')[0];
-                if($routes->hasNamedRoute($route)) {
-                    if($currentRoute == $route) {
-                        $html .= '<li class="active"><a href="'. route($route) . '"><i class="fa fa-circle-o"></i> '. $list_name_node .'</a></li>';
-                    } else {
-                        $html .= '<li><a href="'. route($route) . '"><i class="fa fa-circle-o"></i> '. $list_name_node .'</a></li>';
+                $list_name_node = trans('auth.sidebar_node');
+                foreach($list_name_node as $key=>$value) {
+                    $routeNode = $route . ($key == '_list' ? '' : $key);
+                    if($routes->hasNamedRoute($routeNode)) {
+                        if($currentRoute == $routeNode) {
+                            $html .= '<li class="active"><a href="'. route($routeNode) . '"><i class="fa fa-circle-o"></i> '. $value .'</a></li>';
+                        } else {
+                            $html .= '<li><a href="'. route($routeNode) . '"><i class="fa fa-circle-o"></i> '. $value .'</a></li>';
+                        }
                     }
                 }
                 
-                $create_name_node = trans('auth.sidebar_node')[1];
-                if($routes->hasNamedRoute(($route . '_create'))) {
-                    if($currentRoute == ($route . '_create')) {
-                        $html .= '<li class="active"><a href="'. route($route . '_create') . '"><i class="fa fa-circle-o"></i> '. $create_name_node .'</a></li>';
-                    } else {
-                        $html .= '<li><a href="'. route($route . '_create') . '"><i class="fa fa-circle-o"></i> '. $create_name_node .'</a></li>';
-                    }
-                }
                 $html .= '</ul>';
                 $html .= '</li>';
             } else {
@@ -274,6 +324,7 @@ class Utils {
             
         }
         
+        $html .= '</ul>';
         return $html;
     }
     
@@ -348,12 +399,82 @@ class Utils {
         $html = '';
         foreach($mainNav as $key=>$nav) {
             if($key == Route::currentRouteName()) {
-                $html .= '<li class="active"><a href="'. route($key) .'">'. $nav . ' </a></li>';
+                $html .= '<li class="active"><a href="'. route($key) . '">'. $nav . ' </a></li>';
             } else {
-                $html .= '<li><a href="'. route($key) .'">'. $nav . ' </a></li>';
+                $html .= '<li><a href="'. route($key) . '">'. $nav . ' </a></li>';
             }
         }
         
         return $html;
     }
+    
+    public static function createNameUrl($str) {
+        $unicode = array(
+            'a' => 'á|à|ả|ã|ạ|ă|ắ|ặ|ằ|ẳ|ẵ|â|ấ|ầ|ẩ|ẫ|ậ',
+            'd' => 'đ',
+            'e' => 'é|è|ẻ|ẽ|ẹ|ê|ế|ề|ể|ễ|ệ',
+            'i' => 'í|ì|ỉ|ĩ|ị',
+            'o' => 'ó|ò|ỏ|õ|ọ|ô|ố|ồ|ổ|ỗ|ộ|ơ|ớ|ờ|ở|ỡ|ợ',
+            'u' => 'ú|ù|ủ|ũ|ụ|ư|ứ|ừ|ử|ữ|ự',
+            'y' => 'ý|ỳ|ỷ|ỹ|ỵ',
+            'A' => 'Á|À|Ả|Ã|Ạ|Ă|Ắ|Ặ|Ằ|Ẳ|Ẵ|Â|Ấ|Ầ|Ẩ|Ẫ|Ậ',
+            'D' => 'Đ',
+            'E' => 'É|È|Ẻ|Ẽ|Ẹ|Ê|Ế|Ề|Ể|Ễ|Ệ',
+            'I' => 'Í|Ì|Ỉ|Ĩ|Ị',
+            'O' => 'Ó|Ò|Ỏ|Õ|Ọ|Ô|Ố|Ồ|Ổ|Ỗ|Ộ|Ơ|Ớ|Ờ|Ở|Ỡ|Ợ',
+            'U' => 'Ú|Ù|Ủ|Ũ|Ụ|Ư|Ứ|Ừ|Ử|Ữ|Ự',
+            'Y' => 'Ý|Ỳ|Ỷ|Ỹ|Ỵ',
+        );
+        foreach ($unicode as $nonUnicode => $uni) {
+            $str = preg_replace("/($uni)/i", $nonUnicode, $str);
+        }
+        $kq = str_replace("'", "''", $str);
+        
+        return self::url_title(strtolower($kq));
+    }
+    
+    private static function url_title($str, $separator = '-', $lowercase = FALSE)
+    {
+        if ($separator === 'dash')
+        {
+            $separator = '-';
+        }
+        elseif ($separator === 'underscore')
+        {
+            $separator = '_';
+        }
+        
+        $q_separator = preg_quote($separator, '#');
+        
+        $trans = array(
+            '&.+?;'			=> '',
+            '[^\w\d _-]'		=> '',
+            '\s+'			=> $separator,
+            '('.$q_separator.')+'	=> $separator
+        );
+        
+        $str = strip_tags($str);
+        foreach ($trans as $key => $val)
+        {
+            $str = preg_replace('#'.$key.'#i'.(true ? 'u' : ''), $val, $str);
+        }
+        
+        if ($lowercase === TRUE)
+        {
+            $str = strtolower($str);
+        }
+        
+        return trim(trim($str, $separator));
+    }
+    
+    public static function createFriendlyUrl($segment, $ext) {
+        $url = implode('/', $segment) . $ext;
+        return $url;
+    }
+    
+    public static function getDiscountPrice($price, $discount) {
+        return $price - ($price * ($discount / 100));
+    }
+
+    
 }

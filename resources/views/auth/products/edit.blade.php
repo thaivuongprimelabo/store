@@ -67,9 +67,6 @@ var validatorEventSetting = $("#edit_form").validate({
 		vendor_id: {
 			required: true
 		},
-		description: {
-			required: true,
-		}
 	},
 	messages: {
 		name : {
@@ -86,9 +83,6 @@ var validatorEventSetting = $("#edit_form").validate({
 		vendor_id: {
 			required : "{{ Utils::getValidateMessage('validation.required', 'auth.products.form.vendor_id.text') }}",
 		},
-		description : {
-			required : "{{ Utils::getValidateMessage('validation.required', 'auth.products.form.description.text') }}",
-		}
 	},
 	errorPlacement: function(error, element) {
 		customErrorValidate(error, element);
@@ -116,11 +110,10 @@ $('#save').click(function(e) {
 
 $(document).on('change', '.upload_image_product', function(e) {
 	$(this).parent().parent().parent().removeClass('has-error');
-	$(this).parent().parent().parent().find('span.help-block').html('');
 	var input = $(this);
 	var maxSize = '{{ $config['image_maximum_upload'] }}';
 	var demension = '{{ $config['image_image_size'] }}';
-	previewImage(element, maxSize, demension);
+	previewImage(input, maxSize, demension);
     
 });
 </script>

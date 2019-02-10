@@ -37,6 +37,40 @@ class Product extends Model
         return $output;
     }
     
+    public function getSizes($productSizes) {
+        $arrSizes = explode(',', $productSizes);
+        $sizes = Size::select('name')->whereIn('id', $arrSizes)->get();
+        $html = '';
+        if($sizes->count()) {
+            $html .= '<ul class="size-option">';
+            $html .= '<li><span class="text-uppercase">' . trans('shop.size') . '</span></li>';
+            foreach($sizes as $size) {
+                $html .= '<li><a href="#">' . $size['name'] . '</a></li>';
+            }
+            $html .= '</ul>';
+        }
+        return $html;
+    }
+    
+    public function getColors($productColors) {
+        $arrColors = explode(',', $productColors);
+        $colors = Color::select('name')->whereIn('id', $arrColors)->get();
+        $html = '';
+        if($colors->count()) {
+            $html .= '<ul class="color-option">';
+            $html .= '<li><span class="text-uppercase">' . trans('shop.color') . '</span></li>';
+            foreach($colors as $color) {
+                $html .= '<li><a href="#" style="background-color:'. $color['name'] . ';"></a></li>';
+            }
+            $html .= '</ul>';
+        }
+        return $html;
+    }
+    
+    public function getDiscount($price, $discount) {
+        return number_format($price - ($price * ($discount / 100)));
+    }
+    
     public function getPrice($input) {
         if(is_numeric($input)) {
             return number_format($input);
