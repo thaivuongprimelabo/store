@@ -82,7 +82,7 @@ class ContactsController extends AppController
             $maxSize =  Utils::formatMemory(Common::ATTACHMENT_MAX_SIZE, true);
             
             $validator = Validator::make($request->all(), [
-                'reply_content' => 'required|max:' . Common::DESC_MAXLENGTH,
+                'reply_content' => 'required',
                 'attachment' => 'file|max:' . $maxSize .'|mimes:'. Common::FILE_EXT1
             ]);
             
@@ -108,15 +108,16 @@ class ContactsController extends AppController
                     
                 }
                 
-                $contact->subject       = Utils::cnvNull($request->subject, '');
-                $contact->attachment    = implode(',', $arrAttachments);
+                if(count($arrAttachments)) {
+                    $contact->attachment    = implode(',', $arrAttachments);
+                }
                 $contact->reply_content = Utils::cnvNull($request->reply_content, '');
                 $contact->status        = ContactStatus::REPLIED_CONTACT;
                 $contact->updated_at    = date('Y-m-d H:i:s');
                 
                 // Config mail
                 $config = [
-                    'subject' => $request->subject,
+                    'subject' => '[Reply to: '.$contact->email . ']' . $contact->subject,
                     'msg' => ['content' => $contact->reply_content],
                     'pathToFile' => $arrAttachments,
                     'to' => $contact->email
@@ -127,7 +128,7 @@ class ContactsController extends AppController
                         return redirect(route('auth_contacts'))->with('success', trans('messages.UPDATE_SUCCESS'));
                     }
                 } else {
-                    //return redirect(route('auth_contacts'))->with('error', trans('messages.ERROR'));
+                    return redirect(route('auth_contacts'))->with('error', trans('messages.SEND_MAIL_ERROR'));
                 }
             } else {
                 return redirect(route('auth_contacts'))->with('error', trans('messages.ERROR'));

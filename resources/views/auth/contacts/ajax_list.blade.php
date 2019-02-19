@@ -1,7 +1,7 @@
   <table class="table table-hover">
     <tr>
       <th>{{ trans('auth.contacts.table_header.id') }}</th>
-      <th>{{ trans('auth.contacts.table_header.name') }}</th>
+      <th>{{ trans('auth.contacts.table_header.subject') }}</th>
       <th>{{ trans('auth.contacts.table_header.email') }}</th>
       <th>{{ trans('auth.contacts.table_header.phone') }}</th>
       <th>{{ trans('auth.contacts.table_header.status') }}</th>
@@ -13,7 +13,7 @@
     @foreach($contacts as $contact)
     <tr>
       <td>{{ $contact->id }}</td>
-      <td>{{ $contact->name }}</td>
+      <td>{{ $contact->subject }}</td>
       <td>{{ $contact->email }}</td>
       <td>{{ $contact->phone }}</td>
       @if($contact->status == ContactStatus::NEW_CONTACT)

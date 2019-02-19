@@ -10,7 +10,7 @@ return [
         'about' => 'Giới thiệu',
         'products' => 'Sản phẩm',
         'delivery' => 'Phương thức giao hàng',
-        'posts' => 'Tin tức',
+        'cart' => 'Giỏ hàng',
         'contact' => 'Liên hệ'
     ],
     'button' => [
@@ -42,11 +42,13 @@ return [
     'quick_view' => 'Xem chi tiết',
     'new' => 'New',
     'free_shipping' => 'Không tốn phí',
+    'search_result' => 'Kết quả tìm kiếm từ khóa: {0}',
     'contact' => [
         'title' => 'Gửi chúng tôi ý kiến của bạn',
         'name' => 'Họ và tên',
         'email' => 'E-mail',
         'phone' => 'Số điện thoại',
+        'subject' => 'Tựa đề',
         'comment' => 'Nội dung'
     ],
     'cart' => [

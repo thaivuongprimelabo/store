@@ -107,13 +107,15 @@ Route::group(['prefix' => 'auth', 'namespace' => 'Auth'], function () {
 Route::group(['middleware' => 'web', 'prefix' => ''], function () {
     $config = Config::first();
     Route::get('/', 'HomeController@index')->name('home');
-    Route::get('/about' . $config['url_ext'], 'HomeController@about')->name('about');
-    Route::get('/delivery' . $config['url_ext'], 'HomeController@delivery')->name('delivery');
-    Route::match(['get', 'post'], '/products' . $config['url_ext'], 'HomeController@products')->name('products');
-    Route::get('/posts' . $config['url_ext'], 'HomeController@index')->name('posts');
-    Route::get('/contact' . $config['url_ext'], 'HomeController@contact')->name('contact');
+    Route::get('/gioi-thieu' . $config['url_ext'], 'HomeController@about')->name('about');
+    Route::get('/giao-hang' . $config['url_ext'], 'HomeController@delivery')->name('delivery');
+    Route::match(['get', 'post'], '/san-pham' . $config['url_ext'], 'HomeController@products')->name('products');
+    Route::get('/gio-hang' . $config['url_ext'], 'CartController@index')->name('cart');
+    Route::match(['get', 'post'], '/lien-he' . $config['url_ext'], 'HomeController@contact')->name('contact');
+    Route::post('/search' . $config['url_ext'], 'HomeController@search')->name('search');
     
-    Route::get('/{slug}' . $config['url_ext'], 'HomeController@category')->name('category');
+    Route::get('/nha-cung-cap/{vendor}' . $config['url_ext'], 'HomeController@vendor')->name('vendor');
+    Route::get('/danh-muc/{slug}' . $config['url_ext'], 'HomeController@category')->name('category');
     Route::get('/{slug}/{slug2}' . $config['url_ext'], 'HomeController@productDetails')->name('product_details');
 });
 

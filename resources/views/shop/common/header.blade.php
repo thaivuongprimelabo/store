@@ -34,9 +34,10 @@
 
 				<!-- Search -->
 				<div class="header-search">
-					<form>
-						<input class="input search-input" type="text" placeholder="{{ trans('shop.enter_keyword') }}">
-						<select class="input search-categories">
+					<form method="post" action="{{ route('search') }}">
+						{{ csrf_field() }}
+						<input name="keyword" class="input search-input" type="text" placeholder="{{ trans('shop.enter_keyword') }}">
+						<select class="input search-categories" name="category_id">
 							<option value="">{{ trans('shop.search_all_categories') }}</option>
 							{!! Utils::createSelectList(Common::CATEGORIES) !!}
 						</select>
@@ -47,6 +48,29 @@
 			</div>
 			<div class="pull-right">
 				<ul class="header-btns">
+					<!-- Account -->
+						<li class="header-account dropdown default-dropdown">
+							<div class="dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="true">
+								<div class="header-btns-icon">
+									<i class="fa fa-user-o"></i>
+								</div>
+								<strong class="text-uppercase">Tài khoản <i class="fa fa-caret-down"></i></strong>
+							</div>
+							@if(Auth::check())
+							<a href="#" class="text-uppercase" title="{{ Auth::user()->name }}">{{ str_limit(Auth::user()->name, 9) }}</a>
+							<ul class="custom-menu">
+								<li><a href="#"><i class="fa fa-user-o"></i> Đổi mật khẩu</a></li>
+								<li><a href="#"><i class="fa fa-check"></i> Lịch sử giao dịch</a></li>
+								<li><a href="#"><i class="fa fa-unlock-alt"></i> Thoát</a></li>
+							</ul>
+							@else
+							<a href="#" class="text-uppercase">Đăng nhập</a>
+							<ul class="custom-menu">
+								<li><a href="#"><i class="fa fa-user-plus"></i> Đăng ký tài khoản</a></li>
+							</ul>
+							@endif
+						</li>
+						<!-- /Account -->
 					<!-- Cart -->
 					<li class="header-cart dropdown default-dropdown" id="top-cart">
 						{!! Cart::topCart() !!}

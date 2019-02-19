@@ -9,8 +9,8 @@ var callAjax = function(url, data, page) {
 	    	'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 	    },
 	    success: function (res) {
+	    	output['code'] = res.code;
 	    	if(res.code === 200) {
-	    		output['code'] = res.code;
 				if(page == 'product-list') {
 					output['data'] = res.data;
 					output['paging'] = res.paging;
@@ -55,6 +55,10 @@ var removeItem = function(url, id) {
 		id: id		
 	}
 	var output = callAjax(url, data, 'remove-item');
+	console.log(output);
+	if(output.code === 404) {
+		window.location = '/';
+	}
 	$('#top-cart').html(output.top_cart);
 	$('#main-cart').html(output.main_cart);
 }

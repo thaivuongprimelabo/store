@@ -1736,4 +1736,30 @@ textarea.input {
 	color:#F00;
 	padding:4px;	
 }
+
+.menunew {
+	clear:both;
+	display:flex;
+	flex-flow: row wrap;
+	flex: 1 100%;
+}
+
+.manunew a {
+    display: inline-block;
+    width: 12.58%;
+    border: 1px solid #eee;
+    height: 40px;
+    line-height: 40px;
+    vertical-align: middle;
+    text-align: center;
+    margin-left: -1px;
+    margin-bottom: -1px;
+    transition: all ease 300ms;
+    color: #288ad6;
+}
+
+.manunew a img {
+    display: inline-block;
+    max-height: 25px;
+    vertical-align: middle;
 }

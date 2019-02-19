@@ -25,6 +25,14 @@ class CartController extends AppController
         if(!$request->session()->exists('cart')) {
             return redirect(route('home'));
         }
+        
+        if($request->session()->has('cart')) {
+            $cart = $request->session()->get('cart');
+            if(!count($cart['items'])) {
+                $request->session()->remove('cart');
+                return redirect(route('home'));
+            }
+        }
 
         $this->breadcrumb['active'] = trans('shop.cart.title');
 

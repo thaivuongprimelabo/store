@@ -13,7 +13,7 @@
         	@if($value['type'] == 'textarea')
         		<div class="form-group @if ($errors->has($key)){{'has-error'}} @endif">
                   <label for="exampleInputPassword1">{{ $value['text'] }}</label>
-                  <textarea class="form-control" rows="6" name="{{ $key }}" placeholder="{{ $value['text'] }}" maxlength="{{ Common::DESC_MAXLENGTH }}">{{ old($key, $data->$key) }}</textarea>
+                  <textarea class="form-control" rows="6" name="{{ $key }}" placeholder="{{ $value['text'] }}" maxlength="{{ Common::DESC_MAXLENGTH }}" {{ isset($value['disabled']) ? 'disabled=true' : '' }}>{{ old($key, $data->$key) }}</textarea>
                   <span class="help-block">@if ($errors->has($key)){{ $errors->first($key) }}@endif</span>
                 </div>
         	@endif

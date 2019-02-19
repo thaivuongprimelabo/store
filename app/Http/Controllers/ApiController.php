@@ -171,6 +171,11 @@ class ApiController extends Controller
     public function removeItem(Request $request) {
         $id = $request->id;
         $cart = Cart::removeItem($id);
+        if(!count($cart['items'])) {
+            $this->output['code'] = 404;
+            return response()->json($this->output);
+        }
+        
         $this->output['code'] = 200;
         $this->output['top_cart'] = Cart::topCart($cart);
         $this->output['main_cart'] = Cart::mainCart($cart);

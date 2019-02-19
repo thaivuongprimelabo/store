@@ -135,7 +135,7 @@ return [
         'edit_title' => 'Trả lời',
         'table_header' => [
             'id' => 'ID',
-            'name' => 'Tên',
+            'subject' => 'Tựa đề',
             'email' => 'E-mail',
             'phone' => 'Số điện thoại',
             'content' => 'Nội dung',
@@ -148,14 +148,15 @@ return [
         'form' => [
             'contact_content' => [
                 'text' => 'Nội dung thư',
+                'subject' => ['type' => 'text', 'text' => 'Tựa đề', 'disabled' => true],
                 'name' => ['type' => 'text', 'text' => 'Tên', 'disabled' => true],
                 'email' => ['type' => 'text', 'text' => 'E-mail', 'disabled' => true],
                 'phone' => ['type' => 'text', 'text' => 'Số điện thoại', 'disabled' => true],
-                'content' => ['type' => 'editor', 'text' => 'Nội dung', 'disabled' => true],
+                'content' => ['type' => 'textarea', 'text' => 'Nội dung', 'disabled' => true],
             ],
             'reply' => [
                 'text' => 'Trả lời',
-                'subject' => 'Tựa đề',
+                
                 'reply_content' => ['type' => 'editor', 'text' => 'Nội dung trả lời'],
                 'attachment' => [
                     'type' => 'file',

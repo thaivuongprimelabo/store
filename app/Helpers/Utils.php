@@ -252,6 +252,17 @@ class Utils {
         return $html;
     }
     
+    public static function createVendor() {
+        $html = '<div class="manunew">';
+        $vendors = Vendor::select('id', 'name', 'name_url', 'logo')->where('status', Status::ACTIVE)->get();
+        $count = 1;
+        foreach($vendors as $vendor) {
+            $html .= '<a href="'. route('vendor', ['vendor' => $vendor->name_url]) .'"><img src="'. self::getImageLink($vendor->logo) .'" /></a>';
+        }
+        $html .= '</div>';
+        return $html;
+    }
+    
     public static function createSidebar($site = 'auth', $url_ext = '') {
         
         $sidebar = trans('auth.sidebar');
