@@ -5,68 +5,7 @@
     <div class="row">
         <!-- ASIDE -->
         <div id="aside" class="col-md-3">
-        	<div class="aside">
-    			<h3 class="aside-title">{{ trans('shop.best_selling') }}</h3>
-    			@foreach($best_selling_products as $product)
-    			<!-- widget product -->
-    			<div class="product product-widget">
-    				<div class="product-thumb">
-    					<img src="{{ $product->getFirstImage($product->id) }}" alt="">
-    				</div>
-    				<div class="product-body">
-    					<h2 class="product-name"><a href="{{ route('product_details', ['slug' => $product->category_name_url, 'slug2' => $product->name_url]) }}">{{ $product->name }}</a></h2>
-    					<h3 class="product-price">
-        					@if($product->discount)
-        						{{ $product->getDiscount($product->price, $product->discount) }}
-        						<del class="product-old-price">{{ number_format($product->price) }}</del>
-        					@else
-        						{{ number_format($product->price) }}
-        					@endif
-        				</h3>
-    					<div class="product-rating">
-    						<i class="fa fa-star"></i>
-    						<i class="fa fa-star"></i>
-    						<i class="fa fa-star"></i>
-    						<i class="fa fa-star"></i>
-    						<i class="fa fa-star-o empty"></i>
-    					</div>
-    				</div>
-    			</div>
-    			<!-- /widget product -->
-    			@endforeach
-    		</div>
-    		<!-- /aside widget -->
-    		<div class="aside">
-    			<h3 class="aside-title">{{ trans('shop.discount_products') }}</h3>
-    			@foreach($best_selling_products as $product)
-    			<!-- widget product -->
-    			<div class="product product-widget">
-    				<div class="product-thumb">
-    					<img src="{{ $product->getFirstImage($product->id) }}" alt="">
-    				</div>
-    				<div class="product-body">
-    					<h2 class="product-name"><a href="{{ route('product_details', ['slug' => $product->category_name_url, 'slug2' => $product->name_url]) }}">{{ $product->name }}</a></h2>
-    					<h3 class="product-price">
-        					@if($product->discount)
-        						{{ $product->getDiscount($product->price, $product->discount) }}
-        						<del class="product-old-price">{{ number_format($product->price) }}</del>
-        					@else
-        						{{ number_format($product->price) }}
-        					@endif
-        				</h3>
-    					<div class="product-rating">
-    						<i class="fa fa-star"></i>
-    						<i class="fa fa-star"></i>
-    						<i class="fa fa-star"></i>
-    						<i class="fa fa-star"></i>
-    						<i class="fa fa-star-o empty"></i>
-    					</div>
-    				</div>
-    			</div>
-    			<!-- /widget product -->
-    			@endforeach
-    		</div>
-    		<!-- /aside widget -->
+        	
         </div>
         <div id="main" class="col-md-9">
         	<!-- store top filter -->
@@ -87,7 +26,7 @@
 			</div>
 			<!-- /store top filter -->
         	<div id="store">
-        		<div id="product_list" class="row">
+        		<div id="product_block" class="row">
         			
         		</div>
         	</div>
@@ -98,15 +37,29 @@
 @section('script')
 <script type="text/javascript">
 	$(document).ready(function() {
-		loadProducts('{{ route('products') }}');
-		$(document).on('click', '.page-number', function(e) {
-			var page = $(this).attr('data-page');
-			loadProducts('{{ route('products') }}?page=' + page);
-		});
+		var data = {
+			type : 'post',
+			async : false,
+			page_name: 'product-page',
+			sort: $('#sort').val(),
+			container: '#product_block',
+			paging: '#paging_link',
+			widget: '#aside'
+		}
+
+		loadProducts('{{ route('loadData') }}', data);
 
 		$('#do_sort').click(function(e) {
-			loadProducts('{{ route('products') }}');
+			data.sort = $('#sort').val();
+			loadProducts('{{ route('loadData') }}', data);
 		});
+
+		$(document).on('click', '.page-number', function(e) {
+			data.sort = $('#sort').val();
+			var page = $(this).attr('data-page');
+			loadProducts('{{ route('loadData') }}?page=' + page, data);
+		});
+
 	})
 </script>
 @endsection

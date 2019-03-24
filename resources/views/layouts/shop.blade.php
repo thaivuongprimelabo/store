@@ -11,6 +11,22 @@
 
 	<!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    
+    @if(!Utils::blank($config['web_ico']))
+    <link rel="shortcut icon" href="{{ $config['web_ico'] . '?t=' . time() }}">
+    @endif
+    
+    @if(!Utils::blank($config['web_description']))
+    <meta name="description" content="{{ $config['web_description'] }}" />
+    @endif
+    
+    @if(!Utils::blank($config['web_keywords']))
+    <meta name="keywords" content="{{ $config['web_keywords'] }}" />
+    @endif
+    
+    <!-- ROBOTS -->
+    <meta name="googlebot" content="noarchive" />
+    <meta name="robots" content="noarchive" />
 
 	<!-- Google font -->
 	<link href="https://fonts.googleapis.com/css?family=Hind:400,700" rel="stylesheet">
@@ -71,5 +87,4 @@
 	<script src="{{ url('js/custom.shop.js') }}"></script>
 	@yield('script')
 </body>
-
 </html>

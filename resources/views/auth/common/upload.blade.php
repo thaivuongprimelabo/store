@@ -3,14 +3,14 @@
   <div id="preview_list">
   	@if($image_using != '')
   		<div class="image_product" style="display: inline-block;">
-          <a href="javascript:void(0)" class="upload_image" style="width: {{ $width }}px; height: {{ $height }}px">
+          <a href="javascript:void(0)" id="open_upload_dialog" class="upload_image" style="width: {{ $width }}px; height: {{ $height }}px">
           	<img src="{{ $image_using }}" style="width:{{ $width }}px; height:{{ $height }}px" />
           </a>
           <input type="file" name="{{ $name }}" id="{{ $name }}" style="display: none" />
       	</div>
   	@else
   		<div class="image_product" style="display: inline-block;">
-          <a href="javascript:void(0)" class="upload_image" style="width: {{ $width }}px; height: {{ $height }}px">
+          <a href="javascript:void(0)" id="open_upload_dialog" class="upload_image" style="width: {{ $width }}px; height: {{ $height }}px">
           	<i class="fa fa-upload" aria-hidden="true"></i><br/>{{ trans('auth.button.upload_image') }}
           </a>
           <input type="file" name="{{ $name }}" id="{{ $name }}" style="display: none" />

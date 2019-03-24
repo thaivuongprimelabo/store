@@ -33,6 +33,8 @@
   
   <link rel="stylesheet" href="{{ url('admin/dist/css/skins/_all-skins.min.css') }}">
   
+  <link rel="stylesheet" href="{{ url('admin/css/custom-styles.css') }}">
+  
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
   <style type="text/css">
@@ -219,14 +221,6 @@
 			window.location = url;
 	});
 
-	$(document).on('click', '.remove', function(e) {
-		if(confirmDelete('{{ trans('messages.CONFIRM_DELETE') }}')) {
-			$(this).parent().remove();
-			return true;
-		}
-		return false;
-	});
-
 	$(document).on('click', '.remove-row', function(e) {
 		if(confirmDelete('{{ trans('messages.CONFIRM_DELETE') }}')) {
 			window.location = $(this).attr('data-url');
@@ -256,15 +250,8 @@
 		$(this).find('span').html(res.text);
 	});
 
-	$(document).on('click', '.upload_image', function(e) {
+	$(document).on('click', '#open_upload_dialog', function(e) {
 		$(this).next('input[type="file"]').click();
-	});
-
-	$(document).on('click', '.add_image', function(e) {
-		var clone = $('.image_product_clone').clone();
-		clone.attr('class', 'image_product');
-		clone.attr('style', 'display:inline-block');
-		$(this).parent().before(clone);
 	});
 
 	$('input#check_all').on('ifChecked', function(event){
@@ -281,8 +268,26 @@
 		$('form').submit();
     });
 
+    $('#save').click(function(e) {
+    	var input = {
+    	   	value: $('#name').val(),
+			col : 'name',
+			table: $('#table').val(),
+			itemName : $('#name').attr('placeholder'),
+			url: '{{ route('check_exists') }}',
+			id_check: $('#id_check').val()
+		};
+
+    	if(checkExist(input)) {
+			$('#submit_form').submit();
+    	}
+
+    	return false;
+    });
+
   });
 </script>
 @yield('script')
 </body>
+
 </html>

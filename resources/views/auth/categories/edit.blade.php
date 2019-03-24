@@ -14,13 +14,11 @@
 <section class="content">
 	<div class="row">
 		<div class="col-md-12">
-			<form role="form" id="edit_form" action="?" method="post" enctype="multipart/form-data">
+			<form role="form" id="submit_form" action="?" method="post" enctype="multipart/form-data">
+			<input type="hidden" id="table" value="0" />
 			@include('auth.common.alert')
 			@include('auth.common.edit_form',['data' => $category, 'forms' => trans('auth.categories.form')])
-			<div class="box-footer">
-              	<button type="button" class="btn btn-default" onclick="window.location='{{ route('auth_categories') }}'"><i class="fa fa-arrow-left" aria-hidden="true"></i> {{ trans('auth.button.back') }}</button>
-                <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> {{ trans('auth.button.submit') }}</button>
-            </div>
+			@include('auth.common.button_footer',['back_url' => route('auth_categories')])
             </form>
 		</div>
 	</div>
@@ -28,7 +26,7 @@
 @endsection
 @section('script')
 <script type="text/javascript">
-    var validatorEventSetting = $("#edit_form").validate({
+    var validatorEventSetting = $("#submit_form").validate({
     	onfocusout: false,
     	success: function(label, element) {
         	var jelm = $(element);
@@ -38,28 +36,12 @@
     		name: {
     			required: true,
     			maxlength: {{  Common::NAME_MAXLENGTH }},
-    			remote : {
-					url : '{{ route('check_exists') }}',
-					type : 'post',
-					headers: {
-				    	'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-				    },
-					data : {
-						value : function() {
-							return $('#name').val()
-						},
-						col: 'name',
-						id_check: $('#id').val(),
-						table: 1
-					}
-				}
     		},
     	},
     	messages: {
     		name : {
     			required : "{{ Utils::getValidateMessage('validation.required', 'auth.categories.form.name') }}",
     			maxlength : "{{ Utils::getValidateMessage('validation.max.string', 'auth.categories.form.name', Common::NAME_MAXLENGTH) }}",
-    			remote: '{{ Utils::getValidateMessage('validation.unique', 'auth.categories.form.name') }}'
     		},
     	},
     	errorPlacement: function(error, element) {

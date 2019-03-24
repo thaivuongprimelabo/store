@@ -22,16 +22,13 @@ class Common {
     CONST NO_LOGO_FILE = 'upload/no-image-icon-6.png';
     CONST NO_AVATAR = 'admin/dist/img/user2-160x160.jpg';
     CONST ROW_PER_PAGE = 9;
-    CONST LIMIT_PRODUCT_SHOW = 12;
+    CONST LIMIT_PRODUCT_SHOW = 8;
     CONST LOGO_MAX_SIZE = '512000';
     CONST LOGO_WIDTH = '200';
     CONST LOGO_HEIGHT = '100';
     CONST PRODUCT_MAX_SIZE = '512000';
     CONST PRODUCT_WIDTH = '150';
     CONST PRODUCT_HEIGHT = '100';
-//     CONST BANNER_MAX_SIZE = '1024000';
-//     CONST BANNER_WIDTH = '780';
-//     CONST BANNER_HEIGHT = '350';
     CONST ATTACHMENT_MAX_SIZE = '102400';
     CONST ATTACHMENT_WIDTH = '90';
     CONST ATTACHMENT_HEIGHT = '90';
@@ -78,6 +75,7 @@ class Common {
     CONST PAGES = 'pages';
     CONST ORDERS = 'orders';
     CONST ORDER_DETAILS = 'order_details';
+    CONST CUSTOMERS = 'customers';
     
     /** Role **/
     CONST SUPER_ADMIN = '0';
@@ -90,8 +88,12 @@ class Common {
     CONST SUBJECT = '【CPanel】 Test send mail';
     CONST TEMPLATE = 'auth.emails.template';
     
+    /** Size */
+    CONST UPLOAD_SIZE_LIMIT = ['51200', '102400', '512000', '1024000'];
+    
     public static function getValue($key) {
         return constant('Common::' . $key);
     }
+    
     
 }

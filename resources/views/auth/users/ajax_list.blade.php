@@ -16,7 +16,7 @@
     <tr>
       <td>{{ $user->id }}</td>
       <td>{{ $user->name }}</td>
-      <td><img src="{{ Utils::getImageLink($user->avatar) }}" alt="{{ Utils::getImageLink($user->avatar) }}" width="{{ Common::ADMIN_IMAGE_WIDTH }}" /></td>
+      <td><img src="{{ Utils::getImageLink($user->avatar) }}" width="{{ Common::ADMIN_IMAGE_WIDTH }}" /></td>
       <td>{{ $user->email }}</td>
       @if($user->status == Status::ACTIVE)
       <td><a href="javascript:void(0)" class="update-status" data-tbl="5" data-id="{{ $user->id }}" data-status="{{ $user->status }}"><span class="label label-success">{{ trans('auth.status.active') }}</span></a></td>

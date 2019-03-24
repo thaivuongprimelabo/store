@@ -7,23 +7,37 @@
   </h1>
   <ol class="breadcrumb">
     <li><a href="{{ route('dashboard') }}"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
-    <li><a href="{{ route('auth_config_edit') }}">{{ trans('auth.sidebar.config') }}</a></li>
-    <li class="active">{{ trans('auth.config.title') }}</li>
+    <li><a href="{{ route('auth_config_edit') }}">{{ trans('auth.sidebar.config_edit') }}</a></li>
   </ol>
 </section>
 <section class="content">
 	<div class="row">
 		<div class="col-md-12">
-			<form role="form" id="create_form" action="?" method="post" enctype="multipart/form-data">
+			<form role="form" id="submit_form" action="?" method="post" enctype="multipart/form-data">
     			@include('auth.common.alert')
     			@php
                   	$forms = trans('auth.config.form');
+                  	$accept = [
+                  		'web_info', 'payment_method', 'off'
+                  	];
                 @endphp
                 @foreach($forms as $key=>$form)
-                @include('auth.common.edit_form', ['forms' => $form, 'data' => $config_data])
+                @if(Auth::user()->role_id != Common::SUPER_ADMIN)
+                	@if(in_array($key, $accept))
+                	@include('auth.common.edit_form', ['forms' => $form, 'data' => $config_data])
+                	@endif
+                @endif
+                
+                @if(Auth::user()->role_id == Common::SUPER_ADMIN)
+                	@include('auth.common.edit_form', ['forms' => $form, 'data' => $config_data])
+                @endif
                 @endforeach
                 <div class="box-footer">
-                    <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> {{ trans('auth.button.submit') }}</button>
+                    <button type="submit" name="save" value="1" class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> {{ trans('auth.button.submit') }}</button>
+                    @if(Auth::user()->role_id == Common::SUPER_ADMIN)
+                    <button type="submit" name="clear_data" value="1" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i> {{ trans('auth.button.remove_all_data') }}</button>
+                    <button type="submit" name="clear_config_cache" value="1" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i> {{ trans('auth.button.clear_config_cache') }}</button>
+                	@endif
                 </div>
             </form>
 		</div>

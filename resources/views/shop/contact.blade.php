@@ -32,8 +32,14 @@
     				<div class="form-group">
     					<textarea class="form-control" name="content" rows="5" placeholder="{{ trans('shop.contact.comment') }}"></textarea>
     				</div>
+    				<div class="form-group captcha">
+    					<span id="captcha-img">{!! captcha_img('flat') !!}</span>
+    					<button id="refresh" type="button" class="btn btn-success"><i class="fa fa-refresh"></i></button>
+    					<input class="input" type="text" id="captcha" name="captcha" maxlength="255" placeholder="{{ trans('shop.register_form.captcha') }}">
+    					<span id="captcha-error" class="valid-text"></span>
+    				</div>
     				<div class="pull-right">
-    					<button class="primary-btn" id="send">{{ trans('shop.button.send') }}</button>
+    					<button type="button" class="primary-btn" id="send">{{ trans('shop.button.send') }}</button>
     				</div>
     			</div>
 			</form>
@@ -43,49 +49,84 @@
 @endsection
 @section('script')
 <script type="text/javascript">
-    var validator = $("#contact_form").validate({
-    	onfocusout: false,
-    	rules: {
-    		name: {
-        		required: true
-    		},
-    		email: {
-    			required: true,
-    			email: true
-    		},
-    		phone: {
-    			required: true,
-    			number: true
-    		},
-    		subject: {
-				required: true
-    		},
-    		content: {
-				required: true
-    		}
-    	},
-    	messages: {
-    		name : {
-    			required : "{{ Utils::getValidateMessage('validation.shop_required', '') }}",
-    		},
-    		email : {
-    			required : "{{ Utils::getValidateMessage('validation.shop_required', '') }}",
-    			email : "{{ trans('validation.email') }}"
-    		},
-    		phone : {
-    			required : "{{ Utils::getValidateMessage('validation.shop_required', '') }}",
-    			number: "{{ trans('validation.numeric') }}"
-    		},
-    		subject: {
-    			required : "{{ Utils::getValidateMessage('validation.shop_required', '') }}",
-    		},
-    		content: {
-    			required : "{{ Utils::getValidateMessage('validation.shop_required', '') }}",
-    		}
-    	},
-    	submitHandler: function(form) {
-    		form.submit();
-        }
+    $(document).ready(function() {
+        var validator = $("#contact_form").validate({
+        	onfocusout: false,
+        	rules: {
+        		name: {
+            		required: true
+        		},
+        		email: {
+        			required: true,
+        			email: true
+        		},
+        		phone: {
+        			required: true,
+        			number: true
+        		},
+        		subject: {
+    				required: true
+        		},
+        		content: {
+    				required: true
+        		},
+        		captcha: {
+        			required: true
+        		}
+        	},
+        	messages: {
+        		name : {
+        			required : "{{ Utils::getValidateMessage('validation.shop_required', '') }}",
+        		},
+        		email : {
+        			required : "{{ Utils::getValidateMessage('validation.shop_required', '') }}",
+        			email : "{{ trans('validation.email') }}"
+        		},
+        		phone : {
+        			required : "{{ Utils::getValidateMessage('validation.shop_required', '') }}",
+        			number: "{{ trans('validation.numeric') }}"
+        		},
+        		subject: {
+        			required : "{{ Utils::getValidateMessage('validation.shop_required', '') }}",
+        		},
+        		content: {
+        			required : "{{ Utils::getValidateMessage('validation.shop_required', '') }}",
+        		},
+        		captcha: {
+        			required : "{{ Utils::getValidateMessage('validation.shop_required', '') }}",
+        		}
+        	},
+        	submitHandler: function(form) {
+        		form.submit();
+            }
+        });
+
+        $('#refresh').click(function(){
+      		  $.ajax({
+      		     type:'GET',
+      		     url:'{{ route('refreshcaptcha') }}',
+      		     success:function(data){
+      		        $("#captcha-img").html(data.captcha);
+      		     }
+      		  });
+  		});
+
+  		$('#send').click(function(){
+  			 if($("#contact_form").valid()) {
+  				 var data = {
+  					type : 'post',
+  					async : false,
+  					page: 'checkcaptcha',
+  					captcha: $('#captcha').val(),
+  					container: '#captcha-error',
+  				 }
+
+  				 if(checkCaptcha('{{ route('checkCaptcha') }}', data)) {
+  					 $("#contact_form").submit();
+  				 }
+
+  			 }
+  		});
     });
 
 </script>

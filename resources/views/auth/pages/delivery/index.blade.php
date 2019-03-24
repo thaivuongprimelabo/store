@@ -12,7 +12,7 @@
 <section class="content">
 	<div class="row">
 		<div class="col-md-12">
-			<form role="form" id="create_form" action="?" method="post" enctype="multipart/form-data">
+			<form role="form" id="submit_form" action="?" method="post" enctype="multipart/form-data">
 			@include('auth.common.alert')
 			@if($delivery)
 			@include('auth.common.edit_form',['forms' => trans('auth.delivery.form'), 'data' => $delivery])

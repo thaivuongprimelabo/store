@@ -5,7 +5,6 @@
       <th>{{ trans('auth.banners.table_header.id') }}</th>
       <th>{{ trans('auth.banners.table_header.banner') }}</th>
       <th>{{ trans('auth.banners.table_header.link') }}</th>
-      <th>{{ trans('auth.banners.table_header.description') }}</th>
       <th>{{ trans('auth.banners.table_header.status') }}</th>
       <th>{{ trans('auth.banners.table_header.created_at') }}</th>
       <th>{{ trans('auth.banners.table_header.updated_at') }}</th>
@@ -17,8 +16,7 @@
     <tr>
       <td>{{ $banner->id }}</td>
       <td><img src="{{ Utils::getImageLink($banner->banner) }}" width="{{ Common::ADMIN_IMAGE_WIDTH }}" /></td>
-      <td>{{ $banner->link }}</td>
-      <td>{{ $banner->description }}</td>
+      <td><a href="{{ $banner->link }}" target="_blank" title="{{ $banner->description }}">{{ $banner->link }}</a></td>
       @if($banner->status == Status::ACTIVE)
       <td><a href="javascript:void(0)" class="update-status" data-tbl="2" data-id="{{ $banner->id }}" data-status="{{ $banner->status }}"><span class="label label-success">{{ trans('auth.status.active') }}</span></a></td>
       @else

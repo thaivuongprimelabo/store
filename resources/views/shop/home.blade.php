@@ -4,9 +4,24 @@
 <!-- container -->
 <div class="container">
 	{!! Utils::createVendor() !!}
-	@include('shop.common.product',['title' => trans('shop.new_products'), 'data' => $new_products])
-	@include('shop.common.product',['title' => trans('shop.discount_products'), 'data' => $discount_products])
-	@include('shop.common.product',['title' => trans('shop.best_selling'), 'data' => $best_selling_products])
+	<div id="product_block">
+	</div>
 </div>
 <!-- /container -->
+@endsection
+@section('script')
+<script type="text/javascript">
+	$(document).ready(function() {
+		var current_url = window.location.href.split('/');
+		var data = {
+			type : 'post',
+			async : false,
+			page_name: 'home-page',
+			container: '#product_block',
+		}
+
+		loadProducts('{{ route('loadData') }}', data);
+
+	})
+</script>
 @endsection

@@ -58,7 +58,7 @@ class PostsController extends AppController
             }
         }
         
-        $posts = Post::where($wheres)->paginate(Common::ROW_PER_PAGE);
+        $posts = Post::where($wheres)->orderBy('created_at', 'DESC')->paginate(Common::ROW_PER_PAGE);
         
         $paging = $posts->toArray();
         

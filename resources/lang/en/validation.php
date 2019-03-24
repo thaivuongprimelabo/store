@@ -91,6 +91,8 @@ return [
     'unique'               => ':attribute đang được sử dụng.',
     'uploaded'             => 'The :attribute failed to upload.',
     'url'                  => ':attribute không hợp lệ.',
+    'password_match' => 'Xác nhận mật khẩu không khớp với mật khẩu',
+    'captcha' => 'Mã bảo vệ không chính xác',
 
     /*
     |--------------------------------------------------------------------------

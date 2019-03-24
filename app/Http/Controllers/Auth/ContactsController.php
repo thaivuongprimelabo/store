@@ -53,7 +53,7 @@ class ContactsController extends AppController
             }
         }
         
-        $contacts = Contact::where($wheres)->paginate(Common::ROW_PER_PAGE);
+        $contacts = Contact::where($wheres)->orderBy('status', 'ASC')->paginate(Common::ROW_PER_PAGE);
         
         $paging = $contacts->toArray();
         

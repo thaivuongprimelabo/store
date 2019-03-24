@@ -1,4 +1,5 @@
 <!-- row -->
+@if($data->count())
 <div class="row">
 	<!-- section title -->
 	@if(!Utils::blank($title))
@@ -54,4 +55,5 @@
 	<!-- /Product Single -->
 	@endforeach
 </div>
+@endif
 <!-- /row -->

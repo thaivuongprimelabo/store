@@ -60,7 +60,7 @@ class VendorsController extends AppController
             }
         }
         
-        $vendors = Vendor::where($wheres)->paginate(Common::ROW_PER_PAGE);
+        $vendors = Vendor::where($wheres)->orderBy('created_at', 'DESC')->paginate(Common::ROW_PER_PAGE);
         
         $paging = $vendors->toArray();
         

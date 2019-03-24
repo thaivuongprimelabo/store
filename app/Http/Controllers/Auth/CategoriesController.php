@@ -59,7 +59,7 @@ class CategoriesController extends AppController
             }
         }
         
-        $categories = Category::where($wheres)->paginate(Common::ROW_PER_PAGE);
+        $categories = Category::where($wheres)->orderBy('created_at', 'DESC')->paginate(Common::ROW_PER_PAGE);
         
         $paging = $categories->toArray();
         

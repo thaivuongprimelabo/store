@@ -1,5 +1,5 @@
 var callAjax = function(url, data, page) {
-	var output = '';
+	var output = {};
 	$.ajax({
 	    url: url,
 	    type: data.type,
@@ -10,25 +10,23 @@ var callAjax = function(url, data, page) {
 	    },
 	    success: function (res) {
 	    	if(res.code === 200) {
-		    	if(page === 'ajax_list') {
-					$('#ajax_list').html(res.data);
-		    	}
-		    	
-		    	if(page === 'update_status') {
-		    		output = res.data;
-		    	}
-		    	
-		    	if(page === 'add-size' || page === 'add-color') {
-		    		output = res.data;
-				}
-				
-				if(page == 'product-list') {
-					output = res.data;
-				}
+	    		switch(page) {
+	    			case 'ajax_list':
+	    				$('#ajax_list').html(res.data);
+	    				break;
+	    				
+	    			case 'update_status':
+	    			case 'add-size':
+	    			case 'add-color':
+	    				output = res.data;
+	    				break;
+	    			default:
+	    				output = res;
+	    				break;
+	    		}
 	    	}
 	    }
 	});
-
 	return output;
 }
 
@@ -44,6 +42,26 @@ var loadProducts = function(url) {
 
 var search = function(url, data, page) {
 	callAjax(url, data, page);
+}
+
+var checkExist = function(input) {
+	var data = {
+	   	type: 'post',
+		async : false,
+		value : input.value,
+		col : input.col,
+		table: input.table,
+		itemName : input.itemName,
+		id_check: input.id_check
+	};
+
+	var output = callAjax(input.url, data, 'check-exists');
+	if(output.code === 200 && output.data.length > 0) {
+		alert(output.data);
+		return false;
+	}
+	
+	return true;
 }
 
 var checkFileSize = function(element, size) {
@@ -88,6 +106,18 @@ var previewImage = function(element, size, demension) {
 	    }
 	    reader.readAsDataURL(input);
 //	}
+}
+
+var previewImageProduct = function(element, size, demension, container) {
+	
+	var arr = demension.split('x');
+	var tagA = element.parent().find('.upload_image');
+	var input = element[0].files[0];
+	var reader = new FileReader();
+    reader.onload = function (event) {
+        $(container).attr('src', event.target.result);
+    }
+    reader.readAsDataURL(input);
 }
 
 var customErrorValidate = function(error, element) {
@@ -146,6 +176,18 @@ var checkExtMultiFile = function(element, param, input_message) {
 		}
 	}
 	return message;
+}
+
+var checkFileUpload = function(element, params, message, container) {
+	var error_msg = checkExtMultiFile(element, params[0], message);
+	error_msg += checkSizeMultiFile(element, params[1], message);
+
+	if(error_msg !== '') {
+		$(container).addClass('has-error');
+		$(container).append(error_msg);
+		return false;
+	}
+	return true;
 }
 
 $(document).ready(function() {

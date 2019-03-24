@@ -43,28 +43,11 @@ class HomeController extends AppController
         
         $showSidebar = 'show';
         
-        return view('shop.home', array_merge(compact('banners', 'showSidebar'), $this->loadProducts(false, true, true, true)));
+        return view('shop.home', compact('banners', 'showSidebar'));
     }
     
     public function vendor(Request $request) {
         $slug = str_replace($this->config['config']['url_ext'], '', $request->vendor);
-        
-        $products = Product::select(
-                        'products.name', 
-                        'products.price',
-                        'products.id', 
-                        'products.name_url',
-                        'vendors.name_url AS vendor_name_url',
-                        'products.is_new',
-                        'products.is_best_selling',
-                        'products.is_popular',
-                        'products.discount',
-                        DB::raw('GROUP_CONCAT(images_product.image) AS image')
-                    )
-                    ->leftJoin('vendors', 'vendors.id', '=', 'products.vendor_id')
-                    ->leftJoin('images_product','images_product.product_id', '=', 'products.id')
-                    ->where(['vendors.name_url' => $slug])
-                    ->groupBy('products.id')->get();
         
         $vendor = Vendor::select('name')->where('name_url', $slug)->first();
         
@@ -75,39 +58,22 @@ class HomeController extends AppController
         $breadcrumb  = $this->breadcrumb;
         $showSidebar = 'hide';
         
-        return view('shop.vendor', compact('products', 'breadcrumb', 'showSidebar'));
+        return view('shop.vendor', compact('breadcrumb', 'showSidebar'));
     }
     
     public function category(Request $request) {
         $slug = str_replace($this->config['config']['url_ext'], '', $request->slug);
         
-        $products = Product::select(
-                        'products.name',
-                        'products.price',
-                        'products.id',
-                        'products.name_url',
-                        'categories.name_url AS category_name_url',
-                        'products.is_new',
-                        'products.is_best_selling',
-                        'products.is_popular',
-                        'products.discount',
-                        DB::raw('GROUP_CONCAT(images_product.image) AS image')
-                    )
-                    ->leftJoin('categories', 'categories.id', '=', 'products.category_id')
-                    ->leftJoin('images_product','images_product.product_id', '=', 'products.id')
-                    ->where(['categories.name_url' => $slug])
-                    ->groupBy('products.id')->get();
-                    
-            $category = Category::select('name')->where('name_url', $slug)->first();
-            
-            if($category) {
-                $this->breadcrumb['active'] = $category->name;
-            }
-            
-            $breadcrumb  = $this->breadcrumb;
-            $showSidebar = 'hide';
-            
-            return view('shop.category', compact('products', 'breadcrumb', 'showSidebar'));
+        $category = Category::select('name')->where('name_url', $slug)->first();
+        
+        if($category) {
+            $this->breadcrumb['active'] = $category->name;
+        }
+        
+        $breadcrumb  = $this->breadcrumb;
+        $showSidebar = 'hide';
+        
+        return view('shop.category', compact('breadcrumb', 'showSidebar'));
     }
     
     public function productDetails(Request $request) {
@@ -142,8 +108,10 @@ class HomeController extends AppController
                         'products.is_popular',
                         'products.discount',
                         'categories.name_url AS category_name_url',
-                        'products.name_url'
+                        'products.name_url',
+                        'images_product.image'
                     )
+                    ->leftJoin('images_product','images_product.product_id', '=', 'products.id')
                     ->leftJoin('categories', 'categories.id', '=', 'products.category_id')
                     ->where([
                         ['products.status', '=',  Status::ACTIVE],
@@ -164,25 +132,12 @@ class HomeController extends AppController
     
     public function products(Request $request) {
         
-        if($request->ajax()) {
-            $sort = $request->sort;
-            $data = $this->loadProducts(true, false, false, false, $sort);
-
-            $output = [];
-            $output['code'] = 200;
-            $output['paging'] = $data['paging'];
-            $output['data'] = view('shop.common.product_ajax', $data)->render();
-            
-            return response()->json($output);
-            exit;
-        }
-                    
         $this->breadcrumb['active'] = trans('shop.main_nav.products');
         
         $breadcrumb  = $this->breadcrumb;
         $showSidebar = 'hide';
                     
-        return view('shop.products', array_merge(compact('breadcrumb', 'showSidebar'), $this->loadProducts(false, false, true, false)));
+        return view('shop.products', compact('breadcrumb', 'showSidebar'));
     }
     
     public function about(Request $request) {
@@ -221,7 +176,12 @@ class HomeController extends AppController
                 'phone' => 'required',
                 'content' => 'required',
                 'subject' => 'required',
+                'captcha' => 'required'
             ]);
+            
+            if($request->getSession()->has('captcha')) {
+                $rules['captcha'] = 'required|captcha';
+            }
             
             if($validator->fails()) {
                 return redirect(route('contact'))->with('error', trans('messages.ERROR'));
@@ -295,14 +255,80 @@ class HomeController extends AppController
         return $object;
     }
     
-    private function loadProducts($all = false, $is_new = false, $is_best_selling = false, $discount = false, $sort = '', $limit = Common::LIMIT_PRODUCT_SHOW) {
-        $output = [];
+    public function loadData(Request $request) {
         
-        $wheres = [
-            'products.status' => Status::ACTIVE
+        $result = [
+            'code' => 404,
         ];
         
-        $object = Product::select(
+        if($request->ajax()) {
+            $page = $request->page_name;
+            
+            switch($page) {
+                case 'home-page':
+                    $new_products          = $this->getProducts([['products.is_new', '=', Status::IS_NEW]])['products'];
+                    $discount_products     = $this->getProducts([['products.discount', '>', 0]])['products'];
+                    $best_selling_products = $this->getProducts([['products.is_best_selling', '=', Status::IS_BEST_SELLING]])['products'];
+                    
+                    $news = view('shop.common.product', ['title' => trans('shop.new_products'), 'data' => $new_products])->render();
+                    $discount = view('shop.common.product',['title' => trans('shop.discount_products'), 'data' => $discount_products])->render();
+                    $best_selling = view('shop.common.product',['title' => trans('shop.best_selling'), 'data' => $best_selling_products])->render();
+                    
+                    $result['code'] = 200;
+                    $result['data'] = $news . $discount . $best_selling;
+                    break;
+                    
+                case 'category-page':
+                    $slug = $request->slug;
+                    $products = $this->getProducts([['categories.name_url', '=', $slug]]);
+                    $result['code'] = 200;
+                    $result['data'] = view('shop.common.product',['title' => '', 'data' => $products['products']])->render();
+                    $result['paging'] =  $products['paging'];
+                    break;
+                    
+                case 'vendor-page':
+                    $slug = $request->slug;
+                    $products = $this->getProducts([['vendors.name_url', '=', $slug]]);
+                    $result['code'] = 200;
+                    $result['data'] = view('shop.common.product',['title' => '', 'data' => $products['products']])->render();
+                    $result['paging'] =  $products['paging'];
+                    break;
+                    
+                case 'product-page':
+                    $sort = $request->sort;
+                    $products = $this->getProducts([], $sort);
+                    $result['code'] = 200;
+                    $result['data'] = view('shop.common.product_ajax', ['data' => $products['products']])->render();
+                    $result['paging'] =  $products['paging'];
+                    
+                    $discount_products     = $this->getProducts([['products.discount', '>', 0]], '', 5)['products'];
+                    $best_selling_products = $this->getProducts([['products.is_best_selling', '=', Status::IS_BEST_SELLING]], '', 5)['products'];
+                    
+                    $result['widget'] = view('shop.common.widget',['title' => trans('shop.discount_products'), 'data' => $discount_products])->render() .
+                                        view('shop.common.widget',['title' => trans('shop.best_selling'), 'data' => $best_selling_products])->render();
+                    break;
+            }
+        }
+        
+        return response()->json($result);
+    }
+    
+    private function getProducts($wheres = [], $sort = '', $limit = Common::LIMIT_PRODUCT_SHOW) {
+        
+        $column = 'products.id';
+        $order = 'asc';
+        
+        if(!Utils::blank($sort)) {
+            $arrSort = explode('_', $sort);
+            if(count($arrSort)) {
+                $column = $arrSort[0];
+                $order = $arrSort[1];
+            }
+        }
+        
+        array_push($wheres, ['products.status', '=', Status::ACTIVE]);
+        
+        $products = Product::select(
                         'products.name',
                         'products.price',
                         'products.id',
@@ -313,44 +339,17 @@ class HomeController extends AppController
                         'products.is_popular',
                         'products.discount',
                         DB::raw('GROUP_CONCAT(images_product.image) AS image')
-                    )
-                    ->leftJoin('categories', 'categories.id', '=', 'products.category_id')
-                    ->leftJoin('images_product','images_product.product_id', '=', 'products.id')
-                    ->groupBy('products.id');
+                  )
+                  ->leftJoin('categories', 'categories.id', '=', 'products.category_id')
+                  ->leftJoin('vendors', 'vendors.id', '=', 'products.vendor_id')
+                  ->leftJoin('images_product','images_product.product_id', '=', 'products.id')
+                  ->where($wheres)
+                  ->groupBy('products.id')
+                  ->orderBy($column, $order)
+                  ->paginate($limit);
         
-        if($all) {
-            $conditions = $wheres;
-            if(!Utils::blank($sort)) {
-                $arrSort = explode('_', $sort);
-                $products = $object->where($conditions)->orderBy($arrSort[0], $arrSort[1])->paginate($limit);
-            } else {
-                $products = $object->where($conditions)->orderBy('products.created_at', 'desc')->paginate($limit);
-            }
-            $output['products'] = $products;
-            $output['paging']   = $products->links('shop.common.paging', ['paging' => $products->toArray()])->toHtml();
-        }
-            
-        if($is_new) {
-            $conditions = $wheres;
-            $conditions['is_new'] = Status::IS_NEW;
-            $new_products  = $object->where($conditions)->orderBy('products.created_at', 'desc')->paginate($limit);
-            $output['new_products'] = $new_products;
-        }
+        $paging = $products->links('shop.common.paging', ['paging' => $products->toArray()])->toHtml();
         
-        if($is_best_selling) {
-            $conditions = $wheres;
-            $conditions['is_best_selling'] = Status::IS_BEST_SELLING;
-            $best_selling_products  = $object->where($conditions)->orderBy('products.created_at', 'desc')->paginate($limit);
-            $output['best_selling_products'] = $best_selling_products;
-        }
-        
-        if($discount) {
-            $conditions = $wheres;
-            $conditions[] = ['discount', '>', 0];
-            $discount_products  = $object->where($conditions)->orderBy('products.created_at', 'desc')->paginate($limit);
-            $output['discount_products'] = $discount_products;
-        }
-        
-        return $output;
+        return compact('products', 'paging');
     }
 }

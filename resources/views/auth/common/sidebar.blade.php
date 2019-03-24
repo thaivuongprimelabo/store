@@ -13,7 +13,10 @@
     </div>
   </div>
   <!-- sidebar menu: : style can be found in sidebar.less -->
-    {!! Utils::createSidebar() !!}
+  <ul  class="sidebar-menu" data-widget="tree">
+  <li><a href="{{ route('home') }}" target="_blank"><i class="fa fa-files-o"></i><span>{{ trans('auth.back_to_home') }}</span></a></li>
+  {!! Utils::createSidebar() !!}}
+  </ul>
 </section>
 <!-- /.sidebar -->
 </aside>

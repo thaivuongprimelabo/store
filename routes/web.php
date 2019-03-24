@@ -14,7 +14,7 @@
 use Illuminate\Support\Facades\Auth;
 use App\Config;
 
-Route::group(['prefix' => 'auth', 'namespace' => 'Auth'], function () {
+Route::group(['prefix' => 'admin', 'namespace' => 'Auth'], function () {
     
     // Authentication Routes...
     $this->get('/login', 'LoginController@showLoginForm')->name('login');
@@ -104,19 +104,32 @@ Route::group(['prefix' => 'auth', 'namespace' => 'Auth'], function () {
     
 });
 
-Route::group(['middleware' => 'web', 'prefix' => ''], function () {
+Route::group(['prefix' => ''], function () {
+    
     $config = Config::first();
     Route::get('/', 'HomeController@index')->name('home');
-    Route::get('/gioi-thieu' . $config['url_ext'], 'HomeController@about')->name('about');
-    Route::get('/giao-hang' . $config['url_ext'], 'HomeController@delivery')->name('delivery');
-    Route::match(['get', 'post'], '/san-pham' . $config['url_ext'], 'HomeController@products')->name('products');
-    Route::get('/gio-hang' . $config['url_ext'], 'CartController@index')->name('cart');
-    Route::match(['get', 'post'], '/lien-he' . $config['url_ext'], 'HomeController@contact')->name('contact');
+    Route::get('/about' . $config['url_ext'], 'HomeController@about')->name('about');
+    Route::get('/delivery' . $config['url_ext'], 'HomeController@delivery')->name('delivery');
+    Route::match(['get', 'post'], '/products' . $config['url_ext'], 'HomeController@products')->name('products');
+    Route::get('/cart' . $config['url_ext'], 'CartController@index')->name('cart');
+    Route::match(['get', 'post'], '/contact' . $config['url_ext'], 'HomeController@contact')->name('contact');
     Route::post('/search' . $config['url_ext'], 'HomeController@search')->name('search');
+    Route::match(['get', 'post'], '/login' . $config['url_ext'], 'CustomersController@index')->name('customer_login');
+    Route::post('/register' . $config['url_ext'], 'CustomersController@register')->name('register');
+    Route::get('/logout' . $config['url_ext'], 'CustomersController@logout')->name('customer_logout');
     
-    Route::get('/nha-cung-cap/{vendor}' . $config['url_ext'], 'HomeController@vendor')->name('vendor');
-    Route::get('/danh-muc/{slug}' . $config['url_ext'], 'HomeController@category')->name('category');
+    Route::post('/load-data' . $config['url_ext'], 'HomeController@loadData')->name('loadData');
+    
+    Route::get('/vendor/{vendor}' . $config['url_ext'], 'HomeController@vendor')->name('vendor');
+    Route::get('/category/{slug}' . $config['url_ext'], 'HomeController@category')->name('category');
     Route::get('/{slug}/{slug2}' . $config['url_ext'], 'HomeController@productDetails')->name('product_details');
+    Route::get('refreshcaptcha', 'CustomersController@refreshCaptcha')->name('refreshcaptcha');
+    Route::post('checkcaptcha', 'CustomersController@checkCaptcha')->name('checkCaptcha');
+    
+    Route::get('/offline' . $config['url_ext'], function() {
+        echo 'System is offline. Please wait...';
+        exit;
+    })->name('offline');
 });
 
 

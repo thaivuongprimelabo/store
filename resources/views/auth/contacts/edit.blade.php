@@ -14,7 +14,7 @@
 <section class="content">
 	<div class="row">
 		<div class="col-md-12">
-			<form role="form" id="edit_form" action="?" method="post" enctype="multipart/form-data">
+			<form role="form" id="submit_form" action="?" method="post" enctype="multipart/form-data">
 			@include('auth.common.alert')
 			@php
               	$forms = trans('auth.contacts.form');
@@ -32,7 +32,7 @@
 @endsection
 @section('script')
 <script type="text/javascript">
-var validatorEventSetting = $("#edit_form").validate({
+var validatorEventSetting = $("#submit_form").validate({
 	ignore: ":hidden:not(textarea)",
 	onfocusout: false,
 	success: function(label, element) {

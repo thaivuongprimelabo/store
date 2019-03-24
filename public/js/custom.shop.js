@@ -11,23 +11,46 @@ var callAjax = function(url, data, page) {
 	    success: function (res) {
 	    	output['code'] = res.code;
 	    	if(res.code === 200) {
-				if(page == 'product-list') {
-					output['data'] = res.data;
-					output['paging'] = res.paging;
-				}
-				
-				if(page == 'add-item') {
-					output['top_cart'] = res.top_cart;
-				}
-				
-				if(page == 'remove-item' || page == 'update-item') {
-					output['top_cart'] = res.top_cart;
-					output['main_cart'] = res.main_cart;
-				}
-				
-				if(page == 'checkout') {
-					output['order_id'] = res.order_id;
-				}
+	    		
+	    		switch(page) {
+	    		
+	    			case 'product-list':
+	    				output['data'] = res.data;
+						output['paging'] = res.paging;
+	    				break;
+	    			
+					case 'add-item':
+						output['top_cart'] = res.top_cart;			
+						break;
+						    				
+					case 'remove-item':
+					case 'update-item':
+						output['top_cart'] = res.top_cart;
+						output['main_cart'] = res.main_cart;
+						break;
+						
+					case 'checkout':
+						output['order_id'] = res.order_id;
+						break;
+						
+					default:
+						if(res.hasOwnProperty('data')) {
+							output['data'] = res.data;
+						}
+					
+						if(res.hasOwnProperty('paging')) {
+							output['paging'] = res.paging;
+						}
+						
+						if(res.hasOwnProperty('widget')) {
+							output['widget'] = res.widget;
+						}
+						
+						if(res.hasOwnProperty('new_captcha')) {
+							output['new_captcha'] = res.new_captcha;
+						}
+						break;
+	    		}
 	    	}
 	    }
 	});
@@ -104,13 +127,27 @@ var checkout = function(url) {
 }
 
 
-var loadProducts = function(url) {
-	var data = {
-		type : 'post',
-		async : false,
-		sort: $('#sort').val()	
+var loadProducts = function(url, data) {
+	var output = callAjax(url, data, data.page);
+	if(output.code === 200) {
+		$(data.container).html(output.data);
+		$(data.paging).html(output.paging);
+		if(data.hasOwnProperty('widget')) {
+			$(data.widget).html(output.widget);
+		}
 	}
-	var output = callAjax(url, data, 'product-list');
-	$('#product_list').html(output.data);
-	$('#paging_link').html(output.paging);
+}
+
+var checkCaptcha = function(url, data) {
+	var output = callAjax(url, data, data.page);
+	if(output.code === 200) {
+		if(output.data !== '') {
+			$(data.container).show();
+			$(data.container).html(output.data);
+			$(data.new_captcha).html(output.new_captcha);
+			return false;
+		}
+	}
+	
+	return true;
 }

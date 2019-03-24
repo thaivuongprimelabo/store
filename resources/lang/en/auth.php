@@ -28,25 +28,34 @@ return [
     
     /*------------ Sidebar ------------------- */
     'sidebar' => [
-        'products' => 'Quản lý sản phẩm',
-        'categories' => 'Quản lý loại sản phẩm',
-        'vendors' => 'Quản lý nhà cung cấp',
+        'products' => [
+            'title' => 'Quản lý sản phẩm',
+            'products' => 'Danh mục sản phẩm',
+            'categories' => 'Danh mục loại sản phẩm',
+            'vendors' => 'Danh mục nhà cung cấp',
+            'products_colors' => 'Danh mục màu sắc',
+            'products_sizes' => 'Danh mục kích cỡ',
+        ],
         'orders' => 'Quản lý đơn hàng',
         'banners' => 'Quản lý banner',
         'posts' => 'Quản lý bài viết',
-        'pages' => 'Quản lý trang',
+        'pages' => [
+            'title' => 'Quản lý trang',
+            'pages_about' => 'Giới thiệu',
+            'pages_delivery' => 'Phương thức giao hàng'
+        ],
         'contacts' => 'Hộp thư liên hệ',
         'users' => 'Quản lý tài khoản',
-        'config_edit' => 'Cấu hình'
+        'config_edit' => 'Cài đặt'
     ],
-    'sidebar_node' => [
-        '_list' => 'Danh sách',
-        '_create' => 'Đăng ký', 
-        '_sizes' => 'Kích cỡ',
-        '_colors' => 'Màu sắc',
-        '_about' => 'Giới thiệu',
-        '_delivery' => 'Phương thức giao hàng'
-    ],
+//     'sidebar_node' => [
+//         '_list' => 'Danh sách',
+//         '_create' => 'Đăng ký', 
+//         '_sizes' => 'Kích cỡ',
+//         '_colors' => 'Màu sắc',
+//         '_about' => 'Giới thiệu',
+//         '_delivery' => 'Phương thức giao hàng'
+//     ],
     
     /*------------ Vendor page ------------------- */
     'vendors' => [
@@ -221,7 +230,6 @@ return [
             'phone' => 'Điện thoại',
             'status' => 'Trạng thái',
             'created_at' => 'Ngày đặt hàng',
-            
             'images' => 'Hình ảnh',
             'products' => 'Sản phẩm',
             'qty' => 'Số lượng',
@@ -246,7 +254,7 @@ return [
     ],
     /*------------ Config page ------------------- */
     'config' => [
-        'title' => 'Cấu hình hệ thống',
+        'title' => 'Cài đặt hệ thống',
         'form' => [
             'web_info' => [
                 'text' => 'Website informations',
@@ -258,7 +266,6 @@ return [
                 'web_email' => 'Web mail',
                 'web_description' => ['type' => 'textarea', 'text' => 'SEO Description'],
                 'web_keywords' => 'SEO Keywords',
-                'url_ext' => 'URL Extension'
             ],
             'mail_settings' => [
                 'text' => 'Mail settings',
@@ -273,26 +280,31 @@ return [
             ],
             'upload_settings' => [
                 'text' => 'Upload settings',
-                'banner_maximum_upload' => 'Maximum upload file (Banner) KB',
-                'logo_maximum_upload' => 'Maximum upload file (Nhà cung cấp) KB',
-                'image_maximum_upload' => 'Maximum upload file (Sản phẩm) KB',
-                'photo_maximum_upload' => 'Maximum upload file (Bài viết) KB',
-                'web_logo_maximum_upload' => 'Maximum upload file (Web logo) KB',
-                'attachment_maximum_upload' => 'Maximum upload file (Đính kèm) KB',
-                'avatar_maximum_upload' => 'Maximum upload file (Ảnh đại diện) KB',
+                'banner_maximum_upload' => ['type' => 'select', 'text' => 'Maximum upload file (Banner) KB', 'table' => 'UPLOAD_SIZE_LIMIT'],
+                'logo_maximum_upload' => ['type' => 'select', 'text' => 'Maximum upload file (Nhà cung cấp) KB', 'table' => 'UPLOAD_SIZE_LIMIT'],
+                'image_maximum_upload' => ['type' => 'select', 'text' => 'Maximum upload file (Sản phẩm) KB', 'table' => 'UPLOAD_SIZE_LIMIT'],
+                'photo_maximum_upload' => ['type' => 'select', 'text' => 'Maximum upload file (Bài viết) KB', 'table' => 'UPLOAD_SIZE_LIMIT'],
+                'web_logo_maximum_upload' => ['type' => 'select', 'text' => 'Maximum upload file (Web logo) KB', 'table' => 'UPLOAD_SIZE_LIMIT'],
+                'attachment_maximum_upload' => ['type' => 'select', 'text' => 'Maximum upload file (Đính kèm) KB', 'table' => 'UPLOAD_SIZE_LIMIT'],
+                'avatar_maximum_upload' => ['type' => 'select', 'text' => 'Maximum upload file (Ảnh đại diện) KB', 'table' => 'UPLOAD_SIZE_LIMIT'],
                 'banner_image_size' => 'Kích thước banner (dài x rộng)',
                 'logo_image_size' => 'Kích thước logo nhà cung cấp (dài x rộng)',
                 'image_image_size' => 'Kích thước hình sản phẩm (dài x rộng)',
                 'photo_image_size' => 'Kích thước hình bài viết (dài x rộng)',
                 'web_logo_image_size' => 'Kích thước web logo (dài x rộng)',
                 'avatar_image_size' => 'Kích thước ảnh đại diện (dài x rộng)',
-                'off' => ['type' => 'checkbox', 'text' => 'Tắt hệ thống'],
             ],
             'payment_method' => [
                 'text' => 'Phương thức thanh toán',
                 'bank_info' => ['type' => 'editor', 'text' => 'Chuyển khoản ngân hàng'],
                 'cash_info' => ['type' => 'editor', 'text' => 'Tiền mặt'],
-            ]
+            ],
+            'url_ext' => [
+                'url_ext' => 'URL Extension',
+            ],
+            'off' => [
+                'off' => ['type' => 'checkbox', 'text' => 'Tắt hệ thống']
+            ],
             
         ],
     ],
@@ -319,7 +331,7 @@ return [
         'form' => [
             'name' => 'Tên sản phẩm',
             'price' => 'Giá bán',
-            'discount' => 'Tỷ lệ giảm giá (%)',
+            'discount' => ['type' => 'text', 'text' => 'Tỷ lệ giảm giá (%)', 'value' => 0],
             'category_id' => [
                 'type' => 'select',
                 'text' => 'Loại sản phẩm',
@@ -332,16 +344,16 @@ return [
                 'empty_text' => 'Chọn nhà cung cấp',
                 'table' => \App\Constants\Common::VENDORS
             ],
-            'description' => ['type' => 'editor', 'text' => 'Chi tiết'],
             'sizes' => ['type' => 'checkbox_multi', 'text' => 'Kích cỡ', 'table' => \App\Constants\Common::SIZES],
             'colors' => ['type' => 'checkbox_color_multi', 'text' => 'Màu sắc', 'table' => \App\Constants\Common::COLORS],
             'image' => [
                 'type' => 'file',
-                'text' => 'Hình ảnh',
+                'text' => 'Hình sản phẩm',
                 'size' => \App\Constants\Common::IMAGE_MAX_SIZE,
                 'width' => \App\Constants\Common::IMAGE_WIDTH,
                 'height' => \App\Constants\Common::IMAGE_HEIGHT
             ],
+            'description' => ['type' => 'editor', 'text' => 'Chi tiết'],
             'status' => ['type' => 'checkbox', 'text' => 'Đang hoạt động'],
             'is_new' => ['type' => 'checkbox', 'text' => 'Sản phẩm mới'],
             'is_popular' => ['type' => 'checkbox', 'text' => 'Sản phẩm được quan tâm'],
@@ -410,7 +422,6 @@ return [
             'password' => ['type' => 'password', 'text' => 'Mật khẩu'],
             'conf_password' => ['type' => 'password', 'text' => 'Xác nhận mật khẩu'],
             'status' => ['type' => 'checkbox', 'text' => 'Đang hoạt động'],
-            'role_id' => ['type' => 'select', 'text' => 'Quyền hạn', 'empty_text' => '---', 'table' => ''],
         ]
     ],
     'profile' => [
@@ -463,6 +474,9 @@ return [
         'remove' => 'Xóa',
         'add_image' => 'Thêm file',
         'upload_image' => 'Chọn file',
-        'close' => 'Đóng'
+        'close' => 'Đóng',
+        'select' => 'Chọn',
+        'remove_all_data' => 'Xóa toàn bộ dữ liệu',
+        'clear_config_cache' => 'Xóa cache'
     ]
 ];

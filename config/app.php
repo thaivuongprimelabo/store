@@ -176,7 +176,8 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        Intervention\Image\ImageServiceProvider::class
+        Intervention\Image\ImageServiceProvider::class,
+        Mews\Captcha\CaptchaServiceProvider::class,
     ],
 
     /*
@@ -232,7 +233,8 @@ return [
         'Validation' => App\Constants\Validation::class,
         'Utils' => App\Helpers\Utils::class,
         'Cart' => App\Helpers\Cart::class,
-        'Image' => Intervention\Image\ImageManagerStatic::class
+        'Image' => Intervention\Image\ImageManagerStatic::class,
+        'Captcha' => Mews\Captcha\Facades\Captcha::class,
     ],
 
 ];

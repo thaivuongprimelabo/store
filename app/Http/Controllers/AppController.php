@@ -29,6 +29,8 @@ class AppController extends Controller
             $this->config = [
                 'config' => [
                     'web_name' => Utils::cnvNull($config->web_name, 'E-shop'),
+                    'web_description' => Utils::cnvNull($config->web_description, $config->web_name),
+                    'web_keywords' => Utils::cnvNull($config->web_keywords, $config->web_name),
                     'web_logo' => $web_logo,
                     'web_ico' => $web_ico,
                     'banner_maximum_upload' => Utils::cnvNull($config->banner_maximum_upload, 51200),
@@ -52,6 +54,10 @@ class AppController extends Controller
                     'cash_info' => Utils::cnvNull($config->cash_info, '')
                 ]
             ];
+            
+            if($config->off == 1) {
+                return abort(404);
+            }
             View::share($this->config);
         }
     }

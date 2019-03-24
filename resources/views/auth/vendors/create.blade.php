@@ -7,20 +7,18 @@
   </h1>
   <ol class="breadcrumb">
     <li><a href="{{ route('dashboard') }}"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
-    <li><a href="{{ route('auth_vendors') }}">{{ trans('auth.sidebar.vendors') }}</a></li>
+    <li><a href="{{ route('auth_vendors') }}">{{ trans('auth.sidebar.products.vendors') }}</a></li>
     <li class="active">{{ trans('auth.vendors.create_title') }}</li>
   </ol>
 </section>
 <section class="content">
 	<div class="row">
 		<div class="col-md-12">
-			<form role="form" id="create_form" action="?" method="post" enctype="multipart/form-data">
+			<form role="form" id="submit_form" action="?" method="post" enctype="multipart/form-data">
+			<input type="hidden" id="table" value="0" />
 			@include('auth.common.alert')
 			@include('auth.common.create_form',['forms' => trans('auth.vendors.form')])
-			<div class="box-footer">
-              	<button type="button" class="btn btn-default" onclick="window.location='{{ route('auth_vendors') }}'"><i class="fa fa-arrow-left" aria-hidden="true"></i> {{ trans('auth.button.back') }}</button>
-                <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> {{ trans('auth.button.send') }}</button>
-            </div>
+			@include('auth.common.button_footer',['back_url' => route('auth_vendors')])
             </form>
 		</div>
 	</div>
@@ -28,7 +26,7 @@
 @endsection
 @section('script')
 <script type="text/javascript">
-    var validatorEventSetting = $("#create_form").validate({
+    var validatorEventSetting = $("#submit_form").validate({
     	ignore: ":hidden:not(input[type='file'])",
     	onfocusout: false,
     	success: function(label, element) {
@@ -39,20 +37,6 @@
     		name: {
     			required: true,
     			maxlength: {{  Common::NAME_MAXLENGTH }},
-    			remote : {
-					url : '{{ route('check_exists') }}',
-					type : 'post',
-					headers: {
-				    	'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-				    },
-					data : {
-						value : function() {
-							return $('#name').val()
-						},
-						col: 'name',
-						table: 0
-					}
-				}
     		},
     		description: {
 				maxlength: {{  Common::DESC_MAXLENGTH }}
@@ -66,7 +50,6 @@
     		name : {
     			required : "{{ Utils::getValidateMessage('validation.required', 'auth.vendors.form.name') }}",
     			maxlength : "{{ Utils::getValidateMessage('validation.max.string', 'auth.vendors.form.name', Common::NAME_MAXLENGTH) }}",
-    			remote: '{{ Utils::getValidateMessage('validation.unique', 'auth.vendors.form.name') }}'
     		},
     		description : {
     			maxlength : "{{ Utils::getValidateMessage('validation.max.string', 'auth.vendors.form.description.text', Common::DESC_MAXLENGTH) }}"

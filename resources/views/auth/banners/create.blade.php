@@ -14,14 +14,10 @@
 <section class="content">
 	<div class="row">
 		<div class="col-md-12">
-			<form role="form" id="create_form" action="?" method="post" enctype="multipart/form-data">
+			<form role="form" id="submit_form" action="?" method="post" enctype="multipart/form-data">
     			@include('auth.common.alert')
     			@include('auth.common.create_form',['forms' => trans('auth.banners.form')])
-                <!-- /.box -->
-                <div class="box-footer">
-                  	<button type="button" class="btn btn-default" onclick="window.location='{{ route('auth_banners') }}'"><i class="fa fa-arrow-left" aria-hidden="true"></i> {{ trans('auth.button.back') }}</button>
-                    <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> {{ trans('auth.button.submit') }}</button>
-                </div>
+                @include('auth.common.button_footer',['back_url' => route('auth_banners')])
             </form>
 		</div>
 	</div>
@@ -29,7 +25,7 @@
 @endsection
 @section('script')
 <script type="text/javascript">
-    var validatorEventSetting = $("#create_form").validate({
+    var validatorEventSetting = $("#submit_form").validate({
     	ignore: ":hidden:not(input[type='file'])",
     	onfocusout: false,
     	success: function(label, element) {

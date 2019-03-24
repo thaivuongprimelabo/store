@@ -25,11 +25,11 @@ class ApiController extends Controller
         $col = trim($request->col);
         $table = $request->table;
         $idCheck = $request->id_check;
+        $itemName = trans($request->itemName);
         $check = false;
         switch($table) {
             case 0; // Vendors table
                 $data = Vendor::select('id')->where($col, $value)->first();
-                
                 break;
             case 1; // Categories table
                 $data = Category::select('id')->where($col, $value)->first();
@@ -47,20 +47,18 @@ class ApiController extends Controller
                 break;
         }
         
-        if($data) {
-            $check = true;
-            
-            if(!Utils::blank($idCheck) && $idCheck == $data['id']) {
-                $check = false;
-            }
+        $check = true;
+        
+        if($data && $idCheck != $data['id']) {
+            $check = false;
         }
         
+        $this->output['code'] = 200;
         if(!$check) {
-            echo 'true';
-        } else {
-            echo 'false';
+            $this->output['data'] = Utils::getValidateMessage('validation.unique', $itemName);
         }
-        exit;
+        
+        return response()->json($this->output);
     }
     
     public function updateStatus(Request $request) {

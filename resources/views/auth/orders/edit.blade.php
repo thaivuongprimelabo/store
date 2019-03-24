@@ -14,7 +14,7 @@
 <section class="content">
 	<div class="row">
 		<div class="col-md-12">
-			<form role="form" id="edit_form" action="?" method="post" enctype="multipart/form-data">
+			<form role="form" id="submit_form" action="?" method="post" enctype="multipart/form-data">
 			@include('auth.common.alert')
 			@php
               	$forms = trans('auth.orders.form');
@@ -63,10 +63,7 @@
                     </table>
             	</div>
             </div>
-			<div class="box-footer">
-              	<button type="button" class="btn btn-default" onclick="window.location='{{ route('auth_orders') }}'"><i class="fa fa-arrow-left" aria-hidden="true"></i> {{ trans('auth.button.back') }}</button>
-                <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> {{ trans('auth.button.submit') }}</button>
-            </div>
+            @include('auth.common.button_footer',['back_url' => route('auth_orders')])
             </form>
 		</div>
 	</div>

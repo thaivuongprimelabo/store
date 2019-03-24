@@ -58,7 +58,7 @@ class BannersController extends AppController
             }
         }
         
-        $banners = Banner::where($wheres)->paginate(Common::ROW_PER_PAGE);
+        $banners = Banner::where($wheres)->orderBy('created_at', 'DESC')->paginate(Common::ROW_PER_PAGE);
         
         $paging = $banners->toArray();
         

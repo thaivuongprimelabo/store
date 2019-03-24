@@ -1,19 +1,26 @@
 <div class="box box-primary">
+	@if(isset($forms['text']))
     <div class="box-header with-border">
-      <h3 class="box-title">{{ isset($forms['text']) ? $forms['text'] : trans('auth.edit_box_title') }}</h3>
+      <h3 class="box-title">{{ $forms['text'] }}</h3>
     </div>
+    @endif
     {{ csrf_field() }}
     <div class="box-body">
-        <input type="hidden" name="id" id="id" value="{{ $data->id }}" />
+        <input type="hidden" name="id" id="id_check" value="{{ $data->id }}" />
         @foreach($forms as $key=>$value)
         @if($key == 'text')
         	@continue;
         @endif
         @if(is_array($value))
+        	@php
+        		$text = $value['text'];
+        		$placeholder = isset($value['placeholder']) ? $value['placeholder'] : $text;
+        		$defaultValue = isset($value['value']) ? $value['value'] : '';
+        	@endphp
         	@if($value['type'] == 'textarea')
-        		<div class="form-group @if ($errors->has($key)){{'has-error'}} @endif">
+        		<div class="form-group ">
                   <label for="exampleInputPassword1">{{ $value['text'] }}</label>
-                  <textarea class="form-control" rows="6" name="{{ $key }}" placeholder="{{ $value['text'] }}" maxlength="{{ Common::DESC_MAXLENGTH }}" {{ isset($value['disabled']) ? 'disabled=true' : '' }}>{{ old($key, $data->$key) }}</textarea>
+                  <textarea class="form-control" rows="6" name="{{ $key }}" placeholder="{{ $placeholder }}" maxlength="{{ Common::DESC_MAXLENGTH }}" {{ isset($value['disabled']) ? 'disabled=true' : '' }}>{{ old($key, $data->$key) }}</textarea>
                   <span class="help-block">@if ($errors->has($key)){{ $errors->first($key) }}@endif</span>
                 </div>
         	@endif
@@ -70,24 +77,26 @@
         		<div class="form-group">
                   <label for="exampleInputEmail1">{{ $value['text'] }}</label>
                   <select class="form-control" name="{{ $key }}" id="{{ $key }}">
+                  	@if(isset($value['empty_text']))
                     <option value="0">{{ $value['empty_text'] }}</option>
+                    @endif
                   	{!! Utils::createSelectList($value['table'], $data->$key) !!}
                   </select>
                 </div>
         	@endif
         	
         	@if($value['type'] == 'editor')
-        		<div class="form-group @if ($errors->has($key)){{'has-error'}} @endif">
+        		<div class="form-group ">
                   <label for="exampleInputPassword1">{{ $value['text'] }}</label>
-                  <textarea name="{{ $key }}" id="editor1_{{ $key }}" class="ckeditor" placeholder="Place some text here" {{ isset($value['disabled']) ? 'disabled=true' : '' }}>{{ old($key, $data->$key) }}</textarea>
+                  <textarea name="{{ $key }}" id="editor1_{{ $key }}" class="ckeditor" placeholder="{{ $placeholder }}" {{ isset($value['disabled']) ? 'disabled=true' : '' }}>{{ old($key, $data->$key) }}</textarea>
                   <span class="help-block">@if ($errors->has($key)){{ $errors->first($key) }}@endif</span>
                 </div>
         	@endif
         	
         	@if($value['type'] == 'datepicker')
-        		<div class="form-group @if ($errors->has($key)){{'has-error'}} @endif">
+        		<div class="form-group ">
                   <label for="exampleInputEmail1">{{ $value['text'] }}</label>
-                  <input type="text" class="form-control" name="{{ $key }}" id="{{ $key }}" value="{{ old($key, date('d-m-Y', strtotime($data->$key))) }}" placeholder="{{ $value['text'] }}" maxlength="{{ Common::NAME_MAXLENGTH }}">
+                  <input type="text" class="form-control" name="{{ $key }}" id="{{ $key }}" value="{{ old($key, date('d-m-Y', strtotime($data->$key))) }}" placeholder="{{ $placeholder }}" maxlength="{{ Common::NAME_MAXLENGTH }}">
                   <span class="help-block">@if ($errors->has($key)){{ $errors->first($key) }}@endif</span>
                 </div>
         	@endif
@@ -102,17 +111,17 @@
         	@endif
         	
         	@if($value['type'] == 'password')
-        		<div class="form-group @if ($errors->has($key)){{'has-error'}} @endif">
+        		<div class="form-group ">
                   <label for="exampleInputEmail1">{{ $value['text'] }}</label>
-                  <input type="password" class="form-control" name="{{ $key }}" id="{{ $key }}" value="{{ old($key, '') }}" placeholder="{{ $value['text'] }}" maxlength="{{ Common::NAME_MAXLENGTH }}">
+                  <input type="password" class="form-control" name="{{ $key }}" id="{{ $key }}" value="{{ old($key, '') }}" placeholder="{{ $placeholder }}" maxlength="{{ Common::NAME_MAXLENGTH }}">
                   <span class="help-block">@if ($errors->has($key)){{ $errors->first($key) }}@endif</span>
                 </div>
             @endif
             
             @if($value['type'] == 'text')
-        		<div class="form-group @if ($errors->has($key)){{'has-error'}} @endif">
+        		<div class="form-group ">
                   <label for="exampleInputEmail1">{{ $value['text'] }}</label>
-                  <input type="text" class="form-control" name="{{ $key }}" id="{{ $key }}" value="{{ old($key, $data->$key) }}" placeholder="{{ $value['text'] }}" maxlength="{{ Common::NAME_MAXLENGTH }}" {{ isset($value['disabled']) ? 'disabled=true' : '' }}>
+                  <input type="text" class="form-control" name="{{ $key }}" id="{{ $key }}" value="{{ old($key, $data->$key) }}" placeholder="{{ $placeholder }}" maxlength="{{ Common::NAME_MAXLENGTH }}" {{ isset($value['disabled']) ? 'disabled=true' : '' }}>
                   <span class="help-block">@if ($errors->has($key)){{ $errors->first($key) }}@endif</span>
                 </div>
             @endif
@@ -154,7 +163,7 @@
                 </div>
         	@endif
         @else
-        	<div class="form-group @if ($errors->has($key)){{'has-error'}} @endif">
+        	<div class="form-group ">
               <label for="exampleInputEmail1">{{ $value }}</label>
               <input type="text" class="form-control" name="{{ $key }}" id="{{ $key }}" value="{{ old($key, $data->$key) }}" placeholder="{{ $value }}" maxlength="{{ Common::NAME_MAXLENGTH }}">
               <span class="help-block">@if ($errors->has($key)){{ $errors->first($key) }}@endif</span>

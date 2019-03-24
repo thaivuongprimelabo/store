@@ -4,11 +4,11 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
   <h1>
-    {{ trans('auth.sidebar_node._colors') }}
+    {{ trans('auth.sidebar.products.colors') }}
   </h1>
   <ol class="breadcrumb">
     <li><a href="{{ route('dashboard') }}"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
-    <li class="active">{{ trans('auth.sidebar_node._colors') }}</li>
+    <li class="active">{{ trans('auth.sidebar.products.products_colors') }}</li>
   </ol>
 </section>
 <!-- Main content -->

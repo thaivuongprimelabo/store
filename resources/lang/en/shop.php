@@ -19,12 +19,17 @@ return [
         'checkout' => 'Thanh toán',
         'view_cart' => 'Xem giỏ hàng',
         'update_qty' => 'Cập nhật số lượng',
-        'send' => 'Gửi ý kiến'
+        'send' => 'Gửi ý kiến',
+        'login' => 'Đăng nhập',
+        'register' => 'Đăng ký'
     ],
     'my_account' => 'Tài khoản',
     'profile' => 'Thông tin cá nhân',
     'login' => 'Đăng nhập',
-    'register' => 'Đăng ký',
+    'logout' => 'Thoát',
+    'history' => 'Lịch sử giao dịch',
+    'password' => 'Đổi mật khẩu',
+    'register' => 'Đăng ký tài khoản',
     'new_products' => 'Mới nhất',
     'discount_products' => 'Đang giảm giá',
     'best_selling' => 'Bán chạy nhất',
@@ -50,6 +55,20 @@ return [
         'phone' => 'Số điện thoại',
         'subject' => 'Tựa đề',
         'comment' => 'Nội dung'
+    ],
+    'login_form' => [
+        'email' => 'Địa chỉ E-mail',
+        'password' => 'Mật khẩu'
+    ],
+    'register_form' => [
+        'name' => 'Họ tên',
+        'email' => 'Địa chỉ E-mail',
+        'password' => 'Mật khẩu',
+        'conf_password' => 'Xác nhận mật khẩu',
+        'phone' => 'Điện thoại',
+        'address' => 'Địa chỉ',
+        'answer' => 'Trả lời',
+        'captcha' => 'Captcha'
     ],
     'cart' => [
         'title' => 'Giỏ hàng',

@@ -14,13 +14,11 @@
 <section class="content">
 	<div class="row">
 		<div class="col-md-12">
-			<form role="form" id="edit_form" action="?" method="post" enctype="multipart/form-data">
+			<form role="form" id="submit_form" action="?" method="post" enctype="multipart/form-data">
+			<input type="hidden" id="table" value="3" />
 			@include('auth.common.alert')
 			@include('auth.common.edit_form',['forms' => trans('auth.posts.form'), 'data' => $post])
-			<div class="box-footer">
-              	<button type="button" class="btn btn-default" onclick="window.location='{{ route('auth_posts') }}'"><i class="fa fa-arrow-left" aria-hidden="true"></i> {{ trans('auth.button.back') }}</button>
-                <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> {{ trans('auth.button.send') }}</button>
-            </div>
+			@include('auth.common.button_footer',['back_url' => route('auth_posts')])
             </form>
 		</div>
 	</div>
@@ -39,7 +37,7 @@
       showInputs: false
     });
     
-	var validatorEventSetting = $("#edit_form").validate({
+	var validatorEventSetting = $("#submit_form").validate({
 		ignore: ":hidden:not(textarea, input[type='file'])",
     	onfocusout: false,
     	success: function(label, element) {
@@ -50,21 +48,6 @@
     		name: {
     			required: true,
     			maxlength: {{  Common::NAME_MAXLENGTH }},
-    			remote : {
-    				url : '{{ route('check_exists') }}',
-    				type : 'post',
-    				headers: {
-    			    	'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    			    },
-    				data : {
-    					value : function() {
-    						return $('#name').val()
-    					},
-    					col: 'name',
-    					table: 3,
-    					id_check: $('#id').val()
-    				}
-    			}
     		},
     		description: {
     			required: true,
@@ -82,7 +65,6 @@
     		name : {
     			required : "{{ Utils::getValidateMessage('validation.required', 'auth.posts.form.name') }}",
     			maxlength : "{{ Utils::getValidateMessage('validation.max.string', 'auth.posts.form.name', Common::NAME_MAXLENGTH) }}",
-    			remote: '{{ Utils::getValidateMessage('validation.unique', 'auth.posts.form.name') }}'
     		},
     		description : {
     			required : "{{ Utils::getValidateMessage('validation.required', 'auth.posts.form.description.text') }}",

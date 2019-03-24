@@ -36,7 +36,7 @@
 					@if($products->first()->discount)
 					<h3 class="product-price">{{ $products->first()->getDiscount($products->first()->price, $products->first()->discount) }} <del class="product-old-price">{{ number_format($products->first()->price) }}</del></h3>
 					@else
-					
+					<h3 class="product-price">{{ number_format($products->first()->price) }}</h3>
 					@endif
 					<p><strong>{{ trans('shop.availability') }}:</strong> {{ trans('shop.in_stock') }}</p>
 					<p>{{ $products->first()->introduction }}</p>

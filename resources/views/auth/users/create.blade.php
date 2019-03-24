@@ -14,13 +14,10 @@
 <section class="content">
 	<div class="row">
 		<div class="col-md-12">
-			<form role="form" id="create_form" action="?" method="post" enctype="multipart/form-data">
+			<form role="form" id="submit_form" action="?" method="post" enctype="multipart/form-data">
 			@include('auth.common.alert')
 			@include('auth.common.create_form',['forms' => trans('auth.users.form')])
-			<div class="box-footer">
-              	<button type="button" class="btn btn-default" onclick="window.location='{{ route('auth_users') }}'"><i class="fa fa-arrow-left" aria-hidden="true"></i> {{ trans('auth.button.back') }}</button>
-                <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> {{ trans('auth.button.send') }}</button>
-            </div>
+			@include('auth.common.button_footer',['back_url' => route('auth_users'), 'id' => 'save_user'])
             </form>
 		</div>
 	</div>
@@ -28,7 +25,7 @@
 @endsection
 @section('script')
 <script type="text/javascript">
-    var validatorEventSetting = $("#create_form").validate({
+    var validatorEventSetting = $("#submit_form").validate({
     	ignore: ":hidden:not(input[type='file'])",
     	onfocusout: false,
     	success: function(label, element) {
@@ -43,20 +40,6 @@
     		email: {
 				required: true,
 				email: true,
-				remote : {
-					url : '{{ route('check_exists') }}',
-					type : 'post',
-					headers: {
-				    	'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-				    },
-					data : {
-						value : function() {
-							return $('#email').val()
-						},
-						col: 'email',
-						table: 4
-					}
-				}
     		},
     		password: {
 				required: true,
@@ -82,16 +65,15 @@
     		},
     		email : {
     			required : "{{ Utils::getValidateMessage('validation.required', 'auth.users.form.email') }}",
-    			remote: '{{ Utils::getValidateMessage('validation.unique', 'auth.users.form.email') }}'
     		},
     		password : {
-    			required : "{{ Utils::getValidateMessage('validation.required', 'auth.users.form.password') }}",
-    			maxlength : "{{ Utils::getValidateMessage('validation.max.string', 'auth.users.form.password', Common::PASSWORD_MAXLENGTH) }}",
+    			required : "{{ Utils::getValidateMessage('validation.required', 'auth.users.form.password.text') }}",
+    			maxlength : "{{ Utils::getValidateMessage('validation.max.string', 'auth.users.form.password.text', Common::PASSWORD_MAXLENGTH) }}",
     		},
     		conf_password : {
-    			required : "{{ Utils::getValidateMessage('validation.required', 'auth.users.form.conf_password') }}",
-    			maxlength : "{{ Utils::getValidateMessage('validation.max.string', 'auth.users.form.conf_password', Common::PASSWORD_MAXLENGTH) }}",
-    			equalTo: "{{ Utils::getValidateMessage('validation.confirmed', 'auth.users.form.conf_password', 'auth.users.form.password') }}"
+    			required : "{{ Utils::getValidateMessage('validation.required', 'auth.users.form.conf_password.text') }}",
+    			maxlength : "{{ Utils::getValidateMessage('validation.max.string', 'auth.users.form.conf_password.text', Common::PASSWORD_MAXLENGTH) }}",
+    			equalTo: "{{ Utils::getValidateMessage('validation.confirmed', 'auth.users.form.conf_password.text', 'auth.users.form.password.text') }}"
     		},
     		role_id: {
     			required : "{{ Utils::getValidateMessage('validation.required_select', 'auth.users.form.role_id.text') }}",
@@ -106,6 +88,21 @@
 	  	},
     	submitHanlder: function(form) {
     	    form.submit();
+    	}
+    });
+
+    $('#save_user').click(function(e) {
+    	var input = {
+    	   	value: $('#email').val(),
+			col : 'email',
+			table: 4,
+			itemName : $('#email').attr('placeholder'),
+			url: '{{ route('check_exists') }}',
+			id_check: $('#id').val()
+		};
+
+    	if(checkExist(input)) {
+			$('#submit_form').submit();
     	}
     });
 

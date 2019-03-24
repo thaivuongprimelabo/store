@@ -7,7 +7,7 @@
 			<div class="category-nav {{ $showSidebar == 'hide' ? 'show-on-click' : '' }}">
 				<span class="category-header">Danh mục sản phẩm <i class="fa fa-list"></i></span>
 				<ul class="category-list">
-					{!! Utils::createSidebar('shop', $config['url_ext']) !!}
+					{!! Utils::createSidebarShop() !!}
 				</ul>
 			</div>
 			<!-- /category nav -->

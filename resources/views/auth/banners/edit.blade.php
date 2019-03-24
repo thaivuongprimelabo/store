@@ -14,13 +14,10 @@
 <section class="content">
 	<div class="row">
 		<div class="col-md-12">
-			<form role="form" id="edit_form" action="?" method="post" enctype="multipart/form-data">
+			<form role="form" id="submit_form" action="?" method="post" enctype="multipart/form-data">
     			@include('auth.common.alert')
     			@include('auth.common.edit_form',['forms' => trans('auth.banners.form'), 'data' => $banner])
-    			<div class="box-footer">
-                  	<button type="button" class="btn btn-default" onclick="window.location='{{ route('auth_banners') }}'"><i class="fa fa-arrow-left" aria-hidden="true"></i> {{ trans('auth.button.back') }}</button>
-                    <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> {{ trans('auth.button.submit') }}</button>
-                </div>
+    			@include('auth.common.button_footer',['back_url' => route('auth_banners')])
             </form>
 		</div>
 	</div>
@@ -29,7 +26,7 @@
 @section('script')
 <script src="{{ url('admin/js/jquery.validate.js') }}" type="text/javascript"></script>
 <script type="text/javascript">
-    var validatorEventSetting = $("#edit_form").validate({
+    var validatorEventSetting = $("#submit_form").validate({
     	ignore: ":hidden:not(input[type='file'])",
     	onfocusout: false,
     	success: function(label, element) {
@@ -40,21 +37,6 @@
     		name: {
     			required: true,
     			maxlength: 255,
-    			remote : {
-					url : '{{ route('check_exists') }}',
-					type : 'post',
-					headers: {
-				    	'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-				    },
-					data : {
-						value : function() {
-							return $('#name').val()
-						},
-						col: 'name',
-						table: 0,
-						id_check: $('#id').val()
-					}
-				}
     		},
     		description: {
     			required: true,
@@ -69,7 +51,6 @@
     		name : {
     			required : "{{ Utils::getValidateMessage('validation.required', 'auth.banners.form.name') }}",
     			maxlength : "{{ Utils::getValidateMessage('validation.max.string', 'auth.banners.form.name') }}",
-    			remote: '{{ Utils::getValidateMessage('validation.unique', 'auth.banners.form.name') }}'
     		},
     		description : {
     			required : "{{ Utils::getValidateMessage('validation.required', 'auth.banners.form.description.text') }}",

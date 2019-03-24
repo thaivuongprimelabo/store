@@ -32,8 +32,8 @@ class productsController extends AppController
         $this->rules = [
             'name' => 'required|max:' . Common::NAME_MAXLENGTH,
             'price' => 'required|max:' . Common::PRICE_MAXLENGTH,
-            'category_id' => 'required',
-            'vendor_id' => 'required',
+//             'category_id' => 'required',
+//             'vendor_id' => 'required',
             'image' => 'image|max:' . Utils::formatMemory(Common::IMAGE_MAX_SIZE, true) . '|mimes:'. Common::IMAGE_EXT1
         ];
     }
@@ -66,7 +66,7 @@ class productsController extends AppController
             }
         }
         
-        $products = Product::where($wheres)->paginate(Common::ROW_PER_PAGE);
+        $products = Product::where($wheres)->orderBy('created_at', 'DESC')->paginate(Common::ROW_PER_PAGE);
         
         $paging = $products->toArray();
         
@@ -100,9 +100,14 @@ class productsController extends AppController
                 $product->price         = Utils::cnvNull($request->price, '0');
                 $product->category_id   = Utils::cnvNull($request->category_id, '0');
                 $product->vendor_id     = Utils::cnvNull($request->vendor_id, '0');
-                $product->discount      = Utils::cnvNull($request->discount, '');
-                $product->sizes         = implode(',', $request->sizes);
-                $product->colors        = implode(',', $request->colors);
+                $product->discount      = Utils::cnvNull($request->discount, 0);
+                if(!Utils::blank($request->sizes)) {
+                    $product->sizes         = implode(',', $request->sizes);
+                }
+                
+                if(!Utils::blank($request->colors)) {
+                    $product->colors        = implode(',', $request->colors);
+                }
                 $product->description   = Utils::cnvNull($request->description, '');
                 $product->status        = Utils::cnvNull($request->status, 0);
                 $product->is_new        = Utils::cnvNull($request->is_new, 0);
@@ -112,22 +117,52 @@ class productsController extends AppController
                 
                 if($product->save()) {
                     $arrFilenames = [];
-                    if($request->hasFile('image_upload')) {
-                        
-                        $files = $request->image_upload;
-                        
-                        if(count($files)) {
-                            for($i = 0; $i < count($files); $i++) {
-                                $file = $files[$i];
-                                if(!Utils::blank($file->getClientOriginalName())) {
-                                    $filename = Utils::uploadFile($file, Common::IMAGE_FOLDER);
-                                    array_push($arrFilenames, ['product_id' => $product->id, 'image' => $filename]);
-                                }
+                    
+                    $image_upload_url = $request->image_upload_url;
+                    $image_ids = $request->image_ids;
+                    $files = $request->image_upload;
+                    
+                    if(count($image_ids)) {
+                        foreach($image_ids as $id) {
+                            $url = $image_upload_url[$id];
+                            if(!Utils::blank($url)) {
+                                array_push($arrFilenames, ['product_id' => $product->id, 'image' => $url]);
                             }
                             
-                            DB::table(Common::IMAGES_PRODUCT)->insert($arrFilenames);
+                            $file = isset($files[$id]) ? $files[$id] : '';
+                            if(!Utils::blank($file)) {
+                                $filename = Utils::uploadFile($file, Common::IMAGE_FOLDER);
+                                array_push($arrFilenames, ['product_id' => $product->id, 'image' => $filename]);
+                            }
                         }
+                        
+                        DB::table(Common::IMAGES_PRODUCT)->insert($arrFilenames);
                     }
+                    
+//                     if(count($image_upload_url)) {
+//                         foreach($image_upload_url as $url) {
+//                             array_push($arrFilenames, ['product_id' => $product->id, 'image' => $url]);
+//                         }
+                        
+//                         DB::table(Common::IMAGES_PRODUCT)->insert($arrFilenames);
+//                     }
+                    
+//                     if($request->hasFile('image_upload')) {
+                        
+//                         $files = $request->image_upload;
+                        
+//                         if(count($files)) {
+//                             for($i = 0; $i < count($files); $i++) {
+//                                 $file = $files[$i];
+//                                 if(!Utils::blank($file->getClientOriginalName())) {
+//                                     $filename = Utils::uploadFile($file, Common::IMAGE_FOLDER);
+//                                     array_push($arrFilenames, ['product_id' => $product->id, 'image' => $filename]);
+//                                 }
+//                             }
+                            
+//                             DB::table(Common::IMAGES_PRODUCT)->insert($arrFilenames);
+//                         }
+//                     }
                     
                     return redirect(route('auth_products_create'))->with('success', trans('messages.CREATE_SUCCESS'));
                 }
@@ -174,33 +209,26 @@ class productsController extends AppController
                 if($product->save()) {
                     
                     $arrFilenames = [];
-                    $files = $request->image_upload;
+                    $image_upload_url = $request->image_upload_url;
                     $image_ids = $request->image_ids;
-                    $imagesProduct = ImageProduct::where('product_id', $product->id)->get()->keyBy('id')->toArray();
-                    $count = count($image_ids);
-                    if($count) {
-                        for($i = 0; $i < $count; $i++) {
-                            $id = $image_ids[$i];
-                            if($id != 9999) {
-                                $image = ['product_id' => $product->id, 'image' => $imagesProduct[$id]['image']];
-                            } else {
-                                $image = ['product_id' => $product->id, 'image' => ''];
+                    $files = $request->image_upload;
+                    
+                    if(count($image_ids)) {
+                        foreach($image_ids as $id) {
+                            $url = $image_upload_url[$id];
+                            if(!Utils::blank($url)) {
+                                array_push($arrFilenames, ['product_id' => $product->id, 'image' => $url]);
                             }
                             
-                            if(isset($files[$i])) {
-                                $file = $files[$i];
+                            $file = isset($files[$id]) ? $files[$id] : '';
+                            if(!Utils::blank($file)) {
                                 $filename = Utils::uploadFile($file, Common::IMAGE_FOLDER);
-                                $image['image'] = $filename;
-                            }
-                            
-                            if(!Utils::blank($image['image'])) {
-                                array_push($arrFilenames, $image);
+                                array_push($arrFilenames, ['product_id' => $product->id, 'image' => $filename]);
                             }
                         }
+                        
+                        DB::table(Common::IMAGES_PRODUCT)->insert($arrFilenames);
                     }
-                    
-                    ImageProduct::where('product_id', $product->id)->delete();
-                    DB::table(Common::IMAGES_PRODUCT)->insert($arrFilenames);
                     
                     return redirect(route('auth_products_edit', ['id' => $request->id]))->with('success', trans('messages.UPDATE_SUCCESS'));
                 }
@@ -252,7 +280,7 @@ class productsController extends AppController
         $output = ['code' => 200, 'data' => ''];
         
         if($table == Common::COLORS) {
-            $colors = Color::where($wheres)->get();
+            $colors = Color::where($wheres)->orderBy('created_at', 'DESC')->get();
             
             if($request->ajax()) {
                 $output['data'] = view('auth.colors.ajax_list', compact('colors', 'paging'))->render();

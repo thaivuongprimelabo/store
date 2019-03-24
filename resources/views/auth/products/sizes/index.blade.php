@@ -4,11 +4,11 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
   <h1>
-    {{ trans('auth.sidebar_node._sizes') }}
+    {{ trans('auth.sidebar.products.sizes') }}
   </h1>
   <ol class="breadcrumb">
     <li><a href="{{ route('dashboard') }}"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
-    <li class="active">{{ trans('auth.sidebar_node._sizes') }}</li>
+    <li class="active">{{ trans('auth.sidebar.products.products_sizes') }}</li>
   </ol>
 </section>
 <!-- Main content -->

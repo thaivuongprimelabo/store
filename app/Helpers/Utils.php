@@ -17,9 +17,14 @@ use App\Vendor;
 class Utils {
     
     public static function getImageLink($image = '') {
-        if(strpos($image, ',') != -1) {
+        
+        if(strpos($image, ',') !== FALSE) {
             $arrImage = explode(',', $image);
             $image = $arrImage[0];
+        }
+        
+        if(strpos($image, 'https') !== FALSE || strpos($image, 'http') !== FALSE) {
+            return $image;
         }
         
         $uploadFolder = Common::UPLOAD_FOLDER;
@@ -92,9 +97,11 @@ class Utils {
     }
     
     public static function removeFile($file) {
-        $filepath = Common::UPLOAD_FOLDER . $file;
-        if(file_exists($filepath)) {
-            unlink($filepath);
+        if(!self::blank($file)) {
+            $filepath = Common::UPLOAD_FOLDER . $file;
+            if(file_exists($filepath)) {
+                unlink($filepath);
+            }
         }
     }
     
@@ -192,6 +199,12 @@ class Utils {
             case Common::SIZES:
                 $data = DB::table($table)->select('name', 'id')->where('status', Status::ACTIVE)->get();
                 break;
+            case 'UPLOAD_SIZE_LIMIT':
+                $uploadLimits = Common::UPLOAD_SIZE_LIMIT;
+                foreach($uploadLimits as $limit) {
+                    array_push($data,['id' => $limit, 'name' => self::formatMemory($limit)]);
+                }
+                break;
             default:
                 $data = [
                     ['id' => Common::ADMIN, 'name' => trans('auth.role.admin')],
@@ -201,10 +214,12 @@ class Utils {
         }
         
         foreach($data as $item) {
-            if($selected == $item->id) {
-                $html .= '<option value="'. $item->id .'" selected>'. $item->name .'</option>';
+            $id = is_object($item) ? $item->id : $item['id'];
+            $name = is_object($item) ? $item->name : $item['name'];
+            if($selected == $id) {
+                $html .= '<option value="'. $id .'" selected>'. $name .'</option>';
             } else {
-                $html .= '<option value="'. $item->id .'">'. $item->name .'</option>';
+                $html .= '<option value="'. $id .'">'. $name .'</option>';
             }
         }
         
@@ -263,80 +278,55 @@ class Utils {
         return $html;
     }
     
-    public static function createSidebar($site = 'auth', $url_ext = '') {
+    public static function createSidebar() {
         
-        $sidebar = trans('auth.sidebar');
         $html = '';
         $routes = Route::getRoutes();
         $currentRoute = Route::currentRouteName();
-        $nameList = $routes->getRoutesByName();
-        
-        if($site == 'shop') {
-            $categories = Category::select('name_url','id','name')->where('status', Status::ACTIVE)->get();
-            foreach($categories as $category) {
-                $html .= '<li><a href="' . route('category',['slug' => $category['name_url']]) . '">' . Utils::cnvNull($category['name'], '') . '</a></li>';
-            }
-            
-            return $html;
-        }
-        $html .= '<ul class="sidebar-menu" data-widget="tree">';
-        $html .= '<li>';
-        $html .= '<a href="' . route('home') .'" target="_blank">';
-        $html .= '<i class="fa fa-files-o"></i>';
-        $html .= '<span>' . trans('auth.back_to_home') . '</span>';
-        $html .= '</a>';
-        $html .= '</li>';
-        
+        $open = '';
+        $display = '';
+        $sidebar = trans('auth.sidebar');
+        $html .= '';
         foreach($sidebar as $k=>$v) {
-            
-            if($k == 'pages' || $routes->hasNamedRoute('auth_' . $k) || $routes->hasNamedRoute('auth_' . $k . '_create')) {
-                $open = '';
-                $treemenu = '';
-                $route = 'auth_' . $k;
-                $active = '';
-                if(strpos($currentRoute, $route) > -1) {
+            $open = $display = '';
+            if(!is_array($v)) {
+                $html .= '<li><a href="' . route('auth_' . $k) . '"><i class="fa fa-files-o"></i><span>' . $v . '</span></a></li>';
+            } else {
+                
+                $key = explode('_', $currentRoute);
+                if(key_exists($key[1], $v) || $key[1] == $k) {
                     $open = 'menu-open';
-                    $treemenu = 'style="display:block"';
-                    $active = 'active';
+                    $display = 'style="display: block;"';
                 }
-                
-                $html .= '<li class="treeview '. $open . '">';
-                $html .= '<a href="javascript:void(0)">';
-                $html .= '<i class="fa fa-files-o"></i>';
-                $html .= '<span>'. $v .'</span>';
-                $html .= '<span class="pull-right-container">';
-                $html .= '<i class="fa fa-angle-left pull-right"></i>';
-                $html .= '</span>';
-                $html .= '</a>';
-                $html .= '<ul class="treeview-menu" ' . $treemenu . '>';
-                
-                $list_name_node = trans('auth.sidebar_node');
-                foreach($list_name_node as $key=>$value) {
-                    $routeNode = $route . ($key == '_list' ? '' : $key);
-                    if($routes->hasNamedRoute($routeNode)) {
-                        if($currentRoute == $routeNode) {
-                            $html .= '<li class="active"><a href="'. route($routeNode) . '"><i class="fa fa-circle-o"></i> '. $value .'</a></li>';
-                        } else {
-                            $html .= '<li><a href="'. route($routeNode) . '"><i class="fa fa-circle-o"></i> '. $value .'</a></li>';
-                        }
+                $html .= '<li class="treeview ' . $open . '">';
+                $html .= '<a href="javascript:void(0)"><i class="fa fa-files-o"></i><span>' . $v['title'] . '</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>';
+                $html .= '<ul class="treeview-menu" ' . $display . '>';
+                foreach($v as $kk=>$vv) {
+                    if($routes->hasNamedRoute('auth_' . $kk)) {
+                        $html .= '<li><a href="' . route('auth_' . $kk) . '"><i class="fa fa-circle-o"></i> ' . $vv . '</a></li>';
                     }
                 }
-                
                 $html .= '</ul>';
                 $html .= '</li>';
-            } else {
-                $html .= '<li>';
-                $html .= '<a href="' . route('auth_' . $k) .'">';
-                $html .= '<i class="fa fa-files-o"></i>';
-                $html .= '<span>'. $v .'</span>';
-                $html .= '</a>';
-                $html .= '</li>';
+                
             }
             
         }
         
-        $html .= '</ul>';
         return $html;
+    }
+    
+    public static function createSidebarShop() {
+       $html = '<ul class="category-list">';
+       $category = Category::select('id', 'name', 'name_url')->where('avail_flg', 1)->paginate(7);
+       foreach($category as $cate) {
+           $html .= '<li>';
+           $html .= '<a href="' . route('category', ['slug' => $cate->name_url]) . '">' . $cate->name . '</a>';
+           $html .= '</li>';
+       }
+       $html .= '</ul>';
+       return $html;
+        
     }
     
     public static function getConfig() {
@@ -362,7 +352,7 @@ class Utils {
     
     public static function sendMail($config_email = []) {
         
-        self::setConfigMail();
+//         self::setConfigMail();
         
         try {
             $from = isset($config_email['from'])?$config_email['from']: config('mail.from.address');
@@ -485,6 +475,25 @@ class Utils {
     
     public static function getDiscountPrice($price, $discount) {
         return $price - ($price * ($discount / 100));
+    }
+    
+    public static function deleteDir($dirPath) {
+        
+        if (! is_dir($dirPath)) {
+            return true;
+        }
+        if (substr($dirPath, strlen($dirPath) - 1, 1) != '/') {
+            $dirPath .= '/';
+        }
+        $files = glob($dirPath . '*', GLOB_MARK);
+        foreach ($files as $file) {
+            if (is_dir($file)) {
+                self::deleteDir($file);
+            } else {
+                unlink($file);
+            }
+        }
+        return rmdir($dirPath);
     }
 
     
