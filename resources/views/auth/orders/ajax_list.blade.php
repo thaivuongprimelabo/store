@@ -21,11 +21,11 @@
       <td>{{ $order->customer_address }}</td>
       <td>{{ $order->customer_phone }}</td>
       @if($order->status == Status::ORDER_NEW)
-      <td><a href="javascript:void(0)" class="update-status" data-tbl="0" data-id="{{ $order->id }}" data-status="{{ $order->status }}"><span class="label label-warning">{{ trans('auth.status.order_new') }}</span></a></td>
+      <td><span class="label label-warning">{{ trans('auth.status.order_new') }}</span></td>
       @elseif($order->status == Status::ORDER_SHIPPING)
-      <td><a href="javascript:void(0)" class="update-status" data-tbl="0" data-id="{{ $order->id }}" data-status="{{ $order->status }}"><span class="label label-danger">{{ trans('auth.status.order_shipping') }}</span></a></td>
+      <td><span class="label label-danger">{{ trans('auth.status.order_shipping') }}</span></td>
       @else
-      <td><a href="javascript:void(0)" class="update-status" data-tbl="0" data-id="{{ $order->id }}" data-status="{{ $order->status }}"><span class="label label-success">{{ trans('auth.status.order_done') }}</span></a></td>
+      <td><span class="label label-success">{{ trans('auth.status.order_done') }}</span></td>
       @endif
       <td>{{ $order->created_at }}</td>
       @include('auth.common.row_button',[

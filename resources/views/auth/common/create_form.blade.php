@@ -34,19 +34,8 @@
         			}
         			
         		@endphp
-        		@if(!isset($upload_product))
-            		@include('auth.common.upload',[
-                    	'text' => $text,
-                    	'text_small' => trans('auth.text_image_small'),
-                    	'errors' => $errors,
-                    	'name' => $key,
-                    	'size' => $size,
-                    	'width' => $split[0],
-                    	'height' => $split[1],
-                    	'image_using' => ''
-                    ])
-                @else
-                	@include('auth.common.upload_product',[
+        		
+        		@include('auth.common.upload_product',[
                 	'text' => $text,
                 	'text_small' => trans('auth.text_image_small'),
                 	'errors' => $errors,
@@ -54,9 +43,9 @@
                 	'size' => $size,
                 	'width' => $split[0],
                 	'height' => $split[1],
-                	'image_using' => []
+                	'image_using' => [],
+                	'multiple' => isset($value['multiple']) ? true : false
                 ])
-                @endif
         	@endif
         	
         	@if($value['type'] == 'select')

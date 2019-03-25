@@ -18,6 +18,7 @@
 			@include('auth.common.alert')
 			@php
               	$forms = trans('auth.orders.form');
+              	$order->payment_method = trans('shop.cart.payment.' . $order->payment_method);
             @endphp
             @foreach($forms as $key=>$form)
             @include('auth.common.edit_form', ['forms' => $form, 'data' => $order])

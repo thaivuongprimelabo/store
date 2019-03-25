@@ -15,6 +15,8 @@
 	<div class="row">
 		<div class="col-md-12">
 			<form role="form" id="submit_form" action="?" method="post" enctype="multipart/form-data">
+			<input type="hidden" id="demension" value="{{ $config['avatar_image_size'] }}" />
+			<input type="hidden" id="upload_limit" value="{{ $config['avatar_maximum_upload'] }}" />
 			@include('auth.common.alert')
 			@include('auth.common.edit_form',['forms' => trans('auth.users.form'), 'data' => $user])
 			@include('auth.common.button_footer',['back_url' => route('auth_users')])
@@ -89,14 +91,5 @@
     	}
     });
 
-    $('#avatar').change(function(e) {
-    	$(this).parent().removeClass('has-error');
-    	var element = $(this);
-    	var maxSize = '{{ Common::AVATAR_MAX_SIZE }}';
-    	var width = '{{ Common::AVATAR_WIDTH }}';
-    	var height = '{{ Common::AVATAR_HEIGHT }}';
-    	previewImage(element, maxSize, width, height );
-    	
-    });
 </script>
 @endsection

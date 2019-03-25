@@ -1,4 +1,14 @@
-  <table class="table table-hover">
+  <table class="table table-hover" style="table-layout: fixed; word-wrap:break-word;">
+  	<col width="2%">
+  	<col width="20%">
+  	<col width="5%">
+  	<col width="8%">
+  	<col width="8%">
+  	<col width="8%">
+  	<col width="5%">
+  	<col width="7%">
+  	<col width="2%">
+  	<col width="2%">
     <tr>
       <th>{{ trans('auth.products.table_header.id') }}</th>
       <th>{{ trans('auth.products.table_header.name') }}</th>
@@ -16,7 +26,7 @@
     <tr>
       <td>{{ $product->id }}</td>
       <td>{{ $product->name }}</td>
-      <th><img src="{{ $product->getFirstImage($product->id) }}" width="{{ Common::ADMIN_IMAGE_WIDTH }}" title="{{ $product->description }}" alt="{{ $product->name }}" /></th>
+      <th><img src="{{ $product->getFirstImage($product->id) }}" width="{{ Common::ADMIN_IMAGE_WIDTH }}" title="{{ $product->description }}" alt="" /></th>
       <td>{{ $product->category_id }}</td>
       <td>{{ $product->vendor_id }}</td>
       <td>{{ $product->getPrice($product->price) }}</td>

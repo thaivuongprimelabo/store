@@ -95,14 +95,8 @@ class ConfigController extends AppController
             }
             $icoFile = $config_data->web_ico;
             $filename = $config_data->web_logo;
-            if($request->hasFile('web_logo')) {
-                
-                $file = $request->web_logo;
-
-                $icoFileName = 'favico.png';
-                $icoFile = Utils::createIcoFile($file, $icoFileName);
-                $filename = Utils::uploadFile($file, Common::WEBLOGO_FOLDER);
-            }
+            Utils::doUpload($request, Common::WEBLOGO_FOLDER, $filename);
+            Utils::createIcoFile($request, $icoFile);
             $config_data->web_title       = Utils::cnvNull($request->web_title, '');
             $config_data->web_description = Utils::cnvNull($request->web_description, '');
             $config_data->web_keywords    = Utils::cnvNull($request->web_keywords, '');

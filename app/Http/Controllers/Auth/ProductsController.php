@@ -101,13 +101,8 @@ class productsController extends AppController
                 $product->category_id   = Utils::cnvNull($request->category_id, '0');
                 $product->vendor_id     = Utils::cnvNull($request->vendor_id, '0');
                 $product->discount      = Utils::cnvNull($request->discount, 0);
-                if(!Utils::blank($request->sizes)) {
-                    $product->sizes         = implode(',', $request->sizes);
-                }
-                
-                if(!Utils::blank($request->colors)) {
-                    $product->colors        = implode(',', $request->colors);
-                }
+                $product->sizes         = !Utils::blank($request->sizes) ? implode(',', $request->sizes) : '';
+                $product->colors        = !Utils::blank($request->colors) ? implode(',', $request->colors) : '';
                 $product->description   = Utils::cnvNull($request->description, '');
                 $product->status        = Utils::cnvNull($request->status, 0);
                 $product->is_new        = Utils::cnvNull($request->is_new, 0);
@@ -117,52 +112,8 @@ class productsController extends AppController
                 
                 if($product->save()) {
                     $arrFilenames = [];
-                    
-                    $image_upload_url = $request->image_upload_url;
-                    $image_ids = $request->image_ids;
-                    $files = $request->image_upload;
-                    
-                    if(count($image_ids)) {
-                        foreach($image_ids as $id) {
-                            $url = $image_upload_url[$id];
-                            if(!Utils::blank($url)) {
-                                array_push($arrFilenames, ['product_id' => $product->id, 'image' => $url]);
-                            }
-                            
-                            $file = isset($files[$id]) ? $files[$id] : '';
-                            if(!Utils::blank($file)) {
-                                $filename = Utils::uploadFile($file, Common::IMAGE_FOLDER);
-                                array_push($arrFilenames, ['product_id' => $product->id, 'image' => $filename]);
-                            }
-                        }
-                        
-                        DB::table(Common::IMAGES_PRODUCT)->insert($arrFilenames);
-                    }
-                    
-//                     if(count($image_upload_url)) {
-//                         foreach($image_upload_url as $url) {
-//                             array_push($arrFilenames, ['product_id' => $product->id, 'image' => $url]);
-//                         }
-                        
-//                         DB::table(Common::IMAGES_PRODUCT)->insert($arrFilenames);
-//                     }
-                    
-//                     if($request->hasFile('image_upload')) {
-                        
-//                         $files = $request->image_upload;
-                        
-//                         if(count($files)) {
-//                             for($i = 0; $i < count($files); $i++) {
-//                                 $file = $files[$i];
-//                                 if(!Utils::blank($file->getClientOriginalName())) {
-//                                     $filename = Utils::uploadFile($file, Common::IMAGE_FOLDER);
-//                                     array_push($arrFilenames, ['product_id' => $product->id, 'image' => $filename]);
-//                                 }
-//                             }
-                            
-//                             DB::table(Common::IMAGES_PRODUCT)->insert($arrFilenames);
-//                         }
-//                     }
+                    $filename = '';
+                    Utils::doUpload($request, Common::IMAGE_FOLDER, $filename, $product->id, $arrFilenames);
                     
                     return redirect(route('auth_products_create'))->with('success', trans('messages.CREATE_SUCCESS'));
                 }
@@ -209,26 +160,8 @@ class productsController extends AppController
                 if($product->save()) {
                     
                     $arrFilenames = [];
-                    $image_upload_url = $request->image_upload_url;
-                    $image_ids = $request->image_ids;
-                    $files = $request->image_upload;
-                    
-                    if(count($image_ids)) {
-                        foreach($image_ids as $id) {
-                            $url = $image_upload_url[$id];
-                            if(!Utils::blank($url)) {
-                                array_push($arrFilenames, ['product_id' => $product->id, 'image' => $url]);
-                            }
-                            
-                            $file = isset($files[$id]) ? $files[$id] : '';
-                            if(!Utils::blank($file)) {
-                                $filename = Utils::uploadFile($file, Common::IMAGE_FOLDER);
-                                array_push($arrFilenames, ['product_id' => $product->id, 'image' => $filename]);
-                            }
-                        }
-                        
-                        DB::table(Common::IMAGES_PRODUCT)->insert($arrFilenames);
-                    }
+                    $filename = '';
+                    Utils::doUpload($request, Common::IMAGE_FOLDER, $filename, $product->id, $arrFilenames);
                     
                     return redirect(route('auth_products_edit', ['id' => $request->id]))->with('success', trans('messages.UPDATE_SUCCESS'));
                 }

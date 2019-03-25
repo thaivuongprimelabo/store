@@ -80,7 +80,7 @@ class Common {
     /** Role **/
     CONST SUPER_ADMIN = '0';
     CONST ADMIN = '1';
-    CONST MEMBER = '2';
+    CONST MOD = '2';
     
     /** Mail **/
     CONST ADMIN_EMAIL = 'thaivuong1503@gmail.com';

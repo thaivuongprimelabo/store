@@ -28,7 +28,7 @@ class AppController extends Controller
             
             $this->config = [
                 'config' => [
-                    'web_name' => Utils::cnvNull($config->web_name, 'E-shop'),
+                    'web_name' => Utils::cnvNull($config->web_title, 'E-shop'),
                     'web_description' => Utils::cnvNull($config->web_description, $config->web_name),
                     'web_keywords' => Utils::cnvNull($config->web_keywords, $config->web_name),
                     'web_logo' => $web_logo,

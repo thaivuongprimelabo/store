@@ -21,10 +21,9 @@ class CreateProductsTable extends Migration
             $table->string('price', 20);
             $table->integer('category_id', false, true);
             $table->integer('vendor_id', false, true);
-            $table->string('introduction', 300);
             $table->text('description');
-            $table->string('sizes', 255);
-            $table->string('colors', 255);
+            $table->string('sizes', 255)->nullable();
+            $table->string('colors', 255)->nullable();
             $table->integer('discount', false, true)->nullable()->default('0');
             $table->integer('avail_flg', false, true)->nullable()->default('1');
             $table->integer('status', false, true)->nullable()->default('0');

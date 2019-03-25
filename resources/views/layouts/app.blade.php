@@ -110,13 +110,13 @@
               <!-- User Account: style can be found in dropdown.less -->
               <li class="dropdown user user-menu">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                  <img src="{{ Utils::getAvatar(Auth::user()->avatar) }}" class="user-image" alt="User Image">
+                  <img src="{{ Utils::getImageLink(Auth::user()->avatar) }}" class="user-image" alt="User Image">
                   <span class="hidden-xs">{{ Auth::user()->name }}</span>
                 </a>
                 <ul class="dropdown-menu">
                   <!-- User image -->
                   <li class="user-header">
-                    <img src="{{ Utils::getAvatar(Auth::user()->avatar) }}" class="img-circle" alt="User Image">
+                    <img src="{{ Utils::getImageLink(Auth::user()->avatar) }}" class="img-circle" alt="User Image">
     
                     <p>
                       {{ Auth::user()->name }}
@@ -151,6 +151,7 @@
         Copyright &copy; {{ date('Y') }}. All rights
         reserved.
     </footer>
+    @include('auth.products.upload_modal')
 </div>
 @endif
 <!-- jQuery 3 -->
@@ -250,9 +251,6 @@
 		$(this).find('span').html(res.text);
 	});
 
-	$(document).on('click', '#open_upload_dialog', function(e) {
-		$(this).next('input[type="file"]').click();
-	});
 
 	$('input#check_all').on('ifChecked', function(event){
 		$('input[name="check_remove"]').prop('checked', true);
@@ -269,21 +267,64 @@
     });
 
     $('#save').click(function(e) {
-    	var input = {
-    	   	value: $('#name').val(),
-			col : 'name',
-			table: $('#table').val(),
-			itemName : $('#name').attr('placeholder'),
-			url: '{{ route('check_exists') }}',
-			id_check: $('#id_check').val()
-		};
-
-    	if(checkExist(input)) {
-			$('#submit_form').submit();
+    	if($("#submit_form").valid()) {
+        	var input = {
+        	   	value: $('#name').val(),
+    			col : 'name',
+    			table: $('#table').val(),
+    			itemName : $('#name').attr('placeholder'),
+    			url: '{{ route('check_exists') }}',
+    			id_check: $('#id_check').val()
+    		};
+    
+        	if(checkExist(input)) {
+    			$('#submit_form').submit();
+        	}
     	}
-
-    	return false;
     });
+
+    $('#uploadModal').on('show.bs.modal', function (event) {
+		$('#preview').attr('src','');
+		$('#upload_by_url').val('');
+		$('#error_list').html('');
+
+		var demension = $('#demension').val();
+		var arr = demension.split('x');
+		$('#preview').parent().css({'width': arr[0], 'height': arr[1]});
+		$('#preview').css({'width': arr[0], 'height': arr[1]});
+    });
+
+    $(document).on('click', '#open_upload_dialog', function(e) {
+        $('#select_image').attr('data-id', 0);
+		$('#uploadModal').modal();
+	});
+
+    $(document).on('click', '#upload_by_computer', function(e) {
+    	var index = $('#select_image').attr('data-id');
+		uploadByComputer(index);
+    });
+
+    $(document).on('blur', '#upload_by_url', function(e) {
+    	var src = $(this).val();
+    	uploadByUrl(src);
+    });
+
+    $(document).on('click', '#select_image', function(e) {
+        var index = $(this).attr('data-id');
+        var demension = $('#demension').val();
+    	selectImage(index, demension);
+	});
+
+    $(document).on('change', '.upload_image_product', function(e) {
+    	var input = $(this);
+    	var maxSize = $('#upload_limit').val();
+    	var demension = $('#demension').val();
+    	var rules = ['{{ Common::IMAGE_EXT }}', maxSize];
+    	if(checkFileUpload(input, rules, '{{ trans('validation.size.file_multi') }}', '#error_list')) {
+    		previewImageProduct(input, maxSize, demension, '#preview');
+    	}
+    });
+	
 
   });
 </script>

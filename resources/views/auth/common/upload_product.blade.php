@@ -2,6 +2,7 @@
    $control_name = $name . '[]';
    $control_id = $name;
 @endphp
+@if($multiple)
 <div class="form-group">
   <label for="exampleInputFile">{{ $text }}</label>&nbsp;&nbsp;({{ Utils::replaceMessageParam($text_small,[$size]) }})<br/>
   <div id="preview_list">
@@ -12,6 +13,7 @@
           	<img src="{{ $image }}" style="width:{{ $width }}px; height:{{ $height }}px" />
           </a>
           <a href="javascript:void(0)" class="remove" data-id="{{ $id }}"><i class="fa fa-trash" aria-hidden="true"></i></a>
+          <input type="hidden" name="image_ids[]" class="upload_image_id" value="{{ $id }}" />
       	</div>
   		@endforeach
   	@endif
@@ -21,7 +23,26 @@
       </a>
   	</div>
   </div>
-  
 </div>
 <input type="hidden" id="upload_index" value="-1" />
 <input type="hidden" name="image_del_ids" value="" />
+@else
+<div class="form-group">
+  <label for="exampleInputFile">{{ $text }}</label>&nbsp;&nbsp;({{ Utils::replaceMessageParam($text_small,[$size]) }})<br/>
+  <div id="preview_list">
+  	
+  		<div id="img_0" class="image_product" style="display: inline-block;">
+          <a id="open_upload_dialog" href="javascript:void(0)" class="upload_image" style="width: {{ $width }}px; height: {{ $height }}px">
+          	@if($image_using)
+          	<img src="{{ Utils::getImageLink($image_using) }}" style="width:{{ $width }}px; height:{{ $height }}px" />
+          	@else
+          	<i class="fa fa-upload" aria-hidden="true"></i><br/>{{ trans('auth.button.upload_image') }}
+          	@endif
+          </a>
+          <input type="file" name="image_upload[]" class="upload_image_product" style="display: none" />
+          <input type="hidden" name="image_upload_url[]" class="upload_image_product_url" />
+          <input type="hidden" name="image_ids[]" class="upload_image_id" value="9999" />
+      	</div>
+  </div>
+</div>
+@endif

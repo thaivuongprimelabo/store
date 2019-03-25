@@ -141,7 +141,7 @@ return [
     /*------------ Contacts page ------------------- */
     'contacts' => [
         'list_title' => 'Danh mục liên hệ',
-        'edit_title' => 'Trả lời',
+        'edit_title' => 'Xem thư',
         'table_header' => [
             'id' => 'ID',
             'subject' => 'Tựa đề',
@@ -159,21 +159,10 @@ return [
                 'text' => 'Nội dung thư',
                 'subject' => ['type' => 'text', 'text' => 'Tựa đề', 'disabled' => true],
                 'name' => ['type' => 'text', 'text' => 'Tên', 'disabled' => true],
-                'email' => ['type' => 'text', 'text' => 'E-mail', 'disabled' => true],
+                'email' => ['type' => 'link', 'text' => 'E-mail', 'disabled' => true],
                 'phone' => ['type' => 'text', 'text' => 'Số điện thoại', 'disabled' => true],
                 'content' => ['type' => 'textarea', 'text' => 'Nội dung', 'disabled' => true],
             ],
-            'reply' => [
-                'text' => 'Trả lời',
-                
-                'reply_content' => ['type' => 'editor', 'text' => 'Nội dung trả lời'],
-                'attachment' => [
-                    'type' => 'file',
-                    'text' => 'Đính kèm',
-                    'note_text' => 'Tập tin *.jpg, *.jpeg, *.gif, *.png, *.pdf, *.doc, *.docx, *.xlsx, *.xls.Tối đa {0}'
-                ]
-            ]
-            
         ],
     ],
     /*------------ Posts page ------------------- */
@@ -202,8 +191,6 @@ return [
             'description' => ['type' => 'textarea', 'text' => 'Mô tả ngắn'],
             'content' => ['type' => 'editor', 'text' => 'Nội dung'],
             'status' => ['type' => 'checkbox', 'text' => 'Xuất bản'],
-            'published_at' => ['type' => 'datepicker', 'text' => 'Ngày xuất bản'],
-            'published_time_at' => ['type' => 'timepicker', 'text' => 'Thời điểm xuất bản'],
         ],
     ],
     'about' => [
@@ -248,6 +235,7 @@ return [
                 'customer_email' => ['type' => 'label', 'text' => 'E-mail: '],
                 'customer_address' => ['type' => 'label', 'text' => 'Địa chỉ giao hàng: '],
                 'customer_phone' => ['type' => 'label', 'text' => 'Số điện thoại: '],
+                'payment_method' => ['type' => 'label', 'text' => 'Phương thức chi trả: '],
                 'status' => ['type' => 'select_status_order', 'text' => 'Trạng thái đơn hàng']
             ],
          ]
@@ -262,6 +250,10 @@ return [
                 'web_logo' => [
                     'type' => 'file', 
                     'text' => 'Web logo',
+                ],
+                'web_ico' => [
+                    'type' => 'file_simple',
+                    'text' => 'Web icon'
                 ],
                 'web_email' => 'Web mail',
                 'web_description' => ['type' => 'textarea', 'text' => 'SEO Description'],
@@ -351,7 +343,8 @@ return [
                 'text' => 'Hình sản phẩm',
                 'size' => \App\Constants\Common::IMAGE_MAX_SIZE,
                 'width' => \App\Constants\Common::IMAGE_WIDTH,
-                'height' => \App\Constants\Common::IMAGE_HEIGHT
+                'height' => \App\Constants\Common::IMAGE_HEIGHT,
+                'multiple' => true
             ],
             'description' => ['type' => 'editor', 'text' => 'Chi tiết'],
             'status' => ['type' => 'checkbox', 'text' => 'Đang hoạt động'],

@@ -128,35 +128,47 @@ class Cart {
         if(session('cart')) {
             $cart = session('cart');
             
-            $order = new Order();
-            $order->customer_name       = Utils::cnvNull($checkout['customer_name'], '');
-            $order->customer_email      = Utils::cnvNull($checkout['customer_email'], '');
-            $order->customer_address    = Utils::cnvNull($checkout['customer_address'], '');
-            $order->customer_phone      = Utils::cnvNull($checkout['customer_phone'], '');
-            $order->payment_method      = Utils::cnvNull($checkout['payment_method'], '');
-            $order->total               = $cart['total'];
-            $order->created_at          = date('Y-m-d H:i:s');
-            $order->updated_at          = date('Y-m-d H:i:s');
+            DB::beginTransaction();
             
-            if($order->save()) {
-                $orderDetails = [];
-                foreach($cart['items'] as $item) {
-                    $detail = [
-                        'order_id'      => $order->id,
-                        'product_id'    => $item['id'],
-                        'qty'           => $item['qty'],
-                        'price'         => $item['price'],
-                        'cost'          => $item['cost'],
-                        'created_at'    => date('Y-m-d H:i:s'),
-                        'updated_at'    => date('Y-m-d H:i:s')
-                    ];
+            try {
+                
+                $order = new Order();
+                $order->customer_name       = Utils::cnvNull($checkout['customer_name'], '');
+                $order->customer_email      = Utils::cnvNull($checkout['customer_email'], '');
+                $order->customer_address    = Utils::cnvNull($checkout['customer_address'], '');
+                $order->customer_phone      = Utils::cnvNull($checkout['customer_phone'], '');
+                $order->payment_method      = Utils::cnvNull($checkout['payment_method'], '');
+                $order->total               = $cart['total'];
+                $order->created_at          = date('Y-m-d H:i:s');
+                $order->updated_at          = date('Y-m-d H:i:s');
+                
+                if($order->save()) {
+                    $orderDetails = [];
+                    foreach($cart['items'] as $item) {
+                        $detail = [
+                            'order_id'      => $order->id,
+                            'product_id'    => $item['id'],
+                            'qty'           => $item['qty'],
+                            'price'         => $item['price'],
+                            'cost'          => $item['cost'],
+                            'sizes'         => '',
+                            'colors'        => '',
+                            'created_at'    => date('Y-m-d H:i:s'),
+                            'updated_at'    => date('Y-m-d H:i:s')
+                        ];
+                        
+                        array_push($orderDetails, $detail);
+                    }
                     
-                    array_push($orderDetails, $detail);
+                    DB::table(Common::ORDER_DETAILS)->insert($orderDetails);
+                    
+                    $orderId = $order->id;
                 }
                 
-                DB::table(Common::ORDER_DETAILS)->insert($orderDetails);
+                DB::commit();
                 
-                $orderId = $order->id;
+            }  catch(\Exception $e) {
+                DB::rollBack();
             }
         }
         

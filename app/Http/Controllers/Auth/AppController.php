@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Constants\Common;
 use App\Helpers\Utils;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use View;
 class AppController extends Controller
 {
@@ -51,5 +53,9 @@ class AppController extends Controller
             ];
             View::share($this->config);
         }
+        
+        $arrUnaccess = [
+            'users'
+        ];
     }
 }

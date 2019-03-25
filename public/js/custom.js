@@ -190,6 +190,27 @@ var checkFileUpload = function(element, params, message, container) {
 	return true;
 }
 
+
+var uploadByComputer = function(index) {
+	var container = $('#img_' + index).find('.upload_image_product')
+	container.click();
+}
+
+var uploadByUrl = function(src) {
+	$('#preview').attr('src', src);
+}
+
+var selectImage = function(index, demension) {
+	var img = $('#preview').attr('src');
+	var arr = demension.split('x');
+	$('#img_' + index).css({'display': 'inline-block'});
+	$('#img_' + index).find('a').html('<img src="' + img + '" style="width:' + arr[0] + 'px; height:' + arr[1] + 'px" />');
+	if(img.indexOf('http') !== -1 || img.indexOf('https') !== -1) {
+		$('#img_' + index).find('.upload_image_product_url').val(img);
+	}
+	$('#uploadModal').modal('toggle');
+}
+
 $(document).ready(function() {
 	
 	$.validator.addMethod( "extension", function( value, element, param ) {

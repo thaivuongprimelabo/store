@@ -6,6 +6,7 @@ use App\Constants\Common;
 use App\Helpers\Utils;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -29,11 +30,17 @@ class UsersController extends AppController
         
         $this->rules = [
             'name' => 'required|max:' . Common::NAME_MAXLENGTH,
-            'email' => 'required|email',
-            'password' => 'required|max:' . Common::PASSWORD_MAXLENGTH,
-            'role_id' => 'required',
-            'avatar' => 'image|max:' . Utils::formatMemory(Common::AVATAR_MAX_SIZE, true) . '|mimes:'. Common::IMAGE_EXT1
+            'email' => 'email',
         ];
+        
+        $this->middleware(function ($request, $next) {
+            $roleId = Auth::user()->role_id;
+            if($roleId == Common::MOD) {
+                return redirect(route('auth_products'));
+            }
+            
+            return $next($request);
+        });
     }
     
     public function index(Request $request) {
@@ -69,7 +76,7 @@ class UsersController extends AppController
             }
         }
         
-        $users = User::where($wheres)->whereIn('role_id', [Common::ADMIN, Common::MEMBER])->paginate(Common::ROW_PER_PAGE);
+        $users = User::where($wheres)->whereIn('role_id', [Common::MOD])->paginate(Common::ROW_PER_PAGE);
         
         $paging = $users->toArray();
         
@@ -98,19 +105,14 @@ class UsersController extends AppController
             if (!$validator->fails()) {
                 
                 $filename = '';
-                if($request->hasFile('avatar')) {
-                    
-                    $file = $request->avatar;
-                    
-                    $filename = Utils::uploadFile($file, Common::AVATAR_FOLDER);
-                }
+                Utils::doUpload($request, Common::AVATAR_FOLDER, $filename);
                 
                 $user = new User();
                 $user->name         = Utils::cnvNull($request->name, '');
                 $user->email        = Utils::cnvNull($request->email, '');
                 $user->password     = Hash::make(Utils::cnvNull($request->password, ''));
                 $user->avatar       = $filename;
-                $user->role_id      = Utils::cnvNull($request->role_id, '');;
+                $user->role_id      = Utils::cnvNull($request->role_id, 1);
                 $user->status       = Utils::cnvNull($request->status, 0);
                 $user->created_at   = date('Y-m-d H:i:s');
                 $user->updated_at   = date('Y-m-d H:i:s');
@@ -140,29 +142,20 @@ class UsersController extends AppController
         
         if($request->isMethod('post')) {
             
-            $maxSize =  Utils::formatMemory(Common::LOGO_MAX_SIZE, true);
-            
             $validator = Validator::make($request->all(), $this->rules);
             
             if (!$validator->fails()) {
                 $user = User::find($request->id);
                 
                 $filename = $user->avatar;
-                
-                if($request->hasFile('avatar')) {
-                    
-                    $file = $request->avatar;
-                    
-                    $filename = Utils::uploadFile($file, Common::AVATAR_FOLDER);
-                }
+                Utils::doUpload($request, Common::AVATAR_FOLDER, $filename);
                 
                 $user->name         = Utils::cnvNull($request->name, '');
-                $user->email        = Utils::cnvNull($request->email, '');
                 if(!Utils::blank($request->password)) {
                     $user->password = Utils::cnvNull($request->password, '');
                 }
                 $user->avatar       = $filename;
-                $user->role_id      = Utils::cnvNull($request->role_id, '');;
+                $user->role_id      = Utils::cnvNull($request->role_id, 1);
                 $user->status       = Utils::cnvNull($request->status, 0);
                 $user->updated_at   = date('Y-m-d H:i:s');
                 

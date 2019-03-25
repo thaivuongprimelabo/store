@@ -87,15 +87,7 @@ class PostsController extends AppController
             if (!$validator->fails()) {
                 
                 $filename = '';
-                if($request->hasFile('photo')) {
-                    
-                    $file = $request->photo;
-                    
-                    $filename = Utils::uploadFile($file, Common::PHOTO_FOLDER);
-                }
-                
-                $published_at = date('Ymd', strtotime($request->input('published_at', date('Ymd'))));
-                $published_time_at = date('Hi', strtotime($request->input('published_time_at', date('H:i'))));
+                Utils::doUpload($request, Common::PHOTO_FOLDER, $filename);
                 
                 $post = new Post();
                 $post->name              = Utils::cnvNull($request->name, '');
@@ -103,8 +95,8 @@ class PostsController extends AppController
                 $post->description       = Utils::cnvNull($request->description, 0);
                 $post->content           = Utils::cnvNull($request->content, '');
                 $post->photo             = $filename;
-                $post->published_at      = $published_at;
-                $post->published_time_at = $published_time_at;
+                $post->published_at      = Utils::cnvNull($request->published_at, '');
+                $post->published_time_at = Utils::cnvNull($request->published_time_at, '');
                 $post->status            = Utils::cnvNull($request->status, 0);
                 $post->created_at        = date('Y-m-d H:i:s');
                 $post->updated_at        = date('Y-m-d H:i:s');
@@ -141,12 +133,7 @@ class PostsController extends AppController
                 $post = Post::find($request->id);
                 
                 $filename = $post->photo;
-                if($request->hasFile('photo')) {
-                    
-                    $file = $request->photo;
-                    
-                    $filename = Utils::uploadFile($file, Common::PHOTO_FOLDER);
-                }
+                Utils::doUpload($request, Common::PHOTO_FOLDER, $filename);
                 
                 $published_at = date('Ymd', strtotime($request->input('published_at', date('Ymd'))));
                 $published_time_at = date('Hi', strtotime($request->input('published_time_at', date('H:i'))));

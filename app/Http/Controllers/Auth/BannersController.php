@@ -24,9 +24,7 @@ class BannersController extends AppController
         parent::__construct();
         
         $this->rules = [
-            'link' => 'url|max:' . Common::LINK_MAXLENGTH,
             'description' => 'max:' . Common::DESC_MAXLENGTH,
-            'banner' => 'image|max:' . Utils::formatMemory($this->config['config']['banner_maximum_upload'], true) .'|mimes:'. Common::IMAGE_EXT1,
         ];
     }
     
@@ -87,12 +85,7 @@ class BannersController extends AppController
             if (!$validator->fails()) {
                 
                 $filename = '';
-                if($request->hasFile('banner')) {
-                    
-                    $file = $request->banner;
-                    
-                    $filename = Utils::uploadFile($file, Common::BANNER_FOLDER);
-                }
+                Utils::doUpload($request, Common::BANNER_FOLDER, $filename);
                 
                 $banner = new Banner();
                 $banner->link           = Utils::cnvNull($request->link, '');
@@ -131,12 +124,7 @@ class BannersController extends AppController
             if (!$validator->fails()) {
                 
                 $filename = $banner->banner;
-                if($request->hasFile('banner')) {
-                    
-                    $file = $request->banner;
-                    
-                    $filename = Utils::uploadFile($file, Common::BANNER_FOLDER);
-                }
+                Utils::doUpload($request, Common::BANNER_FOLDER, $filename);
                 
                 $banner->link           = Utils::cnvNull($request->link, '');
                 $banner->banner         = $filename;

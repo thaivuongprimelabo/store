@@ -19,7 +19,7 @@
         	@endphp
         	@if($value['type'] == 'textarea')
         		<div class="form-group ">
-                  <label for="exampleInputPassword1">{{ $value['text'] }}</label>
+                  <label for="exampleInputPassword1">{{ $text }}</label>
                   <textarea class="form-control" rows="6" name="{{ $key }}" placeholder="{{ $placeholder }}" maxlength="{{ Common::DESC_MAXLENGTH }}" {{ isset($value['disabled']) ? 'disabled=true' : '' }}>{{ old($key, $data->$key) }}</textarea>
                   <span class="help-block">@if ($errors->has($key)){{ $errors->first($key) }}@endif</span>
                 </div>
@@ -40,42 +40,37 @@
         			}
         			
         		@endphp
-        		@if($key != 'image' && $key != 'attachment')
-            		@include('auth.common.upload',[
-                    	'text' => $value['text'],
-                    	'text_small' => isset($value['note_text']) ? $value['note_text'] : trans('auth.text_image_small'),
-                    	'errors' => $errors,
-                    	'name' => $key,
-                    	'size' => $size,
-                    	'width' => $split[0],
-                    	'height' => $split[1],
-                    	'image_using' => Utils::getImageLink($data->$key)
-                    ])
-                @else
-                	@include('auth.common.upload_product',[
-                    	'text' => $value['text'],
-                    	'text_small' => isset($value['note_text']) ? $value['note_text'] : trans('auth.text_image_small'),
-                    	'errors' => $errors,
-                    	'name' => $key,
-                    	'size' => $size,
-                    	'width' => $split[0],
-                    	'height' => $split[1],
-                    	'image_using' => $key == 'image' ? $data->getAllImage($data->id) : []
-                    ])
-                @endif
+        		@include('auth.common.upload_product',[
+                	'text' => $text,
+                	'text_small' => isset($value['note_text']) ? $value['note_text'] : trans('auth.text_image_small'),
+                	'errors' => $errors,
+                	'name' => $key,
+                	'size' => $size,
+                	'width' => $split[0],
+                	'height' => $split[1],
+                	'image_using' => isset($value['multiple']) ? $data->getAllImage($data->id) : $data->$key,
+                	'multiple' => isset($value['multiple']) ? true : false
+                ])
+        	@endif
+        	
+        	@if($value['type'] == 'file_simple')
+        		<div class="form-group">
+                  <label for="exampleInputEmail1">{{ $text }}</label>
+                  <input type="file" name="{{ $key }}" class="form-control" />
+                </div>
         	@endif
         	
         	@if($value['type'] == 'checkbox')
         		<div class="checkbox">
                   <label>
-                    <input type="checkbox" name="{{ $key }}" value="1" @if(old($key, $data->$key)) {{ 'checked="checked"' }} @endif> {{ $value['text'] }}
+                    <input type="checkbox" name="{{ $key }}" value="1" @if(old($key, $data->$key)) {{ 'checked="checked"' }} @endif> {{ $text }}
                   </label>
                 </div>
         	@endif
         	
         	@if($value['type'] == 'select')
         		<div class="form-group">
-                  <label for="exampleInputEmail1">{{ $value['text'] }}</label>
+                  <label for="exampleInputEmail1">{{ $text }}</label>
                   <select class="form-control" name="{{ $key }}" id="{{ $key }}">
                   	@if(isset($value['empty_text']))
                     <option value="0">{{ $value['empty_text'] }}</option>
@@ -87,7 +82,7 @@
         	
         	@if($value['type'] == 'editor')
         		<div class="form-group ">
-                  <label for="exampleInputPassword1">{{ $value['text'] }}</label>
+                  <label for="exampleInputPassword1">{{ $text }}</label>
                   <textarea name="{{ $key }}" id="editor1_{{ $key }}" class="ckeditor" placeholder="{{ $placeholder }}" {{ isset($value['disabled']) ? 'disabled=true' : '' }}>{{ old($key, $data->$key) }}</textarea>
                   <span class="help-block">@if ($errors->has($key)){{ $errors->first($key) }}@endif</span>
                 </div>
@@ -95,7 +90,7 @@
         	
         	@if($value['type'] == 'datepicker')
         		<div class="form-group ">
-                  <label for="exampleInputEmail1">{{ $value['text'] }}</label>
+                  <label for="exampleInputEmail1">{{ $text }}</label>
                   <input type="text" class="form-control" name="{{ $key }}" id="{{ $key }}" value="{{ old($key, date('d-m-Y', strtotime($data->$key))) }}" placeholder="{{ $placeholder }}" maxlength="{{ Common::NAME_MAXLENGTH }}">
                   <span class="help-block">@if ($errors->has($key)){{ $errors->first($key) }}@endif</span>
                 </div>
@@ -104,7 +99,7 @@
         	@if($value['type'] == 'timepicker')
         		<div class="bootstrap-timepicker">
                     <div class="form-group">
-                      <label>{{ $value['text'] }}</label>
+                      <label>{{ $text }}</label>
                       <input type="text" name="{{ $key }}" id="{{ $key }}" value="{{ old($key, date('h:i A', strtotime($data->$key))) }}" class="form-control timepicker">
                     </div>
                   </div>
@@ -112,7 +107,7 @@
         	
         	@if($value['type'] == 'password')
         		<div class="form-group ">
-                  <label for="exampleInputEmail1">{{ $value['text'] }}</label>
+                  <label for="exampleInputEmail1">{{ $text }}</label>
                   <input type="password" class="form-control" name="{{ $key }}" id="{{ $key }}" value="{{ old($key, '') }}" placeholder="{{ $placeholder }}" maxlength="{{ Common::NAME_MAXLENGTH }}">
                   <span class="help-block">@if ($errors->has($key)){{ $errors->first($key) }}@endif</span>
                 </div>
@@ -120,15 +115,22 @@
             
             @if($value['type'] == 'text')
         		<div class="form-group ">
-                  <label for="exampleInputEmail1">{{ $value['text'] }}</label>
-                  <input type="text" class="form-control" name="{{ $key }}" id="{{ $key }}" value="{{ old($key, $data->$key) }}" placeholder="{{ $placeholder }}" maxlength="{{ Common::NAME_MAXLENGTH }}" {{ isset($value['disabled']) ? 'disabled=true' : '' }}>
+                  <label for="exampleInputEmail1">{{ $text }}</label>
+                  <input type="text" class="form-control" name="{{ $key }}" id="{{ $key }}" value="{{ old($key, $data->$key) }}" placeholder="{{ $placeholder }}" maxlength="{{ Common::NAME_MAXLENGTH }}" {{ (isset($value['disabled']) || $key == 'email') ? 'disabled=true' : '' }}>
                   <span class="help-block">@if ($errors->has($key)){{ $errors->first($key) }}@endif</span>
+                </div>
+            @endif
+            
+             @if($value['type'] == 'link')
+        		<div class="form-group ">
+                  <label for="exampleInputEmail1">{{ $text }}</label><br/>
+                  <a href="mailto:{{ $data->$key }}">{{ $data->$key }}</a>
                 </div>
             @endif
             
             @if($value['type'] == 'checkbox_multi')
         		<div class="form-group">
-        			<label>{{ $value['text'] }}</label>
+        			<label>{{ $text }}</label>
             		<div class="checkbox">
                       <label>
                         {!! Utils::createCheckboxList($value['table'], $data->$key) !!}
@@ -139,7 +141,7 @@
         	
         	@if($value['type'] == 'checkbox_color_multi')
         		<div class="form-group">
-        			<label>{{ $value['text'] }}</label>
+        			<label>{{ $text }}</label>
             		<div class="checkbox">
                       <label>
                         {!! Utils::createCheckboxList($value['table'], $data->$key) !!}
@@ -149,14 +151,14 @@
         	@endif
         	@if($value['type'] == 'label')
         		<div class="form-group">
-                  <label>{{ $value['text'] }}</label>
+                  <label>{{ $text }}</label>
                   <span>{{ $data->$key }}</span>
                 </div>
         	@endif
         	
         	@if($value['type'] == 'select_status_order')
         		<div class="form-group">
-                  <label for="exampleInputEmail1">{{ $value['text'] }}</label>
+                  <label for="exampleInputEmail1">{{ $text }}</label>
                   <select class="form-control" name="{{ $key }}" id="{{ $key }}">
                   	{!! Status::createSelectList(1, $data->$key) !!}
                   </select>
@@ -165,7 +167,7 @@
         @else
         	<div class="form-group ">
               <label for="exampleInputEmail1">{{ $value }}</label>
-              <input type="text" class="form-control" name="{{ $key }}" id="{{ $key }}" value="{{ old($key, $data->$key) }}" placeholder="{{ $value }}" maxlength="{{ Common::NAME_MAXLENGTH }}">
+              <input type="text" class="form-control" name="{{ $key }}" id="{{ $key }}" value="{{ old($key, $data->$key) }}" placeholder="{{ $value }}" maxlength="{{ Common::NAME_MAXLENGTH }}" {{ $key == 'email' ? 'disabled' : '' }}>
               <span class="help-block">@if ($errors->has($key)){{ $errors->first($key) }}@endif</span>
             </div>
         @endif

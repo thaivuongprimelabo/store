@@ -14,7 +14,7 @@
     <tr>
       <td>{{ $contact->id }}</td>
       <td>{{ $contact->subject }}</td>
-      <td>{{ $contact->email }}</td>
+      <td><a href="mailto:{{ $contact->email }}">{{ $contact->email }}</a></td>
       <td>{{ $contact->phone }}</td>
       @if($contact->status == ContactStatus::NEW_CONTACT)
       <td><a href="javascript:void(0)" class="update-status" data-tbl="3" data-id="{{ $contact->id }}" data-status="{{ $contact->status }}"><span class="label label-danger">{{ trans('auth.status.new') }}</span></a></td>

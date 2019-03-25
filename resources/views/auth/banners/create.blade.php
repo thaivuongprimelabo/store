@@ -15,6 +15,8 @@
 	<div class="row">
 		<div class="col-md-12">
 			<form role="form" id="submit_form" action="?" method="post" enctype="multipart/form-data">
+				<input type="hidden" id="demension" value="{{ $config['banner_image_size'] }}" />
+				<input type="hidden" id="upload_limit" value="{{ $config['banner_maximum_upload'] }}" />
     			@include('auth.common.alert')
     			@include('auth.common.create_form',['forms' => trans('auth.banners.form')])
                 @include('auth.common.button_footer',['back_url' => route('auth_banners')])
@@ -69,12 +71,5 @@
     	}
     });
 
-    $('#banner').change(function(e) {
-    	$(this).parent().removeClass('has-error');
-    	var element = $(this);
-    	var maxSize = '{{ $config['banner_maximum_upload'] }}';
-    	var demension = '{{ $config['banner_image_size'] }}';
-    	previewImage(element, maxSize, demension);
-    });
 </script>
 @endsection

@@ -92,7 +92,7 @@ return [
             ],
             'shipping_methods' => 'Phương thức thanh toán',
             'bank_transfer' => 'Chuyển khoản ngân hàng',
-            'cod' => 'Tiền mặt'
+            'cash' => 'Tiền mặt'
         ]
     ]
 ];

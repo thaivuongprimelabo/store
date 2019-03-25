@@ -5,6 +5,7 @@ namespace App\Helpers;
 use App\Constants\Common;
 use App\Constants\Status;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
@@ -47,6 +48,45 @@ class Utils {
         }
     }
     
+    public static function doUpload($request, $destFolder, &$filename = '', $product_id = 0, &$arrFilenames = []) {
+        $image_upload_url = $request->image_upload_url;
+        $image_ids = $request->image_ids;
+        $files = $request->image_upload;
+        
+        if(is_array($image_ids) && count($image_ids)) {
+            $ids = [];
+            foreach($image_ids as $k=>$v) {
+                $url = isset($image_upload_url[$k]) ? $image_upload_url[$k] : '';
+                if(!Utils::blank($url)) {
+                    $filename = $url;
+                }
+                
+                $file = isset($files[$k]) ? $files[$k] : '';
+                if(!Utils::blank($file)) {
+                    $filename = self::uploadFile($file, $destFolder);
+                }
+                
+                if($product_id > 0 && !Utils::blank($filename)) {
+                    array_push($arrFilenames, ['product_id' => $product_id, 'image' => $filename]);
+                }
+                
+                if($v != 9999) {
+                    array_push($ids, $v);
+                }
+            }
+            
+            if($product_id > 0) {
+                if(count($ids)) {
+                    DB::table(Common::IMAGES_PRODUCT)->where('product_id', $product_id)->whereNotIn('id', $ids)->delete();
+                }
+                
+                if(count($arrFilenames)) {
+                    DB::table(Common::IMAGES_PRODUCT)->insert($arrFilenames);
+                }
+            }
+        }
+    }
+    
     public static function uploadFile($file, $destFolder, $resize = false, $maxWidth = 0, $maxHeight = 0) {
         
         $uploadFolder = Common::UPLOAD_FOLDER;
@@ -65,23 +105,32 @@ class Utils {
         return $filename;
     }
     
-    public static function createIcoFile($file, $filename) {
-        $uploadPath = Common::UPLOAD_FOLDER;
-        $resizePath = $uploadPath . Common::ICO_FOLDER;
-        $image_resize = Image::make($file->getRealPath());
-        $image_resize->resize(Common::ICO_WIDTH, Common::ICO_HEIGHT);
-        
-        if(!file_exists(public_path($uploadPath))) {
-            mkdir(public_path($uploadPath));
+    public static function createIcoFile($request, &$icoFile = '') {
+        if($request->hasFile('web_ico')) {
+            
+            $file = $request->web_ico;
+            
+            $uploadPath = Common::UPLOAD_FOLDER;
+            $resizePath = $uploadPath . Common::ICO_FOLDER;
+            $image_resize = Image::make($file->getRealPath());
+            
+            $image_resize->resize(Common::ICO_WIDTH, null, function ($constraint) {
+                $constraint->aspectRatio();
+            });
+            
+            if(!file_exists(public_path($uploadPath))) {
+                mkdir(public_path($uploadPath));
+            }
+            
+            if(!file_exists(public_path($resizePath))) {
+                mkdir(public_path($resizePath));
+            }
+            
+            $icoFile = Common::ICO_FOLDER . time() . '_ico.png';
+            
+            $image_resize->save(public_path($uploadPath . $icoFile));
         }
         
-        if(!file_exists(public_path($resizePath))) {
-            mkdir(public_path($resizePath));
-        }
-        
-        $image_resize->save(public_path($resizePath . $filename));
-        
-        return Common::ICO_FOLDER . $filename;
     }
     
     public static function resizeImage($uploadPath, $file, $filename, $width = '', $height = '') {
@@ -280,6 +329,10 @@ class Utils {
     
     public static function createSidebar() {
         
+        $arrUnaccess = [
+            'users'
+        ];
+        
         $html = '';
         $routes = Route::getRoutes();
         $currentRoute = Route::currentRouteName();
@@ -289,6 +342,11 @@ class Utils {
         $html .= '';
         foreach($sidebar as $k=>$v) {
             $open = $display = '';
+            $roleId = Auth::user()->role_id;
+            if($roleId == Common::MOD && in_array($k, $arrUnaccess)) {
+                continue;
+            }
+            
             if(!is_array($v)) {
                 $html .= '<li><a href="' . route('auth_' . $k) . '"><i class="fa fa-files-o"></i><span>' . $v . '</span></a></li>';
             } else {

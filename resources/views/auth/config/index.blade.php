@@ -14,6 +14,8 @@
 	<div class="row">
 		<div class="col-md-12">
 			<form role="form" id="submit_form" action="?" method="post" enctype="multipart/form-data">
+				<input type="hidden" id="demension" value="{{ $config['web_logo_image_size'] }}" />
+				<input type="hidden" id="upload_limit" value="{{ $config['web_logo_maximum_upload'] }}" />
     			@include('auth.common.alert')
     			@php
                   	$forms = trans('auth.config.form');
@@ -43,16 +45,4 @@
 		</div>
 	</div>
 </section>
-@endsection
-@section('script')
-<script type="text/javascript">
-$('#web_logo').change(function(e) {
-	$(this).parent().removeClass('has-error');
-	var element = $(this);
-	var maxSize = '{{ $config['web_logo_maximum_upload'] }}';
-	var demension = '{{ $config['web_logo_image_size'] }}';
-	previewImage(element, maxSize, demension );
-	
-});
-</script>
 @endsection

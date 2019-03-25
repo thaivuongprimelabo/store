@@ -83,34 +83,11 @@ class ContactsController extends AppController
             
             $validator = Validator::make($request->all(), [
                 'reply_content' => 'required',
-                'attachment' => 'file|max:' . $maxSize .'|mimes:'. Common::FILE_EXT1
             ]);
             
             if (!$validator->fails()) {
                 
                 $filename = '';
-                $arrAttachments = [];
-                
-                if($request->hasFile('image_upload')) {
-                    
-                    $files = $request->image_upload;
-                    
-                    if(count($files)) {
-                        foreach($files as $k=>$v) {
-                            $file = $files[$k];
-                            if(!Utils::blank($file->getClientOriginalName())) {
-                                $filename = Utils::uploadFile($file, Common::ATTACHMENT_FOLDER);
-                                
-                                array_push($arrAttachments, Common::UPLOAD_FOLDER . $filename);
-                            }
-                        }
-                    }
-                    
-                }
-                
-                if(count($arrAttachments)) {
-                    $contact->attachment    = implode(',', $arrAttachments);
-                }
                 $contact->reply_content = Utils::cnvNull($request->reply_content, '');
                 $contact->status        = ContactStatus::REPLIED_CONTACT;
                 $contact->updated_at    = date('Y-m-d H:i:s');
@@ -119,7 +96,6 @@ class ContactsController extends AppController
                 $config = [
                     'subject' => '[Reply to: '.$contact->email . ']' . $contact->subject,
                     'msg' => ['content' => $contact->reply_content],
-                    'pathToFile' => $arrAttachments,
                     'to' => $contact->email
                 ];
                 

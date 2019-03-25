@@ -15,6 +15,7 @@
 	<div class="row">
 		<div class="col-md-12">
 			<form role="form" id="submit_form" action="?" method="post" enctype="multipart/form-data">
+			<input type="hidden" id="upload_limit" value="{{ $config['attachment_maximum_upload'] }}" />
 			@include('auth.common.alert')
 			@php
               	$forms = trans('auth.contacts.form');
@@ -23,7 +24,7 @@
             @include('auth.common.edit_form', ['forms' => $form, 'data' => $contact])
             @endforeach
             <div class="box-footer">
-                <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> {{ trans('auth.button.submit') }}</button>
+            	<button type="button" class="btn btn-default" onclick="window.location='{{ route('auth_contacts') }}'"><i class="fa fa-arrow-left" aria-hidden="true"></i> {{ trans('auth.button.back') }}</button>
             </div>
             </form>
 		</div>

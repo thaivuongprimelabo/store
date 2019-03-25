@@ -15,6 +15,8 @@ use App\Product;
 use App\User;
 use App\Size;
 use App\Helpers\Cart;
+use App\Constants\ContactStatus;
+use App\Constants\PostStatus;
 
 class ApiController extends Controller
 {
@@ -110,7 +112,28 @@ class ApiController extends Controller
         $object->status = $currentStatus == 1 ? '0' : '1';
         if($object->save()) {
             $this->output['code'] = 200;
-            $this->output['data'] = ['status' => $object->status, 'text' => Status::getData($object->status)];
+            switch($table) {
+                case 0; // Vendors table
+                case 1; // Categories table
+                case 2; // Banners table
+                case 6; // Products table
+                case 7; // Sizes table
+                case 8; // Colors table
+                case 5; // Users table
+                    $this->output['data'] = ['status' => $object->status, 'text' => Status::getData($object->status)];
+                    break;
+                
+                case 3; // Contacts table
+                    $this->output['data'] = ['status' => $object->status, 'text' => ContactStatus::getData($object->status)];
+                    break;
+                
+                case 4; // Posts table
+                    $this->output['data'] = ['status' => $object->status, 'text' => PostStatus::getData($object->status)];
+                    break;
+                
+                default:
+                    break;
+            }
         }
         return response()->json($this->output);
     }

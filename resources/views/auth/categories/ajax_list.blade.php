@@ -1,6 +1,13 @@
 
 
-  <table class="table table-hover">
+  <table class="table table-hover" style="table-layout: fixed; word-wrap:break-word;">
+  	<col width="10%">
+  	<col width="50%">
+  	<col width="10%">
+  	<col width="10%">
+  	<col width="10%">
+  	<col width="5%">
+  	<col width="5%">
     <tr>
       <th>{{ trans('auth.categories.table_header.id') }}</th>
       <th>{{ trans('auth.categories.table_header.name') }}</th>
@@ -14,7 +21,7 @@
     @foreach($categories as $category)
     <tr>
       <td>{{ $category->id }}</td>
-      <td>{{ $category->name }}</td>
+      <td style="width:20%;">{{ $category->name }}</td>
       @if($category->status == Status::ACTIVE)
       <td><a href="javascript:void(0)" class="update-status" data-tbl="1" data-id="{{ $category->id }}" data-status="{{ $category->status }}"><span class="label label-success">{{ trans('auth.status.active') }}</span></a></td>
       @else

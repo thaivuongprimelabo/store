@@ -16,6 +16,8 @@
 		<div class="col-md-12">
 			<form role="form" id="submit_form" action="?" method="post" enctype="multipart/form-data">
 			<input type="hidden" id="table" value="3" />
+			<input type="hidden" id="demension" value="{{ $config['photo_image_size'] }}" />
+			<input type="hidden" id="upload_limit" value="{{ $config['photo_maximum_upload'] }}" />
 			@include('auth.common.alert')
 			@include('auth.common.edit_form',['forms' => trans('auth.posts.form'), 'data' => $post])
 			@include('auth.common.button_footer',['back_url' => route('auth_posts')])
@@ -86,12 +88,5 @@
     	}
     });
 
-    $('#photo').change(function(e) {
-    	$(this).parent().removeClass('has-error');
-    	var element = $(this);
-    	var maxSize = '{{ $config['photo_maximum_upload'] }}';
-    	var demension = '{{ $config['photo_image_size'] }}';
-    	previewImage(element, maxSize, demension );
-    });
 </script>
 @endsection
