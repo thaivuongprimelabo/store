@@ -122,7 +122,7 @@ Route::group(['prefix' => ''], function () {
     
     Route::get('/vendor/{vendor}' . $config['url_ext'], 'HomeController@vendor')->name('vendor');
     Route::get('/category/{slug}' . $config['url_ext'], 'HomeController@category')->name('category');
-    Route::get('/{slug}/{slug2}' . $config['url_ext'], 'HomeController@productDetails')->name('product_details');
+    Route::get('/detail/{slug}/{slug2}' . $config['url_ext'], 'HomeController@productDetails')->name('product_details');
     Route::get('refreshcaptcha', 'CustomersController@refreshCaptcha')->name('refreshcaptcha');
     Route::post('checkcaptcha', 'CustomersController@checkCaptcha')->name('checkCaptcha');
     

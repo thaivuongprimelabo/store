@@ -411,6 +411,8 @@ class Utils {
     public static function sendMail($config_email = []) {
         
 //         self::setConfigMail();
+
+        $message = '';
         
         try {
             $from = isset($config_email['from'])?$config_email['from']: config('mail.from.address');
@@ -445,12 +447,12 @@ class Utils {
                 }
                 $email->subject($subject);
             });
-                
-            return true;
+            
         } catch (\Exception $e) {
-            echo $e->getMessage();
-            return false;
+            $message = $e->getMessage();
         }
+        
+        return $message;
     }
     
     public static function createMainNav() {

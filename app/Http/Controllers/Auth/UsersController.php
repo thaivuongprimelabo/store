@@ -183,12 +183,7 @@ class UsersController extends AppController
                 
                 $filename = $user->avatar;
                 
-                if($request->hasFile('avatar')) {
-                    
-                    $file = $request->avatar;
-                    
-                    $filename = Utils::uploadFile($file, Common::AVATAR_FOLDER);
-                }
+                Utils::doUpload($request, Common::AVATAR_FOLDER, $filename);
                 
                 $user->name         = Utils::cnvNull($request->name, '');
                 if(!Utils::blank($request->password)) {

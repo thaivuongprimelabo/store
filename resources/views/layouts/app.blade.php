@@ -324,8 +324,6 @@
     		previewImageProduct(input, maxSize, demension, '#preview');
     	}
     });
-	
-
   });
 </script>
 @yield('script')

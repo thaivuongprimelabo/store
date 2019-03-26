@@ -27,7 +27,7 @@
     					<input class="input" type="tel" name="phone" maxlength="15" placeholder="{{ trans('shop.contact.phone') }}">
     				</div>
     				<div class="form-group">
-    					<input class="input" type="tel" name="subject" maxlength="15" placeholder="{{ trans('shop.contact.subject') }}">
+    					<input class="input" type="tel" name="subject" maxlength="255" placeholder="{{ trans('shop.contact.subject') }}">
     				</div>
     				<div class="form-group">
     					<textarea class="form-control" name="content" rows="5" placeholder="{{ trans('shop.contact.comment') }}"></textarea>

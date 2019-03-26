@@ -5,10 +5,10 @@
   	<col width="8%">
   	<col width="8%">
   	<col width="8%">
-  	<col width="5%">
   	<col width="7%">
-  	<col width="2%">
-  	<col width="2%">
+  	<col width="7%">
+  	<col width="4%">
+  	<col width="4%">
     <tr>
       <th>{{ trans('auth.products.table_header.id') }}</th>
       <th>{{ trans('auth.products.table_header.name') }}</th>
@@ -26,9 +26,9 @@
     <tr>
       <td>{{ $product->id }}</td>
       <td>{{ $product->name }}</td>
-      <th><img src="{{ $product->getFirstImage($product->id) }}" width="{{ Common::ADMIN_IMAGE_WIDTH }}" title="{{ $product->description }}" alt="" /></th>
-      <td>{{ $product->category_id }}</td>
-      <td>{{ $product->vendor_id }}</td>
+      <th><img src="{{ $product->getFirstImage($product->id) }}" width="{{ Common::IMAGE_WIDTH }}" title="{{ $product->description }}" alt="" /></th>
+      <td>{{ $product->getCategoryName() }}</td>
+      <td>{{ $product->getVendorName() }}</td>
       <td>{{ $product->getPrice($product->price) }}</td>
       @if($product->status == Status::ACTIVE)
       <td><a href="javascript:void(0)" class="update-status" data-tbl="6" data-id="{{ $product->id }}" data-status="{{ $product->status }}"><span class="label label-success">{{ trans('auth.status.active') }}</span></a></td>

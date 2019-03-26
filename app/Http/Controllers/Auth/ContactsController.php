@@ -99,11 +99,13 @@ class ContactsController extends AppController
                     'to' => $contact->email
                 ];
                 
-                if(Utils::sendMail($config)) {
+                $message = Utils::sendMail($config);
+                if(Utils::blank($message)) {
                     if($contact->save()) {
                         return redirect(route('auth_contacts'))->with('success', trans('messages.UPDATE_SUCCESS'));
                     }
                 } else {
+                    \Log::error($message);
                     return redirect(route('auth_contacts'))->with('error', trans('messages.SEND_MAIL_ERROR'));
                 }
             } else {

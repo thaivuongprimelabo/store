@@ -23,9 +23,7 @@
             @foreach($forms as $key=>$form)
             @include('auth.common.edit_form', ['forms' => $form, 'data' => $contact])
             @endforeach
-            <div class="box-footer">
-            	<button type="button" class="btn btn-default" onclick="window.location='{{ route('auth_contacts') }}'"><i class="fa fa-arrow-left" aria-hidden="true"></i> {{ trans('auth.button.back') }}</button>
-            </div>
+            @include('auth.common.button_footer',['back_url' => route('auth_contacts')])
             </form>
 		</div>
 	</div>

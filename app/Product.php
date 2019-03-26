@@ -37,6 +37,16 @@ class Product extends Model
         return $output;
     }
     
+    public function getCategoryName() {
+        $category = Category::select('name')->where('id', $this->category_id)->first();
+        return $category ? $category->name : '';
+    }
+    
+    public function getVendorName() {
+        $vendor = Vendor::select('name')->where('id', $this->vendor_id)->first();
+        return $vendor ? $vendor->name : '';
+    }
+    
     public function getSizes($productSizes) {
         $arrSizes = explode(',', $productSizes);
         $sizes = Size::select('name')->whereIn('id', $arrSizes)->get();

@@ -42,11 +42,6 @@
     		description: {
 				maxlength: {{  Common::DESC_MAXLENGTH }}
     		},
-    		banner: {
-    			required: true,
-				extension: '{{ Common::IMAGE_EXT }}',
-				filesize: '{{ $config['banner_maximum_upload'] }}'
-    		}
     	},
     	messages: {
     		link : {
@@ -57,11 +52,6 @@
     			required : "{{ Utils::getValidateMessage('validation.required', 'auth.banners.form.description.text') }}",
     			maxlength : "{{ Utils::getValidateMessage('validation.max.string', 'auth.banners.form.description.text', Common::DESC_MAXLENGTH) }}"
     		},
-    		banner: {
-    			required : "{{ Utils::getValidateMessage('validation.required_select', 'auth.banners.form.banner.text') }}",
-    			extension : '{{ Utils::getValidateMessage('validation.image', 'auth.banners.form.banner.text') }}',
-    			filesize: '{{ Utils::getValidateMessage('validation.size.file', 'auth.banners.form.banner.text',  Utils::formatMemory($config['banner_maximum_upload'])) }}'
-    		}
     	},
     	errorPlacement: function(error, element) {
     		customErrorValidate(error, element);
@@ -70,6 +60,5 @@
     	    form.submit();
     	}
     });
-
 </script>
 @endsection

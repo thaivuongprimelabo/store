@@ -29,7 +29,6 @@
 <script src="{{ url('admin/js/jquery.validate.js') }}" type="text/javascript"></script>
 <script type="text/javascript">
     var validatorEventSetting = $("#submit_form").validate({
-    	ignore: ":hidden:not(input[type='file'])",
     	onfocusout: false,
     	success: function(label, element) {
         	var jelm = $(element);

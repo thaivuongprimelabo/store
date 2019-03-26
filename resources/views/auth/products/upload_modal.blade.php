@@ -7,7 +7,7 @@
         <h4 class="modal-title">Tải tập tin</h4>
       </div>
       <div class="modal-body">
-        <form id="add_form" role="form" method="post">
+        <form role="form" method="post">
         	<input type="hidden" class="form-control" id="id" name="id" value=""/>
               <div class="form-group">
                 <label>Tải từ máy tính</label>
@@ -21,8 +21,8 @@
               </div>
               <div class="form-group">
               	<label>Preview</label>
-              	 <a href="javascript:void(0)" class="upload_image" style="width: 150px; height: 150px">
-                  	<img src="" id="preview" style="width:150px; height:150px" />
+              	 <a href="javascript:void(0)" class="upload_image">
+                  	<img src="" id="preview" />
                   </a>
               </div>
               <div id="error_list">

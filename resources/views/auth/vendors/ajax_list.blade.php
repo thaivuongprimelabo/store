@@ -1,6 +1,14 @@
 
 
   <table class="table table-hover">
+  	<col width="2%">
+  	<col width="20%">
+  	<col width="10%">
+  	<col width="10%">
+  	<col width="10%">
+  	<col width="10%">
+  	<col width="2%">
+  	<col width="2%">
     <tr>
       <th>{{ trans('auth.vendors.table_header.id') }}</th>
       <th>{{ trans('auth.vendors.table_header.name') }}</th>
@@ -16,7 +24,7 @@
     <tr>
       <td>{{ $vendor->id }}</td>
       <td>{{ $vendor->name }}</td>
-      <td><img src="{{ Utils::getImageLink($vendor->logo) }}" width="{{ Common::ADMIN_IMAGE_WIDTH }}" /></td>
+      <td><img src="{{ Utils::getImageLink($vendor->logo) }}" width="{{ Common::LOGO_WIDTH }}" /></td>
       @if($vendor->status == Status::ACTIVE)
       <td><a href="javascript:void(0)" class="update-status" data-tbl="0" data-id="{{ $vendor->id }}" data-status="{{ $vendor->status }}"><span class="label label-success">{{ trans('auth.status.active') }}</span></a></td>
       @else

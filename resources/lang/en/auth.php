@@ -162,6 +162,10 @@ return [
                 'email' => ['type' => 'link', 'text' => 'E-mail', 'disabled' => true],
                 'phone' => ['type' => 'text', 'text' => 'Số điện thoại', 'disabled' => true],
                 'content' => ['type' => 'textarea', 'text' => 'Nội dung', 'disabled' => true],
+                'reply_content' => [
+                    'type' => 'editor',
+                    'text' => 'Nội dung trả lời'
+                ]
             ],
         ],
     ],

@@ -109,7 +109,6 @@ var previewImage = function(element, size, demension) {
 }
 
 var previewImageProduct = function(element, size, demension, container) {
-	
 	var arr = demension.split('x');
 	var tagA = element.parent().find('.upload_image');
 	var input = element[0].files[0];
