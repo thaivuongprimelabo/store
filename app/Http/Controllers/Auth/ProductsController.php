@@ -64,6 +64,16 @@ class productsController extends AppController
             if(!Utils::blank($status_search)) {
                 $wheres[] = ['status', '=', $status_search];
             }
+            
+            $category_search = $request->category_search;
+            if(!Utils::blank($category_search)) {
+                $wheres[] = ['category_id', '=', $category_search];
+            }
+            
+            $vendor_search = $request->vendor_search;
+            if(!Utils::blank($vendor_search)) {
+                $wheres[] = ['vendor_id', '=', $vendor_search];
+            }
         }
         
         $products = Product::where($wheres)->orderBy('created_at', 'DESC')->paginate(Common::ROW_PER_PAGE);

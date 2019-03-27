@@ -46,7 +46,7 @@ return [
         ],
         'contacts' => 'Hộp thư liên hệ',
         'users' => 'Quản lý tài khoản',
-        'config_edit' => 'Cài đặt'
+        'config_edit' => 'Cài đặt',
     ],
 //     'sidebar_node' => [
 //         '_list' => 'Danh sách',
@@ -76,7 +76,7 @@ return [
         'name_search_placeholder' => 'Lọc theo tên nhà cung cấp',
         'status_search' => 'Tất cả trạng thái',
         'form' => [
-            'name' => 'Tên nhà cung cấp',
+            'name' => ['type' => 'text', 'text' => 'Tên nhà cung cấp'],
             'description' => ['type' => 'textarea', 'text' => 'Mô tả'],
             'logo' => [
                 'type' => 'file',
@@ -103,7 +103,7 @@ return [
         'name_search_placeholder' => 'Lọc theo tên loại sản phẩm',
         'status_search' => 'Tất cả trạng thái',
         'form' => [
-            'name' => 'Tên loại sản phẩm',
+            'name' => ['type' => 'text', 'text' => 'Tên loại sản phẩm'],
             'parent_id' => [
                 'type' => 'select', 
                 'text' => 'Chọn loại cha', 
@@ -133,7 +133,7 @@ return [
                 'type' => 'file', 
                 'text' => 'Banner',
             ],
-            'link' => 'Đường dẫn',
+            'link' => ['type' => 'text', 'text' => 'Đường dẫn'],
             'description' => ['type' => 'textarea', 'text' => 'Mô tả'],
             'status' => ['type' => 'checkbox', 'text' => 'Đang hoạt động']
         ]
@@ -162,11 +162,11 @@ return [
                 'email' => ['type' => 'link', 'text' => 'E-mail', 'disabled' => true],
                 'phone' => ['type' => 'text', 'text' => 'Số điện thoại', 'disabled' => true],
                 'content' => ['type' => 'textarea', 'text' => 'Nội dung', 'disabled' => true],
-                'reply_content' => [
-                    'type' => 'editor',
-                    'text' => 'Nội dung trả lời'
-                ]
             ],
+            'reply_content' => [
+                'text' => 'Nội dung trả lời',
+                'reply_content' => ['type' => 'editor', 'text' => 'Nội dung'],
+            ]
         ],
     ],
     /*------------ Posts page ------------------- */
@@ -187,12 +187,16 @@ return [
         'name_search_placeholder' => 'Lọc theo tựa đề',
         'status_search' => 'Tất cả trạng thái',
         'form' => [
-            'name' => 'Tựa đề',
+            'name' => [
+                'type' => 'text', 'text' => 'Tựa đề', 'maxlength' => 100
+            ],
             'photo' => [
                 'type' => 'file',
                 'text' => 'Hình ảnh',
             ],
-            'description' => ['type' => 'textarea', 'text' => 'Mô tả ngắn'],
+            'description' => [
+                'type' => 'textarea', 'text' => 'Mô tả ngắn', 'maxlength' => 200
+            ],
             'content' => ['type' => 'editor', 'text' => 'Nội dung'],
             'status' => ['type' => 'checkbox', 'text' => 'Xuất bản'],
         ],
@@ -250,7 +254,7 @@ return [
         'form' => [
             'web_info' => [
                 'text' => 'Website informations',
-                'web_title' => 'Web name',
+                'web_title' => ['type' => 'text', 'text' => 'Web name'],
                 'web_logo' => [
                     'type' => 'file', 
                     'text' => 'Web logo',
@@ -259,23 +263,23 @@ return [
                     'type' => 'file_simple',
                     'text' => 'Web icon'
                 ],
-                'web_email' => 'Web mail',
+                'web_email' => ['type' => 'text', 'text' => 'Web mail'],
                 'web_description' => ['type' => 'textarea', 'text' => 'SEO Description'],
-                'web_keywords' => 'SEO Keywords',
+                'web_keywords' => ['type' => 'textarea', 'text' => 'SEO Keywords'],
             ],
             'mail_settings' => [
-                'text' => 'Mail settings',
-                'mail_driver' => 'Mail driver',
-                'mail_host' => 'Mail host',
-                'mail_port' => 'Mail port',
-                'mail_from' => 'Mail from',
-                'mail_name' => 'Mail name',
-                'mail_encryption' => 'Mail encryption',
-                'mail_account' => 'Mail account',
-                'mail_password' => 'Mail password',
+                'text' => ['type' => 'text', 'text' => 'Mail settings'],
+                'mail_driver' => ['type' => 'text', 'text' => 'Mail driver'],
+                'mail_host' => ['type' => 'text', 'text' => 'Mail host'],
+                'mail_port' => ['type' => 'text', 'text' => 'Mail port'],
+                'mail_from' => ['type' => 'text', 'text' => 'Mail from'],
+                'mail_name' => ['type' => 'text', 'text' => 'Mail name'],
+                'mail_encryption' => ['type' => 'text', 'text' => 'Mail encryption'],
+                'mail_account' => ['type' => 'text', 'text' => 'Mail account'],
+                'mail_password' => ['type' => 'text', 'text' => 'Mail password'],
             ],
             'upload_settings' => [
-                'text' => 'Upload settings',
+                'text' => ['type' => 'text', 'text' => 'Upload settings'],
                 'banner_maximum_upload' => ['type' => 'select', 'text' => 'Maximum upload file (Banner) KB', 'table' => 'UPLOAD_SIZE_LIMIT'],
                 'logo_maximum_upload' => ['type' => 'select', 'text' => 'Maximum upload file (Nhà cung cấp) KB', 'table' => 'UPLOAD_SIZE_LIMIT'],
                 'image_maximum_upload' => ['type' => 'select', 'text' => 'Maximum upload file (Sản phẩm) KB', 'table' => 'UPLOAD_SIZE_LIMIT'],
@@ -283,12 +287,12 @@ return [
                 'web_logo_maximum_upload' => ['type' => 'select', 'text' => 'Maximum upload file (Web logo) KB', 'table' => 'UPLOAD_SIZE_LIMIT'],
                 'attachment_maximum_upload' => ['type' => 'select', 'text' => 'Maximum upload file (Đính kèm) KB', 'table' => 'UPLOAD_SIZE_LIMIT'],
                 'avatar_maximum_upload' => ['type' => 'select', 'text' => 'Maximum upload file (Ảnh đại diện) KB', 'table' => 'UPLOAD_SIZE_LIMIT'],
-                'banner_image_size' => 'Kích thước banner (dài x rộng)',
-                'logo_image_size' => 'Kích thước logo nhà cung cấp (dài x rộng)',
-                'image_image_size' => 'Kích thước hình sản phẩm (dài x rộng)',
-                'photo_image_size' => 'Kích thước hình bài viết (dài x rộng)',
-                'web_logo_image_size' => 'Kích thước web logo (dài x rộng)',
-                'avatar_image_size' => 'Kích thước ảnh đại diện (dài x rộng)',
+                'banner_image_size' => ['type' => 'text', 'text' => 'Kích thước banner (dài x rộng)'],
+                'logo_image_size' => ['type' => 'text', 'text' => 'Kích thước logo nhà cung cấp (dài x rộng)'],
+                'image_image_size' => ['type' => 'text', 'text' => 'Kích thước hình sản phẩm (dài x rộng)'],
+                'photo_image_size' => ['type' => 'text', 'text' => 'Kích thước hình bài viết (dài x rộng)'],
+                'web_logo_image_size' => ['type' => 'text', 'text' => 'Kích thước web logo (dài x rộng)'],
+                'avatar_image_size' => ['type' => 'text', 'text' => 'Kích thước ảnh đại diện (dài x rộng)'],
             ],
             'payment_method' => [
                 'text' => 'Phương thức thanh toán',
@@ -296,7 +300,7 @@ return [
                 'cash_info' => ['type' => 'editor', 'text' => 'Tiền mặt'],
             ],
             'url_ext' => [
-                'url_ext' => 'URL Extension',
+                'url_ext' => ['type' => 'text', 'text' => 'URL Extension'],
             ],
             'off' => [
                 'off' => ['type' => 'checkbox', 'text' => 'Tắt hệ thống']
@@ -325,9 +329,9 @@ return [
         'category_search' => 'Loại SP',
         'vendor_search' => 'Nhà cung cấp',
         'form' => [
-            'name' => 'Tên sản phẩm',
-            'price' => 'Giá bán',
-            'discount' => ['type' => 'text', 'text' => 'Tỷ lệ giảm giá (%)', 'value' => 0],
+            'name' => ['type' => 'text', 'text' => 'Tên sản phẩm'],
+            'price' => ['type' => 'number', 'text' => 'Giá bán', 'maxlength' => 10],
+            'discount' => ['type' => 'number', 'text' => 'Tỷ lệ giảm giá (%)', 'value' => 0, 'maxlength' => 3],
             'category_id' => [
                 'type' => 'select',
                 'text' => 'Loại sản phẩm',
@@ -369,7 +373,7 @@ return [
             'updated_at' => 'Ngày chỉnh sửa'
         ],
         'form' => [
-            'name' => 'Tên gọi',
+            'name' => ['type' => 'text', 'text' => 'Tên gọi'],
             'status' => ['type' => 'checkbox', 'text' => 'Đang hoạt động'],
         ]
     ],
@@ -385,7 +389,7 @@ return [
             'updated_at' => 'Ngày chỉnh sửa'
         ],
         'form' => [
-            'name' => 'Màu sắc',
+            'name' => ['type' => 'text', 'text' => 'Màu sắc'],
             'status' => ['type' => 'checkbox', 'text' => 'Đang hoạt động'],
         ]
     ],
@@ -407,7 +411,7 @@ return [
         'email_search_placeholder' => 'E-mail',
         'status_search' => 'Trạng thái',
         'form' => [
-            'name' => 'Tên tài khoản',
+            'name' => ['type' => 'text', 'text' => 'Tên tài khoản'],
             'avatar' => [
                 'type' => 'file',
                 'text' => 'Ảnh đại diện',
@@ -415,16 +419,17 @@ return [
                 'width' => \App\Constants\Common::AVATAR_WIDTH,
                 'height' => \App\Constants\Common::AVATAR_HEIGHT
             ],
-            'email' => 'E-mail',
+            'email' => ['type' => 'email', 'text' => 'E-mail'],
             'password' => ['type' => 'password', 'text' => 'Mật khẩu'],
             'conf_password' => ['type' => 'password', 'text' => 'Xác nhận mật khẩu'],
             'status' => ['type' => 'checkbox', 'text' => 'Đang hoạt động'],
         ]
     ],
+    /*------------ Profile page ------------------- */
     'profile' => [
         'edit_title' => 'Chỉnh sửa tài khoản',
         'form' => [
-            'name' => 'Tên tài khoản',
+            'name' => ['type' => 'text', 'text' => 'Tên tài khoản'],
             'avatar' => [
                 'type' => 'file',
                 'text' => 'Ảnh đại diện',
@@ -435,6 +440,10 @@ return [
             'password' => ['type' => 'password', 'text' => 'Mật khẩu'],
             'conf_password' => ['type' => 'password', 'text' => 'Xác nhận mật khẩu'],
         ]
+    ],
+    /*------------ Manual page ------------------- */
+    'manual' => [
+        'title' => 'Hướng dẫn sử dụng'
     ],
     'text_image_small' => 'Tập tin *.jpg, *.jpeg, *.gif, *.png.Tối đa {0}',
     'select_empty_text' => 'Vui lòng chọn',
@@ -443,6 +452,7 @@ return [
     'no_data_found' => '(Chưa có dữ liệu)',
     'create_box_title' => 'Thông tin đăng ký',
     'edit_box_title' => 'Thông tin cập nhật',
+    'length_text' => ' (Tối đã {0} ký tự)',
     'status' => [
         'unactive' => 'Tạm dừng',
         'active' => 'Đang hoạt động',

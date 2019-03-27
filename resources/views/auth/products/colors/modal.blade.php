@@ -10,7 +10,7 @@
         <form id="add_form" role="form" method="post">
         	<input type="hidden" class="form-control" id="id" name="id" value=""/>
               <div class="form-group">
-                <label>{{ trans('auth.colors.form.name') }}</label>
+                <label>{{ trans('auth.colors.form.name.text') }}</label>
             	<input type="text" class="form-control my-colorpicker1" id="name" name="name" value="" autocomplete="off" />
               </div>
               <div class="checkbox">

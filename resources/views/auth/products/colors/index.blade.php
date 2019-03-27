@@ -4,7 +4,7 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
   <h1>
-    {{ trans('auth.sidebar.products.colors') }}
+    {{ trans('auth.sidebar.products.products_colors') }}
   </h1>
   <ol class="breadcrumb">
     <li><a href="{{ route('dashboard') }}"><i class="fa fa-dashboard"></i> Trang chủ</a></li>

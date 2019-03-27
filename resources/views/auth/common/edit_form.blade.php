@@ -16,11 +16,13 @@
         		$text = $value['text'];
         		$placeholder = isset($value['placeholder']) ? $value['placeholder'] : $text;
         		$defaultValue = isset($value['value']) ? $value['value'] : '';
+        		$maxlength = isset($value['maxlength']) ? $value['maxlength'] : 120;
+        		$lengthText = str_replace('{0}', $maxlength, trans('auth.length_text'));
         	@endphp
         	@if($value['type'] == 'textarea')
         		<div class="form-group ">
-                  <label for="exampleInputPassword1">{{ $text }}</label>
-                  <textarea class="form-control" rows="6" name="{{ $key }}" placeholder="{{ $placeholder }}" maxlength="{{ Common::DESC_MAXLENGTH }}" {{ isset($value['disabled']) ? 'disabled=true' : '' }}>{{ old($key, $data->$key) }}</textarea>
+                  <label for="exampleInputPassword1">{{ $text }}<small>{{ $lengthText }}</small></label>
+                  <textarea class="form-control" rows="6" name="{{ $key }}" placeholder="{{ $placeholder }}" maxlength="{{ $maxlength }}" {{ isset($value['disabled']) ? 'disabled=true' : '' }}>{{ old($key, $data->$key) }}</textarea>
                   <span class="help-block">@if ($errors->has($key)){{ $errors->first($key) }}@endif</span>
                 </div>
         	@endif
@@ -115,8 +117,24 @@
             
             @if($value['type'] == 'text')
         		<div class="form-group ">
-                  <label for="exampleInputEmail1">{{ $text }}</label>
+                  <label for="exampleInputEmail1">{{ $text }}<small>{{ $lengthText }}</small></label>
                   <input type="text" class="form-control" name="{{ $key }}" id="{{ $key }}" value="{{ old($key, $data->$key) }}" placeholder="{{ $placeholder }}" maxlength="{{ Common::NAME_MAXLENGTH }}" {{ (isset($value['disabled']) || $key == 'email') ? 'disabled=true' : '' }}>
+                  <span class="help-block">@if ($errors->has($key)){{ $errors->first($key) }}@endif</span>
+                </div>
+            @endif
+            
+            @if($value['type'] == 'number')
+        		<div class="form-group ">
+                  <label for="exampleInputEmail1">{{ $text }}<small>{{ $lengthText }}</small></label>
+                  <input type="number" class="form-control" name="{{ $key }}" id="{{ $key }}" value="{{ old($key, $data->$key) }}" placeholder="{{ $placeholder }}" maxlength="{{ $maxlength }}" {{ isset($value['disabled']) ? 'disabled=true' : '' }}>
+                  <span class="help-block">@if ($errors->has($key)){{ $errors->first($key) }}@endif</span>
+                </div>
+            @endif
+            
+            @if($value['type'] == 'email')
+        		<div class="form-group ">
+                  <label for="exampleInputEmail1">{{ $text }}<small>{{ $lengthText }}</small></label>
+                  <input type="email" class="form-control" name="{{ $key }}" id="{{ $key }}" value="{{ old($key, $data->$key) }}" placeholder="{{ $placeholder }}" maxlength="{{ Common::NAME_MAXLENGTH }}" {{ (isset($value['disabled']) || $key == 'email') ? 'disabled=true' : '' }}>
                   <span class="help-block">@if ($errors->has($key)){{ $errors->first($key) }}@endif</span>
                 </div>
             @endif

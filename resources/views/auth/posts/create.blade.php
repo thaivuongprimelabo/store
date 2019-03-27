@@ -69,8 +69,8 @@
     	},
     	messages: {
     		name : {
-    			required : "{{ Utils::getValidateMessage('validation.required', 'auth.posts.form.name') }}",
-    			maxlength : "{{ Utils::getValidateMessage('validation.max.string', 'auth.posts.form.name', Common::NAME_MAXLENGTH) }}",
+    			required : "{{ Utils::getValidateMessage('validation.required', 'auth.posts.form.name.text') }}",
+    			maxlength : "{{ Utils::getValidateMessage('validation.max.string', 'auth.posts.form.name.text', Common::NAME_MAXLENGTH) }}",
     		},
     		description : {
     			required : "{{ Utils::getValidateMessage('validation.required', 'auth.posts.form.description.text') }}",

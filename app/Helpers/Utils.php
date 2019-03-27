@@ -191,6 +191,12 @@ class Utils {
     }
     
     public static function getValidateMessage($key, $param, $param2 = '') {
+        
+        if(!self::blank($param)) {
+            $param = str_replace('.text', '', $param);
+            $param = $param . '.text';
+        }
+        
         $message = trans($key);
         $message = str_replace(':size', trans($param2), $message);
         $message = str_replace(':max', trans($param2), $message);

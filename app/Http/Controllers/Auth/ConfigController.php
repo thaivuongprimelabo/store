@@ -137,4 +137,20 @@ class ConfigController extends AppController
         }
         return view('auth.config.index', compact('config_data'));
     }
+    
+    /**
+     * manual
+     * @param Request $request
+     */
+    public function manual(Request $request) {
+        $config = Config::first();
+        if($request->isMethod('post')) {
+            $manual = $request->manual;
+            $config->manual = $manual;
+            $config->save();
+            return redirect(route('auth_manual'))->with('success', trans('messages.UPDATE_SUCCESS'));
+        }
+        $manual = $config->manual;
+        return view('auth.config.manual', compact('manual'));
+    }
 }

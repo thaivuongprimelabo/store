@@ -10,7 +10,7 @@
         <form id="add_form" role="form" method="post">
         	<input type="hidden" class="form-control" id="id" name="id" value=""/>
           	<div class="form-group">
-            	<label>{{ trans('auth.sizes.form.name') }}</label>
+            	<label>{{ trans('auth.sizes.form.name.text') }}</label>
         		<input type="text" class="form-control" id="name" name="name" value=""/>
           	</div>
           	<div class="checkbox">

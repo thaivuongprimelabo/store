@@ -1,6 +1,14 @@
 
 
   <table class="table table-hover">
+  	<col width="2%">
+  	<col width="20%">
+  	<col width="10%">
+  	<col width="10%">
+  	<col width="10%">
+  	<col width="10%">
+  	<col width="2%">
+  	<col width="2%">
     <tr>
       <th>{{ trans('auth.banners.table_header.id') }}</th>
       <th>{{ trans('auth.banners.table_header.banner') }}</th>
@@ -15,7 +23,7 @@
     @foreach($banners as $banner)
     <tr>
       <td>{{ $banner->id }}</td>
-      <td><img src="{{ Utils::getImageLink($banner->banner) }}" width="{{ Common::ADMIN_IMAGE_WIDTH }}" /></td>
+      <td><img src="{{ Utils::getImageLink($banner->banner) }}" width="200" /></td>
       <td><a href="{{ $banner->link }}" target="_blank" title="{{ $banner->description }}">{{ $banner->link }}</a></td>
       @if($banner->status == Status::ACTIVE)
       <td><a href="javascript:void(0)" class="update-status" data-tbl="2" data-id="{{ $banner->id }}" data-status="{{ $banner->status }}"><span class="label label-success">{{ trans('auth.status.active') }}</span></a></td>

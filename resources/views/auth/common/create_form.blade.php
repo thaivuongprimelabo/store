@@ -10,11 +10,13 @@
         		$text = $value['text'];
         		$placeholder = isset($value['placeholder']) ? $value['placeholder'] : $text;
         		$defaultValue = isset($value['value']) ? $value['value'] : '';
+        		$maxlength = isset($value['maxlength']) ? $value['maxlength'] : 120;
+        		$lengthText = str_replace('{0}', $maxlength, trans('auth.length_text'));
         	@endphp
         	@if($value['type'] == 'textarea')
         		<div class="form-group ">
-                  <label for="exampleInputPassword1">{{ $text }}</label>
-                  <textarea class="form-control" rows="6" name="{{ $key }}" placeholder="{{ $placeholder }}" maxlength="{{ Common::DESC_MAXLENGTH }}">{{ old($key) }}</textarea>
+                  <label for="exampleInputPassword1">{{ $text }}<small>{{ $lengthText }}</small></label>
+                  <textarea class="form-control" rows="6" name="{{ $key }}" placeholder="{{ $placeholder }}" maxlength="{{ $maxlength }}">{{ old($key) }}</textarea>
                   <span class="help-block">@if ($errors->has($key)){{ $errors->first($key) }}@endif</span>
                 </div>
         	@endif
@@ -70,7 +72,7 @@
         	@if($value['type'] == 'datepicker')
         		<div class="form-group ">
                   <label for="exampleInputEmail1">{{ $text }}</label>
-                  <input type="text" class="form-control" name="{{ $key }}" id="{{ $key }}" value="{{ old($key, $defaultValue) }}" placeholder="{{ $placeholder }}" maxlength="{{ Common::NAME_MAXLENGTH }}">
+                  <input type="text" class="form-control" name="{{ $key }}" id="{{ $key }}" value="{{ old($key, $defaultValue) }}" placeholder="{{ $placeholder }}" maxlength="{{ $maxlength }}">
                   <span class="help-block">@if ($errors->has($key)){{ $errors->first($key) }}@endif</span>
                 </div>
         	@endif
@@ -79,7 +81,7 @@
         		<div class="bootstrap-timepicker">
                     <div class="form-group">
                       <label>{{ $text }}</label>
-                      <input type="text" name="{{ $key }}" id="{{ $key }}" value="{{ old($key, $defaultValue) }}" class="form-control timepicker">
+                      <input type="text" name="{{ $key }}" id="{{ $key }}" value="{{ old($key, $defaultValue) }}" class="form-control timepicker" maxlength="{{ $maxlength }}">
                     </div>
                   </div>
         	@endif
@@ -94,8 +96,16 @@
         	
         	@if($value['type'] == 'text')
         		<div class="form-group ">
-                  <label for="exampleInputEmail1">{{ $text }}</label>
-                  <input type="text" class="form-control" name="{{ $key }}" id="{{ $key }}" value="{{ old($key, $defaultValue) }}" placeholder="{{ $placeholder }}" maxlength="{{ Common::NAME_MAXLENGTH }}" {{ isset($value['disabled']) ? 'disabled=true' : '' }}>
+                  <label for="exampleInputEmail1">{{ $text }}<small>{{ $lengthText }}</small></label>
+                  <input type="text" class="form-control" name="{{ $key }}" id="{{ $key }}" value="{{ old($key, $defaultValue) }}" placeholder="{{ $placeholder }}" maxlength="{{ $maxlength }}" {{ isset($value['disabled']) ? 'disabled=true' : '' }}>
+                  <span class="help-block">@if ($errors->has($key)){{ $errors->first($key) }}@endif</span>
+                </div>
+            @endif
+            
+            @if($value['type'] == 'number')
+        		<div class="form-group ">
+                  <label for="exampleInputEmail1">{{ $text }}<small>{{ $lengthText }}</small></label>
+                  <input type="number" class="form-control" name="{{ $key }}" id="{{ $key }}" value="{{ old($key, $defaultValue) }}" placeholder="{{ $placeholder }}" maxlength="{{ $maxlength }}" {{ isset($value['disabled']) ? 'disabled=true' : '' }}>
                   <span class="help-block">@if ($errors->has($key)){{ $errors->first($key) }}@endif</span>
                 </div>
             @endif
@@ -103,7 +113,7 @@
             @if($value['type'] == 'password')
         		<div class="form-group ">
                   <label for="exampleInputEmail1">{{ $text }}</label>
-                  <input type="password" class="form-control" name="{{ $key }}" id="{{ $key }}" value="{{ old($key, $defaultValue) }}" placeholder="{{ $placeholder }}" maxlength="{{ Common::NAME_MAXLENGTH }}" {{ isset($value['disabled']) ? 'disabled=true' : '' }}>
+                  <input type="password" class="form-control" name="{{ $key }}" id="{{ $key }}" value="{{ old($key, $defaultValue) }}" placeholder="{{ $placeholder }}" maxlength="{{ $maxlength }}" {{ isset($value['disabled']) ? 'disabled=true' : '' }}>
                   <span class="help-block">@if ($errors->has($key)){{ $errors->first($key) }}@endif</span>
                 </div>
             @endif
@@ -129,12 +139,6 @@
                     </div>
                 </div>
         	@endif
-        @else
-        	<div class="form-group ">
-              <label for="exampleInputEmail1">{{ $value }}</label>
-              <input type="text" class="form-control" name="{{ $key }}" id="{{ $key }}" value="{{ old($key) }}" placeholder="{{ $value }}" maxlength="{{ Common::NAME_MAXLENGTH }}">
-              <span class="help-block">@if ($errors->has($key)){{ $errors->first($key) }}@endif</span>
-            </div>
         @endif
         @endforeach
     </div>

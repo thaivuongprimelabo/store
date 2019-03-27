@@ -1,6 +1,14 @@
 
 
   <table class="table table-hover">
+  	<col width="2%">
+  	<col width="20%">
+  	<col width="10%">
+  	<col width="10%">
+  	<col width="10%">
+  	<col width="10%">
+  	<col width="2%">
+  	<col width="2%">
     <tr>
       <th>{{ trans('auth.users.table_header.id') }}</th>
       <th>{{ trans('auth.users.table_header.name') }}</th>
