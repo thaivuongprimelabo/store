@@ -52,40 +52,44 @@ class UsersController extends AppController
      * @param Request $request
      */
     public function search(Request $request) {
-        $output = ['code' => 200, 'data' => ''];
-        $wheres = [];
-        if($request->isMethod('post')) {
-            $id_search = $request->id_search;
-            if(!Utils::blank($id_search)) {
-                $wheres[] = ['id', '=', $id_search];
-            }
+//         $output = ['code' => 200, 'data' => ''];
+//         $wheres = [];
+//         if($request->isMethod('post')) {
+//             $id_search = $request->id_search;
+//             if(!Utils::blank($id_search)) {
+//                 $wheres[] = ['id', '=', $id_search];
+//             }
             
-            $name_search = $request->name_search;
-            if(!Utils::blank($name_search)) {
-                $wheres[] = ['name', 'LIKE', '%' . $name_search . '%'];
-            }
+//             $name_search = $request->name_search;
+//             if(!Utils::blank($name_search)) {
+//                 $wheres[] = ['name', 'LIKE', '%' . $name_search . '%'];
+//             }
             
-            $status_search = $request->status_search;
-            if(!Utils::blank($status_search)) {
-                $wheres[] = ['status', '=', $status_search];
-            }
+//             $status_search = $request->status_search;
+//             if(!Utils::blank($status_search)) {
+//                 $wheres[] = ['status', '=', $status_search];
+//             }
             
-            $email_search = $request->email_search;
-            if(!Utils::blank($email_search)) {
-                $wheres[] = ['email', '=', $email_search];
-            }
-        }
+//             $email_search = $request->email_search;
+//             if(!Utils::blank($email_search)) {
+//                 $wheres[] = ['email', '=', $email_search];
+//             }
+//         }
         
-        $users = User::where($wheres)->whereIn('role_id', [Common::MOD])->paginate(Common::ROW_PER_PAGE);
+//         $users = User::where($wheres)->whereIn('role_id', [Common::MOD])->paginate(Common::ROW_PER_PAGE);
         
-        $paging = $users->toArray();
+//         $paging = $users->toArray();
         
-        if($request->ajax()) {
-            $output['data'] = view('auth.users.ajax_list', compact('users', 'paging'))->render();
-            return response()->json($output);
-        } else {
-            return compact('users', 'paging');
-        }
+//         if($request->ajax()) {
+//             $output['data'] = view('auth.users.ajax_list', compact('users', 'paging'))->render();
+//             return response()->json($output);
+//         } else {
+//             return compact('users', 'paging');
+//         }
+        
+        $user = new User();
+        return $this->doSearch($request, $user);
+        
     }
     
     /**

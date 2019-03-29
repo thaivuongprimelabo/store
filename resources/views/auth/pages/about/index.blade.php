@@ -13,7 +13,6 @@
 	<div class="row">
 		<div class="col-md-12">
 			<form role="form" id="submit_form" action="?" method="post" enctype="multipart/form-data">
-			@include('auth.common.alert')
 			@if($about)
 			@include('auth.common.edit_form',['forms' => trans('auth.about.form'), 'data' => $about])
 			@else

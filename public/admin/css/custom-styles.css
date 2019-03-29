@@ -5,3 +5,18 @@
 	width:85%;
 	margin-top: 5px;
 }
+
+.hide_element {
+	display: none;
+}
+
+#message {
+    position: fixed;
+    top: 0;
+    left:50%;
+	z-index: 9999;
+    width:auto;
+}
+#inner-message {
+    margin: 0 auto;
+}

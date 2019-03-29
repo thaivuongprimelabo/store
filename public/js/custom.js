@@ -210,6 +210,32 @@ var selectImage = function(index, demension) {
 	$('#uploadModal').modal('toggle');
 }
 
+var getLinkYoutubeId = function(url) {
+	var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    var match = url.match(regExp);
+
+    if (match && match[2].length == 11) {
+    	return match[2];
+    }
+    
+    return '';
+}
+
+var formatCurrency = function (nStr, decSeperate, groupSeperate) {
+  	if(nStr == null) {
+  		return '0 ' + Constants.CURRENCY;
+  	}
+  	nStr += '';
+    x = nStr.split(decSeperate);
+    x1 = x[0];
+    x2 = x.length > 1 ? '.' + x[1] : '';
+    var rgx = /(\d+)(\d{3})/;
+    while (rgx.test(x1)) {
+        x1 = x1.replace(rgx, '$1' + groupSeperate + '$2');
+    }
+    return x1 + x2;
+}
+
 $(document).ready(function() {
 	
 	$.validator.addMethod( "extension", function( value, element, param ) {

@@ -5,8 +5,11 @@ namespace App\Http\Controllers\Auth;
 use App\Constants\Common;
 use App\Helpers\Utils;
 use App\Http\Controllers\Controller;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Route;
 use View;
 class AppController extends Controller
 {
@@ -57,5 +60,45 @@ class AppController extends Controller
         $arrUnaccess = [
             'users'
         ];
+    }
+    
+    public function doSearch($request, Model $model) {
+        $wheres = [];
+        
+        $route = Route::currentRouteName();
+        $name = str_replace('auth_', '', Route::currentRouteName());
+        
+        if($request->isMethod('post')) {
+            
+            $data = $request->all();
+            $search_condition = trans('auth.' . $name . '.search_form');
+            
+            foreach($search_condition as $key=>$con) {
+                $value = $data[$key];
+                if(!Utils::blank($value)) {
+                    $wheres[] = [$key, '=', $value];
+                }
+            }
+        }
+        
+        switch($name) {
+            case Common::USERS:
+                $wheres[] = ['role_id', '=', Common::MOD];
+                break;
+            default:
+                
+                break;
+        }
+        
+        $data_list = $model::where($wheres)->paginate(Common::ROW_PER_PAGE);
+        
+        $paging = $data_list->toArray();
+        
+        if($request->ajax()) {
+            $output['data'] = view('auth.' . $name . '.ajax_list', compact('data_list', 'paging'))->render();
+            return response()->json($output);
+        } else {
+            return compact('data_list', 'paging');
+        }
     }
 }

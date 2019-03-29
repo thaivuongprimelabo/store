@@ -56,17 +56,18 @@
 								</div>
 								<strong class="text-uppercase">{{ trans('shop.my_account') }} <i class="fa fa-caret-down"></i></strong>
 							</div>
-							@if(Auth::guard('customer')->check())
-							<a href="#" class="text-uppercase" title="{{ Auth::guard('customer')->user()->name }}">{{ str_limit(Auth::guard('customer')->user()->name, 9) }}</a>
+							
+							@if(Auth::guard('member')->check())
+							<a href="#" class="text-uppercase" title="{{ Auth::guard('member')->user()->name }}">{{ str_limit(Auth::guard('member')->user()->name, 9) }}</a>
 							<ul class="custom-menu">
 								<li><a href="#"><i class="fa fa-user-o"></i> {{ trans('shop.password') }}</a></li>
 								<li><a href="#"><i class="fa fa-check"></i> {{ trans('shop.history') }}</a></li>
-								<li><a href="{{ route('customer_logout') }}"><i class="fa fa-unlock-alt"></i> {{ trans('shop.logout') }}</a></li>
+								<li><a href="{{ route('member_logout') }}"><i class="fa fa-unlock-alt"></i> {{ trans('shop.logout') }}</a></li>
 							</ul>
 							@else
-							<a href="{{ route('customer_login') }}" class="text-uppercase">{{ trans('shop.login') }}</a>
+							<a href="{{ route('member_login') }}" class="text-uppercase">{{ trans('shop.login') }}</a>
 							<ul class="custom-menu">
-								<li><a href="{{ route('customer_login') }}"><i class="fa fa-user-plus"></i> {{ trans('shop.register') }}</a></li>
+								<li><a href="{{ route('member_login') }}"><i class="fa fa-user-plus"></i> {{ trans('shop.register') }}</a></li>
 							</ul>
 							@endif
 						</li>

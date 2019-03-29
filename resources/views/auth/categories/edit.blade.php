@@ -16,7 +16,6 @@
 		<div class="col-md-12">
 			<form role="form" id="submit_form" action="?" method="post" enctype="multipart/form-data">
 			<input type="hidden" id="table" value="0" />
-			@include('auth.common.alert')
 			@include('auth.common.edit_form',['data' => $category, 'forms' => trans('auth.categories.form')])
 			@include('auth.common.button_footer',['back_url' => route('auth_categories')])
             </form>

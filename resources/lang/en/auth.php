@@ -1,6 +1,11 @@
 <?php
 
-return [
+$bannerType = [
+    'use_image' => ['checked' => true, 'text' => 'Hình ảnh'],
+    'use_youtube' => ['checked' => false, 'text' => 'Youtube Clip']
+];
+
+$auth = [
 
     /*
     |--------------------------------------------------------------------------
@@ -46,17 +51,16 @@ return [
         ],
         'contacts' => 'Hộp thư liên hệ',
         'users' => 'Quản lý tài khoản',
+        'forum' => [
+            'title' => 'Diễn đàn',
+            'members' => 'Thành viên',
+            'groups' => 'Nhóm thảo luận',
+            'threads' => 'Chủ đề thảo luận',
+            'comments' => 'Bình luận'
+        ],
         'config_edit' => 'Cài đặt',
     ],
-//     'sidebar_node' => [
-//         '_list' => 'Danh sách',
-//         '_create' => 'Đăng ký', 
-//         '_sizes' => 'Kích cỡ',
-//         '_colors' => 'Màu sắc',
-//         '_about' => 'Giới thiệu',
-//         '_delivery' => 'Phương thức giao hàng'
-//     ],
-    
+    'banner_type' => $bannerType,
     /*------------ Vendor page ------------------- */
     'vendors' => [
         'list_title' => 'Danh mục nhà cung cấp',
@@ -72,9 +76,16 @@ return [
             'created_at' => 'Ngày đăng ký',
             'updated_at' => 'Ngày chỉnh sửa'
         ],
-        'id_search_placeholder' => 'Lọc theo Id nhà cung cấp',
-        'name_search_placeholder' => 'Lọc theo tên nhà cung cấp',
-        'status_search' => 'Tất cả trạng thái',
+        'search_form' => [
+            'id_search' => ['type' => 'text', 'placeholder' => 'Lọc theo ID nhà cung cấp'],
+            'name_search' => ['type' => 'text', 'placeholder' => 'Lọc theo tên nhà cung cấp'],
+            'status_search' => ['type' => 'status_select']
+        ],
+        'search_form' => [
+            'id_search' => ['type' => 'text', 'placeholder' => 'Lọc theo ID loại sản phẩm'],
+            'name_search' => ['type' => 'text', 'placeholder' => 'Lọc theo tên loại sản phẩm'],
+            'status_search' => ['type' => 'status_select']
+        ],
         'form' => [
             'name' => ['type' => 'text', 'text' => 'Tên nhà cung cấp'],
             'description' => ['type' => 'textarea', 'text' => 'Mô tả'],
@@ -99,9 +110,11 @@ return [
             'created_at' => 'Ngày đăng ký',
             'updated_at' => 'Ngày chỉnh sửa'
         ],
-        'id_search_placeholder' => 'Lọc theo Id loại sản phẩm',
-        'name_search_placeholder' => 'Lọc theo tên loại sản phẩm',
-        'status_search' => 'Tất cả trạng thái',
+        'search_form' => [
+            'id_search' => ['type' => 'text', 'placeholder' => 'Lọc theo ID loại sản phẩm'],
+            'name_search' => ['type' => 'text', 'placeholder' => 'Lọc theo tên loại sản phẩm'],
+            'status_search' => ['type' => 'status_select']
+        ],
         'form' => [
             'name' => ['type' => 'text', 'text' => 'Tên loại sản phẩm'],
             'parent_id' => [
@@ -127,14 +140,24 @@ return [
             'created_at' => 'Ngày đăng ký',
             'updated_at' => 'Ngày chỉnh sửa'
         ],
+        'search_form' => [
+            'status_search' => ['type' => 'status_select', 'empty_text' => 'Lọc theo trạng thái'],
+            'type_search' => ['type' => 'data_select', 'table' => 'BANNER_TYPE', 'empty_text' => 'Lọc theo loại'],
+        ],
         'status_search' => 'Tất cả trạng thái',
         'form' => [
+            'select_type' => [
+                'type' => 'radio_list', 
+                'value' => $bannerType
+            ],
             'banner' => [
                 'type' => 'file', 
                 'text' => 'Banner',
+                'container_id' => 'use_image'
             ],
-            'link' => ['type' => 'text', 'text' => 'Đường dẫn'],
-            'description' => ['type' => 'textarea', 'text' => 'Mô tả'],
+            'link' => ['type' => 'text', 'text' => 'Đường dẫn', 'container_id' => 'use_image'],
+            'youtube_id' => ['type' => 'youtube_url', 'text' => 'Youtube URL', 'container_id' => 'use_youtube'],
+            'preview_youtube' => ['type' => 'youtube_preview', 'text' => 'Preview', 'container_id' => 'use_youtube'],
             'status' => ['type' => 'checkbox', 'text' => 'Đang hoạt động']
         ]
     ],
@@ -151,9 +174,11 @@ return [
             'status' => 'Trạng thái',
             'created_at' => 'Ngày gửi',
         ],
-        'email_search_placeholder' => 'Lọc theo email',
-        'phone_search_placeholder' => 'Lọc theo số điện thoại',
-        'status_search' => 'Tất cả trạng thái',
+        'search_form' => [
+            'email_search' => ['type' => 'text', 'placeholder' => 'Lọc theo địa chỉ E-mail'],
+            'phone_search' => ['type' => 'text', 'placeholder' => 'Lọc theo số điện thoại'],
+            'status_search' => ['type' => 'data_select', 'empty_text' => 'Lọc theo trạng thái', 'table' => 'CONTACT_TYPE'],
+        ],
         'form' => [
             'contact_content' => [
                 'text' => 'Nội dung thư',
@@ -186,6 +211,11 @@ return [
         'id_search_placeholder' => 'Lọc theo Id bài viết',
         'name_search_placeholder' => 'Lọc theo tựa đề',
         'status_search' => 'Tất cả trạng thái',
+        'search_form' => [
+            'id_search' => ['type' => 'text', 'placeholder' => 'Lọc theo ID bài viết'],
+            'name_search' => ['type' => 'text', 'placeholder' => 'Lọc theo tựa đề'],
+            'status_search' => ['type' => 'status_select', 'empty_text' => 'Lọc theo trạng thái'],
+        ],
         'form' => [
             'name' => [
                 'type' => 'text', 'text' => 'Tựa đề', 'maxlength' => 100
@@ -231,11 +261,13 @@ return [
             'price' => 'Đơn giá',
             'cost' => 'Thành tiền'
         ],
-        'id_search_placeholder' => 'Mã đơn hàng',
-        'name_search_placeholder' => 'Tên khách hàng',
-        'phone_search_placeholder' => 'Số điện thoại',
-        'date_search_placeholder' => 'Ngày đặt hàng',
-        'status_search' => 'Tất cả trạng thái',
+        'search_form' => [
+            'id_search' => ['type' => 'text', 'placeholder' => 'Lọc theo ID bài viết'],
+            'name_search' => ['type' => 'text', 'placeholder' => 'Lọc theo tên khách hàng'],
+            'phone_search' => ['type' => 'text', 'placeholder' => 'Lọc theo số điện thoại'],
+            'date_search' => ['type' => 'text', 'placeholder' => 'Lọc theo ngày giao hàng'],
+            'status_search' => ['type' => 'status_select', 'empty_text' => 'Lọc theo trạng thái'],
+        ],
         'form' => [
             'customer_info' => [
                 'text' => 'Thông tin đặt hàng',
@@ -268,7 +300,7 @@ return [
                 'web_keywords' => ['type' => 'textarea', 'text' => 'SEO Keywords'],
             ],
             'mail_settings' => [
-                'text' => ['type' => 'text', 'text' => 'Mail settings'],
+                'text' => 'Mail settings',
                 'mail_driver' => ['type' => 'text', 'text' => 'Mail driver'],
                 'mail_host' => ['type' => 'text', 'text' => 'Mail host'],
                 'mail_port' => ['type' => 'text', 'text' => 'Mail port'],
@@ -279,7 +311,7 @@ return [
                 'mail_password' => ['type' => 'text', 'text' => 'Mail password'],
             ],
             'upload_settings' => [
-                'text' => ['type' => 'text', 'text' => 'Upload settings'],
+                'text' => 'Upload settings',
                 'banner_maximum_upload' => ['type' => 'select', 'text' => 'Maximum upload file (Banner) KB', 'table' => 'UPLOAD_SIZE_LIMIT'],
                 'logo_maximum_upload' => ['type' => 'select', 'text' => 'Maximum upload file (Nhà cung cấp) KB', 'table' => 'UPLOAD_SIZE_LIMIT'],
                 'image_maximum_upload' => ['type' => 'select', 'text' => 'Maximum upload file (Sản phẩm) KB', 'table' => 'UPLOAD_SIZE_LIMIT'],
@@ -323,14 +355,16 @@ return [
             'status' => 'Trạng thái',
             'created_at' => 'Ngày đăng ký',
         ],
-        'id_search_placeholder' => 'Id sản phẩm',
-        'name_search_placeholder' => 'Tên sản phẩm',
-        'status_search' => 'Trạng thái',
-        'category_search' => 'Loại SP',
-        'vendor_search' => 'Nhà cung cấp',
+        'search_form' => [
+            'id_search' => ['type' => 'text', 'placeholder' => 'Lọc theo Id sản phẩm'],
+            'name_search' => ['type' => 'text', 'placeholder' => 'Lọc theo tên sản phẩm'],
+            'status_search' => ['type' => 'status_select', 'empty_text' => 'Lọc theo trạng thái'],
+            'category_search' => ['type' => 'data_select', 'table' => \App\Constants\Common::CATEGORIES, 'empty_text' => 'Lọc theo loại'],
+            'vendor_search' => ['type' => 'data_select', 'table' => \App\Constants\Common::VENDORS, 'empty_text' => 'Lọc theo nhà cung cấp'],
+        ],
         'form' => [
             'name' => ['type' => 'text', 'text' => 'Tên sản phẩm'],
-            'price' => ['type' => 'number', 'text' => 'Giá bán', 'maxlength' => 10],
+            'price' => ['type' => 'currency', 'text' => 'Giá bán', 'maxlength' => 10],
             'discount' => ['type' => 'number', 'text' => 'Tỷ lệ giảm giá (%)', 'value' => 0, 'maxlength' => 3],
             'category_id' => [
                 'type' => 'select',
@@ -406,10 +440,13 @@ return [
             'status' => 'Trạng thái',
             'created_at' => 'Ngày đăng ký',
         ],
-        'id_search_placeholder' => 'Id tài khoản',
-        'name_search_placeholder' => 'Tên tài khoản',
-        'email_search_placeholder' => 'E-mail',
-        'status_search' => 'Trạng thái',
+        'search_form' => [
+            'id_search' => ['type' => 'text', 'placeholder' => 'Lọc theo ID tài khoản'],
+            'name_search' => ['type' => 'text', 'placeholder' => 'Lọc theo tên'],
+            'phone_search' => ['type' => 'text', 'placeholder' => 'Lọc theo số điện thoại'],
+            'email_search' => ['type' => 'text', 'placeholder' => 'Lọc theo địa chỉ e-mail'],
+            'status_search' => ['type' => 'status_select', 'empty_text' => 'Lọc theo trạng thái'],
+        ],
         'form' => [
             'name' => ['type' => 'text', 'text' => 'Tên tài khoản'],
             'avatar' => [
@@ -441,9 +478,68 @@ return [
             'conf_password' => ['type' => 'password', 'text' => 'Xác nhận mật khẩu'],
         ]
     ],
-    /*------------ Manual page ------------------- */
-    'manual' => [
-        'title' => 'Hướng dẫn sử dụng'
+    /*------------ Threads page ------------------- */
+    'threads' => [
+        'list_title' => 'Danh mục chủ đề',
+        'create_title' => 'Đăng ký chủ đề',
+        'edit_title' => 'Chỉnh sửa chủ đề',
+        'edit_title' => 'Chỉnh sửa chủ đề',
+        'search_placeholder' => 'Mã, tên chủ đề',
+        'table_header' => [
+            'id' => 'ID',
+            'name' => 'Tên chủ đề',
+            'status' => 'Trạng thái',
+            'author' => 'Người đăng',
+            'created_at' => 'Ngày đăng ký',
+            'updated_at' => 'Ngày chỉnh sửa'
+        ],
+        'id_search_placeholder' => 'Lọc theo Id chủ đề',
+        'name_search_placeholder' => 'Lọc theo tên chủ đề',
+        'status_search' => 'Tất cả trạng thái',
+        'form' => [
+            'name' => ['type' => 'text', 'text' => 'Chủ đề'],
+            'content' => [
+                'type' => 'editor',
+                'text' => 'Nội dung',
+            ],
+            'status' => ['type' => 'checkbox', 'text' => 'Đang hoạt động']
+        ]
+    ],
+    /*------------ Members page ------------------- */
+    'members' => [
+        'list_title' => 'Danh mục thành viên',
+        'create_title' => 'Đăng ký thành viên',
+        'edit_title' => 'Chỉnh sửa thành viên',
+        'edit_title' => 'Chỉnh sửa thành viên',
+        'search_placeholder' => 'Mã, tên thành viên',
+        'table_header' => [
+            'id' => 'ID',
+            'name' => 'Tên',
+            'email' => 'E-mail',
+            'avatar' => 'Ảnh đại diện',
+            'status' => 'Trạng thái',
+            'created_at' => 'Ngày đăng ký',
+            'updated_at' => 'Ngày chỉnh sửa'
+        ],
+        'search_form' => [
+            'id_search' => ['type' => 'text', 'placeholder' => 'Lọc theo Id thành viên'],
+            'name_search' => ['type' => 'text', 'placeholder' => 'Lọc theo tên thành viên'],
+            'status_search' => ['type' => 'status_select']
+        ],
+        'form' => [
+            'name' => ['type' => 'text', 'text' => 'Tên thành viên'],
+            'email' => ['type' => 'email', 'text' => 'E-mail'],
+            'password' => ['type' => 'password', 'text' => 'Mật khẩu'],
+            'conf_password' => ['type' => 'password', 'text' => 'Xác nhận mật khẩu'],
+            'avatar' => [
+                'type' => 'file',
+                'text' => 'Ảnh đại diện',
+                'size' => \App\Constants\Common::AVATAR_MAX_SIZE,
+                'width' => \App\Constants\Common::AVATAR_WIDTH,
+                'height' => \App\Constants\Common::AVATAR_HEIGHT
+            ],
+            'status' => ['type' => 'checkbox', 'text' => 'Đang hoạt động']
+        ]
     ],
     'text_image_small' => 'Tập tin *.jpg, *.jpeg, *.gif, *.png.Tối đa {0}',
     'select_empty_text' => 'Vui lòng chọn',
@@ -487,3 +583,5 @@ return [
         'clear_config_cache' => 'Xóa cache'
     ]
 ];
+
+return $auth;

@@ -16,7 +16,6 @@
 			<form role="form" id="submit_form" action="?" method="post" enctype="multipart/form-data">
 				<input type="hidden" id="demension" value="{{ $config['web_logo_image_size'] }}" />
 				<input type="hidden" id="upload_limit" value="{{ $config['web_logo_maximum_upload'] }}" />
-    			@include('auth.common.alert')
     			@php
                   	$forms = trans('auth.config.form');
                   	$accept = [
@@ -28,9 +27,7 @@
                 	@if(in_array($key, $accept))
                 	@include('auth.common.edit_form', ['forms' => $form, 'data' => $config_data])
                 	@endif
-                @endif
-                
-                @if(Auth::user()->role_id == Common::SUPER_ADMIN)
+                @else
                 	@include('auth.common.edit_form', ['forms' => $form, 'data' => $config_data])
                 @endif
                 @endforeach

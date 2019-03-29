@@ -18,45 +18,7 @@
           <div class="box">
               <!-- Box Body -->
               <div class="box-body">
-              	 <form id="search_form">
-                  	 <div class="col-md-2">
-                        <div class="form-group has-feedback">
-                          <input type="text" class="form-control" name="id_search" id="id_search" placeholder="{{ trans('auth.products.id_search_placeholder') }}"/>
-                          <span class="glyphicon glyphicon-search form-control-feedback"></span>
-                        </div>
-                     </div>
-                     <div class="col-md-2">
-                        <div class="form-group has-feedback">
-                          <input type="text" class="form-control" name="name_search" id="name_search" placeholder="{{ trans('auth.products.name_search_placeholder') }}"/>
-                          <span class="glyphicon glyphicon-search form-control-feedback"></span>	
-                        </div>
-                     </div>
-                     <div class="col-md-2">
-                        <div class="form-group">
-                          <select class="form-control" name="category_search" id="status_search">
-                          	<option value="">{{ trans('auth.products.category_search') }}</option>
-                          	{!! Utils::createSelectList(Common::CATEGORIES) !!}
-                          </select>
-                        </div>
-                     </div>
-                     <div class="col-md-2">
-                        <div class="form-group">
-                          <select class="form-control" name="vendor_search" id="status_search">
-                          	<option value="">{{ trans('auth.products.vendor_search') }}</option>
-                          	{!! Utils::createSelectList(Common::VENDORS) !!}
-                          </select>
-                        </div>
-                     </div>
-                     <div class="col-md-2">
-                        <div class="form-group">
-                          <select class="form-control" name="status_search" id="status_search">
-                          	<option value="">{{ trans('auth.products.status_search') }}</option>
-                          	{!! Status::createSelectList() !!}
-                          </select>
-                        </div>
-                     </div>
-                 </form>
-                 @include('auth.common.group_button')
+                 @include('auth.common.search',['form' => trans('auth.products.search_form')])
               </div>
           </div>
           @if (session('success'))

@@ -40,14 +40,9 @@ class BannersController extends AppController
         $wheres = [];
         $output = ['code' => 200, 'data' => ''];
         if($request->isMethod('post')) {
-            $id_search = $request->id_search;
-            if(!Utils::blank($id_search)) {
-                $wheres[] = ['id', '=', $id_search];
-            }
-            
-            $name_search = $request->name_search;
-            if(!Utils::blank($name_search)) {
-                $wheres[] = ['name', 'LIKE', '%' . $name_search . '%'];
+            $type_search = $request->type_search;
+            if(!Utils::blank($type_search)) {
+                $wheres[] = ['select_type', '=', $type_search];
             }
             
             $status_search = $request->status_search;
@@ -86,12 +81,18 @@ class BannersController extends AppController
                 
                 $filename = '';
                 Utils::doUpload($request, Common::BANNER_FOLDER, $filename);
+                $select_type = Utils::cnvNull($request->select_type, 'use_image');
                 
                 $banner = new Banner();
-                $banner->link           = Utils::cnvNull($request->link, '');
-                $banner->banner         = $filename;
+                if($select_type == 'use_image') {
+                    $banner->link           = Utils::cnvNull($request->link, '');
+                    $banner->banner         = $filename;
+                } else {
+                    $banner->youtube_id    = Utils::cnvNull($request->youtube_embed_url, '');
+                }
                 $banner->description    = Utils::cnvNull($request->description, '');
                 $banner->status         = Utils::cnvNull($request->status, 0);
+                $banner->select_type    = Utils::cnvNull($request->select_type, 'use_image');
                 $banner->created_at     = date('Y-m-d H:i:s');
                 $banner->updated_at     = date('Y-m-d H:i:s');
                 
@@ -126,10 +127,20 @@ class BannersController extends AppController
                 $filename = $banner->banner;
                 Utils::doUpload($request, Common::BANNER_FOLDER, $filename);
                 
-                $banner->link           = Utils::cnvNull($request->link, '');
-                $banner->banner         = $filename;
+                $select_type = Utils::cnvNull($request->select_type, 'use_image');
+                if($select_type == 'use_image') {
+                    $banner->link           = Utils::cnvNull($request->link, '');
+                    $banner->banner         = $filename;
+                    $banner->youtube_id    = '';
+                } else {
+                    $banner->youtube_id    = Utils::cnvNull($request->youtube_embed_url, '');
+                    $banner->link           = '';
+                    $banner->banner         = '';
+                }
+                
                 $banner->description    = Utils::cnvNull($request->description, '');
                 $banner->status         = Utils::cnvNull($request->status, 0);
+                $banner->select_type    = Utils::cnvNull($request->select_type, 'use_image');
                 $banner->updated_at     = date('Y-m-d H:i:s');
                 
                 if($banner->save()) {

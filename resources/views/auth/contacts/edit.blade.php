@@ -16,7 +16,6 @@
 		<div class="col-md-12">
 			<form role="form" id="submit_form" action="?" method="post" enctype="multipart/form-data">
 			<input type="hidden" id="upload_limit" value="{{ $config['attachment_maximum_upload'] }}" />
-			@include('auth.common.alert')
 			@php
               	$forms = trans('auth.contacts.form');
             @endphp

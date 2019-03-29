@@ -6,11 +6,11 @@ use App\Constants\Common;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Customer extends Authenticatable
+class Member extends Authenticatable
 {
     use Notifiable;
     
-    protected $table = Common::CUSTOMERS;
+    protected $table = Common::MEMBERS;
     
     /**
      * The attributes that are mass assignable.

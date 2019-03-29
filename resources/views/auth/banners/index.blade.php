@@ -18,17 +18,7 @@
           <div class="box">
               <!-- Box Body -->
               <div class="box-body">
-              	 <form id="search_form">
-                     <div class="col-md-3">
-                        <div class="form-group">
-                          <select class="form-control" name="status_search" id="status_search">
-                          	<option value="">{{ trans('auth.banners.status_search') }}</option>
-                          	{!! Status::createSelectList() !!}
-                          </select>
-                        </div>
-                     </div>
-                 </form>
-                 @include('auth.common.group_button')
+              	 @include('auth.common.search',['form' => trans('auth.banners.search_form')])
               </div>
           </div>
           @if (session('success'))

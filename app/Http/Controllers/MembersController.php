@@ -5,13 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use App\Customer;
 use App\Helpers\Utils;
+use App\Member;
 
-class CustomersController extends AppController
+class MembersController extends AppController
 {
     public $breadcrumb = [];
-    protected $guard = 'customer';
+    protected $guard = 'member';
     
     /**
      * Create a new controller instance.
@@ -64,14 +64,14 @@ class CustomersController extends AppController
         $validator = Validator::make($request->all(), $rules);
         
         if(!$validator->fails()) {
-            $customer = new Customer();
-            $customer->name = Utils::cnvNull($request->name, '');
-            $customer->email = Utils::cnvNull($request->email, '');
-            $customer->password = bcrypt($request->password);
-            $customer->phone = Utils::cnvNull($request->phone, '');
-            $customer->address = Utils::cnvNull($request->address, '');
-            $customer->created_at = date('Y-m-d H:i:s');
-            $customer->updated_at = date('Y-m-d H:i:s');
+            $member = new Member();
+            $member->name = Utils::cnvNull($request->name, '');
+            $member->email = Utils::cnvNull($request->email, '');
+            $member->password = bcrypt($request->password);
+            $member->phone = Utils::cnvNull($request->phone, '');
+            $member->address = Utils::cnvNull($request->address, '');
+            $member->created_at = date('Y-m-d H:i:s');
+            $member->updated_at = date('Y-m-d H:i:s');
             
             $config = [
                 'subject' => '[' . $this->config['config']['web_name'] . '] Thông tin tài khoản',
@@ -87,7 +87,7 @@ class CustomersController extends AppController
             ];
             
             if(Utils::sendMail($config)) {
-                if($customer->save()) {
+                if($member->save()) {
                     return redirect(route('login'))->with('success', trans('messages.REG_SUCCESS'));
                 }
             }

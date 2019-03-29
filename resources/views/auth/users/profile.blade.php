@@ -17,7 +17,6 @@
 			<form role="form" id="submit_form" action="?" method="post" enctype="multipart/form-data">
 				<input type="hidden" id="demension" value="{{ $config['avatar_image_size'] }}" />
 				<input type="hidden" id="upload_limit" value="{{ $config['avatar_maximum_upload'] }}" />
-    			@include('auth.common.alert')
                 @include('auth.common.edit_form',['forms' => trans('auth.profile.form'), 'data' => Auth::user()])
                 @include('auth.common.button_footer',['back_url' => route('auth_users')])
             </form>

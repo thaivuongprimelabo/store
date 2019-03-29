@@ -19,8 +19,8 @@
       <th></th>
       <th></th>
     </tr>
-    @if($users->count())
-    @foreach($users as $user)
+    @if($data_list->count())
+    @foreach($data_list as $user)
     <tr>
       <td>{{ $user->id }}</td>
       <td>{{ $user->name }}</td>

@@ -17,7 +17,6 @@
 			<form role="form" id="submit_form" action="?" method="post" enctype="multipart/form-data">
 				<input type="hidden" id="demension" value="{{ $config['banner_image_size'] }}" />
 				<input type="hidden" id="upload_limit" value="{{ $config['banner_maximum_upload'] }}" />
-    			@include('auth.common.alert')
     			@include('auth.common.edit_form',['forms' => trans('auth.banners.form'), 'data' => $banner])
     			@include('auth.common.button_footer',['back_url' => route('auth_banners')])
             </form>
@@ -26,49 +25,3 @@
 </section>
 @endsection
 @section('script')
-<script src="{{ url('admin/js/jquery.validate.js') }}" type="text/javascript"></script>
-<script type="text/javascript">
-    var validatorEventSetting = $("#submit_form").validate({
-    	onfocusout: false,
-    	success: function(label, element) {
-        	var jelm = $(element);
-        	jelm.parent().removeClass('has-error');
-    	},
-    	rules: {
-    		name: {
-    			required: true,
-    			maxlength: 255,
-    		},
-    		description: {
-    			required: true,
-				maxlength: 300
-    		},
-    		banner: {
-				extension: '{{ Common::IMAGE_EXT }}',
-				filesize: '{{ $config['banner_maximum_upload'] }}'
-    		}
-    	},
-    	messages: {
-    		name : {
-    			required : "{{ Utils::getValidateMessage('validation.required', 'auth.banners.form.name') }}",
-    			maxlength : "{{ Utils::getValidateMessage('validation.max.string', 'auth.banners.form.name') }}",
-    		},
-    		description : {
-    			required : "{{ Utils::getValidateMessage('validation.required', 'auth.banners.form.description.text') }}",
-    			maxlength : "{{ Utils::getValidateMessage('validation.max.string', 'auth.banners.form.description.text') }}"
-    		},
-    		banner: {
-    			extension : '{{ Utils::getValidateMessage('validation.image', 'auth.banners.form.banner.text') }}',
-    			filesize: '{{ Utils::getValidateMessage('validation.size.file', 'auth.banners.form.banner.text',  Utils::formatMemory($config['banner_maximum_upload'])) }}'
-    		}
-    	},
-    	errorPlacement: function(error, element) {
-    		customErrorValidate(error, element);
-	  	},
-    	submitHanlder: function(form) {
-    	    form.submit();
-    	}
-    });
-
-</script>
-@endsection

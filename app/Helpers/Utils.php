@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use App\Constants\Common;
+use App\Constants\ContactStatus;
 use App\Constants\Status;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -190,9 +191,9 @@ class Utils {
         
     }
     
-    public static function getValidateMessage($key, $param, $param2 = '') {
+    public static function getValidateMessage($key, $param = '', $param2 = '') {
         
-        if(!self::blank($param)) {
+        if(!self::blank($param) && strpos($param, 'auth.') !== FALSE) {
             $param = str_replace('.text', '', $param);
             $param = $param . '.text';
         }
@@ -259,6 +260,15 @@ class Utils {
                 foreach($uploadLimits as $limit) {
                     array_push($data,['id' => $limit, 'name' => self::formatMemory($limit)]);
                 }
+                break;
+            case 'BANNER_TYPE':
+                $bannerType = trans('auth.banner_type');
+                foreach($bannerType as $key=>$value) {
+                    array_push($data,['id' => $key, 'name' => $value['text']]);
+                }
+                break;
+            case 'CONTACT_TYPE':
+                return ContactStatus::createSelectList();
                 break;
             default:
                 $data = [
@@ -560,6 +570,46 @@ class Utils {
             }
         }
         return rmdir($dirPath);
+    }
+    
+    public static function getYoutubeEmbedUrl($url)
+    {
+        preg_match('/[\\?\\&]v=([^\\?\\&]+)/', $url, $matches);
+        
+        if(isset($matches[1])) {
+            $id = $matches[1];
+            return 'https://www.youtube.com/embed/' . $id;
+        }
+        
+        return null;
+    }
+    
+    public static function getYoutubeVideoId($url)
+    {
+        preg_match('/[\\?\\&]v=([^\\?\\&]+)/', $url, $matches);
+        
+        if(isset($matches[1])) {
+            $id = $matches[1];
+            return $id;
+        }
+        
+        return null;
+    }
+    
+    public static function getYoutubeThumbnail($url)
+    {
+        preg_match('/[\\?\\&]v=([^\\?\\&]+)/', $url, $matches);
+        
+        if(isset($matches[1])) {
+            $id = $matches[1];
+            return 'http://img.youtube.com/vi/' . $id . '/0.jpg';
+        }
+        
+        return null;
+    }
+    
+    public static function formatCurrency($input) {
+        return number_format($input, 0, ',', '.');
     }
 
     

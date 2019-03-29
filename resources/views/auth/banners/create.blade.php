@@ -17,48 +17,10 @@
 			<form role="form" id="submit_form" action="?" method="post" enctype="multipart/form-data">
 				<input type="hidden" id="demension" value="{{ $config['banner_image_size'] }}" />
 				<input type="hidden" id="upload_limit" value="{{ $config['banner_maximum_upload'] }}" />
-    			@include('auth.common.alert')
     			@include('auth.common.create_form',['forms' => trans('auth.banners.form')])
                 @include('auth.common.button_footer',['back_url' => route('auth_banners')])
             </form>
 		</div>
 	</div>
 </section>
-@endsection
-@section('script')
-<script type="text/javascript">
-    var validatorEventSetting = $("#submit_form").validate({
-    	ignore: ":hidden:not(input[type='file'])",
-    	onfocusout: false,
-    	success: function(label, element) {
-        	var jelm = $(element);
-        	jelm.parent().removeClass('has-error');
-    	},
-    	rules: {
-    		link: {
-        		url: true,
-    			maxlength: {{  Common::LINK_MAXLENGTH }},
-    		},
-    		description: {
-				maxlength: {{  Common::DESC_MAXLENGTH }}
-    		},
-    	},
-    	messages: {
-    		link : {
-    			url : "{{ Utils::getValidateMessage('validation.url', 'auth.banners.form.link') }}",
-    			maxlength : "{{ Utils::getValidateMessage('validation.max.string', 'auth.banners.form.link', Common::LINK_MAXLENGTH) }}",
-    		},
-    		description : {
-    			required : "{{ Utils::getValidateMessage('validation.required', 'auth.banners.form.description.text') }}",
-    			maxlength : "{{ Utils::getValidateMessage('validation.max.string', 'auth.banners.form.description.text', Common::DESC_MAXLENGTH) }}"
-    		},
-    	},
-    	errorPlacement: function(error, element) {
-    		customErrorValidate(error, element);
-	  	},
-    	submitHanlder: function(form) {
-    	    form.submit();
-    	}
-    });
-</script>
 @endsection

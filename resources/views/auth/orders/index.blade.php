@@ -18,43 +18,7 @@
           <div class="box">
               <!-- Box Body -->
               <div class="box-body">
-              	 <form id="search_form">
-                  	 <div class="col-md-2">
-                        <div class="form-group has-feedback">
-                          <input type="text" class="form-control" name="id_search" id="id_search" placeholder="{{ trans('auth.orders.id_search_placeholder') }}"/>
-                          <span class="glyphicon glyphicon-search form-control-feedback"></span>
-                        </div>
-                     </div>
-                     <div class="col-md-3">
-                        <div class="form-group has-feedback">
-                          <input type="text" class="form-control" name="name_search" id="name_search" placeholder="{{ trans('auth.orders.name_search_placeholder') }}"/>
-                          <span class="glyphicon glyphicon-search form-control-feedback"></span>	
-                        </div>
-                     </div>
-                     <div class="col-md-2">
-                        <div class="form-group has-feedback">
-                          <input type="text" class="form-control" name="phone_search" id="phone_search" placeholder="{{ trans('auth.orders.phone_search_placeholder') }}"/>
-                          <span class="glyphicon glyphicon-search form-control-feedback"></span>	
-                        </div>
-                     </div>
-                     <div class="col-md-2">
-                        <div class="form-group has-feedback">
-                          <input type="text" class="form-control" name="date_search" id="date_search" placeholder="{{ trans('auth.orders.date_search_placeholder') }}"/>
-                          <span class="glyphicon glyphicon-search form-control-feedback"></span>	
-                        </div>
-                     </div>
-                     <div class="col-md-2">
-                        <div class="form-group">
-                          <select class="form-control" name="status_search" id="status_search">
-                          	<option value="">{{ trans('auth.orders.status_search') }}</option>
-                          	{!! Status::createSelectList(1) !!}
-                          </select>
-                        </div>
-                     </div>
-                 </form>
-                 <div class="col-md-12">
-                    <button type="button" id="search" class="btn btn-primary pull-right" data-url="{{ route('auth_orders_search') }}">{{ trans('auth.button.search') }}</button>
-                  </div>
+              	 @include('auth.common.search',['form' => trans('auth.orders.search_form')])
               </div>
           </div>
           @if (session('success'))

@@ -152,6 +152,7 @@
         reserved.
     </footer>
     @include('auth.products.upload_modal')
+    @include('auth.common.alert')
 </div>
 @endif
 <!-- jQuery 3 -->
@@ -185,7 +186,7 @@
   $(function () {
 	setTimeout(function(){ 
 		$('.alert').fadeOut();
-	}, 1000);
+	}, 3000);
 	  
     //bootstrap WYSIHTML5 - text editor
     if($(".ckeditor").length > 0){
@@ -307,6 +308,7 @@
     $(document).on('blur', '#upload_by_url', function(e) {
     	var src = $(this).val();
     	uploadByUrl(src);
+    	$('.upload_image_product').val('');
     });
 
     $(document).on('click', '#select_image', function(e) {
@@ -322,8 +324,26 @@
     	var rules = ['{{ Common::IMAGE_EXT }}', maxSize];
     	if(checkFileUpload(input, rules, '{{ trans('validation.size.file_multi') }}', '#error_list')) {
     		previewImageProduct(input, maxSize, demension, '#preview');
+    		$('#upload_by_url').val('');
     	}
     });
+
+    $('input.select_type').on('ifChecked', function(event){
+    	var className = $(this).val();
+    	$('.select_type').addClass('hide_element');
+    	$('.' + className).removeClass('hide_element');
+	});
+
+    $(document).on('blur', '#youtube_id', function(e) {
+        var id = getLinkYoutubeId($(this).val());
+        var iframe = '<iframe width="560" height="315" src="https://www.youtube.com/embed/' + id + '" frameborder="0" allowfullscreen></iframe>';
+        $('#youtube_embed_url').val(id);
+        $('#youtube_preview').html(iframe);
+	});
+
+	$(document).on('keyup', '#price', function(e) {
+		$('#format_currency strong small i').html(formatCurrency($(this).val(), '.', '.'));
+	});
   });
 </script>
 @yield('script')

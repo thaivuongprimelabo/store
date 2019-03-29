@@ -81,9 +81,9 @@ class Product extends Model
         return number_format($price - ($price * ($discount / 100)));
     }
     
-    public function getPrice($input) {
-        if(is_numeric($input)) {
-            return number_format($input);
+    public function getPrice() {
+        if(is_numeric($this->price)) {
+            return Utils::formatCurrency($this->price);
         } else {
             return $input;
         }

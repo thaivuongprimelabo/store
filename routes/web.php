@@ -88,9 +88,33 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Auth'], function () {
     Route::match(['get', 'post'], '/profile', 'UsersController@profile')->name('auth_profile');
     
     // Pages
-//     $this->get('/pages', 'PagesController@index')->name('auth_pages');
     Route::match(['get', 'post'], '/pages/about', 'PagesController@about')->name('auth_pages_about');
     Route::match(['get', 'post'], '/pages/delivery', 'PagesController@delivery')->name('auth_pages_delivery');
+    
+    // Forums
+    Route::match(['get', 'post'], '/forum', 'ForumController@index')->name('auth_forum');
+    
+    // Members
+    Route::match(['get', 'post'], '/forum/members', 'MembersController@index')->name('auth_members');
+    Route::match(['get', 'post'], '/forum/members/create', 'MembersController@create')->name('auth_members_create');
+    Route::match(['get', 'post'], '/forum/members/edit/{id}', 'MembersController@edit')->name('auth_members_edit');
+    Route::match(['get', 'post'], '/forum/members/search', 'MembersController@search')->name('auth_members_search');
+    Route::get('/forum//members/remove/{id}', 'MembersController@remove')->name('auth_members_remove');
+    
+    // Groups
+    Route::match(['get', 'post'], '/forum/groups', 'GroupsController@index')->name('auth_groups');
+    
+    // Comments
+    Route::match(['get', 'post'], '/forum/comments', 'CommentsController@index')->name('auth_comments');
+    
+    // Threads
+    $this->get('/forum/threads', 'ThreadsController@index')->name('auth_threads');
+    Route::match(['get', 'post'], '/forum/threads/create', 'ThreadsController@create')->name('auth_threads_create');
+    Route::match(['get', 'post'], '/forum/threads/edit/{id}', 'ThreadsController@edit')->name('auth_threads_edit');
+    Route::match(['get', 'post'], '/forum/threads/search', 'ThreadsController@search')->name('auth_threads_search');
+    Route::match(['get', 'post'], '/forum/threads/remove/{id?}', 'ThreadsController@remove')->name('auth_threads_remove');
+    
+    
     
     // Registration Routes...
 //     $this->get('/register', 'RegisterController@showRegistrationForm')->name('register');
@@ -114,17 +138,17 @@ Route::group(['prefix' => ''], function () {
     Route::get('/cart' . $config['url_ext'], 'CartController@index')->name('cart');
     Route::match(['get', 'post'], '/contact' . $config['url_ext'], 'HomeController@contact')->name('contact');
     Route::post('/search' . $config['url_ext'], 'HomeController@search')->name('search');
-    Route::match(['get', 'post'], '/login' . $config['url_ext'], 'CustomersController@index')->name('customer_login');
-    Route::post('/register' . $config['url_ext'], 'CustomersController@register')->name('register');
-    Route::get('/logout' . $config['url_ext'], 'CustomersController@logout')->name('customer_logout');
+    Route::match(['get', 'post'], '/login' . $config['url_ext'], 'MembersController@index')->name('member_login');
+    Route::post('/register' . $config['url_ext'], 'MembersController@register')->name('register');
+    Route::get('/logout' . $config['url_ext'], 'MembersController@logout')->name('member_logout');
     
     Route::post('/load-data' . $config['url_ext'], 'HomeController@loadData')->name('loadData');
     
     Route::get('/vendor/{vendor}' . $config['url_ext'], 'HomeController@vendor')->name('vendor');
     Route::get('/category/{slug}' . $config['url_ext'], 'HomeController@category')->name('category');
     Route::get('/detail/{slug}/{slug2}' . $config['url_ext'], 'HomeController@productDetails')->name('product_details');
-    Route::get('refreshcaptcha', 'CustomersController@refreshCaptcha')->name('refreshcaptcha');
-    Route::post('checkcaptcha', 'CustomersController@checkCaptcha')->name('checkCaptcha');
+    Route::get('refreshcaptcha', 'MembersController@refreshCaptcha')->name('refreshcaptcha');
+    Route::post('checkcaptcha', 'MembersController@checkCaptcha')->name('checkCaptcha');
     
     Route::get('/offline' . $config['url_ext'], function() {
         echo 'System is offline. Please wait...';

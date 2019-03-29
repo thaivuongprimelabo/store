@@ -3,7 +3,7 @@
    $control_id = $name;
 @endphp
 @if($multiple)
-<div class="form-group">
+<div class="form-group {{ $containerId }}">
   <label for="exampleInputFile">{{ $text }}</label>&nbsp;&nbsp;({{ Utils::replaceMessageParam($text_small,[$size]) }})<br/>
   <div id="preview_list">
   	@if(count($image_using))
@@ -27,7 +27,7 @@
 <input type="hidden" id="upload_index" value="-1" />
 <input type="hidden" name="image_del_ids" value="" />
 @else
-<div class="form-group">
+<div class="form-group {{ $containerId }}">
   <label for="exampleInputFile">{{ $text }}</label>&nbsp;&nbsp;({{ Utils::replaceMessageParam($text_small,[$size]) }})<br/>
   <div id="preview_list">
   	

@@ -7,18 +7,72 @@
     {{ csrf_field() }}
     <div class="box-body">
         <input type="hidden" name="id" id="id_check" value="{{ $data->id }}" />
+        @php
+    		$containerShow = '';
+    	@endphp
         @foreach($forms as $key=>$value)
         @if($key == 'text')
         	@continue;
         @endif
         @if(is_array($value))
         	@php
-        		$text = $value['text'];
+        		$text = isset($value['text']) ? $value['text'] : '';
         		$placeholder = isset($value['placeholder']) ? $value['placeholder'] : $text;
         		$defaultValue = isset($value['value']) ? $value['value'] : '';
         		$maxlength = isset($value['maxlength']) ? $value['maxlength'] : 120;
         		$lengthText = str_replace('{0}', $maxlength, trans('auth.length_text'));
+        		$containerId = '';
+        		if(isset($value['container_id'])) {
+        			$container_id = isset($value['container_id']) ? $value['container_id'] : '';
+            		if(!empty($containerShow) && $containerShow != $container_id) {
+            			$containerId = 'select_type ' . $container_id . ' hide_element';
+            		} else {
+            			$containerId = 'select_type ' . $container_id;
+            		}
+        		}
         	@endphp
+        	
+        	@if($value['type'] == 'radio_list')
+        		@php
+        			$radio_values = $value['value'];
+        		@endphp
+        		<div class="radio">
+        			@foreach($radio_values as $k=>$v)
+        			@php
+        				if($k == $data->$key) {
+        					$containerShow = $k;
+        				}
+        			@endphp
+                  	<label>
+                    	<input type="radio" class="{{ $key }}" name="{{ $key }}" value="{{ $k }}" {{ $k == $data->$key ? 'checked="checked"' : '' }} /> {{ $v['text'] }}
+                  	</label>
+                  	@endforeach
+                </div>
+        	@endif
+        	
+        	@if($value['type'] == 'youtube_preview')
+        		<div class="form-group {{ $containerId }}">
+                  <label for="exampleInputPassword1">{{ $text }}<small>{{ $lengthText }}</small></label>
+                  <div id="youtube_preview">
+                  	@if(!Utils::blank($data->youtube_id))
+                  	<iframe width="560" height="315" src="https://www.youtube.com/embed/{{ $data->youtube_id }}" frameborder="0" allowfullscreen></iframe>
+                  	@endif	
+                  </div>
+                  <input type="hidden" name="youtube_embed_url" id="youtube_embed_url" value="{{ $data->youtube_id }}" />
+                </div>
+        	@endif
+        	
+        	@if($value['type'] == 'youtube_url')
+            	@php
+            		$youtube_url = !Utils::blank($data->$key) ? 'https://www.youtube.com/watch?v=' . $data->$key : '';
+            	@endphp
+        		<div class="form-group {{ $containerId }}">
+                  <label for="">{{ $text }}<small>{{ $lengthText }}</small></label>
+                  <input type="text" class="form-control" name="{{ $key }}" id="{{ $key }}" value="{{ old($key, $youtube_url) }}" placeholder="{{ $placeholder }}" maxlength="{{ Common::NAME_MAXLENGTH }}" {{ (isset($value['disabled'])) ? 'disabled=true' : '' }}>
+                  <span class="help-block">@if ($errors->has($key)){{ $errors->first($key) }}@endif</span>
+                </div>
+            @endif
+        	
         	@if($value['type'] == 'textarea')
         		<div class="form-group ">
                   <label for="exampleInputPassword1">{{ $text }}<small>{{ $lengthText }}</small></label>
@@ -51,13 +105,14 @@
                 	'width' => $split[0],
                 	'height' => $split[1],
                 	'image_using' => isset($value['multiple']) ? $data->getAllImage($data->id) : $data->$key,
-                	'multiple' => isset($value['multiple']) ? true : false
+                	'multiple' => isset($value['multiple']) ? true : false,
+                	'containter_id' =>  $containerId
                 ])
         	@endif
         	
         	@if($value['type'] == 'file_simple')
         		<div class="form-group">
-                  <label for="exampleInputEmail1">{{ $text }}</label>
+                  <label for="">{{ $text }}</label>
                   <input type="file" name="{{ $key }}" class="form-control" />
                 </div>
         	@endif
@@ -72,7 +127,7 @@
         	
         	@if($value['type'] == 'select')
         		<div class="form-group">
-                  <label for="exampleInputEmail1">{{ $text }}</label>
+                  <label for="">{{ $text }}</label>
                   <select class="form-control" name="{{ $key }}" id="{{ $key }}">
                   	@if(isset($value['empty_text']))
                     <option value="0">{{ $value['empty_text'] }}</option>
@@ -92,7 +147,7 @@
         	
         	@if($value['type'] == 'datepicker')
         		<div class="form-group ">
-                  <label for="exampleInputEmail1">{{ $text }}</label>
+                  <label for="">{{ $text }}</label>
                   <input type="text" class="form-control" name="{{ $key }}" id="{{ $key }}" value="{{ old($key, date('d-m-Y', strtotime($data->$key))) }}" placeholder="{{ $placeholder }}" maxlength="{{ Common::NAME_MAXLENGTH }}">
                   <span class="help-block">@if ($errors->has($key)){{ $errors->first($key) }}@endif</span>
                 </div>
@@ -109,23 +164,32 @@
         	
         	@if($value['type'] == 'password')
         		<div class="form-group ">
-                  <label for="exampleInputEmail1">{{ $text }}</label>
+                  <label for="">{{ $text }}</label>
                   <input type="password" class="form-control" name="{{ $key }}" id="{{ $key }}" value="{{ old($key, '') }}" placeholder="{{ $placeholder }}" maxlength="{{ Common::NAME_MAXLENGTH }}">
                   <span class="help-block">@if ($errors->has($key)){{ $errors->first($key) }}@endif</span>
                 </div>
             @endif
             
             @if($value['type'] == 'text')
-        		<div class="form-group ">
-                  <label for="exampleInputEmail1">{{ $text }}<small>{{ $lengthText }}</small></label>
-                  <input type="text" class="form-control" name="{{ $key }}" id="{{ $key }}" value="{{ old($key, $data->$key) }}" placeholder="{{ $placeholder }}" maxlength="{{ Common::NAME_MAXLENGTH }}" {{ (isset($value['disabled']) || $key == 'email') ? 'disabled=true' : '' }}>
+        		<div class="form-group {{ $containerId }}">
+                  <label for="">{{ $text }}<small>{{ $lengthText }}</small></label>
+                  <input type="text" class="form-control" name="{{ $key }}" id="{{ $key }}" value="{{ old($key, $data->$key) }}" placeholder="{{ $placeholder }}" maxlength="{{ Common::NAME_MAXLENGTH }}" {{ (isset($value['disabled'])) ? 'disabled=true' : '' }}>
+                  <span class="help-block">@if ($errors->has($key)){{ $errors->first($key) }}@endif</span>
+                </div>
+            @endif
+            
+            @if($value['type'] == 'currency')
+        		<div class="form-group {{ $containerId }}">
+                  <label for="">{{ $text }}<small>{{ $lengthText }}</small></label>
+                  <input type="text" class="form-control" name="{{ $key }}" id="{{ $key }}" value="{{ old($key, $data->$key) }}" placeholder="{{ $placeholder }}" maxlength="{{ Common::NAME_MAXLENGTH }}" {{ (isset($value['disabled'])) ? 'disabled=true' : '' }}>
+                  <span id="format_currency"><strong><small>Định dạng tiền tệ: <i>0</i></small></strong></span>
                   <span class="help-block">@if ($errors->has($key)){{ $errors->first($key) }}@endif</span>
                 </div>
             @endif
             
             @if($value['type'] == 'number')
         		<div class="form-group ">
-                  <label for="exampleInputEmail1">{{ $text }}<small>{{ $lengthText }}</small></label>
+                  <label for="">{{ $text }}<small>{{ $lengthText }}</small></label>
                   <input type="number" class="form-control" name="{{ $key }}" id="{{ $key }}" value="{{ old($key, $data->$key) }}" placeholder="{{ $placeholder }}" maxlength="{{ $maxlength }}" {{ isset($value['disabled']) ? 'disabled=true' : '' }}>
                   <span class="help-block">@if ($errors->has($key)){{ $errors->first($key) }}@endif</span>
                 </div>
@@ -133,15 +197,15 @@
             
             @if($value['type'] == 'email')
         		<div class="form-group ">
-                  <label for="exampleInputEmail1">{{ $text }}<small>{{ $lengthText }}</small></label>
-                  <input type="email" class="form-control" name="{{ $key }}" id="{{ $key }}" value="{{ old($key, $data->$key) }}" placeholder="{{ $placeholder }}" maxlength="{{ Common::NAME_MAXLENGTH }}" {{ (isset($value['disabled']) || $key == 'email') ? 'disabled=true' : '' }}>
+                  <label for="">{{ $text }}<small>{{ $lengthText }}</small></label>
+                  <input type="email" class="form-control" name="{{ $key }}" id="{{ $key }}" value="{{ old($key, $data->$key) }}" placeholder="{{ $placeholder }}" maxlength="{{ Common::NAME_MAXLENGTH }}" {{ (isset($value['disabled'])) ? 'disabled=true' : '' }}>
                   <span class="help-block">@if ($errors->has($key)){{ $errors->first($key) }}@endif</span>
                 </div>
             @endif
             
              @if($value['type'] == 'link')
         		<div class="form-group ">
-                  <label for="exampleInputEmail1">{{ $text }}</label><br/>
+                  <label for="">{{ $text }}</label><br/>
                   <a href="mailto:{{ $data->$key }}">{{ $data->$key }}</a>
                 </div>
             @endif
@@ -176,18 +240,12 @@
         	
         	@if($value['type'] == 'select_status_order')
         		<div class="form-group">
-                  <label for="exampleInputEmail1">{{ $text }}</label>
+                  <label for="">{{ $text }}</label>
                   <select class="form-control" name="{{ $key }}" id="{{ $key }}">
                   	{!! Status::createSelectList(1, $data->$key) !!}
                   </select>
                 </div>
         	@endif
-        @else
-        	<div class="form-group ">
-              <label for="exampleInputEmail1">{{ $value }}</label>
-              <input type="text" class="form-control" name="{{ $key }}" id="{{ $key }}" value="{{ old($key, $data->$key) }}" placeholder="{{ $value }}" maxlength="{{ Common::NAME_MAXLENGTH }}" {{ $key == 'email' ? 'disabled' : '' }}>
-              <span class="help-block">@if ($errors->has($key)){{ $errors->first($key) }}@endif</span>
-            </div>
         @endif
         @endforeach
     </div>

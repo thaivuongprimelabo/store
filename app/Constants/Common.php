@@ -75,7 +75,10 @@ class Common {
     CONST PAGES = 'pages';
     CONST ORDERS = 'orders';
     CONST ORDER_DETAILS = 'order_details';
-    CONST CUSTOMERS = 'customers';
+    CONST MEMBERS = 'members';
+    CONST THREADS = 'threads';
+    CONST GROUPS = 'groups';
+    CONST COMMENTS = 'comments';
     
     /** Role **/
     CONST SUPER_ADMIN = '0';

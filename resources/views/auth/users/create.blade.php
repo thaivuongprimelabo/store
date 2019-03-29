@@ -17,7 +17,6 @@
 			<form role="form" id="submit_form" action="?" method="post" enctype="multipart/form-data">
 			<input type="hidden" id="demension" value="{{ $config['avatar_image_size'] }}" />
 			<input type="hidden" id="upload_limit" value="{{ $config['avatar_maximum_upload'] }}" />
-			@include('auth.common.alert')
 			@include('auth.common.create_form',['forms' => trans('auth.users.form')])
 			@include('auth.common.button_footer',['back_url' => route('auth_users'), 'id' => 'save_user'])
             </form>
@@ -55,10 +54,6 @@
     		role_id: {
 				required: true
     		},
-    		avatar: {
-				extension: '{{ Common::IMAGE_EXT }}',
-				filesize: '{{ Common::AVATAR_MAX_SIZE }}'
-    		}
     	},
     	messages: {
     		name : {
@@ -67,6 +62,7 @@
     		},
     		email : {
     			required : "{{ Utils::getValidateMessage('validation.required', 'auth.users.form.email') }}",
+    			email: "{{ Utils::getValidateMessage('validation.email') }}",
     		},
     		password : {
     			required : "{{ Utils::getValidateMessage('validation.required', 'auth.users.form.password.text') }}",
@@ -80,10 +76,6 @@
     		role_id: {
     			required : "{{ Utils::getValidateMessage('validation.required_select', 'auth.users.form.role_id.text') }}",
     		},
-    		avatar: {
-    			extension : '{{ Utils::getValidateMessage('validation.image', 'auth.vendors.form.avatar.text') }}',
-    			filesize: '{{ Utils::getValidateMessage('validation.size.file', 'auth.vendors.form.avatar.text',  Utils::formatMemory(Common::AVATAR_MAX_SIZE)) }}'
-    		}
     	},
     	errorPlacement: function(error, element) {
     		customErrorValidate(error, element);

@@ -18,7 +18,6 @@
 			<input type="hidden" id="table" value="0" />
 			<input type="hidden" id="demension" value="{{ $config['logo_image_size'] }}" />
 			<input type="hidden" id="upload_limit" value="{{ $config['logo_maximum_upload'] }}" />
-			@include('auth.common.alert')
 			@include('auth.common.edit_form',['forms' => trans('auth.vendors.form'), 'data' => $vendor])
 			@include('auth.common.button_footer',['back_url' => route('auth_vendors')])
             </form>

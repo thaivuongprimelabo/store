@@ -18,7 +18,6 @@
 			<input type="hidden" id="table" value="2" />
 			<input type="hidden" id="demension" value="{{ $config['image_image_size'] }}" />
 			<input type="hidden" id="upload_limit" value="{{ $config['image_maximum_upload'] }}" />
-			@include('auth.common.alert')
 			@include('auth.common.create_form',['forms' => trans('auth.products.form'), 'upload_product' => true])
 			@include('auth.common.button_footer',['back_url' => route('auth_products')])
             </form>

@@ -16,10 +16,12 @@ class CreateBannersTable extends Migration
     {
         Schema::create(Common::BANNERS, function (Blueprint $table) {
             $table->increments('id');
-            $table->string('banner', 255);
-            $table->string('description', 300);
-            $table->string('link', 255);
+            $table->string('banner', 255)->nullable();
+            $table->string('description', 300)->nullable();
+            $table->string('link', 255)->nullable();
+            $table->string('youtube_url', 255)->nullable();
             $table->integer('avail_flg', false, true)->nullable()->default('1');
+            $table->string('select_type', '20')->nullable();
             $table->integer('status', false, true)->nullable()->default('0');
             $table->timestamps();
         });

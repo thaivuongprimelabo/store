@@ -130,11 +130,14 @@ class CategoriesController extends AppController
                 $category->parent_id    = Utils::cnvNull($request->parent_id, 0);
                 $category->status       = Utils::cnvNull($request->status, 0);
                 $category->updated_at   = date('Y-m-d H:i:s');
+                
+                if($category->save()) {
+                    return redirect(route('auth_categories_edit', ['id' => $request->id]))->with('success', trans('messages.UPDATE_SUCCESS'));
+                }
+            } else {
+                return redirect(route('auth_categories_edit', ['id' => $request->id]))->with('error', trans('messages.ERROR'));
             }
             
-            if($category->save()) {
-                return redirect(route('auth_categories_edit', ['id' => $request->id]))->with('success', trans('messages.UPDATE_SUCCESS'));
-            }
         }
         
         return view('auth.categories.edit', compact('category'))->withErrors($validator);

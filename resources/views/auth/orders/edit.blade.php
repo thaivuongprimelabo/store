@@ -15,7 +15,6 @@
 	<div class="row">
 		<div class="col-md-12">
 			<form role="form" id="submit_form" action="?" method="post" enctype="multipart/form-data">
-			@include('auth.common.alert')
 			@php
               	$forms = trans('auth.orders.form');
               	$order->payment_method = trans('shop.cart.payment.' . $order->payment_method);

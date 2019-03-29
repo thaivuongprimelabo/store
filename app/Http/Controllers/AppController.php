@@ -3,9 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Utils;
-use App\Helpers\Cart;
-use Illuminate\Http\Request;
-use Illuminate\Session\SessionManager;
 use View;
 class AppController extends Controller
 {
@@ -61,4 +58,5 @@ class AppController extends Controller
             View::share($this->config);
         }
     }
+    
 }

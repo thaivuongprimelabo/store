@@ -23,7 +23,13 @@
     @foreach($banners as $banner)
     <tr>
       <td>{{ $banner->id }}</td>
-      <td><img src="{{ Utils::getImageLink($banner->banner) }}" width="200" /></td>
+      <td>
+      	@if($banner->select_type == 'use_image')
+      	<img src="{{ Utils::getImageLink($banner->banner) }}" width="200" />
+      	@else
+      	<img src="http://img.youtube.com/vi/{{ $banner->youtube_id }}/0.jpg" width="200" />
+      	@endif
+      </td>
       <td><a href="{{ $banner->link }}" target="_blank" title="{{ $banner->description }}">{{ $banner->link }}</a></td>
       @if($banner->status == Status::ACTIVE)
       <td><a href="javascript:void(0)" class="update-status" data-tbl="2" data-id="{{ $banner->id }}" data-status="{{ $banner->status }}"><span class="label label-success">{{ trans('auth.status.active') }}</span></a></td>
