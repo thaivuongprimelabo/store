@@ -32,7 +32,7 @@ class CategoriesController extends AppController
     }
     
     public function index(Request $request) {
-        return view('auth.categories.index', $this->search($request));
+        return view('auth.index', $this->search($request));
     }
     
     /**
@@ -40,35 +40,7 @@ class CategoriesController extends AppController
      * @param Request $request
      */
     public function search(Request $request) {
-        $wheres = [];
-        $output = ['code' => 200, 'data' => ''];
-        if($request->isMethod('post')) {
-            $id_search = $request->id_search;
-            if(!Utils::blank($id_search)) {
-                $wheres[] = ['id', '=', $id_search];
-            }
-            
-            $name_search = $request->name_search;
-            if(!Utils::blank($name_search)) {
-                $wheres[] = ['name', 'LIKE', '%' . $name_search . '%'];
-            }
-            
-            $status_search = $request->status_search;
-            if(!Utils::blank($status_search)) {
-                $wheres[] = ['status', '=', $status_search];
-            }
-        }
-        
-        $categories = Category::where($wheres)->orderBy('created_at', 'DESC')->paginate(Common::ROW_PER_PAGE);
-        
-        $paging = $categories->toArray();
-        
-        if($request->ajax()) {
-            $output['data'] = view('auth.categories.ajax_list', compact('categories', 'paging'))->render();
-            return response()->json($output);
-        } else {
-            return compact('categories', 'paging');
-        }
+        return $this->doSearch($request, new Category());
     }
     
     /**
@@ -86,15 +58,15 @@ class CategoriesController extends AppController
             $validator = Validator::make($request->all(), $this->rules);
             
             if (!$validator->fails()) {
-                $category = new Category();
-                $category->name         = Utils::cnvNull($request->name, '');
-                $category->name_url     = Utils::createNameUrl(Utils::cnvNull($request->name, ''));
-                $category->parent_id    = Utils::cnvNull($request->parent_id, 0);
-                $category->status       = Utils::cnvNull($request->status, 0);
-                $category->created_at   = date('Y-m-d H:i:s');
-                $category->updated_at   = date('Y-m-d H:i:s');
+                $data = new Category();
+                $data->name         = Utils::cnvNull($request->name, '');
+                $data->name_url     = Utils::createNameUrl(Utils::cnvNull($request->name, ''));
+                $data->parent_id    = Utils::cnvNull($request->parent_id, 0);
+                $data->status       = Utils::cnvNull($request->status, 0);
+                $data->created_at   = date('Y-m-d H:i:s');
+                $data->updated_at   = date('Y-m-d H:i:s');
                 
-                if($category->save()) {
+                if($data->save()) {
                     return redirect(route('auth_categories_create'))->with('success', trans('messages.CREATE_SUCCESS'));
                 }
             } else {
@@ -102,7 +74,8 @@ class CategoriesController extends AppController
             }
         }
         
-        return view('auth.categories.create')->withErrors($validator);
+        $name = $this->name;
+        return view('auth.categories.create', compact('name'));
     }
     
     /**
@@ -115,7 +88,7 @@ class CategoriesController extends AppController
         
         $validator = [];
         
-        $category = Category::find($request->id);
+        $data = Category::find($request->id);
         
         if($request->isMethod('post')) {
             
@@ -124,14 +97,14 @@ class CategoriesController extends AppController
             $validator = Validator::make($request->all(), $this->rules);
             
             if (!$validator->fails()) {
-                $category = Category::find($request->id);
-                $category->name         = Utils::cnvNull($request->name, '');
-                $category->name_url     = Utils::createNameUrl(Utils::cnvNull($request->name, ''));
-                $category->parent_id    = Utils::cnvNull($request->parent_id, 0);
-                $category->status       = Utils::cnvNull($request->status, 0);
-                $category->updated_at   = date('Y-m-d H:i:s');
+                $data = Category::find($request->id);
+                $data->name         = Utils::cnvNull($request->name, '');
+                $data->name_url     = Utils::createNameUrl(Utils::cnvNull($request->name, ''));
+                $data->parent_id    = Utils::cnvNull($request->parent_id, 0);
+                $data->status       = Utils::cnvNull($request->status, 0);
+                $data->updated_at   = date('Y-m-d H:i:s');
                 
-                if($category->save()) {
+                if($data->save()) {
                     return redirect(route('auth_categories_edit', ['id' => $request->id]))->with('success', trans('messages.UPDATE_SUCCESS'));
                 }
             } else {
@@ -140,14 +113,15 @@ class CategoriesController extends AppController
             
         }
         
-        return view('auth.categories.edit', compact('category'))->withErrors($validator);
+        $name = $this->name;
+        return view('auth.categories.edit', compact('data', 'name'));
     }
     
     public function remove(Request $request) {
         if($request->isMethod('get')) {
             $id = $request->id;
-            $Category = Category::find($id);
-            if($Category->delete()) {
+            $data = Category::find($id);
+            if($data->delete()) {
                 return redirect(route('auth_categories'))->with('success', trans('messages.REMOVE_SUCCESS'));
             }
         }

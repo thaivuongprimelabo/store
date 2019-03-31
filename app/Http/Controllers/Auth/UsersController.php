@@ -44,7 +44,7 @@ class UsersController extends AppController
     }
     
     public function index(Request $request) {
-        return view('auth.users.index', $this->search($request));
+        return view('auth.index', $this->search($request));
     }
     
     /**
@@ -52,43 +52,7 @@ class UsersController extends AppController
      * @param Request $request
      */
     public function search(Request $request) {
-//         $output = ['code' => 200, 'data' => ''];
-//         $wheres = [];
-//         if($request->isMethod('post')) {
-//             $id_search = $request->id_search;
-//             if(!Utils::blank($id_search)) {
-//                 $wheres[] = ['id', '=', $id_search];
-//             }
-            
-//             $name_search = $request->name_search;
-//             if(!Utils::blank($name_search)) {
-//                 $wheres[] = ['name', 'LIKE', '%' . $name_search . '%'];
-//             }
-            
-//             $status_search = $request->status_search;
-//             if(!Utils::blank($status_search)) {
-//                 $wheres[] = ['status', '=', $status_search];
-//             }
-            
-//             $email_search = $request->email_search;
-//             if(!Utils::blank($email_search)) {
-//                 $wheres[] = ['email', '=', $email_search];
-//             }
-//         }
-        
-//         $users = User::where($wheres)->whereIn('role_id', [Common::MOD])->paginate(Common::ROW_PER_PAGE);
-        
-//         $paging = $users->toArray();
-        
-//         if($request->ajax()) {
-//             $output['data'] = view('auth.users.ajax_list', compact('users', 'paging'))->render();
-//             return response()->json($output);
-//         } else {
-//             return compact('users', 'paging');
-//         }
-        
-        $user = new User();
-        return $this->doSearch($request, $user);
+        return $this->doSearch($request, new User());
         
     }
     
@@ -111,17 +75,17 @@ class UsersController extends AppController
                 $filename = '';
                 Utils::doUpload($request, Common::AVATAR_FOLDER, $filename);
                 
-                $user = new User();
-                $user->name         = Utils::cnvNull($request->name, '');
-                $user->email        = Utils::cnvNull($request->email, '');
-                $user->password     = Hash::make(Utils::cnvNull($request->password, ''));
-                $user->avatar       = $filename;
-                $user->role_id      = Utils::cnvNull($request->role_id, 1);
-                $user->status       = Utils::cnvNull($request->status, 0);
-                $user->created_at   = date('Y-m-d H:i:s');
-                $user->updated_at   = date('Y-m-d H:i:s');
+                $data = new User();
+                $data->name         = Utils::cnvNull($request->name, '');
+                $data->email        = Utils::cnvNull($request->email, '');
+                $data->password     = Hash::make(Utils::cnvNull($request->password, ''));
+                $data->avatar       = $filename;
+                $data->role_id      = Utils::cnvNull($request->role_id, 1);
+                $data->status       = Utils::cnvNull($request->status, 0);
+                $data->created_at   = date('Y-m-d H:i:s');
+                $data->updated_at   = date('Y-m-d H:i:s');
                 
-                if($user->save()) {
+                if($data->save()) {
                     return redirect(route('auth_users_create'))->with('success', trans('messages.CREATE_SUCCESS'));
                 }
             } else {
@@ -129,7 +93,8 @@ class UsersController extends AppController
             }
         }
         
-        return view('auth.users.create')->withErrors($validator);
+        $name = $this->name;
+        return view('auth.users.create', compact('name'));
     }
     
     /**
@@ -142,28 +107,28 @@ class UsersController extends AppController
         
         $validator = [];
         
-        $user = User::find($request->id);
+        $data = User::find($request->id);
         
         if($request->isMethod('post')) {
             
             $validator = Validator::make($request->all(), $this->rules);
             
             if (!$validator->fails()) {
-                $user = User::find($request->id);
+                $data = User::find($request->id);
                 
-                $filename = $user->avatar;
+                $filename = $data->avatar;
                 Utils::doUpload($request, Common::AVATAR_FOLDER, $filename);
                 
-                $user->name         = Utils::cnvNull($request->name, '');
+                $data->name         = Utils::cnvNull($request->name, '');
                 if(!Utils::blank($request->password)) {
-                    $user->password = Utils::cnvNull($request->password, '');
+                    $data->password = Utils::cnvNull($request->password, '');
                 }
-                $user->avatar       = $filename;
-                $user->role_id      = Utils::cnvNull($request->role_id, 1);
-                $user->status       = Utils::cnvNull($request->status, 0);
-                $user->updated_at   = date('Y-m-d H:i:s');
+                $data->avatar       = $filename;
+                $data->role_id      = Utils::cnvNull($request->role_id, 1);
+                $data->status       = Utils::cnvNull($request->status, 0);
+                $data->updated_at   = date('Y-m-d H:i:s');
                 
-                if($user->save()) {
+                if($data->save()) {
                     return redirect(route('auth_users_edit', ['id' => $request->id]))->with('success', trans('messages.UPDATE_SUCCESS'));
                 }
                 
@@ -172,7 +137,8 @@ class UsersController extends AppController
             }
         }
         
-        return view('auth.users.edit', compact('user'))->withErrors($validator);
+        $name = $this->name;
+        return view('auth.users.edit', compact('data', 'name'));
     }
     
     public function profile(Request $request) {
@@ -183,20 +149,20 @@ class UsersController extends AppController
             ]);
             
             if (!$validator->fails()) {
-                $user = User::find($request->id);
+                $data = User::find($request->id);
                 
-                $filename = $user->avatar;
+                $filename = $data->avatar;
                 
                 Utils::doUpload($request, Common::AVATAR_FOLDER, $filename);
                 
-                $user->name         = Utils::cnvNull($request->name, '');
+                $data->name         = Utils::cnvNull($request->name, '');
                 if(!Utils::blank($request->password)) {
-                    $user->password = Utils::cnvNull($request->password, '');
+                    $data->password = Utils::cnvNull($request->password, '');
                 }
-                $user->avatar       = $filename;
-                $user->updated_at   = date('Y-m-d H:i:s');
+                $data->avatar       = $filename;
+                $data->updated_at   = date('Y-m-d H:i:s');
                 
-                if($user->save()) {
+                if($data->save()) {
                     return redirect(route('auth_profile'))->with('success', trans('messages.UPDATE_SUCCESS'));
                 }
                 
@@ -204,14 +170,15 @@ class UsersController extends AppController
                 return redirect(route('auth_profile'))->with('error', trans('messages.ERROR'));
             }
         }
+        
         return view('auth.users.profile');
     }
     
     public function remove(Request $request) {
         if($request->isMethod('get')) {
             $id = $request->id;
-            $user = User::find($id);
-            if($user->delete()) {
+            $data = User::find($id);
+            if($data->delete()) {
                 return redirect(route('auth_users'))->with('success', trans('messages.REMOVE_SUCCESS'));
             }
         }

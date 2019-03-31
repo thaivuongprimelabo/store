@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\ImageProduct;
 
-class productsController extends AppController
+class AccessoriesController extends AppController
 {
     
     public $rules = [];
@@ -32,9 +32,7 @@ class productsController extends AppController
         $this->rules = [
             'name' => 'required|max:' . Common::NAME_MAXLENGTH,
             'price' => 'required|max:' . Common::PRICE_MAXLENGTH,
-//             'category_id' => 'required',
-//             'vendor_id' => 'required',
-            'image' => 'image|max:' . Utils::formatMemory(Common::IMAGE_MAX_SIZE, true) . '|mimes:'. Common::IMAGE_EXT1
+            'image' => 'image'
         ];
     }
     
@@ -46,9 +44,9 @@ class productsController extends AppController
      * search
      * @param Request $request
      */
-    public function search(Request $request, $type = '') {
+    public function search(Request $request) {
         
-        return $this->doSearch($request, new Product(), $type);
+        return $this->doSearch($request, new Product(), 'toy');
     }
     
     /**
@@ -81,6 +79,7 @@ class productsController extends AppController
                 $data->is_new        = Utils::cnvNull($request->is_new, 0);
                 $data->is_popular        = Utils::cnvNull($request->is_popular, 0);
                 $data->is_best_selling   = Utils::cnvNull($request->is_best_selling, 0);
+                $data->is_toy        = Utils::cnvNull($request->is_toy, 0);
                 $data->created_at    = date('Y-m-d H:i:s');
                 
                 if($data->save()) {
@@ -130,6 +129,7 @@ class productsController extends AppController
                 $data->is_new        = Utils::cnvNull($request->is_new, 0);
                 $data->is_popular        = Utils::cnvNull($request->is_popular, 0);
                 $data->is_best_selling   = Utils::cnvNull($request->is_best_selling, 0);
+                $data->is_toy        = Utils::cnvNull($request->is_toy, 0);
                 $data->updated_at    = date('Y-m-d H:i:s');
                 
                 if($data->save()) {
@@ -156,58 +156,4 @@ class productsController extends AppController
             }
         }
     }
-    
-    public function sizes(Request $request) {
-        return view('auth.products.sizes.index', $this->searchSizeColor($request, Common::SIZES));
-    }
-    
-    public function colors(Request $request) {
-        return view('auth.products.colors.index', $this->searchSizeColor($request, Common::COLORS));
-    }
-    
-    public function removeSize(Request $request) {
-        if($request->isMethod('get')) {
-            $id = $request->id;
-            $size = Size::find($id);
-            if($size->delete()) {
-                return redirect(route('auth_products_sizes'))->with('success', trans('messages.REMOVE_SUCCESS'));
-            }
-        }
-    }
-    
-    public function removeColor(Request $request) {
-        if($request->isMethod('get')) {
-            $id = $request->id;
-            $color = Color::find($id);
-            if($color->delete()) {
-                return redirect(route('auth_products_colors'))->with('success', trans('messages.REMOVE_SUCCESS'));
-            }
-        }
-    }
-    
-    public function searchSizeColor(Request $request, $table = '') {
-        $wheres = [];
-        $output = ['code' => 200, 'data' => ''];
-        
-        if($table == Common::COLORS) {
-            $colors = Color::where($wheres)->orderBy('created_at', 'DESC')->get();
-            
-            if($request->ajax()) {
-                $output['data'] = view('auth.colors.ajax_list', compact('colors', 'paging'))->render();
-                return response()->json($output);
-            } else {
-                return compact('colors');
-            }
-        } else {
-            $sizes = Size::where($wheres)->get();
-            
-            if($request->ajax()) {
-                $output['data'] = view('auth.sizes.ajax_list', compact('sizes', 'paging'))->render();
-                return response()->json($output);
-            } else {
-                return compact('sizes');
-            }
-        }
-    }
-    
 }

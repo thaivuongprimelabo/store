@@ -1,4 +1,4 @@
-  <table class="table table-hover">
+<table class="table table-hover">
     <tr>
       <th>{{ trans('auth.sizes.table_header.id') }}</th>
       <th>{{ trans('auth.sizes.table_header.name') }}</th>
@@ -31,7 +31,4 @@
     	<td colspan="8" align="center">{{ trans('auth.no_data_found') }}</td>
     </tr>
     @endif
-  </table>
-<!-- /.box-body -->
-<div class="box-footer clearfix">
-</div>
+</table>

@@ -1,6 +1,4 @@
-
-
-  <table class="table table-hover">
+<table class="table table-hover" style="table-layout: fixed; word-wrap:break-word;">
   	<col width="2%">
   	<col width="20%">
   	<col width="10%">
@@ -19,8 +17,8 @@
       <th></th>
       <th></th>
     </tr>
-    @if($vendors->count())
-    @foreach($vendors as $vendor)
+    @if($data_list->count())
+    @foreach($data_list as $vendor)
     <tr>
       <td>{{ $vendor->id }}</td>
       <td>{{ $vendor->name }}</td>
@@ -43,8 +41,4 @@
     	<td colspan="8" align="center">{{ trans('auth.no_data_found') }}</td>
     </tr>
     @endif
-  </table>
-<!-- /.box-body -->
-<div class="box-footer clearfix">
-  {{ $vendors->links('auth.common.paging', ['paging' => $paging]) }}
-</div>
+</table>

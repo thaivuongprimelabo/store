@@ -1,4 +1,4 @@
-<table class="table table-hover">
+<table class="table table-hover" style="table-layout: fixed; word-wrap:break-word;">
   	<col width="2%">
   	<col width="20%">
   	<col width="10%">
@@ -42,7 +42,3 @@
     </tr>
     @endif
 </table>
-<!-- /.box-body -->
-<div class="box-footer clearfix">
-  {{ $threads->links('auth.common.paging', ['paging' => $paging]) }}
-</div>

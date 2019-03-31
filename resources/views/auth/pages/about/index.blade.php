@@ -13,10 +13,10 @@
 	<div class="row">
 		<div class="col-md-12">
 			<form role="form" id="submit_form" action="?" method="post" enctype="multipart/form-data">
-			@if($about)
-			@include('auth.common.edit_form',['forms' => trans('auth.about.form'), 'data' => $about])
+			@if(count($data))
+			@include('auth.common.edit_form', ['hide_footer' => true])
 			@else
-			@include('auth.common.create_form',['forms' => trans('auth.about.form')])
+			@include('auth.common.create_form', ['hide_footer' => true])
 			@endif
 			<div class="box-footer">
                 <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> {{ trans('auth.button.submit') }}</button>

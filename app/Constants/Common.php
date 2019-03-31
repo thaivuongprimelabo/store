@@ -14,6 +14,7 @@ class Common {
     CONST AVATAR_FOLDER = 'avatar/';
     CONST IMAGE_FOLDER = 'image/';
     CONST IMAGE_EXT = 'png|jpe?g|gif';
+    CONST ICO_EXT = 'png|ico';
     CONST IMAGE_EXT1 = 'jpeg,png,gif';
     CONST FILE_EXT = 'png|jpe?g|gif|pdf|doc|docx|xlsx|xls';
     CONST FILE_EXT1 = 'jpeg,png,gif,pdf,doc,docx,xlsx,xls';

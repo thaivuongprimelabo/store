@@ -31,7 +31,7 @@ class PostsController extends AppController
     }
     
     public function index(Request $request) {
-        return view('auth.posts.index', $this->search($request));
+        return view('auth.index', $this->search($request));
     }
     
     /**
@@ -39,35 +39,7 @@ class PostsController extends AppController
      * @param Request $request
      */
     public function search(Request $request) {
-        $wheres = [];
-        $output = ['code' => 200, 'data' => ''];
-        if($request->isMethod('post')) {
-            $id_search = $request->id_search;
-            if(!Utils::blank($id_search)) {
-                $wheres[] = ['id', '=', $id_search];
-            }
-            
-            $name_search = $request->name_search;
-            if(!Utils::blank($name_search)) {
-                $wheres[] = ['name', 'LIKE', '%' . $name_search . '%'];
-            }
-            
-            $status_search = $request->status_search;
-            if(!Utils::blank($status_search)) {
-                $wheres[] = ['status', '=', $status_search];
-            }
-        }
-        
-        $posts = Post::where($wheres)->orderBy('created_at', 'DESC')->paginate(Common::ROW_PER_PAGE);
-        
-        $paging = $posts->toArray();
-        
-        if($request->ajax()) {
-            $output['data'] = view('auth.posts.ajax_list', compact('posts', 'paging'))->render();
-            return response()->json($output);
-        } else {
-            return compact('posts', 'paging');
-        }
+        return $this->doSearch($request, new Post());
     }
     
     /**
@@ -89,19 +61,19 @@ class PostsController extends AppController
                 $filename = '';
                 Utils::doUpload($request, Common::PHOTO_FOLDER, $filename);
                 
-                $post = new Post();
-                $post->name              = Utils::cnvNull($request->name, '');
-                $post->name_url          = Utils::createNameUrl(Utils::cnvNull($request->name, ''));
-                $post->description       = Utils::cnvNull($request->description, 0);
-                $post->content           = Utils::cnvNull($request->content, '');
-                $post->photo             = $filename;
-                $post->published_at      = Utils::cnvNull($request->published_at, '');
-                $post->published_time_at = Utils::cnvNull($request->published_time_at, '');
-                $post->status            = Utils::cnvNull($request->status, 0);
-                $post->created_at        = date('Y-m-d H:i:s');
-                $post->updated_at        = date('Y-m-d H:i:s');
+                $data = new Post();
+                $data->name              = Utils::cnvNull($request->name, '');
+                $data->name_url          = Utils::createNameUrl(Utils::cnvNull($request->name, ''));
+                $data->description       = Utils::cnvNull($request->description, 0);
+                $data->content           = Utils::cnvNull($request->content, '');
+                $data->photo             = $filename;
+                $data->published_at      = Utils::cnvNull($request->published_at, '');
+                $data->published_time_at = Utils::cnvNull($request->published_time_at, '');
+                $data->status            = Utils::cnvNull($request->status, 0);
+                $data->created_at        = date('Y-m-d H:i:s');
+                $data->updated_at        = date('Y-m-d H:i:s');
                 
-                if($post->save()) {
+                if($data->save()) {
                     return redirect(route('auth_posts_create'))->with('success', trans('messages.CREATE_SUCCESS'));
                 }
                 
@@ -110,7 +82,8 @@ class PostsController extends AppController
             }
         }
         
-        return view('auth.posts.create')->withErrors($validator);
+        $name = $this->name;
+        return view('auth.posts.create', compact('name'));
     }
     
     /**
@@ -123,33 +96,33 @@ class PostsController extends AppController
         
         $validator = [];
         
-        $post = Post::find($request->id);
+        $data = Post::find($request->id);
         
         if($request->isMethod('post')) {
             
             $validator = Validator::make($request->all(), $this->rules);
             
             if (!$validator->fails()) {
-                $post = Post::find($request->id);
+                $data = Post::find($request->id);
                 
-                $filename = $post->photo;
+                $filename = $data->photo;
                 Utils::doUpload($request, Common::PHOTO_FOLDER, $filename);
                 
                 $published_at = date('Ymd', strtotime($request->input('published_at', date('Ymd'))));
                 $published_time_at = date('Hi', strtotime($request->input('published_time_at', date('H:i'))));
                 
-                $post->name                 = Utils::cnvNull($request->name, '');
-                $post->name_url             = Utils::createNameUrl(Utils::cnvNull($request->name, ''));
-                $post->description          = Utils::cnvNull($request->description, 0);
-                $post->content              = Utils::cnvNull($request->content, '');
-                $post->photo                = $filename;
-                $post->published_at         = $published_at;
-                $post->published_time_at    = $published_time_at;
-                $post->status               = Utils::cnvNull($request->status, 0);
-                $post->created_at           = date('Y-m-d H:i:s');
-                $post->updated_at           = date('Y-m-d H:i:s');
+                $data->name                 = Utils::cnvNull($request->name, '');
+                $data->name_url             = Utils::createNameUrl(Utils::cnvNull($request->name, ''));
+                $data->description          = Utils::cnvNull($request->description, 0);
+                $data->content              = Utils::cnvNull($request->content, '');
+                $data->photo                = $filename;
+                $data->published_at         = $published_at;
+                $data->published_time_at    = $published_time_at;
+                $data->status               = Utils::cnvNull($request->status, 0);
+                $data->created_at           = date('Y-m-d H:i:s');
+                $data->updated_at           = date('Y-m-d H:i:s');
                 
-                if($post->save()) {
+                if($data->save()) {
                     return redirect(route('auth_posts_edit', ['id' => $request->id]))->with('success', trans('messages.UPDATE_SUCCESS'));
                 }
                 
@@ -158,14 +131,15 @@ class PostsController extends AppController
             }
         }
         
-        return view('auth.posts.edit', compact('post'))->withErrors($validator);
+        $name = $this->name;
+        return view('auth.posts.edit', compact('data', 'name'));
     }
     
     public function remove(Request $request) {
         if($request->isMethod('get')) {
             $id = $request->id;
-            $post = Post::find($id);
-            if($post->delete()) {
+            $data = Post::find($id);
+            if($data->delete()) {
                 return redirect(route('auth_posts'))->with('success', trans('messages.REMOVE_SUCCESS'));
             }
         }

@@ -5,6 +5,7 @@ namespace App\Helpers;
 use App\Constants\Common;
 use App\Constants\ContactStatus;
 use App\Constants\Status;
+use App\Constants\StatusOrders;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -268,7 +269,10 @@ class Utils {
                 }
                 break;
             case 'CONTACT_TYPE':
-                return ContactStatus::createSelectList();
+                return ContactStatus::createSelectList($selected);
+                break;
+            case 'STATUS_ORDERS':
+                return StatusOrders::createSelectList($selected);
                 break;
             default:
                 $data = [
@@ -612,5 +616,260 @@ class Utils {
         return number_format($input, 0, ',', '.');
     }
 
+    public static function generateForm($forms, $config, $name, $data = null) {
+        
+        $form_html = '';
+        foreach($forms as $key=>$value) {
+            if($key == 'header') {
+                $form_html .= '<h1>' . $value . '</h1>';
+            }
+            
+            $form_html .= self::createElement($key, $value, $config, $name, $data);
+            
+        }
+        
+        return $form_html;
+    }
+    
+    private static function createElement($key = '', $value = '', $config, $name, $data = null) {
+        
+        $text = isset($value['text']) ? $value['text'] : '';
+        $placeholder = isset($value['placeholder']) ? $value['placeholder'] : $text;
+        $maxlength = isset($value['maxlength']) ? $value['maxlength'] : 120;
+        $lengthText = str_replace('{0}', $maxlength, trans('auth.length_text'));
+        $table = isset($value['table']) ? $value['table'] : '';
+        $emptyText = isset($value['empty_text']) ? $value['empty_text'] : '';
+        $containerId = isset($value['container_id']) ? $value['container_id'] : '';
+        if(!Utils::blank($containerId)) {
+            $banner_type = trans('auth.banner_type');
+            if(!$banner_type[$containerId]['checked']) {
+                $containerId = 'select_type ' . $containerId . ' hide_element';
+            } else {
+                $containerId = 'select_type ' . $containerId;
+            }
+        }
+        
+        $disable = isset($value['disabled']) ? 'disabled=true' : '';
+        $label = '<label>' . $text . '<small>' . $lengthText . '</small></label>';
+        $element_value = !is_null($data) && !Utils::blank($data->$key) ? $data->$key : '';
+        
+        $element_html = '<div class="form-group ' . $containerId . '">';
+        $type = isset($value['type']) ? $value['type'] : '';
+        $count = isset($value['count']) ? $value['count'] : 0;
+        
+        switch($type) {
+            case 'radio_list':
+                
+                $element_html = '<div class="radio">';
+                
+                $radio_values = $value['value'];
+                foreach($radio_values as $k=>$v) {
+                    
+                    $element_html .= '<label>';
+                    $element_html .= '<input type="radio" class="' . $key . '" name="' . $key . '" value="' . $k . '" ' . ($v['checked'] || $k == $element_value ? 'checked="checked"' : '') . ' /> ' . $v['text'];
+                    $element_html .= '</label>';
+                    
+                }
+                
+                break;
+                
+            case 'youtube_preview':
+                
+                $element_html .= $label;
+                $element_html .= '<div id="youtube_preview">';
+                if(!is_null($data) && !Utils::blank($data->youtube_id)) {
+                    $element_html .= '<iframe width="560" height="315" src="https://www.youtube.com/embed/' . $data->youtube_id . '" frameborder="0" allowfullscreen></iframe>';
+                }
+                $element_html .= '</div>';
+                $element_html .= '<input type="hidden" name="youtube_embed_url" id="youtube_embed_url" value="" />';
+                
+                break;
+                
+            case 'textarea':
+                
+                $element_html .= $label;
+                $element_html .= '<textarea class="form-control" rows="6" name="' . $key . '" placeholder="' . $placeholder . '" maxlength="' . $maxlength . '" '. $disable . '>' . $element_value . '</textarea>';
+                $element_html .= '<input type="hidden" name="youtube_embed_url" id="youtube_embed_url" value="" />';
+                
+                break;
+                
+            case 'text':
+                
+                if($key == 'youtube_id') {
+                    $element_value = !Utils::blank($element_value) ? 'https://www.youtube.com/watch?v=' . $element_value : '';
+                }
+                
+                $element_html .= $label;
+                $element_html .= '<div class="input-group"><span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>';
+                $element_html .= '<input type="text" class="form-control" name="' . $key . '" id="' . $key . '" value="' . $element_value . '" placeholder="' . $placeholder . '" maxlength="' . $maxlength . '" '. $disable . ' />';
+                $element_html .= '</div>';
+                break;
+                
+            case 'currency':
+                
+                $element_html .= $label;
+                $element_html .= '<div class="input-group"><span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>';
+                $element_html .= '<input type="number" class="form-control" name="' . $key . '" id="' . $key . '" value="' . $element_value . '" placeholder="' . $placeholder . '" maxlength="' . $maxlength . '" '. $disable . ' />';
+                
+                if(!self::blank($element_value)) {
+                    $element_value = self::formatCurrency($element_value);
+                }
+                $element_html .= '</div>';
+                $element_html .= '<span id="format_currency"><strong><small>Định dạng tiền tệ: <i>' . $element_value . '</i></small></strong></span>';
+                
+                break;
+                
+            case 'number':
+                
+                $element_html .= $label;
+                $element_html .= '<div class="input-group"><span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>';
+                $element_html .= '<input type="number" class="form-control" name="' . $key . '" id="' . $key . '" value="' . $element_value . '" placeholder="' . $placeholder . '" maxlength="' . $maxlength . '" '. $disable . ' />';
+                $element_html .= '</div>';
+                break;
+                
+            case 'email':
+                
+                $element_html .= $label;
+                $element_html .= '<div class="input-group"><span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>';
+                $element_html .= '<input type="email" class="form-control" name="' . $key . '" id="' . $key . '" value="' . $element_value . '" placeholder="' . $placeholder . '" maxlength="' . $maxlength . '" '. $disable . ' />';
+                $element_html .= '</div>';
+                break;
+                
+            case 'password':
+                
+                $element_html .= $label;
+                $element_html .= '<div class="input-group"><span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>';
+                $element_html .= '<input type="password" class="form-control" name="' . $key . '" id="' . $key . '" value="" placeholder="' . $placeholder . '" maxlength="' . $maxlength . '" '. $disable . ' />';
+                $element_html .= '</div>';
+                break;
+                
+            case 'checkbox':
+                
+                $checked = '';
+                
+                $element_html .= '<div class="checkbox">';
+                if($element_value || (isset($value['checked']) && $value['checked'])) {
+                    $checked = 'checked="checked"';
+                }
+                
+                $element_html .= '<label><input type="checkbox" name="' . $key . '" value="1" ' . $checked . ' />' . $text . '</label>';
+                
+                $element_html .= '</div>';
+                break;
+                
+            case 'checkbox_multi':
+                
+                $element_html .= '<label>' .$text . '</label>';
+                $element_html .= '<div class="checkbox">';
+                $element_html .= '<label>' . self::createCheckboxList($table, $element_value) . '</label>';
+                $element_html .= '</div>';
+                break;
+                
+            case 'checkbox_color_multi':
+                
+                $element_html .= '<label>' .$text . '</label>';
+                $element_html .= '<div class="checkbox">';
+                $element_html .= '<label>' . self::createCheckboxList($table, $element_value) . '</label>';
+                $element_html .= '</div>';
+                break;
+                
+            case 'label':
+                
+                $element_html .= '<label>' .$text . '</label>&nbsp;&nbsp;&nbsp;';
+                $element_html .= '<span>' . $element_value . '</span>';
+                break;
+                
+            case 'link':
+                
+                $element_html .= '<label>' .$text . '</label>';
+                $element_html .= '<a href="mailto:' . $element_value . '">' . $element_value . '</a>';
+                break;
+                
+            case 'file':
+                
+                $image_size = isset($config[$name . '_image_size']) ? $config[$name . '_image_size'] : $config[$key . '_image_size'];
+                $upload_limit = isset($config[$name . '_maximum_upload']) ? $config[$name . '_maximum_upload'] : $config[$key . '_maximum_upload'];
+                
+                
+                $split = explode('x', $image_size);
+                $size = self::formatMemory($upload_limit);
+                
+                $image_using = [];
+                if(!is_null($data)) {
+                    if($key == 'image') {
+                        $image_using = $data->getAllImage($data->id);
+                    } else {
+                        $image_using = $element_value;
+                    }
+                }
+                
+                $text_small = trans('auth.text_image_small');
+                $file_ext = isset($value['file_ext']) ? $value['file_ext'] : Common::IMAGE_EXT;
+                
+                if($count > 0) {
+                    
+                    $element_html .= '<label>' . $text . '</label>&nbsp;&nbsp;(' . Utils::replaceMessageParam($text_small,[$size]) . ')<br/>';
+                    $element_html .= '<div id="preview_list">';
+                    
+                    if(count($image_using)) {
+                        foreach($image_using as $id=>$image) {
+                            $element_html .= '<div class="image_product" style="display: inline-block;">';
+                            $element_html .= '<a href="javascript:void(0)" class="add_image" style="width: ' . $split[0] . 'px; height: ' . $split[1] . 'px">';
+                            $element_html .= '<img src="' . $image . '" style="width: ' . $split[0] . 'px; height: ' . $split[1] . 'px" />';
+                            $element_html .= '</a>';
+                            
+                            $element_html .= '<a href="javascript:void(0)" class="remove" data-id="' . $id . '"><i class="fa fa-trash" aria-hidden="true"></i></a>';
+                            $element_html .= '<input type="hidden" name="image_ids[]" class="upload_image_id" value="' . $id . '" />';
+                            $element_html .= '</div>';
+                        }
+                    }
+                    
+                    $element_html .= '<div class="image_product" style="display: inline-block;">';
+                    $element_html .= '<a href="javascript:void(0)" class="add_image" data-key="' . $key . '" data-demension="' . $image_size . '" data-upload-limit="' . $upload_limit . '" data-file-ext="' . $file_ext . '" style="width: ' . $split[0] . 'px; height: ' . $split[1] . 'px">';
+                    $element_html .= '<i class="fa fa-upload" style="font-size: 20px;" aria-hidden="true"></i><br/>' . trans('auth.button.add_image');
+                    $element_html .= '</a>';
+                    
+                    $element_html .= '<input type="hidden" id="upload_index" value="-1" />';
+                    $element_html .= '</div>';
+                    $element_html .= '</div>';
+                } else {
+                    $element_html .= '<label>' . $text . '</label>&nbsp;&nbsp;(' . Utils::replaceMessageParam($text_small,[$size]) . ')<br/>';
+                    $element_html .= '<div id="preview_list">';
+                    $element_html .= '<div  id="' . $key . '_0" class="image_product" style="display: inline-block;">';
+                    $element_html .= '<a href="javascript:void(0)" class="upload_image open_upload_dialog" data-demension="' . $image_size . '" data-upload-limit="' . $upload_limit . '" data-file-ext="' . $file_ext . '" style="width: ' . $split[0] . 'px; height: ' . $split[1] . 'px">';
+                    $element_html .= '<i class="fa fa-upload" style="font-size: 20px;" aria-hidden="true"></i><br/>' . trans('auth.button.add_image');
+                    $element_html .= '</a>';
+                    
+                    $element_html .= '<input type="file" name="image_upload[]" class="upload_image_product" style="display: none" />';
+                    $element_html .= '<input type="hidden" name="image_upload_url[]" class="upload_image_product_url" />';
+                    $element_html .= '<input type="hidden" name="image_ids[]" class="upload_image_id" value="9999" />';
+                            
+                    $element_html .= '</div>';
+                    $element_html .= '</div>';
+                }
+                
+                break;
+                
+            case 'select':
+                $element_html .= '<label>' .$text . '</label>';
+                $element_html .= '<select class="form-control" name="' . $key . '" id="' . $key . '">';
+                if(!self::blank($emptyText)) {
+                    $element_html .= '<option value="">' . $emptyText . '</option>';
+                }
+                $element_html .= self::createSelectList($table, $element_value);
+                $element_html .= '</select>';
+                break;
+                
+            case 'editor':
+                $element_html .= '<label>' .$text . '</label>';
+                $element_html .= '<textarea name="' . $key . '" id="editor_' . $key . '" class="ckeditor" placeholder="' . $placeholder . '">' . $element_value . '</textarea>';
+                break;
+                
+        }
+        $element_html .= '<span class="help-block"></span>';
+        $element_html .= '</div>';
+        return $element_html;
+    }
+    
     
 }

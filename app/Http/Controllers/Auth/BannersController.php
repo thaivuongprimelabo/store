@@ -29,7 +29,7 @@ class BannersController extends AppController
     }
     
     public function index(Request $request) {
-        return view('auth.banners.index', $this->search($request));
+        return view('auth.index', $this->search($request));
     }
     
     /**
@@ -37,30 +37,7 @@ class BannersController extends AppController
      * @param Request $request
      */
     public function search(Request $request) {
-        $wheres = [];
-        $output = ['code' => 200, 'data' => ''];
-        if($request->isMethod('post')) {
-            $type_search = $request->type_search;
-            if(!Utils::blank($type_search)) {
-                $wheres[] = ['select_type', '=', $type_search];
-            }
-            
-            $status_search = $request->status_search;
-            if(!Utils::blank($status_search)) {
-                $wheres[] = ['status', '=', $status_search];
-            }
-        }
-        
-        $banners = Banner::where($wheres)->orderBy('created_at', 'DESC')->paginate(Common::ROW_PER_PAGE);
-        
-        $paging = $banners->toArray();
-        
-        if($request->ajax()) {
-            $output['data'] = view('auth.banners.ajax_list', compact('banners', 'paging'))->render();
-            return response()->json($output);
-        } else {
-            return compact('banners', 'paging');
-        }
+        return $this->doSearch($request, new Banner());
     }
     
     /**
@@ -83,27 +60,29 @@ class BannersController extends AppController
                 Utils::doUpload($request, Common::BANNER_FOLDER, $filename);
                 $select_type = Utils::cnvNull($request->select_type, 'use_image');
                 
-                $banner = new Banner();
+                $data = new Banner();
                 if($select_type == 'use_image') {
-                    $banner->link           = Utils::cnvNull($request->link, '');
-                    $banner->banner         = $filename;
+                    $data->link           = Utils::cnvNull($request->link, '');
+                    $data->banner         = $filename;
                 } else {
-                    $banner->youtube_id    = Utils::cnvNull($request->youtube_embed_url, '');
+                    $data->youtube_id    = Utils::cnvNull($request->youtube_embed_url, '');
                 }
-                $banner->description    = Utils::cnvNull($request->description, '');
-                $banner->status         = Utils::cnvNull($request->status, 0);
-                $banner->select_type    = Utils::cnvNull($request->select_type, 'use_image');
-                $banner->created_at     = date('Y-m-d H:i:s');
-                $banner->updated_at     = date('Y-m-d H:i:s');
+                $data->description    = Utils::cnvNull($request->description, '');
+                $data->status         = Utils::cnvNull($request->status, 0);
+                $data->select_type    = Utils::cnvNull($request->select_type, 'use_image');
+                $data->created_at     = date('Y-m-d H:i:s');
+                $data->updated_at     = date('Y-m-d H:i:s');
                 
-                if($banner->save()) {
+                if($data->save()) {
                     return redirect(route('auth_banners_create'))->with('success', trans('messages.CREATE_SUCCESS'));
                 }
             } else {
                 return redirect(route('auth_banners_create'))->with('error', trans('messages.ERROR'));
             }
         }
-        return view('auth.banners.create')->withErrors($validator);
+        
+        $name = $this->name;
+        return view('auth.banners.create', compact('name'));
     }
     
     /**
@@ -116,7 +95,7 @@ class BannersController extends AppController
         
         $validator = [];
         
-        $banner = Banner::find($request->id);
+        $data = Banner::find($request->id);
         
         if($request->isMethod('post')) {
             
@@ -124,41 +103,42 @@ class BannersController extends AppController
             
             if (!$validator->fails()) {
                 
-                $filename = $banner->banner;
+                $filename = $data->banner;
                 Utils::doUpload($request, Common::BANNER_FOLDER, $filename);
                 
                 $select_type = Utils::cnvNull($request->select_type, 'use_image');
                 if($select_type == 'use_image') {
-                    $banner->link           = Utils::cnvNull($request->link, '');
-                    $banner->banner         = $filename;
-                    $banner->youtube_id    = '';
+                    $data->link           = Utils::cnvNull($request->link, '');
+                    $data->banner         = $filename;
+                    $data->youtube_id    = '';
                 } else {
-                    $banner->youtube_id    = Utils::cnvNull($request->youtube_embed_url, '');
-                    $banner->link           = '';
-                    $banner->banner         = '';
+                    $data->youtube_id    = Utils::cnvNull($request->youtube_embed_url, '');
+                    $data->link           = '';
+                    $data->banner         = '';
                 }
                 
-                $banner->description    = Utils::cnvNull($request->description, '');
-                $banner->status         = Utils::cnvNull($request->status, 0);
-                $banner->select_type    = Utils::cnvNull($request->select_type, 'use_image');
-                $banner->updated_at     = date('Y-m-d H:i:s');
+                $data->description    = Utils::cnvNull($request->description, '');
+                $data->status         = Utils::cnvNull($request->status, 0);
+                $data->select_type    = Utils::cnvNull($request->select_type, 'use_image');
+                $data->updated_at     = date('Y-m-d H:i:s');
                 
-                if($banner->save()) {
+                if($data->save()) {
                     return redirect(route('auth_banners_edit', ['id' => $request->id]))->with('success', trans('messages.UPDATE_SUCCESS'));
                 }
             } else {
                 return redirect(route('auth_banners_edit', ['id' => $request->id]))->with('error', trans('messages.ERROR'));
             }
         }
-        return view('auth.banners.edit', compact('banner'))->withErrors($validator);
+        $name = $this->name;
+        return view('auth.banners.edit', compact('data', 'name'));
     }
     
     public function remove(Request $request) {
         if($request->isMethod('get')) {
             $id = $request->id;
-            $banner = Banner::find($id);
-            if($banner->delete()) {
-                Utils::removeFile($banner->banner);
+            $data = Banner::find($id);
+            if($data->delete()) {
+                Utils::removeFile($data->banner);
                 return redirect(route('auth_banners'))->with('success', trans('messages.REMOVE_SUCCESS'));
             }
         }

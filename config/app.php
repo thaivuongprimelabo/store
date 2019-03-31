@@ -229,6 +229,8 @@ return [
         'Status' => App\Constants\Status::class,
         'ContactStatus' => App\Constants\ContactStatus::class,
         'PostStatus' => App\Constants\PostStatus::class,
+        'StatusOrders' => App\Constants\StatusOrders::class,
+        'ProductStatus' => App\Constants\ProductStatus::class,
         'Common' => App\Constants\Common::class,
         'Validation' => App\Constants\Validation::class,
         'Utils' => App\Helpers\Utils::class,

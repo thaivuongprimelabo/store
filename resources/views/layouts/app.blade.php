@@ -180,7 +180,7 @@
 <!-- CK Editor -->
 <script src="{{ url('admin/bower_components/ckeditor/ckeditor.js') }}"></script>
 <script src="{{ url('admin/js/jquery.validate.js') }}" type="text/javascript"></script>
-<script src="{{ url('js/custom.js') }}"></script>
+<script src="{{ url('js/custom.js?t=' . time()) }}"></script>
 
 <script>
   $(function () {
@@ -285,18 +285,26 @@
     });
 
     $('#uploadModal').on('show.bs.modal', function (event) {
-		$('#preview').attr('src','');
+		$('#preview').attr('src','https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTk3tIoN8xFb5O6v9T9SgFWpp3ps6mfSbLblzh6zh24fUR4cjPDBg');
 		$('#upload_by_url').val('');
 		$('#error_list').html('');
 
-		var demension = $('#demension').val();
+		var demension = $('#select_image').attr('data-demension');
 		var arr = demension.split('x');
 		$('#preview').parent().css({'width': arr[0], 'height': arr[1]});
 		$('#preview').css({'width': arr[0], 'height': arr[1]});
+
     });
 
-    $(document).on('click', '#open_upload_dialog', function(e) {
-        $('#select_image').attr('data-id', 0);
+    $(document).on('click', '.open_upload_dialog', function(e) {
+        var id = $(this).parent().attr('id');
+        var demension = $(this).attr('data-demension');
+        var upload_limit = $(this).attr('data-upload-limit');
+        var file_ext = $(this).attr('data-file-ext');
+        $('#select_image').attr('data-id', id);
+        $('#select_image').attr('data-demension', demension);
+        $('#select_image').attr('data-upload-limit', upload_limit);
+        $('#select_image').attr('data-file-ext', file_ext);
 		$('#uploadModal').modal();
 	});
 
@@ -309,22 +317,29 @@
     	var src = $(this).val();
     	uploadByUrl(src);
     	$('.upload_image_product').val('');
+    	$('#error_list').html('');
     });
 
     $(document).on('click', '#select_image', function(e) {
-        var index = $(this).attr('data-id');
-        var demension = $('#demension').val();
-    	selectImage(index, demension);
+        var id = $(this).attr('data-id');
+        var demension = $(this).attr('data-demension');
+    	selectImage(id, demension);
 	});
 
     $(document).on('change', '.upload_image_product', function(e) {
     	var input = $(this);
-    	var maxSize = $('#upload_limit').val();
-    	var demension = $('#demension').val();
-    	var rules = ['{{ Common::IMAGE_EXT }}', maxSize];
-    	if(checkFileUpload(input, rules, '{{ trans('validation.size.file_multi') }}', '#error_list')) {
-    		previewImageProduct(input, maxSize, demension, '#preview');
+    	var upload_limit =$('#select_image').attr('data-upload-limit');
+    	var demension = $('#select_image').attr('data-demension');
+    	var file_ext = $('#select_image').attr('data-file-ext');
+    	var rules = [file_ext, upload_limit];
+    	var messages = [
+    		'{{ trans('validation.image') }}',
+    		'{{ trans('validation.size.file_multi') }}'
+        ];
+    	if(checkFileUpload(input, rules, messages, '#error_list')) {
+    		previewImageProduct(input, upload_limit, demension, '#preview');
     		$('#upload_by_url').val('');
+    		$('#error_list').html('');
     	}
     });
 
@@ -343,6 +358,52 @@
 
 	$(document).on('keyup', '#price', function(e) {
 		$('#format_currency strong small i').html(formatCurrency($(this).val(), '.', '.'));
+	});
+
+	$(document).on('click', '.remove', function(e) {
+		if(confirmDelete('{{ trans('messages.CONFIRM_DELETE') }}')) {
+			$(this).parent().remove();
+			return true;
+		}
+		return false;
+	});
+
+	$(document).on('click', '.add_image', function(e) {
+
+		var demension = $(this).attr('data-demension');
+        var upload_limit = $(this).attr('data-upload-limit');
+        var file_ext = $(this).attr('data-file-ext');
+		var key = $(this).attr('data-key');
+		var index = Number($('#upload_index').val()) + 1;
+		var id = key + '_' + index;
+		var html = '<div id="' + id + '" class="image_product" style="display: none;">';
+		html += '<a href="javascript:void(0)" class="upload_image" style="width: 150px; height: 150px">';
+		html += '<i class="fa fa-upload" aria-hidden="true"></i><br/>{{ trans('auth.button.upload_image') }}';
+		html += '</a>';
+		html += '<a href="javascript:void(0)" class="remove"><i class="fa fa-trash" aria-hidden="true"></i></a>';
+		html += '<input type="file" name="image_upload[]" class="upload_image_product" style="display: none" />';
+		html += '<input type="hidden" name="image_upload_url[]" class="upload_image_product_url" />';
+		html += '<input type="hidden" name="image_ids[]" class="upload_image_id" value="9999" />';
+		html += '</div>';
+
+		$('#select_image').attr('data-id', id);
+		$('#select_image').attr('data-demension', demension);
+        $('#select_image').attr('data-upload-limit', upload_limit);
+        $('#select_image').attr('data-file-ext', file_ext);
+
+		$('#preview_list').prepend(html);
+		$('#uploadModal').modal();
+		$('#upload_index').val(index);
+
+	});
+
+	$(document).on('click', '.toy-item', function(e) {
+		var style = $(this).find('tbody').attr('style');
+		if(style.length === 0) {
+			$(this).find('tbody').fadeOut();
+		} else {
+			$(this).find('tbody').fadeIn();
+		}
 	});
   });
 </script>

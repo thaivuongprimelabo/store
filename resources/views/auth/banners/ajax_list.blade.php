@@ -1,14 +1,12 @@
-
-
-  <table class="table table-hover">
-  	<col width="2%">
-  	<col width="20%">
-  	<col width="10%">
-  	<col width="10%">
-  	<col width="10%">
-  	<col width="10%">
-  	<col width="2%">
-  	<col width="2%">
+<table class="table table-hover" style="table-layout: fixed; word-wrap:break-word;">
+    <col width="2%">
+    <col width="20%">
+    <col width="10%">
+    <col width="10%">
+    <col width="10%">
+    <col width="10%">
+    <col width="2%">
+    <col width="2%">
     <tr>
       <th>{{ trans('auth.banners.table_header.id') }}</th>
       <th>{{ trans('auth.banners.table_header.banner') }}</th>
@@ -19,8 +17,8 @@
       <th></th>
       <th></th>
     </tr>
-    @if($banners->count())
-    @foreach($banners as $banner)
+    @if($data_list->count())
+    @foreach($data_list as $banner)
     <tr>
       <td>{{ $banner->id }}</td>
       <td>
@@ -49,8 +47,4 @@
     	<td colspan="8" align="center">{{ trans('auth.no_data_found') }}</td>
     </tr>
     @endif
-  </table>
-<!-- /.box-body -->
-<div class="box-footer clearfix">
-  {{ $banners->links('auth.common.paging', ['paging' => $paging]) }}
-</div>
+</table>

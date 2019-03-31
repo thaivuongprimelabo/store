@@ -40,14 +40,14 @@ $auth = [
             'vendors' => 'Danh mục nhà cung cấp',
             'products_colors' => 'Danh mục màu sắc',
             'products_sizes' => 'Danh mục kích cỡ',
+            'accessories' => 'Đồ chơi theo xe'
         ],
         'orders' => 'Quản lý đơn hàng',
         'banners' => 'Quản lý banner',
         'posts' => 'Quản lý bài viết',
         'pages' => [
-            'title' => 'Quản lý trang',
+            'title' => 'Quản lý trang nội dung',
             'pages_about' => 'Giới thiệu',
-            'pages_delivery' => 'Phương thức giao hàng'
         ],
         'contacts' => 'Hộp thư liên hệ',
         'users' => 'Quản lý tài khoản',
@@ -77,14 +77,14 @@ $auth = [
             'updated_at' => 'Ngày chỉnh sửa'
         ],
         'search_form' => [
-            'id_search' => ['type' => 'text', 'placeholder' => 'Lọc theo ID nhà cung cấp'],
-            'name_search' => ['type' => 'text', 'placeholder' => 'Lọc theo tên nhà cung cấp'],
-            'status_search' => ['type' => 'status_select']
+            'id' => ['type' => 'text', 'placeholder' => 'Lọc theo ID nhà cung cấp'],
+            'name' => ['type' => 'text', 'placeholder' => 'Lọc theo tên nhà cung cấp'],
+            'status' => ['type' => 'status_select']
         ],
         'search_form' => [
-            'id_search' => ['type' => 'text', 'placeholder' => 'Lọc theo ID loại sản phẩm'],
-            'name_search' => ['type' => 'text', 'placeholder' => 'Lọc theo tên loại sản phẩm'],
-            'status_search' => ['type' => 'status_select']
+            'id' => ['type' => 'text', 'placeholder' => 'Lọc theo ID loại sản phẩm'],
+            'name' => ['type' => 'text', 'placeholder' => 'Lọc theo tên loại sản phẩm'],
+            'status' => ['type' => 'status_select']
         ],
         'form' => [
             'name' => ['type' => 'text', 'text' => 'Tên nhà cung cấp'],
@@ -111,9 +111,9 @@ $auth = [
             'updated_at' => 'Ngày chỉnh sửa'
         ],
         'search_form' => [
-            'id_search' => ['type' => 'text', 'placeholder' => 'Lọc theo ID loại sản phẩm'],
-            'name_search' => ['type' => 'text', 'placeholder' => 'Lọc theo tên loại sản phẩm'],
-            'status_search' => ['type' => 'status_select']
+            'id' => ['type' => 'text', 'placeholder' => 'Lọc theo ID loại sản phẩm'],
+            'name' => ['type' => 'text', 'placeholder' => 'Lọc theo tên loại sản phẩm'],
+            'status' => ['type' => 'status_select']
         ],
         'form' => [
             'name' => ['type' => 'text', 'text' => 'Tên loại sản phẩm'],
@@ -141,10 +141,10 @@ $auth = [
             'updated_at' => 'Ngày chỉnh sửa'
         ],
         'search_form' => [
-            'status_search' => ['type' => 'status_select', 'empty_text' => 'Lọc theo trạng thái'],
-            'type_search' => ['type' => 'data_select', 'table' => 'BANNER_TYPE', 'empty_text' => 'Lọc theo loại'],
+            'status' => ['type' => 'status_select', 'empty_text' => 'Lọc theo trạng thái'],
+            'select_type' => ['type' => 'data_select', 'table' => 'BANNER_TYPE', 'empty_text' => 'Lọc theo loại'],
         ],
-        'status_search' => 'Tất cả trạng thái',
+        'status' => 'Tất cả trạng thái',
         'form' => [
             'select_type' => [
                 'type' => 'radio_list', 
@@ -156,9 +156,9 @@ $auth = [
                 'container_id' => 'use_image'
             ],
             'link' => ['type' => 'text', 'text' => 'Đường dẫn', 'container_id' => 'use_image'],
-            'youtube_id' => ['type' => 'youtube_url', 'text' => 'Youtube URL', 'container_id' => 'use_youtube'],
+            'youtube_id' => ['type' => 'text', 'text' => 'Youtube URL', 'container_id' => 'use_youtube'],
             'preview_youtube' => ['type' => 'youtube_preview', 'text' => 'Preview', 'container_id' => 'use_youtube'],
-            'status' => ['type' => 'checkbox', 'text' => 'Đang hoạt động']
+            'status' => ['type' => 'checkbox', 'text' => 'Đang hoạt động'],
         ]
     ],
     /*------------ Contacts page ------------------- */
@@ -175,23 +175,17 @@ $auth = [
             'created_at' => 'Ngày gửi',
         ],
         'search_form' => [
-            'email_search' => ['type' => 'text', 'placeholder' => 'Lọc theo địa chỉ E-mail'],
-            'phone_search' => ['type' => 'text', 'placeholder' => 'Lọc theo số điện thoại'],
-            'status_search' => ['type' => 'data_select', 'empty_text' => 'Lọc theo trạng thái', 'table' => 'CONTACT_TYPE'],
+            'email' => ['type' => 'text', 'placeholder' => 'Lọc theo địa chỉ E-mail'],
+            'phone' => ['type' => 'text', 'placeholder' => 'Lọc theo số điện thoại'],
+            'status' => ['type' => 'data_select', 'empty_text' => 'Lọc theo trạng thái', 'table' => 'CONTACT_TYPE'],
         ],
         'form' => [
-            'contact_content' => [
-                'text' => 'Nội dung thư',
-                'subject' => ['type' => 'text', 'text' => 'Tựa đề', 'disabled' => true],
-                'name' => ['type' => 'text', 'text' => 'Tên', 'disabled' => true],
-                'email' => ['type' => 'link', 'text' => 'E-mail', 'disabled' => true],
-                'phone' => ['type' => 'text', 'text' => 'Số điện thoại', 'disabled' => true],
-                'content' => ['type' => 'textarea', 'text' => 'Nội dung', 'disabled' => true],
-            ],
-            'reply_content' => [
-                'text' => 'Nội dung trả lời',
-                'reply_content' => ['type' => 'editor', 'text' => 'Nội dung'],
-            ]
+            'subject' => ['type' => 'text', 'text' => 'Tựa đề', 'disabled' => true],
+            'name' => ['type' => 'text', 'text' => 'Tên', 'disabled' => true],
+            'email' => ['type' => 'link', 'text' => 'E-mail', 'disabled' => true],
+            'phone' => ['type' => 'text', 'text' => 'Số điện thoại', 'disabled' => true],
+            'content' => ['type' => 'textarea', 'text' => 'Nội dung', 'disabled' => true],
+            'reply_content' => ['type' => 'editor', 'text' => 'Nội dung trả lời '],
         ],
     ],
     /*------------ Posts page ------------------- */
@@ -208,13 +202,13 @@ $auth = [
             'published_at' => 'Ngày xuất bản',
             'created_at' => 'Ngày đăng ký',
         ],
-        'id_search_placeholder' => 'Lọc theo Id bài viết',
-        'name_search_placeholder' => 'Lọc theo tựa đề',
-        'status_search' => 'Tất cả trạng thái',
+        'id_placeholder' => 'Lọc theo Id bài viết',
+        'name_placeholder' => 'Lọc theo tựa đề',
+        'status' => 'Tất cả trạng thái',
         'search_form' => [
-            'id_search' => ['type' => 'text', 'placeholder' => 'Lọc theo ID bài viết'],
-            'name_search' => ['type' => 'text', 'placeholder' => 'Lọc theo tựa đề'],
-            'status_search' => ['type' => 'status_select', 'empty_text' => 'Lọc theo trạng thái'],
+            'id' => ['type' => 'text', 'placeholder' => 'Lọc theo ID bài viết'],
+            'name' => ['type' => 'text', 'placeholder' => 'Lọc theo tựa đề'],
+            'status' => ['type' => 'status_select', 'empty_text' => 'Lọc theo trạng thái'],
         ],
         'form' => [
             'name' => [
@@ -262,45 +256,46 @@ $auth = [
             'cost' => 'Thành tiền'
         ],
         'search_form' => [
-            'id_search' => ['type' => 'text', 'placeholder' => 'Lọc theo ID bài viết'],
-            'name_search' => ['type' => 'text', 'placeholder' => 'Lọc theo tên khách hàng'],
-            'phone_search' => ['type' => 'text', 'placeholder' => 'Lọc theo số điện thoại'],
-            'date_search' => ['type' => 'text', 'placeholder' => 'Lọc theo ngày giao hàng'],
-            'status_search' => ['type' => 'status_select', 'empty_text' => 'Lọc theo trạng thái'],
+            'id' => ['type' => 'text', 'placeholder' => 'Lọc theo ID bài viết'],
+            'name' => ['type' => 'text', 'placeholder' => 'Lọc theo tên khách hàng'],
+            'phone' => ['type' => 'text', 'placeholder' => 'Lọc theo số điện thoại'],
+            'date' => ['type' => 'text', 'placeholder' => 'Lọc theo ngày giao hàng'],
+            'status' => ['type' => 'data_select', 'table' => 'STATUS_ORDERS', 'empty_text' => 'Lọc theo trạng thái'],
         ],
         'form' => [
             'customer_info' => [
-                'text' => 'Thông tin đặt hàng',
+                'header' => 'Thông tin khách hàng',
                 'customer_name' => ['type' => 'label', 'text' => 'Tên khách hàng: '],
                 'customer_email' => ['type' => 'label', 'text' => 'E-mail: '],
                 'customer_address' => ['type' => 'label', 'text' => 'Địa chỉ giao hàng: '],
                 'customer_phone' => ['type' => 'label', 'text' => 'Số điện thoại: '],
                 'payment_method' => ['type' => 'label', 'text' => 'Phương thức chi trả: '],
-                'status' => ['type' => 'select_status_order', 'text' => 'Trạng thái đơn hàng']
+                'status' => ['type' => 'select', 'table' => 'STATUS_ORDERS', 'text' => 'Trạng thái đơn hàng', 'empty_text']
             ],
          ]
     ],
     /*------------ Config page ------------------- */
     'config' => [
-        'title' => 'Cài đặt hệ thống',
+        'edit_title' => 'Cài đặt hệ thống',
         'form' => [
             'web_info' => [
-                'text' => 'Website informations',
+                'header' => 'Website informations',
                 'web_title' => ['type' => 'text', 'text' => 'Web name'],
                 'web_logo' => [
                     'type' => 'file', 
                     'text' => 'Web logo',
                 ],
                 'web_ico' => [
-                    'type' => 'file_simple',
-                    'text' => 'Web icon'
+                    'type' => 'file',
+                    'text' => 'Web ico',
+                    'file_ext' => \App\Constants\Common::ICO_EXT
                 ],
                 'web_email' => ['type' => 'text', 'text' => 'Web mail'],
                 'web_description' => ['type' => 'textarea', 'text' => 'SEO Description'],
                 'web_keywords' => ['type' => 'textarea', 'text' => 'SEO Keywords'],
             ],
             'mail_settings' => [
-                'text' => 'Mail settings',
+                'header' => 'Mail settings',
                 'mail_driver' => ['type' => 'text', 'text' => 'Mail driver'],
                 'mail_host' => ['type' => 'text', 'text' => 'Mail host'],
                 'mail_port' => ['type' => 'text', 'text' => 'Mail port'],
@@ -311,23 +306,25 @@ $auth = [
                 'mail_password' => ['type' => 'text', 'text' => 'Mail password'],
             ],
             'upload_settings' => [
-                'text' => 'Upload settings',
-                'banner_maximum_upload' => ['type' => 'select', 'text' => 'Maximum upload file (Banner) KB', 'table' => 'UPLOAD_SIZE_LIMIT'],
-                'logo_maximum_upload' => ['type' => 'select', 'text' => 'Maximum upload file (Nhà cung cấp) KB', 'table' => 'UPLOAD_SIZE_LIMIT'],
-                'image_maximum_upload' => ['type' => 'select', 'text' => 'Maximum upload file (Sản phẩm) KB', 'table' => 'UPLOAD_SIZE_LIMIT'],
-                'photo_maximum_upload' => ['type' => 'select', 'text' => 'Maximum upload file (Bài viết) KB', 'table' => 'UPLOAD_SIZE_LIMIT'],
+                'header' => 'Upload settings',
+                'banners_maximum_upload' => ['type' => 'select', 'text' => 'Maximum upload file (Banner) KB', 'table' => 'UPLOAD_SIZE_LIMIT'],
+                'vendors_maximum_upload' => ['type' => 'select', 'text' => 'Maximum upload file (Nhà cung cấp) KB', 'table' => 'UPLOAD_SIZE_LIMIT'],
+                'products_maximum_upload' => ['type' => 'select', 'text' => 'Maximum upload file (Sản phẩm) KB', 'table' => 'UPLOAD_SIZE_LIMIT'],
+                'posts_maximum_upload' => ['type' => 'select', 'text' => 'Maximum upload file (Bài viết) KB', 'table' => 'UPLOAD_SIZE_LIMIT'],
                 'web_logo_maximum_upload' => ['type' => 'select', 'text' => 'Maximum upload file (Web logo) KB', 'table' => 'UPLOAD_SIZE_LIMIT'],
+                'web_ico_maximum_upload' => ['type' => 'select', 'text' => 'Maximum upload file (Web ico) KB', 'table' => 'UPLOAD_SIZE_LIMIT'],
                 'attachment_maximum_upload' => ['type' => 'select', 'text' => 'Maximum upload file (Đính kèm) KB', 'table' => 'UPLOAD_SIZE_LIMIT'],
-                'avatar_maximum_upload' => ['type' => 'select', 'text' => 'Maximum upload file (Ảnh đại diện) KB', 'table' => 'UPLOAD_SIZE_LIMIT'],
-                'banner_image_size' => ['type' => 'text', 'text' => 'Kích thước banner (dài x rộng)'],
-                'logo_image_size' => ['type' => 'text', 'text' => 'Kích thước logo nhà cung cấp (dài x rộng)'],
-                'image_image_size' => ['type' => 'text', 'text' => 'Kích thước hình sản phẩm (dài x rộng)'],
-                'photo_image_size' => ['type' => 'text', 'text' => 'Kích thước hình bài viết (dài x rộng)'],
+                'users_maximum_upload' => ['type' => 'select', 'text' => 'Maximum upload file (Ảnh đại diện) KB', 'table' => 'UPLOAD_SIZE_LIMIT'],
+                'banners_image_size' => ['type' => 'text', 'text' => 'Kích thước banner (dài x rộng)'],
+                'vendors_image_size' => ['type' => 'text', 'text' => 'Kích thước logo nhà cung cấp (dài x rộng)'],
+                'products_image_size' => ['type' => 'text', 'text' => 'Kích thước hình sản phẩm (dài x rộng)'],
+                'posts_image_size' => ['type' => 'text', 'text' => 'Kích thước hình bài viết (dài x rộng)'],
                 'web_logo_image_size' => ['type' => 'text', 'text' => 'Kích thước web logo (dài x rộng)'],
-                'avatar_image_size' => ['type' => 'text', 'text' => 'Kích thước ảnh đại diện (dài x rộng)'],
+                'web_ico_image_size' => ['type' => 'text', 'text' => 'Kích thước web icon (dài x rộng)'],
+                'users_image_size' => ['type' => 'text', 'text' => 'Kích thước ảnh đại diện (dài x rộng)'],
             ],
             'payment_method' => [
-                'text' => 'Phương thức thanh toán',
+                'header' => 'Phương thức thanh toán',
                 'bank_info' => ['type' => 'editor', 'text' => 'Chuyển khoản ngân hàng'],
                 'cash_info' => ['type' => 'editor', 'text' => 'Tiền mặt'],
             ],
@@ -356,11 +353,11 @@ $auth = [
             'created_at' => 'Ngày đăng ký',
         ],
         'search_form' => [
-            'id_search' => ['type' => 'text', 'placeholder' => 'Lọc theo Id sản phẩm'],
-            'name_search' => ['type' => 'text', 'placeholder' => 'Lọc theo tên sản phẩm'],
-            'status_search' => ['type' => 'status_select', 'empty_text' => 'Lọc theo trạng thái'],
-            'category_search' => ['type' => 'data_select', 'table' => \App\Constants\Common::CATEGORIES, 'empty_text' => 'Lọc theo loại'],
-            'vendor_search' => ['type' => 'data_select', 'table' => \App\Constants\Common::VENDORS, 'empty_text' => 'Lọc theo nhà cung cấp'],
+            'id' => ['type' => 'text', 'placeholder' => 'Lọc theo Id sản phẩm'],
+            'name' => ['type' => 'text', 'placeholder' => 'Lọc theo tên sản phẩm'],
+            'status' => ['type' => 'status_select', 'empty_text' => 'Lọc theo trạng thái'],
+            'category_id' => ['type' => 'data_select', 'table' => \App\Constants\Common::CATEGORIES, 'empty_text' => 'Lọc theo loại'],
+            'vendor_id' => ['type' => 'data_select', 'table' => \App\Constants\Common::VENDORS, 'empty_text' => 'Lọc theo nhà cung cấp'],
         ],
         'form' => [
             'name' => ['type' => 'text', 'text' => 'Tên sản phẩm'],
@@ -386,13 +383,69 @@ $auth = [
                 'size' => \App\Constants\Common::IMAGE_MAX_SIZE,
                 'width' => \App\Constants\Common::IMAGE_WIDTH,
                 'height' => \App\Constants\Common::IMAGE_HEIGHT,
-                'multiple' => true
+                'count' => 5
             ],
             'description' => ['type' => 'editor', 'text' => 'Chi tiết'],
-            'status' => ['type' => 'checkbox', 'text' => 'Đang hoạt động'],
-            'is_new' => ['type' => 'checkbox', 'text' => 'Sản phẩm mới'],
-            'is_popular' => ['type' => 'checkbox', 'text' => 'Sản phẩm được quan tâm'],
-            'is_best_selling' => ['type' => 'checkbox', 'text' => 'Sản phẩm bán chạy'],
+            'status' => ['type' => 'checkbox', 'text' => 'Đang hoạt động', 'checked' => true],
+            'is_new' => ['type' => 'checkbox', 'text' => 'Sản phẩm mới', 'checked' => true],
+            'is_popular' => ['type' => 'checkbox', 'text' => 'Sản phẩm được quan tâm', 'checked' => true],
+            'is_best_selling' => ['type' => 'checkbox', 'text' => 'Sản phẩm bán chạy', 'checked' => true],
+            'is_toy' => ['type' => 'checkbox', 'text' => 'Đồ chơi theo xe', 'checked' => false],
+        ]
+    ],
+    'accessories' => [
+        'list_title' => 'Danh mục đồ chơi theo xe',
+        'create_title' => 'Đăng ký',
+        'edit_title' => 'Chỉnh sửa',
+        'table_header' => [
+            'id' => 'ID',
+            'name' => 'Tên sản phẩm',
+            'image' => 'Hình ảnh',
+            'category' => 'Loại SP',
+            'vendor' => 'Nhà cung cấp',
+            'price' => 'Giá bán (VNĐ)',
+            'status' => 'Trạng thái',
+            'created_at' => 'Ngày đăng ký',
+        ],
+        'search_form' => [
+            'id' => ['type' => 'text', 'placeholder' => 'Lọc theo Id sản phẩm'],
+            'name' => ['type' => 'text', 'placeholder' => 'Lọc theo tên sản phẩm'],
+            'status' => ['type' => 'status_select', 'empty_text' => 'Lọc theo trạng thái'],
+            'category_id' => ['type' => 'data_select', 'table' => \App\Constants\Common::CATEGORIES, 'empty_text' => 'Lọc theo loại'],
+            'vendor_id' => ['type' => 'data_select', 'table' => \App\Constants\Common::VENDORS, 'empty_text' => 'Lọc theo nhà cung cấp'],
+        ],
+        'form' => [
+            'name' => ['type' => 'text', 'text' => 'Tên sản phẩm'],
+            'price' => ['type' => 'currency', 'text' => 'Giá bán', 'maxlength' => 10],
+            'discount' => ['type' => 'number', 'text' => 'Tỷ lệ giảm giá (%)', 'value' => 0, 'maxlength' => 3],
+            'category_id' => [
+                'type' => 'select',
+                'text' => 'Loại sản phẩm',
+                'empty_text' => 'Chọn loại sản phẩm',
+                'table' => \App\Constants\Common::CATEGORIES
+            ],
+            'vendor_id' => [
+                'type' => 'select',
+                'text' => 'Nhà cung cấp',
+                'empty_text' => 'Chọn nhà cung cấp',
+                'table' => \App\Constants\Common::VENDORS
+            ],
+            'sizes' => ['type' => 'checkbox_multi', 'text' => 'Kích cỡ', 'table' => \App\Constants\Common::SIZES],
+            'colors' => ['type' => 'checkbox_color_multi', 'text' => 'Màu sắc', 'table' => \App\Constants\Common::COLORS],
+            'image' => [
+                'type' => 'file',
+                'text' => 'Hình sản phẩm',
+                'size' => \App\Constants\Common::IMAGE_MAX_SIZE,
+                'width' => \App\Constants\Common::IMAGE_WIDTH,
+                'height' => \App\Constants\Common::IMAGE_HEIGHT,
+                'count' => 5
+            ],
+            'description' => ['type' => 'editor', 'text' => 'Chi tiết'],
+            'status' => ['type' => 'checkbox', 'text' => 'Đang hoạt động', 'checked' => true],
+            'is_new' => ['type' => 'checkbox', 'text' => 'Sản phẩm mới', 'checked' => true],
+            'is_popular' => ['type' => 'checkbox', 'text' => 'Sản phẩm được quan tâm', 'checked' => true],
+            'is_best_selling' => ['type' => 'checkbox', 'text' => 'Sản phẩm bán chạy', 'checked' => true],
+            'is_toy' => ['type' => 'checkbox', 'text' => 'Đồ chơi theo xe', 'checked' => false],
         ]
     ],
     /*------------ Sizes page ------------------- */
@@ -441,11 +494,11 @@ $auth = [
             'created_at' => 'Ngày đăng ký',
         ],
         'search_form' => [
-            'id_search' => ['type' => 'text', 'placeholder' => 'Lọc theo ID tài khoản'],
-            'name_search' => ['type' => 'text', 'placeholder' => 'Lọc theo tên'],
-            'phone_search' => ['type' => 'text', 'placeholder' => 'Lọc theo số điện thoại'],
-            'email_search' => ['type' => 'text', 'placeholder' => 'Lọc theo địa chỉ e-mail'],
-            'status_search' => ['type' => 'status_select', 'empty_text' => 'Lọc theo trạng thái'],
+            'id' => ['type' => 'text', 'placeholder' => 'Lọc theo ID tài khoản'],
+            'name' => ['type' => 'text', 'placeholder' => 'Lọc theo tên'],
+            'phone' => ['type' => 'text', 'placeholder' => 'Lọc theo số điện thoại'],
+            'email' => ['type' => 'text', 'placeholder' => 'Lọc theo địa chỉ e-mail'],
+            'status' => ['type' => 'status_select', 'empty_text' => 'Lọc theo trạng thái'],
         ],
         'form' => [
             'name' => ['type' => 'text', 'text' => 'Tên tài khoản'],
@@ -493,9 +546,9 @@ $auth = [
             'created_at' => 'Ngày đăng ký',
             'updated_at' => 'Ngày chỉnh sửa'
         ],
-        'id_search_placeholder' => 'Lọc theo Id chủ đề',
-        'name_search_placeholder' => 'Lọc theo tên chủ đề',
-        'status_search' => 'Tất cả trạng thái',
+        'id_placeholder' => 'Lọc theo Id chủ đề',
+        'name_placeholder' => 'Lọc theo tên chủ đề',
+        'status' => 'Tất cả trạng thái',
         'form' => [
             'name' => ['type' => 'text', 'text' => 'Chủ đề'],
             'content' => [
@@ -503,6 +556,14 @@ $auth = [
                 'text' => 'Nội dung',
             ],
             'status' => ['type' => 'checkbox', 'text' => 'Đang hoạt động']
+        ]
+    ],
+    /*------------ Members page ------------------- */
+    'pages' => [
+        'create_title' => 'Đăng ký',
+        'edit_title' => 'Chỉnh sửa',
+        'form' => [
+            'content' => ['type' => 'editor', 'text' => 'Nội dung']
         ]
     ],
     /*------------ Members page ------------------- */
@@ -522,9 +583,9 @@ $auth = [
             'updated_at' => 'Ngày chỉnh sửa'
         ],
         'search_form' => [
-            'id_search' => ['type' => 'text', 'placeholder' => 'Lọc theo Id thành viên'],
-            'name_search' => ['type' => 'text', 'placeholder' => 'Lọc theo tên thành viên'],
-            'status_search' => ['type' => 'status_select']
+            'id' => ['type' => 'text', 'placeholder' => 'Lọc theo Id thành viên'],
+            'name' => ['type' => 'text', 'placeholder' => 'Lọc theo tên thành viên'],
+            'status' => ['type' => 'status_select']
         ],
         'form' => [
             'name' => ['type' => 'text', 'text' => 'Tên thành viên'],
@@ -575,7 +636,7 @@ $auth = [
         'back' => 'Quay về',
         'send' => 'Gửi',
         'remove' => 'Xóa',
-        'add_image' => 'Thêm file',
+        'add_image' => 'Tải file',
         'upload_image' => 'Chọn file',
         'close' => 'Đóng',
         'select' => 'Chọn',

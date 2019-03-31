@@ -35,6 +35,12 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Auth'], function () {
     Route::get('/products/colors', 'ProductsController@colors')->name('auth_products_colors');
     Route::get('/products/colors/remove/{id}', 'ProductsController@removeColor')->name('auth_products_colors_remove');
     
+    // Accessories
+    Route::get('/products/accessories', 'AccessoriesController@index')->name('auth_accessories');
+    Route::match(['get', 'post'], '/products/accessories/create', 'AccessoriesController@create')->name('auth_accessories_create');
+    Route::match(['get', 'post'], '/products/accessories/edit/{id}', 'AccessoriesController@edit')->name('auth_accessories_edit');
+    Route::match(['get', 'post'], '/products/accessories/search', 'AccessoriesController@search')->name('auth_accessories_search');
+    
     // Vendors
     $this->get('/vendors', 'VendorsController@index')->name('auth_vendors');
     Route::match(['get', 'post'], '/vendors/create', 'VendorsController@create')->name('auth_vendors_create');
@@ -89,7 +95,6 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Auth'], function () {
     
     // Pages
     Route::match(['get', 'post'], '/pages/about', 'PagesController@about')->name('auth_pages_about');
-    Route::match(['get', 'post'], '/pages/delivery', 'PagesController@delivery')->name('auth_pages_delivery');
     
     // Forums
     Route::match(['get', 'post'], '/forum', 'ForumController@index')->name('auth_forum');

@@ -1,24 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-<section class="content-header">
-  <h1>
-    {{ trans('auth.users.create_title') }}
-  </h1>
-  <ol class="breadcrumb">
-    <li><a href="{{ route('dashboard') }}"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
-    <li><a href="{{ route('auth_users') }}">{{ trans('auth.sidebar.users') }}</a></li>
-    <li class="active">{{ trans('auth.users.create_title') }}</li>
-  </ol>
-</section>
+@include('auth.common.content_header',['title' => 'create_title'])
 <section class="content">
 	<div class="row">
 		<div class="col-md-12">
 			<form role="form" id="submit_form" action="?" method="post" enctype="multipart/form-data">
-			<input type="hidden" id="demension" value="{{ $config['avatar_image_size'] }}" />
-			<input type="hidden" id="upload_limit" value="{{ $config['avatar_maximum_upload'] }}" />
-			@include('auth.common.create_form',['forms' => trans('auth.users.form')])
-			@include('auth.common.button_footer',['back_url' => route('auth_users'), 'id' => 'save_user'])
+			@include('auth.common.create_form')
             </form>
 		</div>
 	</div>

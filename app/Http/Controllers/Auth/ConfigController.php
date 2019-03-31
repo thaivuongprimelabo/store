@@ -24,7 +24,7 @@ class ConfigController extends AppController
     }
     
     public function index(Request $request) {
-        $config_data = Config::first();
+        $data = Config::first();
         if($request->isMethod('post')) {
             
             if($request->clear_config_cache) {
@@ -93,49 +93,53 @@ class ConfigController extends AppController
                 echo '=============== Done! =============== ';
                 exit;
             }
-            $icoFile = $config_data->web_ico;
-            $filename = $config_data->web_logo;
+            $icoFile = $data->web_ico;
+            $filename = $data->web_logo;
             Utils::doUpload($request, Common::WEBLOGO_FOLDER, $filename);
             Utils::createIcoFile($request, $icoFile);
-            $config_data->web_title       = Utils::cnvNull($request->web_title, '');
-            $config_data->web_description = Utils::cnvNull($request->web_description, '');
-            $config_data->web_keywords    = Utils::cnvNull($request->web_keywords, '');
-            $config_data->web_logo        = $filename;
-            $config_data->web_ico         = $icoFile;
-            $config_data->web_email       = Utils::cnvNull($request->web_email, '');
-            $config_data->url_ext         = Utils::cnvNull($request->url_ext, '');
+            $data->web_title       = Utils::cnvNull($request->web_title, '');
+            $data->web_description = Utils::cnvNull($request->web_description, '');
+            $data->web_keywords    = Utils::cnvNull($request->web_keywords, '');
+            $data->web_logo        = $filename;
+            $data->web_ico         = $icoFile;
+            $data->web_email       = Utils::cnvNull($request->web_email, '');
+            $data->url_ext         = Utils::cnvNull($request->url_ext, '');
             
             if(Auth::user()->role_id == Common::SUPER_ADMIN) {
-                $config_data->mail_driver     = Utils::cnvNull($request->mail_driver, '');
-                $config_data->mail_host       = Utils::cnvNull($request->mail_host, '');
-                $config_data->mail_port       = Utils::cnvNull($request->mail_port, '');
-                $config_data->mail_from       = Utils::cnvNull($request->mail_from, '');
-                $config_data->mail_name       = Utils::cnvNull($request->mail_name, '');
-                $config_data->mail_encryption = Utils::cnvNull($request->mail_encryption, '');
-                $config_data->mail_account    = Utils::cnvNull($request->mail_account, '');
-                $config_data->mail_password   = Utils::cnvNull($request->mail_password, '');
-                $config_data->banner_maximum_upload = Utils::cnvNull($request->banner_maximum_upload, '');
-                $config_data->logo_maximum_upload = Utils::cnvNull($request->logo_maximum_upload, '');
-                $config_data->image_maximum_upload = Utils::cnvNull($request->image_maximum_upload, '');
-                $config_data->photo_maximum_upload    = Utils::cnvNull($request->photo_maximum_upload, '');
-                $config_data->web_logo_maximum_upload    = Utils::cnvNull($request->web_logo_maximum_upload, '');
-                $config_data->attachment_maximum_upload = Utils::cnvNull($request->attachment_maximum_upload, '');
-                $config_data->avatar_maximum_upload = Utils::cnvNull($request->avatar_maximum_upload, '');
-                $config_data->banner_image_size = Utils::cnvNull($request->banner_image_size, '');
-                $config_data->logo_image_size = Utils::cnvNull($request->logo_image_size, '');
-                $config_data->image_image_size = Utils::cnvNull($request->image_image_size, '');
-                $config_data->photo_image_size = Utils::cnvNull($request->photo_image_size, '');
-                $config_data->web_logo_image_size = Utils::cnvNull($request->web_logo_image_size, '');
-                $config_data->avatar_image_size = Utils::cnvNull($request->avatar_image_size, '');
+                $data->mail_driver     = Utils::cnvNull($request->mail_driver, '');
+                $data->mail_host       = Utils::cnvNull($request->mail_host, '');
+                $data->mail_port       = Utils::cnvNull($request->mail_port, '');
+                $data->mail_from       = Utils::cnvNull($request->mail_from, '');
+                $data->mail_name       = Utils::cnvNull($request->mail_name, '');
+                $data->mail_encryption = Utils::cnvNull($request->mail_encryption, '');
+                $data->mail_account    = Utils::cnvNull($request->mail_account, '');
+                $data->mail_password   = Utils::cnvNull($request->mail_password, '');
+                $data->banners_maximum_upload = Utils::cnvNull($request->banners_maximum_upload, '');
+                $data->vendors_maximum_upload = Utils::cnvNull($request->vendors_maximum_upload, '');
+                $data->products_maximum_upload = Utils::cnvNull($request->products_maximum_upload, '');
+                $data->posts_maximum_upload    = Utils::cnvNull($request->posts_maximum_upload, '');
+                $data->web_logo_maximum_upload    = Utils::cnvNull($request->web_logo_maximum_upload, '');
+                $data->web_ico_maximum_upload    = Utils::cnvNull($request->web_ico_maximum_upload, '');
+                $data->attachment_maximum_upload = Utils::cnvNull($request->attachment_maximum_upload, '');
+                $data->users_maximum_upload = Utils::cnvNull($request->users_maximum_upload, '');
+                $data->banners_image_size = Utils::cnvNull($request->banners_image_size, '');
+                $data->vendors_image_size = Utils::cnvNull($request->vendors_image_size, '');
+                $data->products_image_size = Utils::cnvNull($request->products_image_size, '');
+                $data->posts_image_size = Utils::cnvNull($request->posts_image_size, '');
+                $data->web_logo_image_size = Utils::cnvNull($request->web_logo_image_size, '');
+                $data->web_ico_image_size = Utils::cnvNull($request->web_ico_image_size, '');
+                $data->users_image_size = Utils::cnvNull($request->users_image_size, '');
             }
-            $config_data->off = Utils::cnvNull($request->off, 0);
-            $config_data->bank_info = Utils::cnvNull($request->bank_info, '');
-            $config_data->cash_info = Utils::cnvNull($request->cash_info, '');
-            if($config_data->save()) {
+            $data->off = Utils::cnvNull($request->off, 0);
+            $data->bank_info = Utils::cnvNull($request->bank_info, '');
+            $data->cash_info = Utils::cnvNull($request->cash_info, '');
+            if($data->save()) {
                 return redirect(route('auth_config_edit'))->with('success', trans('messages.UPDATE_SUCCESS'));
             }
         }
-        return view('auth.config.index', compact('config_data'));
+        
+        $name = $this->name;
+        return view('auth.config.index', compact('data', 'name'));
     }
     
     /**

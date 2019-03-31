@@ -65,7 +65,8 @@ var checkExist = function(input) {
 }
 
 var checkFileSize = function(element, size) {
-	if (element.size > Number(size)) {
+	
+	if (Number(element.size) > Number(size)) {
 		return false;
 	}
 	return true;
@@ -177,9 +178,9 @@ var checkExtMultiFile = function(element, param, input_message) {
 	return message;
 }
 
-var checkFileUpload = function(element, params, message, container) {
-	var error_msg = checkExtMultiFile(element, params[0], message);
-	error_msg += checkSizeMultiFile(element, params[1], message);
+var checkFileUpload = function(element, params, messages, container) {
+	var error_msg = checkExtMultiFile(element, params[0], messages[0]);
+	error_msg += checkSizeMultiFile(element, params[1], messages[1]);
 
 	if(error_msg !== '') {
 		$(container).addClass('has-error');
@@ -190,8 +191,8 @@ var checkFileUpload = function(element, params, message, container) {
 }
 
 
-var uploadByComputer = function(index) {
-	var container = $('#img_' + index).find('.upload_image_product')
+var uploadByComputer = function(id) {
+	var container = $('#' + id).find('.upload_image_product')
 	container.click();
 }
 
@@ -199,13 +200,13 @@ var uploadByUrl = function(src) {
 	$('#preview').attr('src', src);
 }
 
-var selectImage = function(index, demension) {
+var selectImage = function(id, demension) {
 	var img = $('#preview').attr('src');
 	var arr = demension.split('x');
-	$('#img_' + index).css({'display': 'inline-block'});
-	$('#img_' + index).find('a').html('<img src="' + img + '" style="width:' + arr[0] + 'px; height:' + arr[1] + 'px" />');
+	$('#' + id).css({'display': 'inline-block'});
+	$('#' + id).find('a.upload_image').html('<img src="' + img + '" style="width:' + arr[0] + 'px; height:' + arr[1] + 'px" />');
 	if(img.indexOf('http') !== -1 || img.indexOf('https') !== -1) {
-		$('#img_' + index).find('.upload_image_product_url').val(img);
+		$('#' + id).find('.upload_image_product_url').val(img);
 	}
 	$('#uploadModal').modal('toggle');
 }

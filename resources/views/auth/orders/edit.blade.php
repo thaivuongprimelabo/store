@@ -17,10 +17,10 @@
 			<form role="form" id="submit_form" action="?" method="post" enctype="multipart/form-data">
 			@php
               	$forms = trans('auth.orders.form');
-              	$order->payment_method = trans('shop.cart.payment.' . $order->payment_method);
+              	$data->payment_method = trans('shop.cart.payment.' . $data->payment_method);
             @endphp
             @foreach($forms as $key=>$form)
-            @include('auth.common.edit_form', ['forms' => $form, 'data' => $order])
+            @include('auth.common.edit_form', ['hide_footer' => true])
             @endforeach
             <div class="box box-primary">
                 <div class="box-header with-border">
@@ -52,12 +52,12 @@
                         	<tr>
                     			<th class="empty" colspan="3"></th>
                     			<th>{{ trans('shop.cart.table.subtotal') }}</th>
-                    			<th colspan="2" class="sub-total">{{ number_format($order->total) }}</th>
+                    			<th colspan="2" class="sub-total">{{ number_format($data->total) }}</th>
                     		</tr>
                     		<tr>
                     			<th class="empty" colspan="3"></th>
                     			<th>{{ trans('shop.cart.table.total') }}</th>
-                    			<th colspan="2" class="total">{{ number_format($order->total) }}</th>
+                    			<th colspan="2" class="total">{{ number_format($data->total) }}</th>
                     		</tr>
                         </tfoot>
                     </table>

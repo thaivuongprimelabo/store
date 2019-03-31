@@ -1,4 +1,4 @@
-  <table class="table table-hover">
+<table class="table table-hover">
   	<col width="2%">
   	<col width="20%">
   	<col width="10%">
@@ -17,8 +17,8 @@
       <th></th>
       <th></th>
     </tr>
-    @if($contacts->count())
-    @foreach($contacts as $contact)
+    @if($data_list->count())
+    @foreach($data_list as $contact)
     <tr>
       <td>{{ $contact->id }}</td>
       <td>{{ $contact->subject }}</td>
@@ -41,7 +41,4 @@
     	<td colspan="8" align="center">{{ trans('auth.no_data_found') }}</td>
     </tr>
     @endif
-  </table>
-<!-- /.box-body -->
-<div class="box-footer clearfix">
-</div>
+</table>

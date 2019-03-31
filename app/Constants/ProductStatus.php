@@ -2,20 +2,17 @@
 
 namespace App\Constants;
 
-use App\Helpers\Utils;
-
-class Status {
+class ProductStatus {
     
-    CONST UNACTIVE = 0;
-    CONST ACTIVE = 1;
     CONST IS_NEW = 1;
     CONST IS_POPULAR = 1;
     CONST IS_BEST_SELLING = 1;
     
     public static function getData($key = '') {
         $array = [
-            self::UNACTIVE => trans('auth.status.unactive'),
-            self::ACTIVE => trans('auth.status.active'),
+            self::IS_NEW => trans('auth.products.form.is_new.text'),
+            self::IS_POPULAR => trans('auth.products.form.is_popular.text'),
+            self::IS_BEST_SELLING => trans('auth.products.form.is_best_selling.text'),
         ];
         
         if($key != '') {
@@ -29,7 +26,7 @@ class Status {
         $data = self::getData();
         $html = '';
         foreach($data as $key=>$value) {
-            if(!Utils::blank($selected) && $key == $selected) {
+            if($key == $selected) {
                 $html .= '<option value="'. $key.'" selected>'. $value .'</option>';
             } else {
                 $html .= '<option value="'. $key.'">'. $value .'</option>';

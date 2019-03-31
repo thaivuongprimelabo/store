@@ -4,24 +4,23 @@ namespace App\Constants;
 
 use App\Helpers\Utils;
 
-class Status {
+class StatusOrders {
     
-    CONST UNACTIVE = 0;
-    CONST ACTIVE = 1;
-    CONST IS_NEW = 1;
-    CONST IS_POPULAR = 1;
-    CONST IS_BEST_SELLING = 1;
+    CONST ORDER_NEW = 0;
+    CONST ORDER_SHIPPING = 1;
+    CONST ORDER_DONE = 2;
     
     public static function getData($key = '') {
         $array = [
-            self::UNACTIVE => trans('auth.status.unactive'),
-            self::ACTIVE => trans('auth.status.active'),
+            self::ORDER_NEW => trans('auth.status.order_new'),
+            self::ORDER_SHIPPING => trans('auth.status.order_shipping'),
+            self::ORDER_DONE => trans('auth.status.order_done'),
         ];
         
         if($key != '') {
             return $array[$key];
         }
-        
+
         return $array;
     }
     

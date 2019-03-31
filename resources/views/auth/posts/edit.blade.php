@@ -1,25 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
-<section class="content-header">
-  <h1>
-    {{ trans('auth.posts.edit_title') }}
-  </h1>
-  <ol class="breadcrumb">
-    <li><a href="{{ route('dashboard') }}"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
-    <li><a href="{{ route('auth_posts') }}">{{ trans('auth.sidebar.posts') }}</a></li>
-    <li class="active">{{ trans('auth.posts.edit_title') }}</li>
-  </ol>
-</section>
+@include('auth.common.content_header',['title' => 'edit_title'])
 <section class="content">
 	<div class="row">
 		<div class="col-md-12">
 			<form role="form" id="submit_form" action="?" method="post" enctype="multipart/form-data">
 			<input type="hidden" id="table" value="3" />
-			<input type="hidden" id="demension" value="{{ $config['photo_image_size'] }}" />
-			<input type="hidden" id="upload_limit" value="{{ $config['photo_maximum_upload'] }}" />
-			@include('auth.common.edit_form',['forms' => trans('auth.posts.form'), 'data' => $post])
-			@include('auth.common.button_footer',['back_url' => route('auth_posts')])
+			@include('auth.common.edit_form')
             </form>
 		</div>
 	</div>

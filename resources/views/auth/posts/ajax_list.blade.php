@@ -1,14 +1,12 @@
-
-
-  <table class="table table-hover">
-  	<col width="2%">
-  	<col width="20%">
-  	<col width="10%">
-  	<col width="10%">
-  	<col width="10%">
-  	<col width="10%">
-  	<col width="2%">
-  	<col width="2%">
+<table class="table table-hover" style="table-layout: fixed; word-wrap:break-word;">
+  	<col width="5%">
+  	<col width="25%">
+  	<col width="15%">
+  	<col width="15%">
+  	<col width="15%">
+  	<col width="15%">
+  	<col width="5%">
+  	<col width="5%">
     <tr>
       <th>{{ trans('auth.posts.table_header.id') }}</th>
       <th>{{ trans('auth.posts.table_header.name') }}</th>
@@ -19,8 +17,8 @@
       <th></th>
       <th></th>
     </tr>
-    @if($posts->count())
-    @foreach($posts as $post)
+    @if($data_list->count())
+    @foreach($data_list as $post)
     <tr>
       <td>{{ $post->id }}</td>
       <td>{{ $post->name }}</td>
@@ -43,7 +41,4 @@
     	<td colspan="8" align="center">{{ trans('auth.no_data_found') }}</td>
     </tr>
     @endif
-  </table>
-<!-- /.box-body -->
-<div class="box-footer clearfix">
-</div>
+</table>

@@ -1,10 +1,13 @@
-<table class="table table-hover">
-  	<col width="2%">
-  	<col width="30%">
+<table class="table table-hover" style="table-layout: fixed; word-wrap:break-word;">
+  	<col width="5%">
+  	<col width="20%">
   	<col width="20%">
   	<col width="10%">
   	<col width="10%">
   	<col width="10%">
+  	<col width="10%">
+  	<col width="5%">
+  	<col width="5%">
     <tr>
       <th>{{ trans('auth.members.table_header.id') }}</th>
       <th>{{ trans('auth.members.table_header.name') }}</th>
@@ -16,8 +19,8 @@
       <th></th>
       <th></th>
     </tr>
-    @if($members->count())
-    @foreach($members as $member)
+    @if($data_list->count())
+    @foreach($data_list as $member)
     <tr>
       <td>{{ $member->id }}</td>
       <td>{{ $member->name }}</td>
@@ -42,7 +45,3 @@
     </tr>
     @endif
 </table>
-<!-- /.box-body -->
-<div class="box-footer clearfix">
-  {{ $members->links('auth.common.paging', ['paging' => $paging]) }}
-</div>

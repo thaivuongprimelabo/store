@@ -3,19 +3,17 @@
 @section('content')
 <section class="content-header">
   <h1>
-    {{ trans('auth.config.title') }}
+    {{ trans('auth.config.edit_title') }}
   </h1>
   <ol class="breadcrumb">
     <li><a href="{{ route('dashboard') }}"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
-    <li><a href="{{ route('auth_config_edit') }}">{{ trans('auth.sidebar.config_edit') }}</a></li>
+    <li><a href="{{ route('auth_config_edit') }}">{{ trans('auth.config.edit_title') }}</a></li>
   </ol>
 </section>
 <section class="content">
 	<div class="row">
 		<div class="col-md-12">
 			<form role="form" id="submit_form" action="?" method="post" enctype="multipart/form-data">
-				<input type="hidden" id="demension" value="{{ $config['web_logo_image_size'] }}" />
-				<input type="hidden" id="upload_limit" value="{{ $config['web_logo_maximum_upload'] }}" />
     			@php
                   	$forms = trans('auth.config.form');
                   	$accept = [
@@ -25,10 +23,10 @@
                 @foreach($forms as $key=>$form)
                 @if(Auth::user()->role_id != Common::SUPER_ADMIN)
                 	@if(in_array($key, $accept))
-                	@include('auth.common.edit_form', ['forms' => $form, 'data' => $config_data])
+                	@include('auth.common.edit_form',['hide_footer' => true])
                 	@endif
                 @else
-                	@include('auth.common.edit_form', ['forms' => $form, 'data' => $config_data])
+                	@include('auth.common.edit_form',['hide_footer' => true])
                 @endif
                 @endforeach
                 <div class="box-footer">

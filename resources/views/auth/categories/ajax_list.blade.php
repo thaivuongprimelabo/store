@@ -1,6 +1,4 @@
-
-
-  <table class="table table-hover" style="table-layout: fixed; word-wrap:break-word;">
+<table class="table table-hover" style="table-layout: fixed; word-wrap:break-word;">
   	<col width="10%">
   	<col width="50%">
   	<col width="10%">
@@ -17,8 +15,8 @@
       <th></th>
       <th></th>
     </tr>
-    @if($categories->count())
-    @foreach($categories as $category)
+    @if($data_list->count())
+    @foreach($data_list as $category)
     <tr>
       <td>{{ $category->id }}</td>
       <td style="width:20%;">{{ $category->name }}</td>
@@ -40,7 +38,4 @@
     	<td colspan="8" align="center">{{ trans('auth.no_data_found') }}</td>
     </tr>
     @endif
-  </table>
-<!-- /.box-body -->
-<div class="box-footer clearfix">
-</div>
+</table>

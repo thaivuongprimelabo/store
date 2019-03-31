@@ -26,7 +26,7 @@ class ContactsController extends AppController
     }
     
     public function index(Request $request) {
-        return view('auth.contacts.index', $this->search($request));
+        return view('auth.index', $this->search($request));
     }
     
     /**
@@ -34,35 +34,7 @@ class ContactsController extends AppController
      * @param Request $request
      */
     public function search(Request $request) {
-        $wheres = [];
-        $output = ['code' => 200, 'data' => ''];
-        if($request->isMethod('post')) {
-            $email_search = $request->email_search;
-            if(!Utils::blank($email_search)) {
-                $wheres[] = ['email', '=', $email_search];
-            }
-            
-            $phone_search = $request->phone_search;
-            if(!Utils::blank($phone_search)) {
-                $wheres[] = ['phone', '=', $phone_search];
-            }
-            
-            $status_search = $request->status_search;
-            if(!Utils::blank($status_search)) {
-                $wheres[] = ['status', '=', $status_search];
-            }
-        }
-        
-        $contacts = Contact::where($wheres)->orderBy('status', 'ASC')->paginate(Common::ROW_PER_PAGE);
-        
-        $paging = $contacts->toArray();
-        
-        if($request->ajax()) {
-            $output['data'] = view('auth.contacts.ajax_list', compact('contacts', 'paging'))->render();
-            return response()->json($output);
-        } else {
-            return compact('contacts', 'paging');
-        }
+        return $this->doSearch($request, new Contact());
     }
     
     /**
@@ -75,7 +47,7 @@ class ContactsController extends AppController
         
         $validator = [];
         
-        $contact = Contact::find($request->id);
+        $data = Contact::find($request->id);
         
         if($request->isMethod('post')) {
             
@@ -88,20 +60,20 @@ class ContactsController extends AppController
             if (!$validator->fails()) {
                 
                 $filename = '';
-                $contact->reply_content = Utils::cnvNull($request->reply_content, '');
-                $contact->status        = ContactStatus::REPLIED_CONTACT;
-                $contact->updated_at    = date('Y-m-d H:i:s');
+                $data->reply_content = Utils::cnvNull($request->reply_content, '');
+                $data->status        = ContactStatus::REPLIED_CONTACT;
+                $data->updated_at    = date('Y-m-d H:i:s');
                 
                 // Config mail
                 $config = [
-                    'subject' => '[Reply to: '.$contact->email . ']' . $contact->subject,
-                    'msg' => ['content' => $contact->reply_content],
-                    'to' => $contact->email
+                    'subject' => '[Reply to: '.$data->email . ']' . $data->subject,
+                    'msg' => ['content' => $data->reply_content],
+                    'to' => $data->email
                 ];
                 
                 $message = Utils::sendMail($config);
                 if(Utils::blank($message)) {
-                    if($contact->save()) {
+                    if($data->save()) {
                         return redirect(route('auth_contacts'))->with('success', trans('messages.UPDATE_SUCCESS'));
                     }
                 } else {
@@ -112,15 +84,17 @@ class ContactsController extends AppController
                 return redirect(route('auth_contacts'))->with('error', trans('messages.ERROR'));
             }
         }
-        return view('auth.contacts.edit', compact('contact'))->withErrors($validator);;
+        
+        $name = $this->name;
+        return view('auth.contacts.edit', compact('data', 'name'));
     }
     
     public function remove(Request $request) {
         if($request->isMethod('get')) {
             $id = $request->id;
-            $contact = Contact::find($id);
-            if($contact->delete()) {
-                Utils::removeFile($contact->attachment);
+            $data = Contact::find($id);
+            if($data->delete()) {
+                Utils::removeFile($data->attachment);
                 return redirect(route('auth_contacts'))->with('success', trans('messages.REMOVE_SUCCESS'));
             }
         }

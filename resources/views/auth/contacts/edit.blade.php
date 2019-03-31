@@ -1,28 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
-<section class="content-header">
-  <h1>
-    {{ trans('auth.contacts.edit_title') }}
-  </h1>
-  <ol class="breadcrumb">
-    <li><a href="{{ route('dashboard') }}"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
-    <li><a href="{{ route('auth_contacts') }}">{{ trans('auth.sidebar.contacts') }}</a></li>
-    <li class="active">{{ $contact->name }} - {{ $contact->email }}</li>
-  </ol>
-</section>
+@include('auth.common.content_header',['title' => 'edit_title'])
 <section class="content">
 	<div class="row">
 		<div class="col-md-12">
 			<form role="form" id="submit_form" action="?" method="post" enctype="multipart/form-data">
 			<input type="hidden" id="upload_limit" value="{{ $config['attachment_maximum_upload'] }}" />
-			@php
-              	$forms = trans('auth.contacts.form');
-            @endphp
-            @foreach($forms as $key=>$form)
-            @include('auth.common.edit_form', ['forms' => $form, 'data' => $contact])
-            @endforeach
-            @include('auth.common.button_footer',['back_url' => route('auth_contacts')])
+			@include('auth.common.edit_form')
             </form>
 		</div>
 	</div>

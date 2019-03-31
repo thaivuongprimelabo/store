@@ -1,14 +1,12 @@
-
-
-  <table class="table table-hover">
+<table class="table table-hover" style="table-layout: fixed; word-wrap:break-word;">
   	<col width="2%">
-  	<col width="20%">
+  	<col width="15%">
+  	<col width="10%">
+  	<col width="15%">
   	<col width="10%">
   	<col width="10%">
-  	<col width="10%">
-  	<col width="10%">
-  	<col width="2%">
-  	<col width="2%">
+  	<col width="5%">
+  	<col width="5%">
     <tr>
       <th>{{ trans('auth.users.table_header.id') }}</th>
       <th>{{ trans('auth.users.table_header.name') }}</th>
@@ -43,7 +41,4 @@
     	<td colspan="8" align="center">{{ trans('auth.no_data_found') }}</td>
     </tr>
     @endif
-  </table>
-<!-- /.box-body -->
-<div class="box-footer clearfix">
-</div>
+</table>

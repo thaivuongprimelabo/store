@@ -1,23 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
-<section class="content-header">
-  <h1>
-    {{ trans('auth.categories.edit_title') }}
-  </h1>
-  <ol class="breadcrumb">
-    <li><a href="{{ route('dashboard') }}"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
-    <li><a href="{{ route('auth_categories') }}">{{ trans('auth.sidebar.categories') }}</a></li>
-    <li class="active">{{ trans('auth.categories.edit_title') }}</li>
-  </ol>
-</section>
+@include('auth.common.content_header',['title' => 'edit_title'])
 <section class="content">
 	<div class="row">
 		<div class="col-md-12">
 			<form role="form" id="submit_form" action="?" method="post" enctype="multipart/form-data">
-			<input type="hidden" id="table" value="0" />
-			@include('auth.common.edit_form',['data' => $category, 'forms' => trans('auth.categories.form')])
-			@include('auth.common.button_footer',['back_url' => route('auth_categories')])
+    			<input type="hidden" id="table" value="1" />
+    			@include('auth.common.edit_form')
             </form>
 		</div>
 	</div>
@@ -51,18 +41,5 @@
     	}
     });
 
-    $('#logo').change(function(e) {
-    	$(this).parent().removeClass('has-error');
-    	var element = $('input[name="logo"]')[0];
-    	
-    	if(checkFileSize(element, '{{ Common::LOGO_MAX_SIZE }}')) {
-    		var reader = new FileReader();
-            reader.onload = function (event) {
-                $('#logo_preview').attr('src', event.target.result);
-            }
-            reader.readAsDataURL($('input[name="logo"]')[0].files[0]);
-    	}
-    	
-    });
 </script>
 @endsection

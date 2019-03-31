@@ -32,7 +32,7 @@ class MembersController extends AppController
     }
     
     public function index(Request $request) {
-        return view('auth.members.index', $this->search($request, 'members'));
+        return view('auth.index', $this->search($request, 'members'));
     }
     
     /**
@@ -40,27 +40,7 @@ class MembersController extends AppController
      * @param Request $request
      */
     public function search(Request $request, $type) {
-        $wheres = [];
-        $output = ['code' => 200, 'data' => ''];
-        
-        if($request->isMethod('post')) {
-            $id_search = $request->id_search;
-            if(!Utils::blank($id_search)) {
-                $wheres[] = ['id', '=', $id_search];
-            }
-        }
-        
-        $members = Member::where($wheres)->orderBy('created_at', 'DESC')->paginate(Common::ROW_PER_PAGE);
-        
-        $paging = $members->toArray();
-        
-        if($request->ajax()) {
-            $output['data'] = view('auth.members.ajax_list', compact('members', 'paging'))->render();
-            return response()->json($output);
-        } else {
-            return compact('members', 'paging');
-        }
-        
+        return $this->doSearch($request, new Member());
     }
     
     /**
@@ -82,21 +62,22 @@ class MembersController extends AppController
             $filename = '';
             Utils::doUpload($request, Common::AVATAR_FOLDER, $filename);
             
-            $member = new Member();
-            $member->name = Utils::cnvNull($request->name, '');
-            $member->email = Utils::cnvNull($request->email, '');
-            $member->password = Hash::make(Utils::cnvNull($request->password, ''));
-            $member->avatar = $filename;
-            $member->status = Utils::cnvNull($request->status, 0);
-            $member->created_at = date('Y-m-d H:i:s');
-            $member->updated_at = date('Y-m-d H:i:s');
+            $data = new Member();
+            $data->name = Utils::cnvNull($request->name, '');
+            $data->email = Utils::cnvNull($request->email, '');
+            $data->password = Hash::make(Utils::cnvNull($request->password, ''));
+            $data->avatar = $filename;
+            $data->status = Utils::cnvNull($request->status, 0);
+            $data->created_at = date('Y-m-d H:i:s');
+            $data->updated_at = date('Y-m-d H:i:s');
             
-            if($member->save()) {
+            if($data->save()) {
                 return redirect(route('auth_members_create'))->with('success', trans('messages.UPDATE_SUCCESS'));
             }
         }
         
-        return view('auth.members.create');
+        $name = $this->name;
+        return view('auth.members.create', compact('name'));
         
     }
     
@@ -109,7 +90,7 @@ class MembersController extends AppController
         
         $validator = [];
         
-        $member = Member::find($request->id);
+        $data = Member::find($request->id);
         
         if($request->isMethod('post')) {
             
@@ -122,30 +103,31 @@ class MembersController extends AppController
             $filename = '';
             Utils::doUpload($request, Common::AVATAR_FOLDER, $filename);
             
-            $member->name = Utils::cnvNull($request->name, '');
-            $member->email = Utils::cnvNull($request->email, '');
+            $data->name = Utils::cnvNull($request->name, '');
+            $data->email = Utils::cnvNull($request->email, '');
             if(!Utils::blank($request->password)) {
-                $member->password = Hash::make(Utils::cnvNull($request->password, ''));
+                $data->password = Hash::make(Utils::cnvNull($request->password, ''));
             }
             if(!Utils::blank($filename)) {
-                $member->avatar = $filename;
+                $data->avatar = $filename;
             }
-            $member->status = Utils::cnvNull($request->status, 0);
-            $member->updated_at = date('Y-m-d H:i:s');
+            $data->status = Utils::cnvNull($request->status, 0);
+            $data->updated_at = date('Y-m-d H:i:s');
             
-            if($member->save()) {
+            if($data->save()) {
                 return redirect(route('auth_members_edit', ['id' => $request->id]))->with('success', trans('messages.UPDATE_SUCCESS'));
             }
         }
         
-        return view('auth.members.edit', compact('member'));
+        $name = $this->name;
+        return view('auth.members.edit', compact('data', 'name'));
     }
     
     public function remove(Request $request) {
         if($request->isMethod('get')) {
             $id = $request->id;
-            $member = Member::find($id);
-            if($member->delete()) {
+            $data = Member::find($id);
+            if($data->delete()) {
                 return redirect(route('auth_members'))->with('success', trans('messages.REMOVE_SUCCESS'));
             }
         }

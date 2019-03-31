@@ -32,7 +32,7 @@ class VendorsController extends AppController
     }
     
     public function index(Request $request) {
-        return view('auth.vendors.index', $this->search($request));
+        return view('auth.index', $this->search($request));
     }
     
     /**
@@ -40,35 +40,7 @@ class VendorsController extends AppController
      * @param Request $request
      */
     public function search(Request $request) {
-        $wheres = [];
-        $output = ['code' => 200, 'data' => ''];
-        if($request->isMethod('post')) {
-            $id_search = $request->id_search;
-            if(!Utils::blank($id_search)) {
-                $wheres[] = ['id', '=', $id_search];
-            }
-            
-            $name_search = $request->name_search;
-            if(!Utils::blank($name_search)) {
-                $wheres[] = ['name', 'LIKE', '%' . $name_search . '%'];
-            }
-            
-            $status_search = $request->status_search;
-            if(!Utils::blank($status_search)) {
-                $wheres[] = ['status', '=', $status_search];
-            }
-        }
-        
-        $vendors = Vendor::where($wheres)->orderBy('created_at', 'DESC')->paginate(Common::ROW_PER_PAGE);
-        
-        $paging = $vendors->toArray();
-        
-        if($request->ajax()) {
-            $output['data'] = view('auth.vendors.ajax_list', compact('vendors', 'paging'))->render();
-            return response()->json($output);
-        } else {
-            return compact('vendors', 'paging');
-        }
+        return $this->doSearch($request, new Vendor());
     }
     
     /**
@@ -91,23 +63,25 @@ class VendorsController extends AppController
                 
                 Utils::doUpload($request, Common::VENDOR_FOLDER, $filename);
                 
-                $vendor = new Vendor();
-                $vendor->name           = Utils::cnvNull($request->name, '');
-                $vendor->name_url       = Utils::createNameUrl(Utils::cnvNull($request->name, ''));
-                $vendor->logo           = $filename;
-                $vendor->description    = Utils::cnvNull($request->description, '');
-                $vendor->status         = Utils::cnvNull($request->status, 0);
-                $vendor->created_at     = date('Y-m-d H:i:s');
-                $vendor->updated_at     = date('Y-m-d H:i:s');
+                $data = new Vendor();
+                $data->name           = Utils::cnvNull($request->name, '');
+                $data->name_url       = Utils::createNameUrl(Utils::cnvNull($request->name, ''));
+                $data->logo           = $filename;
+                $data->description    = Utils::cnvNull($request->description, '');
+                $data->status         = Utils::cnvNull($request->status, 0);
+                $data->created_at     = date('Y-m-d H:i:s');
+                $data->updated_at     = date('Y-m-d H:i:s');
                 
-                if($vendor->save()) {
+                if($data->save()) {
                     return redirect(route('auth_vendors_create'))->with('success', trans('messages.CREATE_SUCCESS'));
                 }
             } else {
                 return redirect(route('auth_vendors_create'))->with('error', trans('messages.ERROR'));
             }
         }
-        return view('auth.vendors.create')->withErrors($validator);
+        
+        $name = $this->name;
+        return view('auth.vendors.create', compact('name'));
     }
     
     /**
@@ -120,7 +94,7 @@ class VendorsController extends AppController
         
         $validator = [];
         
-        $vendor = Vendor::find($request->id);
+        $data = Vendor::find($request->id);
         
         if($request->isMethod('post')) {
             
@@ -128,35 +102,37 @@ class VendorsController extends AppController
             
             if (!$validator->fails()) {
                 
-                $vendor = Vendor::find($request->id);
+                $data = Vendor::find($request->id);
                 
-                $filename = $vendor->logo;
+                $filename = $data->logo;
                 Utils::doUpload($request, Common::VENDOR_FOLDER, $filename);
                 
-                $vendor->name           = Utils::cnvNull($request->name, '');
-                $vendor->name_url       = Utils::createNameUrl(Utils::cnvNull($request->name, ''));
-                $vendor->logo           = $filename;
-                $vendor->description    = Utils::cnvNull($request->description, '');
-                $vendor->status         = Utils::cnvNull($request->status, 0);
-                $vendor->created_at     = date('Y-m-d H:i:s');
-                $vendor->updated_at     = date('Y-m-d H:i:s');
+                $data->name           = Utils::cnvNull($request->name, '');
+                $data->name_url       = Utils::createNameUrl(Utils::cnvNull($request->name, ''));
+                $data->logo           = $filename;
+                $data->description    = Utils::cnvNull($request->description, '');
+                $data->status         = Utils::cnvNull($request->status, 0);
+                $data->created_at     = date('Y-m-d H:i:s');
+                $data->updated_at     = date('Y-m-d H:i:s');
                 
-                if($vendor->save()) {
+                if($data->save()) {
                     return redirect(route('auth_vendors_edit', ['id' => $request->id]))->with('success', trans('messages.UPDATE_SUCCESS'));
                 }
             } else {
                 return redirect(route('auth_vendors_create'))->with('error', trans('messages.ERROR'));
             }
         }
-        return view('auth.vendors.edit', compact('vendor'))->withErrors($validator);;
+        
+        $name = $this->name;
+        return view('auth.vendors.edit', compact('data', 'name'));
     }
     
     public function remove(Request $request) {
         if($request->isMethod('get')) {
             $id = $request->id;
-            $vendor = Vendor::find($id);
-            if($vendor->delete()) {
-                Utils::removeFile($vendor->logo);
+            $data = Vendor::find($id);
+            if($data->delete()) {
+                Utils::removeFile($data->logo);
                 return redirect(route('auth_vendors'))->with('success', trans('messages.REMOVE_SUCCESS'));
             }
         }
