@@ -96,13 +96,9 @@ class AppController extends Controller
         }
         
         if($model instanceof Category) {
-            $wheres[] = ['type', '=', 0];
         }
         
         if($model instanceof Product) {
-            if($type == 'toy') {
-                $wheres[] = ['is_toy', '=', 1];
-            }
         }
         
         

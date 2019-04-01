@@ -80,6 +80,9 @@ class Common {
     CONST THREADS = 'threads';
     CONST GROUPS = 'groups';
     CONST COMMENTS = 'comments';
+    CONST SERVICES = 'services';
+    CONST SERVICE_GROUPS = 'service_groups';
+    CONST PRODUCT_SERVICE_GROUP = 'product_service_group';
     
     /** Role **/
     CONST SUPER_ADMIN = '0';

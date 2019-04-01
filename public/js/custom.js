@@ -122,13 +122,8 @@ var previewImageProduct = function(element, size, demension, container) {
 
 var customErrorValidate = function(error, element) {
 	if(error[0].innerHTML !== '') {
-		if(element[0].type !== 'file') {
-			element.parent().addClass('has-error');
-			element.parent().find('span.help-block').html(error[0].innerHTML);
-		} else {
-			element.parent().parent().parent().addClass('has-error');
-			element.parent().parent().parent().find('span.help-block').html(error[0].innerHTML);
-		}
+		element.parent().parent().addClass('has-error');
+		element.parent().parent().find('span.help-block').html(error[0].innerHTML);
 	}
 }
 

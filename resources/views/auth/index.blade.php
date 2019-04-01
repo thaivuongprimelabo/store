@@ -21,11 +21,6 @@
               	 @include('auth.common.search',['form' => trans('auth.' . $name . '.search_form')])
               </div>
           </div>
-          @if (session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-          @endif
           <div class="box">
             <div class="box-header">
               <h3 class="box-title">{{ trans('auth.' . $name . '.list_title') }}</h3>

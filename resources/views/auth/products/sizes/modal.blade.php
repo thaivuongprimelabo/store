@@ -11,7 +11,10 @@
         	<input type="hidden" class="form-control" id="id" name="id" value=""/>
           	<div class="form-group">
             	<label>{{ trans('auth.sizes.form.name.text') }}</label>
-        		<input type="text" class="form-control" id="name" name="name" value=""/>
+            	<div class="input-group">
+              		<span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>
+            		<input type="text" class="form-control" id="name" name="name" value=""/>
+            	</div>
           	</div>
           	<div class="checkbox">
               <label>

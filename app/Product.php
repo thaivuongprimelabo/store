@@ -4,6 +4,7 @@ namespace App;
 
 use App\Constants\Common;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use App\Helpers\Utils;
 
 class Product extends Model
@@ -45,6 +46,25 @@ class Product extends Model
     public function getVendorName() {
         $vendor = Vendor::select('name')->where('id', $this->vendor_id)->first();
         return $vendor ? $vendor->name : '';
+    }
+    
+    public function getServices() {
+        $services = Services::select(
+                            'service_groups.id AS group_id', 
+                            'service_groups.name AS group_name', 
+                            DB::raw('GROUP_CONCAT(services.name) AS service_names'), 
+                            DB::raw('GROUP_CONCAT(services.price) AS service_prices')
+                        )
+                        ->join('service_groups', 'service_groups.id', '=', 'services.service_group_id')
+                        ->where('services.product_id', $this->id)
+                        ->groupBy('service_groups.id', 'service_groups.name')
+                        ->get();
+        
+        $html = '';
+        $table = view('auth.products.services', ['services' => $services])->render();
+        $html .= $table;
+        
+        return $html;
     }
     
     public function getSizes($productSizes) {

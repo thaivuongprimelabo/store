@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.17, for Win64 (x86_64)
 --
 -- Host: localhost    Database: store_db
 -- ------------------------------------------------------
--- Server version	5.7.19
+-- Server version	5.7.21
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -61,7 +61,6 @@ CREATE TABLE `categories` (
   `parent_id` smallint(5) unsigned DEFAULT '0',
   `avail_flg` smallint(5) unsigned DEFAULT '1',
   `status` smallint(5) unsigned DEFAULT '0',
-  `type` smallint(6) DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -74,7 +73,7 @@ CREATE TABLE `categories` (
 
 LOCK TABLES `categories` WRITE;
 /*!40000 ALTER TABLE `categories` DISABLE KEYS */;
-INSERT INTO `categories` VALUES (1,'Điện thoại','dien-thoai',0,1,1,0,'2019-03-24 19:30:31','2019-03-24 19:30:31'),(2,'Laptop','laptop',0,1,1,0,'2019-03-24 19:30:36','2019-03-24 19:30:36'),(3,'Tablet','tablet',0,1,1,0,'2019-03-24 19:30:41','2019-03-24 19:30:41'),(4,'Phụ kiện','phu-kien',0,1,1,0,'2019-03-24 19:30:50','2019-03-24 19:30:50'),(5,'Đồng hồ','dong-ho',0,1,1,0,'2019-03-24 19:30:57','2019-03-24 19:30:57'),(6,'Cũ giá rẻ','cu-gia-re',0,1,1,0,'2019-03-24 19:31:04','2019-03-24 19:31:04'),(7,'Công nghệ','cong-nghe',0,1,1,0,'2019-03-24 23:10:36','2019-03-24 23:10:36');
+INSERT INTO `categories` VALUES (1,'Điện thoại','dien-thoai',0,1,1,'2019-03-24 19:30:31','2019-03-24 19:30:31'),(2,'Laptop','laptop',0,1,1,'2019-03-24 19:30:36','2019-03-24 19:30:36'),(3,'Tablet','tablet',0,1,1,'2019-03-24 19:30:41','2019-03-24 19:30:41'),(4,'Phụ kiện','phu-kien',0,1,1,'2019-03-24 19:30:50','2019-03-24 19:30:50'),(5,'Đồng hồ','dong-ho',0,1,1,'2019-03-24 19:30:57','2019-03-24 19:30:57'),(6,'Cũ giá rẻ','cu-gia-re',0,1,1,'2019-03-24 19:31:04','2019-03-24 19:31:04'),(7,'Công nghệ','cong-nghe',0,1,1,'2019-03-24 23:10:36','2019-03-24 23:10:36');
 /*!40000 ALTER TABLE `categories` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -264,7 +263,7 @@ CREATE TABLE `images_product` (
   `product_id` int(10) unsigned NOT NULL,
   `image` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -273,7 +272,7 @@ CREATE TABLE `images_product` (
 
 LOCK TABLES `images_product` WRITE;
 /*!40000 ALTER TABLE `images_product` DISABLE KEYS */;
-INSERT INTO `images_product` VALUES (9,1,'https://cdn.tgdd.vn/Products/Images/42/190321/iphone-xs-max-gray-400x400.jpg'),(10,1,'https://cdn.tgdd.vn/Products/Images/42/190323/iphone-xs-gold-400x400.jpg'),(11,2,'https://cdn.tgdd.vn/Products/Images/42/190323/iphone-xs-gold-400x400.jpg'),(12,2,'https://cdn.tgdd.vn/Products/Images/42/190324/iphone-xs-256gb-white-600x600.jpg'),(13,2,'https://cdn.tgdd.vn/Products/Images/42/190321/iphone-xs-max-gray-400x400.jpg'),(14,6,'image/1553489386_iphone-8-plus-hh-600x600.jpg'),(16,6,'https://cdn.tgdd.vn/Products/Images/42/114114/iphone-8-plus-256gb-red-600x600.jpg'),(21,10,'https://cdn.tgdd.vn/Products/Images/42/196963/samsung-galaxy-a50-black-400x400.jpg'),(23,11,'https://cdn.tgdd.vn/Products/Images/42/198791/oppo-f11-pro-mtp-400x400.jpg');
+INSERT INTO `images_product` VALUES (9,1,'https://cdn.tgdd.vn/Products/Images/42/190321/iphone-xs-max-gray-400x400.jpg'),(10,1,'https://cdn.tgdd.vn/Products/Images/42/190323/iphone-xs-gold-400x400.jpg'),(11,2,'https://cdn.tgdd.vn/Products/Images/42/190323/iphone-xs-gold-400x400.jpg'),(12,2,'https://cdn.tgdd.vn/Products/Images/42/190324/iphone-xs-256gb-white-600x600.jpg'),(13,2,'https://cdn.tgdd.vn/Products/Images/42/190321/iphone-xs-max-gray-400x400.jpg'),(14,6,'image/1553489386_iphone-8-plus-hh-600x600.jpg'),(16,6,'https://cdn.tgdd.vn/Products/Images/42/114114/iphone-8-plus-256gb-red-600x600.jpg'),(21,10,'https://cdn.tgdd.vn/Products/Images/42/196963/samsung-galaxy-a50-black-400x400.jpg'),(23,11,'https://cdn.tgdd.vn/Products/Images/42/198791/oppo-f11-pro-mtp-400x400.jpg'),(24,12,'https://cdn.tgdd.vn/Products/Images/58/86507/cap-micro-1m-esaver-ds118br-tb-avatar-1-600x600.jpg'),(25,13,'https://cdn.tgdd.vn/Products/Images/42/198985/huawei-p30-lite-1-400x400.jpg');
 /*!40000 ALTER TABLE `images_product` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -484,6 +483,32 @@ INSERT INTO `posts` VALUES (1,'Quang Liêm giữ mạch thắng ở giải cờ 
 UNLOCK TABLES;
 
 --
+-- Table structure for table `product_service_group`
+--
+
+DROP TABLE IF EXISTS `product_service_group`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `product_service_group` (
+  `product_id` int(11) NOT NULL,
+  `service_group_id` int(11) NOT NULL,
+  `service_id` int(11) NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `price` decimal(10,0) DEFAULT NULL,
+  PRIMARY KEY (`product_id`,`service_group_id`,`service_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `product_service_group`
+--
+
+LOCK TABLES `product_service_group` WRITE;
+/*!40000 ALTER TABLE `product_service_group` DISABLE KEYS */;
+/*!40000 ALTER TABLE `product_service_group` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `products`
 --
 
@@ -506,11 +531,10 @@ CREATE TABLE `products` (
   `is_new` smallint(5) unsigned DEFAULT '0',
   `is_popular` smallint(5) unsigned DEFAULT '0',
   `is_best_selling` smallint(5) unsigned DEFAULT '0',
-  `is_toy` smallint(6) DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -519,8 +543,64 @@ CREATE TABLE `products` (
 
 LOCK TABLES `products` WRITE;
 /*!40000 ALTER TABLE `products` DISABLE KEYS */;
-INSERT INTO `products` VALUES (1,'Iphone XS Max 64GB','iphone-xs-max-64gb','29990000',1,0,'','','',0,1,1,1,1,1,NULL,'2019-03-24 19:40:44','2019-03-24 19:59:11'),(2,'Iphone XS 64GB','iphone-xs-64gb','26990000',1,1,'<p>Nếu thang AQI vượt qu&aacute; 300 l&agrave; mức nguy hại, cảnh b&aacute;o sức khoẻ khẩn cấp, mọi người n&ecirc;n ở trong nh&agrave;.<br />\r\n<br />\r\n<em>TS Ho&agrave;ng Dương T&ugrave;ng, Chủ tịch Mạng lưới kh&ocirc;ng kh&iacute; sạch Việt Nam, nguy&ecirc;n Ph&oacute; Tổng cục trưởng Tổng cục M&ocirc;i trường, Bộ TN&amp;MT đ&aacute;nh gi&aacute;, từ đầu tuần đến nay, chất lượng kh&ocirc;ng kh&iacute; ở H&agrave; Nội k&eacute;m c&oacute; thể do c&ugrave;ng l&uacute;c kết hợp nhiều yếu tố.</em><br />\r\n<br />\r\nTrong đ&oacute; c&oacute; điều kiện kh&iacute; hậu kh&ocirc;ng thuận lợi, gi&oacute; lặng, c&oacute; thể xuất hiện hiện tượng nghịch nhiệt khiến kh&oacute;i bụi, chất &ocirc; nhiễm kh&ocirc;ng khuếch t&aacute;n l&ecirc;n được, bị giữ lại ở tầng thấp c&agrave;ng l&agrave;m kh&ocirc;ng kh&iacute; &ocirc; nhiễm trầm trọng.<br />\r\n<br />\r\nTheo TS T&ugrave;ng, khi n&oacute;i đến chất lượng kh&ocirc;ng kh&iacute;, người ta quan t&acirc;m h&agrave;ng đầu đến bụi mịn (PM2.5). Đ&acirc;y l&agrave; những hạt bụi si&ecirc;u nhỏ, c&oacute; k&iacute;ch cỡ nhỏ hơn 1/30 sợi t&oacute;c, c&oacute; thể theo đường thở v&agrave;o cơ thể v&agrave; ảnh hưởng trực tiếp đến sức khoẻ.<br />\r\n<br />\r\nTại H&agrave; Nội, hiện chỉ số PM2.5 đang cao hơn mức b&igrave;nh thường, c&ograve;n c&aacute;c chỉ số &ocirc; nhiễm kh&aacute;c về kh&ocirc;ng kh&iacute; như kh&iacute; CO, NO2, SO2, O3... vẫn ở ngưỡng cho ph&eacute;p.<br />\r\n<br />\r\nVề nguy&ecirc;n nh&acirc;n h&igrave;nh th&agrave;nh bụi mịn, TS T&ugrave;ng cho biết c&oacute; tới 60-70% do c&aacute;c phương tiện giao th&ocirc;ng, c&ograve;n lại do quản l&yacute; c&aacute;c c&ocirc;ng tr&igrave;nh x&acirc;y dựng kh&ocirc;ng tốt, bụi từ c&aacute;c nơi sản xuất xi măng, sắt th&eacute;p, ho&aacute; chất ở c&aacute;c tỉnh bay về H&agrave; Nội, bụi mịn cũng h&igrave;nh th&agrave;nh do đốt rơm rạ, đốt r&aacute;c.</p>','1,2,3,4','1,2,3',15,1,1,1,1,1,NULL,'2019-03-24 19:42:38','2019-03-30 00:42:14'),(9,'MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMv','mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmv','3000000',0,0,'','','',0,1,1,1,1,1,NULL,'2019-03-25 02:26:05',NULL),(6,'Iphone 8 Plus 256GB','iphone-8-plus-256gb','25790000',1,1,'','1','1',0,1,1,1,1,1,NULL,'2019-03-24 21:49:44','2019-03-24 21:54:25'),(10,'Samsung Galaxy S10','samsung-galaxy-s10','22990000',1,2,'','2,3','2,3',10,1,1,1,1,1,NULL,'2019-03-31 00:12:48','2019-03-31 00:30:48'),(11,'Oppo F11 Pro','oppo-f11-pro','8490000',1,3,'','','',0,1,1,1,1,1,0,'2019-03-31 09:41:44',NULL);
+INSERT INTO `products` VALUES (1,'Iphone XS Max 64GB','iphone-xs-max-64gb','29990000',1,0,'','','',0,1,1,1,1,1,'2019-03-24 19:40:44','2019-03-24 19:59:11'),(2,'Iphone XS 64GB','iphone-xs-64gb','26990000',1,1,'<p>Nếu thang AQI vượt qu&aacute; 300 l&agrave; mức nguy hại, cảnh b&aacute;o sức khoẻ khẩn cấp, mọi người n&ecirc;n ở trong nh&agrave;.<br />\r\n<br />\r\n<em>TS Ho&agrave;ng Dương T&ugrave;ng, Chủ tịch Mạng lưới kh&ocirc;ng kh&iacute; sạch Việt Nam, nguy&ecirc;n Ph&oacute; Tổng cục trưởng Tổng cục M&ocirc;i trường, Bộ TN&amp;MT đ&aacute;nh gi&aacute;, từ đầu tuần đến nay, chất lượng kh&ocirc;ng kh&iacute; ở H&agrave; Nội k&eacute;m c&oacute; thể do c&ugrave;ng l&uacute;c kết hợp nhiều yếu tố.</em><br />\r\n<br />\r\nTrong đ&oacute; c&oacute; điều kiện kh&iacute; hậu kh&ocirc;ng thuận lợi, gi&oacute; lặng, c&oacute; thể xuất hiện hiện tượng nghịch nhiệt khiến kh&oacute;i bụi, chất &ocirc; nhiễm kh&ocirc;ng khuếch t&aacute;n l&ecirc;n được, bị giữ lại ở tầng thấp c&agrave;ng l&agrave;m kh&ocirc;ng kh&iacute; &ocirc; nhiễm trầm trọng.<br />\r\n<br />\r\nTheo TS T&ugrave;ng, khi n&oacute;i đến chất lượng kh&ocirc;ng kh&iacute;, người ta quan t&acirc;m h&agrave;ng đầu đến bụi mịn (PM2.5). Đ&acirc;y l&agrave; những hạt bụi si&ecirc;u nhỏ, c&oacute; k&iacute;ch cỡ nhỏ hơn 1/30 sợi t&oacute;c, c&oacute; thể theo đường thở v&agrave;o cơ thể v&agrave; ảnh hưởng trực tiếp đến sức khoẻ.<br />\r\n<br />\r\nTại H&agrave; Nội, hiện chỉ số PM2.5 đang cao hơn mức b&igrave;nh thường, c&ograve;n c&aacute;c chỉ số &ocirc; nhiễm kh&aacute;c về kh&ocirc;ng kh&iacute; như kh&iacute; CO, NO2, SO2, O3... vẫn ở ngưỡng cho ph&eacute;p.<br />\r\n<br />\r\nVề nguy&ecirc;n nh&acirc;n h&igrave;nh th&agrave;nh bụi mịn, TS T&ugrave;ng cho biết c&oacute; tới 60-70% do c&aacute;c phương tiện giao th&ocirc;ng, c&ograve;n lại do quản l&yacute; c&aacute;c c&ocirc;ng tr&igrave;nh x&acirc;y dựng kh&ocirc;ng tốt, bụi từ c&aacute;c nơi sản xuất xi măng, sắt th&eacute;p, ho&aacute; chất ở c&aacute;c tỉnh bay về H&agrave; Nội, bụi mịn cũng h&igrave;nh th&agrave;nh do đốt rơm rạ, đốt r&aacute;c.</p>','1,2,3,4','1,2,3',15,1,1,1,1,1,'2019-03-24 19:42:38','2019-03-30 00:42:14'),(9,'MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMv','mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmv','3000000',0,0,'','','',0,1,1,1,1,1,'2019-03-25 02:26:05',NULL),(6,'Iphone 8 Plus 256GB','iphone-8-plus-256gb','25790000',1,1,'','1','1',0,1,1,1,1,1,'2019-03-24 21:49:44','2019-03-24 21:54:25'),(10,'Samsung Galaxy S10','samsung-galaxy-s10','22990000',1,2,'','2,3','2,3',10,1,1,1,1,1,'2019-03-31 00:12:48','2019-03-31 00:30:48'),(11,'Oppo F11 Pro','oppo-f11-pro','8490000',1,3,'','','',0,1,1,1,1,1,'2019-03-31 09:41:44',NULL),(12,'Dây cáp Micro USB 1 m eSaver DS118-TB','day-cap-micro-usb-1-m-esaver-ds118-tb','51000',4,0,'','','',0,1,1,1,1,1,'2019-03-31 19:25:19',NULL),(13,'Huaweo P30 Lite','huaweo-p30-lite','7490000',1,5,'','','',0,1,1,1,1,1,'2019-03-31 23:21:55',NULL),(21,'Bánh bao','banh-bao','3000000',0,0,'','','',0,1,1,1,1,1,'2019-04-01 02:38:53','2019-04-01 03:26:03'),(20,'AAAAAAAAAAAAAA','aaaaaaaaaaaaaa','3000000',0,0,'','','',0,1,1,1,1,1,'2019-04-01 00:53:03',NULL);
 /*!40000 ALTER TABLE `products` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `service_groups`
+--
+
+DROP TABLE IF EXISTS `service_groups`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `service_groups` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `service_groups`
+--
+
+LOCK TABLES `service_groups` WRITE;
+/*!40000 ALTER TABLE `service_groups` DISABLE KEYS */;
+INSERT INTO `service_groups` VALUES (12,'#1001','2019-04-01 02:38:53','2019-04-01 09:38:53'),(11,'#1002','2019-04-01 02:38:53','2019-04-01 09:38:53'),(10,'#1001','2019-04-01 02:38:53','2019-04-01 09:38:53'),(9,'#1003','2019-04-01 00:53:03','2019-04-01 07:53:03'),(13,'#1002','2019-04-01 02:38:53','2019-04-01 09:38:53'),(14,'#1001','2019-04-01 03:24:35','2019-04-01 10:24:35'),(15,'#1002','2019-04-01 03:24:35','2019-04-01 10:24:35'),(16,'Quán cháo lòng miền Nam','2019-04-01 03:26:03','2019-04-01 10:26:03'),(17,'#1002','2019-04-01 03:26:03','2019-04-01 10:26:03');
+/*!40000 ALTER TABLE `service_groups` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `services`
+--
+
+DROP TABLE IF EXISTS `services`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `services` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `price` decimal(10,0) DEFAULT NULL,
+  `image` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `product_id` int(11) DEFAULT NULL,
+  `service_group_id` int(11) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `services`
+--
+
+LOCK TABLES `services` WRITE;
+/*!40000 ALTER TABLE `services` DISABLE KEYS */;
+INSERT INTO `services` VALUES (7,'S2',12,NULL,20,9,'2019-04-01 00:53:03','2019-04-01 07:53:03'),(6,'S1',11,NULL,20,9,'2019-04-01 00:53:03','2019-04-01 07:53:03'),(8,'S1',11,NULL,0,10,'2019-04-01 02:38:53','2019-04-01 09:38:53'),(9,'S2',12,NULL,0,10,'2019-04-01 02:38:53','2019-04-01 09:38:53'),(10,'A1',33,NULL,0,11,'2019-04-01 02:38:53','2019-04-01 09:38:53'),(11,'A2',44,NULL,0,11,'2019-04-01 02:38:53','2019-04-01 09:38:53'),(25,'A2',44,NULL,21,17,'2019-04-01 03:26:03','2019-04-01 10:26:03'),(24,'A1',33,NULL,21,17,'2019-04-01 03:26:03','2019-04-01 10:26:03'),(23,'S1',11,NULL,21,16,'2019-04-01 03:26:03','2019-04-01 10:26:03'),(22,'D2',150000,NULL,21,16,'2019-04-01 03:26:03','2019-04-01 10:26:03'),(21,'D1',900000,NULL,21,16,'2019-04-01 03:26:03','2019-04-01 10:26:03');
+/*!40000 ALTER TABLE `services` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -652,4 +732,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-03-31 23:58:06
+-- Dump completed on 2019-04-01 17:27:48

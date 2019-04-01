@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Color;
 use App\Product;
+use App\ServiceGroups;
 use App\Size;
 use App\Constants\Common;
 use App\Helpers\Utils;
@@ -12,6 +13,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\ImageProduct;
+use App\Constants\ProductType;
+use App\Services;
+use App\ProductServiceGroup;
 
 class productsController extends AppController
 {
@@ -67,29 +71,44 @@ class productsController extends AppController
             
             if (!$validator->fails()) {
                 
-                $data = new Product();
-                $data->name          = Utils::cnvNull($request->name, '');
-                $data->name_url      = Utils::createNameUrl(Utils::cnvNull($request->name, ''));
-                $data->price         = Utils::cnvNull($request->price, '0');
-                $data->category_id   = Utils::cnvNull($request->category_id, '0');
-                $data->vendor_id     = Utils::cnvNull($request->vendor_id, '0');
-                $data->discount      = Utils::cnvNull($request->discount, 0);
-                $data->sizes         = !Utils::blank($request->sizes) ? implode(',', $request->sizes) : '';
-                $data->colors        = !Utils::blank($request->colors) ? implode(',', $request->colors) : '';
-                $data->description   = Utils::cnvNull($request->description, '');
-                $data->status        = Utils::cnvNull($request->status, 0);
-                $data->is_new        = Utils::cnvNull($request->is_new, 0);
-                $data->is_popular        = Utils::cnvNull($request->is_popular, 0);
-                $data->is_best_selling   = Utils::cnvNull($request->is_best_selling, 0);
-                $data->created_at    = date('Y-m-d H:i:s');
+                $this->addService(0, $request);
                 
-                if($data->save()) {
-                    $arrFilenames = [];
-                    $filename = '';
-                    Utils::doUpload($request, Common::IMAGE_FOLDER, $filename, $data->id, $arrFilenames);
+                DB::beginTransaction();
+                
+                try {
                     
-                    return redirect(route('auth_products_create'))->with('success', trans('messages.CREATE_SUCCESS'));
+                    $data = new Product();
+                    $data->name          = Utils::cnvNull($request->name, '');
+                    $data->name_url      = Utils::createNameUrl(Utils::cnvNull($request->name, ''));
+                    $data->price         = Utils::cnvNull($request->price, '0');
+                    $data->category_id   = Utils::cnvNull($request->category_id, '0');
+                    $data->vendor_id     = Utils::cnvNull($request->vendor_id, '0');
+                    $data->discount      = Utils::cnvNull($request->discount, 0);
+                    $data->sizes         = !Utils::blank($request->sizes) ? implode(',', $request->sizes) : '';
+                    $data->colors        = !Utils::blank($request->colors) ? implode(',', $request->colors) : '';
+                    $data->description   = Utils::cnvNull($request->description, '');
+                    $data->status        = Utils::cnvNull($request->status, 0);
+                    $data->is_new        = Utils::cnvNull($request->is_new, 0);
+                    $data->is_popular        = Utils::cnvNull($request->is_popular, 0);
+                    $data->is_best_selling   = Utils::cnvNull($request->is_best_selling, 0);
+                    $data->created_at    = date('Y-m-d H:i:s');
+                    
+                    if($data->save()) {
+                        $arrFilenames = [];
+                        $filename = '';
+                        Utils::doUpload($request, Common::IMAGE_FOLDER, $filename, $data->id, $arrFilenames);
+                        
+                        $this->addService($data->id, $request);
+                        
+                        DB::commit();
+                        
+                        return redirect(route('auth_products_create'))->with('success', trans('messages.CREATE_SUCCESS'));
+                    }
+                    
+                } catch(\Exception $e) {
+                    DB::rollBack();
                 }
+                
             } else {
                 return redirect(route('auth_products_create'))->with('error', trans('messages.ERROR'));
             }
@@ -97,6 +116,38 @@ class productsController extends AppController
         
         $name = $this->name;
         return view('auth.products.create', compact('name'))->withErrors($validator);
+    }
+    
+    private function addService($productId, $request) {
+        $services = $request->service;
+        
+        if(count($services)) {
+            DB::table('services')->where('product_id', $productId)->delete();
+            foreach($services as $key=>$value) {
+                
+                $serviceGroup               = new ServiceGroups();
+                $serviceGroup->name         = strip_tags($value['group_name']);
+                $serviceGroup->created_at   = date('Y-m-d H:i:s');
+                
+                if($serviceGroup->save()) {
+                    
+                    $items = $value['item'];
+                    
+                    foreach($items as $item) {
+                        $service = new Services();
+                        $service->name = strip_tags($item['name']);
+                        $service->price = strip_tags($item['price']);
+                        $service->product_id = $productId;
+                        $service->service_group_id = $serviceGroup->id;
+                        $service->created_at   = date('Y-m-d H:i:s');
+                        $service->save();
+                        
+                        if($service->save()) {
+                        }
+                    }
+                }
+            }
+        }
     }
     
     /**
@@ -137,6 +188,8 @@ class productsController extends AppController
                     $arrFilenames = [];
                     $filename = '';
                     Utils::doUpload($request, Common::IMAGE_FOLDER, $filename, $data->id, $arrFilenames);
+                    
+                    $this->addService($data->id, $request);
                     
                     return redirect(route('auth_products_edit', ['id' => $request->id]))->with('success', trans('messages.UPDATE_SUCCESS'));
                 }

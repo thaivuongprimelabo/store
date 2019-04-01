@@ -787,8 +787,13 @@ class Utils {
                 
             case 'file':
                 
-                $image_size = isset($config[$name . '_image_size']) ? $config[$name . '_image_size'] : $config[$key . '_image_size'];
-                $upload_limit = isset($config[$name . '_maximum_upload']) ? $config[$name . '_maximum_upload'] : $config[$key . '_maximum_upload'];
+                if($name != 'accessories') {
+                    $image_size = isset($config[$name . '_image_size']) ? $config[$name . '_image_size'] : $config[$key . '_image_size'];
+                    $upload_limit = isset($config[$name . '_maximum_upload']) ? $config[$name . '_maximum_upload'] : $config[$key . '_maximum_upload'];
+                } else {
+                    $image_size = $config['products_image_size'];
+                    $upload_limit = $config['products_maximum_upload'];
+                }
                 
                 
                 $split = explode('x', $image_size);

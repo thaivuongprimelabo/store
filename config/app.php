@@ -231,6 +231,7 @@ return [
         'PostStatus' => App\Constants\PostStatus::class,
         'StatusOrders' => App\Constants\StatusOrders::class,
         'ProductStatus' => App\Constants\ProductStatus::class,
+        'ProductType' => App\Constants\ProductType::class,
         'Common' => App\Constants\Common::class,
         'Validation' => App\Constants\Validation::class,
         'Utils' => App\Helpers\Utils::class,

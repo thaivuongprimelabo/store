@@ -5,6 +5,11 @@ $bannerType = [
     'use_youtube' => ['checked' => false, 'text' => 'Youtube Clip']
 ];
 
+$productType = [
+    'normal' => 'Sản phẩm',
+    'accessories' => 'Phụ kiện'
+];
+
 $auth = [
 
     /*
@@ -40,7 +45,6 @@ $auth = [
             'vendors' => 'Danh mục nhà cung cấp',
             'products_colors' => 'Danh mục màu sắc',
             'products_sizes' => 'Danh mục kích cỡ',
-            'accessories' => 'Đồ chơi theo xe'
         ],
         'orders' => 'Quản lý đơn hàng',
         'banners' => 'Quản lý banner',
@@ -390,13 +394,12 @@ $auth = [
             'is_new' => ['type' => 'checkbox', 'text' => 'Sản phẩm mới', 'checked' => true],
             'is_popular' => ['type' => 'checkbox', 'text' => 'Sản phẩm được quan tâm', 'checked' => true],
             'is_best_selling' => ['type' => 'checkbox', 'text' => 'Sản phẩm bán chạy', 'checked' => true],
-            'is_toy' => ['type' => 'checkbox', 'text' => 'Đồ chơi theo xe', 'checked' => false],
         ]
     ],
     'accessories' => [
-        'list_title' => 'Danh mục đồ chơi theo xe',
-        'create_title' => 'Đăng ký',
-        'edit_title' => 'Chỉnh sửa',
+        'list_title' => 'Danh mục phụ kiện',
+        'create_title' => 'Đăng ký phụ kiện',
+        'edit_title' => 'Chỉnh sửa phụ kiện',
         'table_header' => [
             'id' => 'ID',
             'name' => 'Tên sản phẩm',
@@ -415,7 +418,7 @@ $auth = [
             'vendor_id' => ['type' => 'data_select', 'table' => \App\Constants\Common::VENDORS, 'empty_text' => 'Lọc theo nhà cung cấp'],
         ],
         'form' => [
-            'name' => ['type' => 'text', 'text' => 'Tên sản phẩm'],
+            'name' => ['type' => 'text', 'text' => 'Tên gọi'],
             'price' => ['type' => 'currency', 'text' => 'Giá bán', 'maxlength' => 10],
             'discount' => ['type' => 'number', 'text' => 'Tỷ lệ giảm giá (%)', 'value' => 0, 'maxlength' => 3],
             'category_id' => [
@@ -445,7 +448,6 @@ $auth = [
             'is_new' => ['type' => 'checkbox', 'text' => 'Sản phẩm mới', 'checked' => true],
             'is_popular' => ['type' => 'checkbox', 'text' => 'Sản phẩm được quan tâm', 'checked' => true],
             'is_best_selling' => ['type' => 'checkbox', 'text' => 'Sản phẩm bán chạy', 'checked' => true],
-            'is_toy' => ['type' => 'checkbox', 'text' => 'Đồ chơi theo xe', 'checked' => false],
         ]
     ],
     /*------------ Sizes page ------------------- */
@@ -602,6 +604,7 @@ $auth = [
             'status' => ['type' => 'checkbox', 'text' => 'Đang hoạt động']
         ]
     ],
+    'product_type' => $productType,
     'text_image_small' => 'Tập tin *.jpg, *.jpeg, *.gif, *.png.Tối đa {0}',
     'select_empty_text' => 'Vui lòng chọn',
     'price_empty_text' => 'Liên hệ',
@@ -610,6 +613,8 @@ $auth = [
     'create_box_title' => 'Thông tin đăng ký',
     'edit_box_title' => 'Thông tin cập nhật',
     'length_text' => ' (Tối đã {0} ký tự)',
+    'product_info' => 'Thông tin sản phẩm',
+    'services' => 'Gói dịch vụ kèm theo',
     'status' => [
         'unactive' => 'Tạm dừng',
         'active' => 'Đang hoạt động',
@@ -641,7 +646,9 @@ $auth = [
         'close' => 'Đóng',
         'select' => 'Chọn',
         'remove_all_data' => 'Xóa toàn bộ dữ liệu',
-        'clear_config_cache' => 'Xóa cache'
+        'clear_config_cache' => 'Xóa cache',
+        'add_service' => 'Đăng ký gói dịch vụ',
+        'add_item' => 'Thêm dịch vụ',
     ]
 ];
 

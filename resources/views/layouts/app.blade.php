@@ -397,14 +397,6 @@
 
 	});
 
-	$(document).on('click', '.toy-item', function(e) {
-		var style = $(this).find('tbody').attr('style');
-		if(style.length === 0) {
-			$(this).find('tbody').fadeOut();
-		} else {
-			$(this).find('tbody').fadeIn();
-		}
-	});
   });
 </script>
 @yield('script')
