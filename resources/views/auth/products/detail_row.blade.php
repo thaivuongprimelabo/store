@@ -19,7 +19,7 @@
     	</div>
     </td>
     <td>
-    	<button class="btn btn-danger btn-xs" title="Remove item"><span class="glyphicon glyphicon-remove"></span> {{ trans('auth.button.remove') }}</button>
+    	<button type="button" class="btn btn-danger btn-xs remove-detail" title="Remove item"><span class="glyphicon glyphicon-remove"></span> {{ trans('auth.button.remove') }}</button>
     </td>
 </tr>
 @else
@@ -37,7 +37,7 @@
     	</div>
     </td>
     <td>
-    	<button class="btn btn-danger btn-xs" title="Remove item"><span class="glyphicon glyphicon-remove"></span> {{ trans('auth.button.remove') }}</button>
+    	<button type="button" class="btn btn-danger btn-xs remove-detail" title="Remove item"><span class="glyphicon glyphicon-remove"></span> {{ trans('auth.button.remove') }}</button>
     </td>
 </tr>
 @endif

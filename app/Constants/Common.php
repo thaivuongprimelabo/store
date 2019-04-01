@@ -82,7 +82,8 @@ class Common {
     CONST COMMENTS = 'comments';
     CONST SERVICES = 'services';
     CONST SERVICE_GROUPS = 'service_groups';
-    CONST PRODUCT_SERVICE_GROUP = 'product_service_group';
+    CONST PRODUCT_DETAILS = 'product_details';
+    CONST PRODUCT_DETAIL_GROUPS = 'product_detail_groups';
     
     /** Role **/
     CONST SUPER_ADMIN = '0';

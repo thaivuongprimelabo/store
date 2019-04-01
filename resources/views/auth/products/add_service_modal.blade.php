@@ -27,5 +27,5 @@
   <!-- /.modal-dialog -->
 </div>
 <div id="clone" style="display: none;">
-@include('auth.products.services')
+@include('auth.products.details')
 </div>

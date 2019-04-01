@@ -44,10 +44,11 @@ class AppController extends Controller
                     'banners_maximum_upload' => Utils::cnvNull($config->banners_maximum_upload, 51200),
                     'vendors_maximum_upload' => Utils::cnvNull($config->vendors_maximum_upload, 51200),
                     'products_maximum_upload' => Utils::cnvNull($config->products_maximum_upload, 51200),
-                    'post_maximum_upload'   => Utils::cnvNull($config->post_maximum_upload, 51200),
+                    'posts_maximum_upload'   => Utils::cnvNull($config->post_maximum_upload, 51200),
                     'web_logo_maximum_upload'   => Utils::cnvNull($config->web_logo_maximum_upload, 51200),
                     'web_ico_maximum_upload'   => Utils::cnvNull($config->web_ico_maximum_upload, 51200),
                     'users_maximum_upload'   => Utils::cnvNull($config->users_maximum_upload, 51200),
+                    'avatar_maximum_upload'   => Utils::cnvNull($config->users_maximum_upload, 51200),
                     'attachment_maximum_upload'   => Utils::cnvNull($config->attachment_maximum_upload, 51200),
                     
                     'banners_image_size' => Utils::cnvNull($config->banners_image_size, '100x100'),
@@ -57,6 +58,7 @@ class AppController extends Controller
                     'web_logo_image_size'   => Utils::cnvNull($config->web_logo_image_size, '100x100'),
                     'web_ico_image_size'   => Utils::cnvNull($config->web_ico_image_size, '100x100'),
                     'users_image_size'   => Utils::cnvNull($config->users_image_size, '100x100'),
+                    'avatar_image_size' => Utils::cnvNull($config->users_image_size, '100x100'),
                     
                     'url_ext' => Utils::cnvNull($config->url_ext, '.html'),
                 ]
@@ -92,7 +94,12 @@ class AppController extends Controller
         }
         
         if($model instanceof User) {
-            $wheres[] = ['role_id', '=', Common::MOD];
+            switch(Auth::user()->role_id) {
+                case Common::SUPER_ADMIN:
+                case Common::ADMIN:
+                    $wheres[] = ['role_id', '!=', Common::SUPER_ADMIN];
+                    break;
+            }
         }
         
         if($model instanceof Category) {

@@ -81,7 +81,7 @@ class VendorsController extends AppController
         }
         
         $name = $this->name;
-        return view('auth.vendors.create', compact('name'));
+        return view('auth.vendors.form', compact('name'));
     }
     
     /**
@@ -124,7 +124,7 @@ class VendorsController extends AppController
         }
         
         $name = $this->name;
-        return view('auth.vendors.edit', compact('data', 'name'));
+        return view('auth.vendors.form', compact('data', 'name'));
     }
     
     public function remove(Request $request) {

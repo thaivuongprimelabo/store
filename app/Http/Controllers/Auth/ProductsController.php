@@ -16,6 +16,8 @@ use App\ImageProduct;
 use App\Constants\ProductType;
 use App\Services;
 use App\ProductServiceGroup;
+use App\ProductDetailGroups;
+use App\ProductDetails;
 
 class productsController extends AppController
 {
@@ -71,8 +73,6 @@ class productsController extends AppController
             
             if (!$validator->fails()) {
                 
-                $this->addService(0, $request);
-                
                 DB::beginTransaction();
                 
                 try {
@@ -84,8 +84,6 @@ class productsController extends AppController
                     $data->category_id   = Utils::cnvNull($request->category_id, '0');
                     $data->vendor_id     = Utils::cnvNull($request->vendor_id, '0');
                     $data->discount      = Utils::cnvNull($request->discount, 0);
-                    $data->sizes         = !Utils::blank($request->sizes) ? implode(',', $request->sizes) : '';
-                    $data->colors        = !Utils::blank($request->colors) ? implode(',', $request->colors) : '';
                     $data->description   = Utils::cnvNull($request->description, '');
                     $data->status        = Utils::cnvNull($request->status, 0);
                     $data->is_new        = Utils::cnvNull($request->is_new, 0);
@@ -118,38 +116,6 @@ class productsController extends AppController
         return view('auth.products.create', compact('name'))->withErrors($validator);
     }
     
-    private function addService($productId, $request) {
-        $services = $request->service;
-        
-        if(count($services)) {
-            DB::table('services')->where('product_id', $productId)->delete();
-            foreach($services as $key=>$value) {
-                
-                $serviceGroup               = new ServiceGroups();
-                $serviceGroup->name         = strip_tags($value['group_name']);
-                $serviceGroup->created_at   = date('Y-m-d H:i:s');
-                
-                if($serviceGroup->save()) {
-                    
-                    $items = $value['item'];
-                    
-                    foreach($items as $item) {
-                        $service = new Services();
-                        $service->name = strip_tags($item['name']);
-                        $service->price = strip_tags($item['price']);
-                        $service->product_id = $productId;
-                        $service->service_group_id = $serviceGroup->id;
-                        $service->created_at   = date('Y-m-d H:i:s');
-                        $service->save();
-                        
-                        if($service->save()) {
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
     /**
      * create
      * @param Request $request
@@ -174,8 +140,6 @@ class productsController extends AppController
                 $data->category_id   = Utils::cnvNull($request->category_id, '0');
                 $data->vendor_id     = Utils::cnvNull($request->vendor_id, '0');
                 $data->discount      = Utils::cnvNull($request->discount, '');
-                $data->sizes         = !Utils::blank($request->sizes) ? implode(',', $request->sizes) : '';
-                $data->colors        = !Utils::blank($request->colors) ? implode(',', $request->colors) : '';
                 $data->description   = Utils::cnvNull($request->description, '');
                 $data->status        = Utils::cnvNull($request->status, 0);
                 $data->is_new        = Utils::cnvNull($request->is_new, 0);
@@ -205,60 +169,45 @@ class productsController extends AppController
             $id = $request->id;
             $data = Product::find($id);
             if($data->delete()) {
+                Services::where('product_id', $id)->delete();
                 return redirect(route('auth_products'))->with('success', trans('messages.REMOVE_SUCCESS'));
             }
         }
     }
     
-    public function sizes(Request $request) {
-        return view('auth.products.sizes.index', $this->searchSizeColor($request, Common::SIZES));
-    }
-    
-    public function colors(Request $request) {
-        return view('auth.products.colors.index', $this->searchSizeColor($request, Common::COLORS));
-    }
-    
-    public function removeSize(Request $request) {
-        if($request->isMethod('get')) {
-            $id = $request->id;
-            $size = Size::find($id);
-            if($size->delete()) {
-                return redirect(route('auth_products_sizes'))->with('success', trans('messages.REMOVE_SUCCESS'));
-            }
-        }
-    }
-    
-    public function removeColor(Request $request) {
-        if($request->isMethod('get')) {
-            $id = $request->id;
-            $color = Color::find($id);
-            if($color->delete()) {
-                return redirect(route('auth_products_colors'))->with('success', trans('messages.REMOVE_SUCCESS'));
-            }
-        }
-    }
-    
-    public function searchSizeColor(Request $request, $table = '') {
-        $wheres = [];
-        $output = ['code' => 200, 'data' => ''];
+    private function addService($productId, $request) {
+        $services = $request->service;
         
-        if($table == Common::COLORS) {
-            $colors = Color::where($wheres)->orderBy('created_at', 'DESC')->get();
-            
-            if($request->ajax()) {
-                $output['data'] = view('auth.colors.ajax_list', compact('colors', 'paging'))->render();
-                return response()->json($output);
-            } else {
-                return compact('colors');
-            }
-        } else {
-            $sizes = Size::where($wheres)->get();
-            
-            if($request->ajax()) {
-                $output['data'] = view('auth.sizes.ajax_list', compact('sizes', 'paging'))->render();
-                return response()->json($output);
-            } else {
-                return compact('sizes');
+        if(count($services)) {
+            ProductDetails::where('product_id', $productId)->delete();
+            foreach($services as $key=>$value) {
+                
+                $items = $value['item'];
+                
+                if(!count($items)) {
+                    continue;
+                }
+                
+                $productDetailGroup               = new ProductDetailGroups();
+                $productDetailGroup->name         = strip_tags($value['group_name']);
+                $productDetailGroup->created_at   = date('Y-m-d H:i:s');
+                
+                if($productDetailGroup->save()) {
+                    
+                    foreach($items as $item) {
+                        
+                        if(Utils::blank($item['name'])) {
+                            continue;
+                        }
+                        
+                        $detail = new ProductDetails();
+                        $detail->name = strip_tags($item['name']);
+                        $detail->price = strip_tags($item['price']);
+                        $detail->product_id = $productId;
+                        $detail->product_detail_group_id = $productDetailGroup->id;
+                        $detail->save();
+                    }
+                }
             }
         }
     }

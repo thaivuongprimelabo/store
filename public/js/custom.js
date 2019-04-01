@@ -199,6 +199,7 @@ var selectImage = function(id, demension) {
 	var img = $('#preview').attr('src');
 	var arr = demension.split('x');
 	$('#' + id).css({'display': 'inline-block'});
+	$('#' + id).find('a.upload_image').css({'width': arr[0], 'height': arr[1]});
 	$('#' + id).find('a.upload_image').html('<img src="' + img + '" style="width:' + arr[0] + 'px; height:' + arr[1] + 'px" />');
 	if(img.indexOf('http') !== -1 || img.indexOf('https') !== -1) {
 		$('#' + id).find('.upload_image_product_url').val(img);
@@ -230,6 +231,16 @@ var formatCurrency = function (nStr, decSeperate, groupSeperate) {
         x1 = x1.replace(rgx, '$1' + groupSeperate + '$2');
     }
     return x1 + x2;
+}
+
+var getMax = function(element, data) {
+	var max = -1;
+	$(element).each(function() {
+	  	var value = parseInt($(this).attr(data));
+	  	max = (value > max) ? value : max;
+	});
+
+	return max
 }
 
 $(document).ready(function() {

@@ -49,19 +49,19 @@ class Product extends Model
     }
     
     public function getServices() {
-        $services = Services::select(
-                            'service_groups.id AS group_id', 
-                            'service_groups.name AS group_name', 
-                            DB::raw('GROUP_CONCAT(services.name) AS service_names'), 
-                            DB::raw('GROUP_CONCAT(services.price) AS service_prices')
+        $services = ProductDetails::select(
+                            'product_detail_groups.id AS group_id', 
+                            'product_detail_groups.name AS group_name', 
+                            DB::raw('GROUP_CONCAT(product_details.name ORDER BY product_details.id) AS service_names'), 
+                            DB::raw('GROUP_CONCAT(product_details.price ORDER BY product_details.id) AS service_prices')
                         )
-                        ->join('service_groups', 'service_groups.id', '=', 'services.service_group_id')
-                        ->where('services.product_id', $this->id)
-                        ->groupBy('service_groups.id', 'service_groups.name')
+                        ->join('product_detail_groups', 'product_detail_groups.id', '=', 'product_details.product_detail_group_id')
+                        ->where('product_details.product_id', $this->id)
+                        ->groupBy('product_detail_groups.id', 'product_detail_groups.name')
                         ->get();
         
         $html = '';
-        $table = view('auth.products.services', ['services' => $services])->render();
+        $table = view('auth.products.details', ['services' => $services])->render();
         $html .= $table;
         
         return $html;

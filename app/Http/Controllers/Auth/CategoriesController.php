@@ -75,7 +75,7 @@ class CategoriesController extends AppController
         }
         
         $name = $this->name;
-        return view('auth.categories.create', compact('name'));
+        return view('auth.categories.form', compact('name'));
     }
     
     /**
@@ -114,7 +114,7 @@ class CategoriesController extends AppController
         }
         
         $name = $this->name;
-        return view('auth.categories.edit', compact('data', 'name'));
+        return view('auth.categories.form', compact('data', 'name'));
     }
     
     public function remove(Request $request) {

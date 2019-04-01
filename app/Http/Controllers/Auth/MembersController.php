@@ -77,7 +77,7 @@ class MembersController extends AppController
         }
         
         $name = $this->name;
-        return view('auth.members.create', compact('name'));
+        return view('auth.members.form', compact('name'));
         
     }
     
@@ -120,7 +120,7 @@ class MembersController extends AppController
         }
         
         $name = $this->name;
-        return view('auth.members.edit', compact('data', 'name'));
+        return view('auth.members.form', compact('data', 'name'));
     }
     
     public function remove(Request $request) {

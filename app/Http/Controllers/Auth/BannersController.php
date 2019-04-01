@@ -82,7 +82,7 @@ class BannersController extends AppController
         }
         
         $name = $this->name;
-        return view('auth.banners.create', compact('name'));
+        return view('auth.banners.form', compact('name'));
     }
     
     /**
@@ -130,7 +130,7 @@ class BannersController extends AppController
             }
         }
         $name = $this->name;
-        return view('auth.banners.edit', compact('data', 'name'));
+        return view('auth.banners.form', compact('data', 'name'));
     }
     
     public function remove(Request $request) {

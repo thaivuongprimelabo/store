@@ -43,8 +43,6 @@ $auth = [
             'products' => 'Danh mục sản phẩm',
             'categories' => 'Danh mục loại sản phẩm',
             'vendors' => 'Danh mục nhà cung cấp',
-            'products_colors' => 'Danh mục màu sắc',
-            'products_sizes' => 'Danh mục kích cỡ',
         ],
         'orders' => 'Quản lý đơn hàng',
         'banners' => 'Quản lý banner',
@@ -155,7 +153,7 @@ $auth = [
                 'value' => $bannerType
             ],
             'banner' => [
-                'type' => 'file', 
+                'type' => 'file',
                 'text' => 'Banner',
                 'container_id' => 'use_image'
             ],
@@ -614,7 +612,7 @@ $auth = [
     'edit_box_title' => 'Thông tin cập nhật',
     'length_text' => ' (Tối đã {0} ký tự)',
     'product_info' => 'Thông tin sản phẩm',
-    'services' => 'Gói dịch vụ kèm theo',
+    'services' => 'Thông tin thêm',
     'status' => [
         'unactive' => 'Tạm dừng',
         'active' => 'Đang hoạt động',
@@ -647,8 +645,9 @@ $auth = [
         'select' => 'Chọn',
         'remove_all_data' => 'Xóa toàn bộ dữ liệu',
         'clear_config_cache' => 'Xóa cache',
-        'add_service' => 'Đăng ký gói dịch vụ',
-        'add_item' => 'Thêm dịch vụ',
+        'add_service' => 'Đăng ký thông tin',
+        'add_item' => 'Thêm',
+        'copy_service' => 'Sử dụng dịch vụ của sản phẩm khác'
     ]
 ];
 

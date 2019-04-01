@@ -63,34 +63,41 @@
     	$('#name').val('');
     });
 
-    $(document).on('click', '.toy-item thead', function(e) {
-		var style = $(this).find('tbody').attr('style');
-		if(style.length === 0) {
-			$(this).find('tbody').fadeOut();
-		} else {
-			$(this).find('tbody').fadeIn();
-		}
-	});
-
-    var group_index = -1;
-    var row_index = -1;
-    
     $('#service_submit').click(function(e) {
 		var service_group_name = $('#name').val().trim();
 		if(service_group_name.length > 0) {
-			group_index++;
+
+			var max = getMax('.toy-item', 'data-index');
+			var group_index = Number(max) + 1;
 			$('#clone').find('.service-group-name').val(service_group_name);
-			$('#clone').find('.group_index').val(group_index);
+			$('#clone').find('table').attr('data-index', group_index);
 			var clone = $('#clone').html();
 			$('#services').append(clone.replace('{service_group_name}', service_group_name));
 		}
 		$('#serviceModal').modal('hide');
     });
 
+    $(document).on('click', '.remove-group', function(e) {
+        if(confirm('{{ trans('messages.CONFIRM_DELETE') }}')) {
+			$(this).parent().parent().remove();
+        }
+        return false;
+    });
+
+    $(document).on('click', '.remove-detail', function(e) {
+        if(confirm('{{ trans('messages.CONFIRM_DELETE') }}')) {
+			$(this).parent().parent()..parent()..parent().remove();
+        }
+        return false;
+    });
+
     $(document).on('click', '.add-service-item', function(e) {
     	var parentElement = $(this).parent().parent().parent().parent();
-    	var group_index = parentElement.find('.group_index').val();
-    	var row_index = Number(parentElement.find('.row_index').val()) + 1;
+    	var group_index = parentElement.attr('data-index');
+
+    	var max = getMax(parentElement, 'data-row-index');
+    	var row_index = Number(max) + 1;
+    	parentElement.attr('data-row-index', row_index);
 
     	var row = 'service[' + group_index + ']';
 		var service_group_name_tag = row + '[group_name]';
@@ -103,7 +110,6 @@
 		service_item.find('.service-price').attr('name', service_price_tag);
 
 		parentElement.find('.service-group-name').attr('name', service_group_name_tag);
-		parentElement.find('.row_index').val(row_index);
 		service_item.insertBefore(parentElement.find('tr.add-item'));
     });
 

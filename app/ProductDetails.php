@@ -5,7 +5,7 @@ namespace App;
 use App\Constants\Common;
 use Illuminate\Database\Eloquent\Model;
 
-class ProductServiceGroup extends Model
+class ProductDetails extends Model
 {
     //
     public $timestamps = false;
@@ -15,5 +15,5 @@ class ProductServiceGroup extends Model
      *
      * @var array
      */
-    protected $table = Common::PRODUCT_SERVICE_GROUP;
+    protected $table = Common::PRODUCT_DETAILS;
 }

@@ -640,12 +640,22 @@ class Utils {
         $table = isset($value['table']) ? $value['table'] : '';
         $emptyText = isset($value['empty_text']) ? $value['empty_text'] : '';
         $containerId = isset($value['container_id']) ? $value['container_id'] : '';
+        
         if(!Utils::blank($containerId)) {
-            $banner_type = trans('auth.banner_type');
-            if(!$banner_type[$containerId]['checked']) {
-                $containerId = 'select_type ' . $containerId . ' hide_element';
+            if($data != null) {
+                $select_type = $data->select_type;
+                if($containerId != $select_type) {
+                    $containerId = 'select_type ' . $containerId . ' hide_element';
+                } else {
+                    $containerId = 'select_type ' . $containerId;
+                }
             } else {
-                $containerId = 'select_type ' . $containerId;
+                $banner_type = trans('auth.banner_type');
+                if(!$banner_type[$containerId]['checked']) {
+                    $containerId = 'select_type ' . $containerId . ' hide_element';
+                } else {
+                    $containerId = 'select_type ' . $containerId;
+                }
             }
         }
         
@@ -804,12 +814,13 @@ class Utils {
                     if($key == 'image') {
                         $image_using = $data->getAllImage($data->id);
                     } else {
-                        $image_using = $element_value;
+                        $image_using = self::getImageLink($element_value);
                     }
                 }
                 
                 $text_small = trans('auth.text_image_small');
                 $file_ext = isset($value['file_ext']) ? $value['file_ext'] : Common::IMAGE_EXT;
+                
                 
                 if($count > 0) {
                     
@@ -842,16 +853,74 @@ class Utils {
                     $element_html .= '<div id="preview_list">';
                     $element_html .= '<div  id="' . $key . '_0" class="image_product" style="display: inline-block;">';
                     $element_html .= '<a href="javascript:void(0)" class="upload_image open_upload_dialog" data-demension="' . $image_size . '" data-upload-limit="' . $upload_limit . '" data-file-ext="' . $file_ext . '" style="width: ' . $split[0] . 'px; height: ' . $split[1] . 'px">';
-                    $element_html .= '<i class="fa fa-upload" style="font-size: 20px;" aria-hidden="true"></i><br/>' . trans('auth.button.add_image');
+                    
+                    if(is_string($image_using)) {
+                        $element_html .= '<img src="' . $image_using . '" style="width: ' . $split[0] . 'px; height: ' . $split[1] . 'px" />';
+                    } else {
+                        $element_html .= '<i class="fa fa-upload" style="font-size: 20px;" aria-hidden="true"></i><br/>' . trans('auth.button.add_image');
+                    }
+                    
                     $element_html .= '</a>';
                     
                     $element_html .= '<input type="file" name="image_upload[]" class="upload_image_product" style="display: none" />';
                     $element_html .= '<input type="hidden" name="image_upload_url[]" class="upload_image_product_url" />';
                     $element_html .= '<input type="hidden" name="image_ids[]" class="upload_image_id" value="9999" />';
-                            
+                    
                     $element_html .= '</div>';
                     $element_html .= '</div>';
                 }
+                
+//                 if(is_array($image_using)) {
+//                     $element_html .= '<div id="preview_list">';
+//                     foreach($image_using as $id=>$image) {
+//                         $element_html .= '<div class="image_product" style="display: inline-block;">';
+//                         $element_html .= '<a href="javascript:void(0)" class="add_image" style="width: ' . $split[0] . 'px; height: ' . $split[1] . 'px">';
+//                         $element_html .= '<img src="' . $image . '" style="width: ' . $split[0] . 'px; height: ' . $split[1] . 'px" />';
+//                         $element_html .= '</a>';
+                        
+//                         $element_html .= '<a href="javascript:void(0)" class="remove" data-id="' . $id . '"><i class="fa fa-trash" aria-hidden="true"></i></a>';
+//                         $element_html .= '<input type="hidden" name="image_ids[]" class="upload_image_id" value="' . $id . '" />';
+//                         $element_html .= '</div>';
+//                     }
+                    
+//                     $element_html .= '<div class="image_product" style="display: inline-block;">';
+//                     $element_html .= '<a href="javascript:void(0)" class="add_image" data-key="' . $key . '" data-demension="' . $image_size . '" data-upload-limit="' . $upload_limit . '" data-file-ext="' . $file_ext . '" style="width: ' . $split[0] . 'px; height: ' . $split[1] . 'px">';
+//                     $element_html .= '<i class="fa fa-upload" style="font-size: 20px;" aria-hidden="true"></i><br/>' . trans('auth.button.add_image');
+//                     $element_html .= '</a>';
+                    
+//                     $element_html .= '<input type="hidden" id="upload_index" value="-1" />';
+//                     $element_html .= '</div>';
+//                     $element_html .= '</div>';
+                    
+//                 } elseif(is_string($image_using)) {
+                    
+//                     $element_html .= '<div id="preview_list">';
+//                     $element_html .= '<div  id="' . $key . '_0" class="image_product" style="display: inline-block;">';
+//                     $element_html .= '<a href="javascript:void(0)" class="upload_image open_upload_dialog" data-demension="' . $image_size . '" data-upload-limit="' . $upload_limit . '" data-file-ext="' . $file_ext . '" style="width: ' . $split[0] . 'px; height: ' . $split[1] . 'px">';
+//                     $element_html .= '<img src="' . $image_using . '" style="width: ' . $split[0] . 'px; height: ' . $split[1] . 'px" />';
+//                     $element_html .= '</a>';
+                    
+//                     $element_html .= '<input type="file" name="image_upload[]" class="upload_image_product" style="display: none" />';
+//                     $element_html .= '<input type="hidden" name="image_upload_url[]" class="upload_image_product_url" />';
+//                     $element_html .= '<input type="hidden" name="image_ids[]" class="upload_image_id" value="9999" />';
+                    
+//                     $element_html .= '</div>';
+//                     $element_html .= '</div>';
+                    
+//                 } else {
+//                     $element_html .= '<div id="preview_list">';
+//                     $element_html .= '<div  id="' . $key . '_0" class="image_product" style="display: inline-block;">';
+//                     $element_html .= '<a href="javascript:void(0)" class="upload_image open_upload_dialog" data-demension="' . $image_size . '" data-upload-limit="' . $upload_limit . '" data-file-ext="' . $file_ext . '" style="width: ' . $split[0] . 'px; height: ' . $split[1] . 'px">';
+//                     $element_html .= '<i class="fa fa-upload" style="font-size: 20px;" aria-hidden="true"></i><br/>' . trans('auth.button.add_image');
+//                     $element_html .= '</a>';
+                    
+//                     $element_html .= '<input type="file" name="image_upload[]" class="upload_image_product" style="display: none" />';
+//                     $element_html .= '<input type="hidden" name="image_upload_url[]" class="upload_image_product_url" />';
+//                     $element_html .= '<input type="hidden" name="image_ids[]" class="upload_image_id" value="9999" />';
+                    
+//                     $element_html .= '</div>';
+//                     $element_html .= '</div>';
+//                 }
                 
                 break;
                 

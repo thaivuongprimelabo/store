@@ -4,10 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Constants\Common;
 use App\Helpers\Utils;
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\User;
@@ -94,7 +92,7 @@ class UsersController extends AppController
         }
         
         $name = $this->name;
-        return view('auth.users.create', compact('name'));
+        return view('auth.users.form', compact('name'));
     }
     
     /**
@@ -138,7 +136,7 @@ class UsersController extends AppController
         }
         
         $name = $this->name;
-        return view('auth.users.edit', compact('data', 'name'));
+        return view('auth.users.form', compact('data', 'name'));
     }
     
     public function profile(Request $request) {

@@ -83,7 +83,7 @@ class PostsController extends AppController
         }
         
         $name = $this->name;
-        return view('auth.posts.create', compact('name'));
+        return view('auth.posts.form', compact('name'));
     }
     
     /**
@@ -132,7 +132,7 @@ class PostsController extends AppController
         }
         
         $name = $this->name;
-        return view('auth.posts.edit', compact('data', 'name'));
+        return view('auth.posts.form', compact('data', 'name'));
     }
     
     public function remove(Request $request) {
