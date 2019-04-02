@@ -134,7 +134,7 @@ class ConfigController extends AppController
             $data->bank_info = Utils::cnvNull($request->bank_info, '');
             $data->cash_info = Utils::cnvNull($request->cash_info, '');
             if($data->save()) {
-                return redirect(route('auth_config_edit'))->with('success', trans('messages.UPDATE_SUCCESS'));
+                return redirect(route('auth_config'))->with('success', trans('messages.UPDATE_SUCCESS'));
             }
         }
         

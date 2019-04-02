@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Constants\Common;
+use App\Constants\UserRole;
 use App\Helpers\Utils;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\Model;
@@ -19,6 +20,8 @@ class AppController extends Controller
     public $config = [];
     public $result = ['code' => 200, 'data' => ''];
     public $name = '';
+    public $rules = [];
+    public $output = ['data' => null, 'name' => '', 'rules' => []];
     
     //
     /**
@@ -72,6 +75,9 @@ class AppController extends Controller
         
         $exp = explode('_', Route::currentRouteName());
         $this->name = isset($exp[1]) ? $exp[1] : '';
+        $this->rules = trans('auth.' . $this->name . '.rules');
+        $this->output['name'] =  $this->name;
+        $this->output['rules'] = $this->rules;
     }
     
     public function doSearch($request, Model $model, $type = '') {
@@ -95,9 +101,9 @@ class AppController extends Controller
         
         if($model instanceof User) {
             switch(Auth::user()->role_id) {
-                case Common::SUPER_ADMIN:
-                case Common::ADMIN:
-                    $wheres[] = ['role_id', '!=', Common::SUPER_ADMIN];
+                case UserRole::SUPER_ADMIN:
+                case UserRole::ADMIN:
+                    $wheres[] = ['role_id', '!=', UserRole::SUPER_ADMIN];
                     break;
             }
         }
@@ -114,7 +120,7 @@ class AppController extends Controller
         $paging = $data_list->toArray();
         
         if($request->ajax()) {
-            $this->result['data'] = view('auth.' . $name . '.ajax_list', compact('data_list', 'paging'))->render();
+            $this->result['data'] = view('auth.' . $name . '.ajax_list', compact('data_list', 'paging', 'name'))->render();
             return response()->json($this->result);
         } else {
             return compact('data_list', 'paging', 'name');

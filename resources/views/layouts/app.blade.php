@@ -232,7 +232,7 @@
 	});
 
 	$(document).on('click', '.update-status', function(e) {
-		var table = $(this).attr('data-tbl');
+		var table = '{{ isset($name) ? $name : '' }}';
 		var data = {
 			type : 'post',
 			async : false,

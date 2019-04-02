@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Validator;
 class PostsController extends AppController
 {
     
-    public $rules = [];
     
     /**
      * Create a new controller instance.
@@ -23,11 +22,6 @@ class PostsController extends AppController
     {
         parent::__construct();
         
-        $this->rules = [
-            'name' => 'required|max:' . Common::NAME_MAXLENGTH,
-            'content' => 'required',
-            'photo' => 'image|max:' . Utils::formatMemory(Common::PHOTO_MAX_SIZE, true) . '|mimes:'. Common::IMAGE_EXT1
-        ];
     }
     
     public function index(Request $request) {
@@ -82,8 +76,7 @@ class PostsController extends AppController
             }
         }
         
-        $name = $this->name;
-        return view('auth.posts.form', compact('name'));
+        return view('auth.form', $this->output);
     }
     
     /**
@@ -131,8 +124,8 @@ class PostsController extends AppController
             }
         }
         
-        $name = $this->name;
-        return view('auth.posts.form', compact('data', 'name'));
+        $this->output['data'] = $data;
+        return view('auth.form', $this->output);
     }
     
     public function remove(Request $request) {

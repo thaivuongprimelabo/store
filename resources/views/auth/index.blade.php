@@ -15,22 +15,14 @@
 <section class="content">
 	<div class="row">
         <div class="col-xs-12">
-          <div class="box">
-              <!-- Box Body -->
-              <div class="box-body">
-              	 @include('auth.common.search',['form' => trans('auth.' . $name . '.search_form')])
-              </div>
-          </div>
+          @include('auth.common.search')
           <div class="box">
             <div class="box-header">
               <h3 class="box-title">{{ trans('auth.' . $name . '.list_title') }}</h3>
             </div>
             <!-- /.box-header -->
-            <div id="ajax_list" class="box-body">
-            @include('auth.' . $name . '.ajax_list')
-            </div>
-            <div class="box-footer clearfix">
-              {{ $data_list->links('auth.common.paging', ['paging' => $paging]) }}
+            <div id="ajax_list">
+                @include('auth.ajax_list')
             </div>
           </div>
           <!-- /.box -->

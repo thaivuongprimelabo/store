@@ -11,7 +11,6 @@ use App\Helpers\Utils;
 
 class VendorsController extends AppController
 {
-    public $rules = [];
     
     /**
      * Create a new controller instance.
@@ -23,12 +22,6 @@ class VendorsController extends AppController
         parent::__construct();
         
         $this->middleware('auth');
-        
-        $this->rules = [
-            'name' => 'required|max:' . Common::NAME_MAXLENGTH,
-            'description' => 'max:' . Common::DESC_MAXLENGTH,
-            'logo' => 'image|max:' . Utils::formatMemory(Common::LOGO_MAX_SIZE, true) . '|mimes:'. Common::IMAGE_EXT1
-        ];
     }
     
     public function index(Request $request) {
@@ -80,8 +73,7 @@ class VendorsController extends AppController
             }
         }
         
-        $name = $this->name;
-        return view('auth.vendors.form', compact('name'));
+        return view('auth.form', $this->output);
     }
     
     /**
@@ -123,8 +115,8 @@ class VendorsController extends AppController
             }
         }
         
-        $name = $this->name;
-        return view('auth.vendors.form', compact('data', 'name'));
+        $this->output['data'] = $data;
+        return view('auth.form', $this->output);
     }
     
     public function remove(Request $request) {

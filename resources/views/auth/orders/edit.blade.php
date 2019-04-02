@@ -14,57 +14,19 @@
 <section class="content">
 	<div class="row">
 		<div class="col-md-12">
-			<form role="form" id="submit_form" action="?" method="post" enctype="multipart/form-data">
 			@php
-              	$forms = trans('auth.orders.form');
               	$data->payment_method = trans('shop.cart.payment.' . $data->payment_method);
             @endphp
-            @foreach($forms as $key=>$form)
-            @include('auth.common.edit_form', ['hide_footer' => true])
-            @endforeach
+            @include('auth.form')
             <div class="box box-primary">
                 <div class="box-header with-border">
                   <h3 class="box-title">{{ isset($forms['text']) ? $forms['text'] : trans('auth.edit_box_title') }}</h3>
                 </div>
             	<div class="box-body">
-            		<table class="table table-hover">
-            			<thead>
-                            <tr>
-                              <th>{{ trans('auth.orders.table_header.images') }}</th>
-                              <th>{{ trans('auth.orders.table_header.products') }}</th>
-                              <th>{{ trans('auth.orders.table_header.qty') }}</th>
-                              <th>{{ trans('auth.orders.table_header.price') }}</th>
-                              <th>{{ trans('auth.orders.table_header.cost') }}</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($orderDetails as $detail)
-                        <tr>
-                          <td><img src="{{ $detail->getFirstImage($detail->product_id) }}" width="{{ Common::ADMIN_IMAGE_WIDTH }}" /></td>
-                          <td>{{ $detail->name }}</td>
-                          <td>{{ $detail->qty }}</td>
-                          <td>{{ number_format($detail->price) }}</td>
-                          <td>{{ number_format($detail->cost) }}</td>
-                        </tr>
-                        @endforeach
-                        </tbody>
-                        <tfoot>
-                        	<tr>
-                    			<th class="empty" colspan="3"></th>
-                    			<th>{{ trans('shop.cart.table.subtotal') }}</th>
-                    			<th colspan="2" class="sub-total">{{ number_format($data->total) }}</th>
-                    		</tr>
-                    		<tr>
-                    			<th class="empty" colspan="3"></th>
-                    			<th>{{ trans('shop.cart.table.total') }}</th>
-                    			<th colspan="2" class="total">{{ number_format($data->total) }}</th>
-                    		</tr>
-                        </tfoot>
-                    </table>
+            		{!! Utils::generateList($config, $name, $orderDetails, $data, 'table_product_header') !!}
             	</div>
             </div>
             @include('auth.common.button_footer',['back_url' => route('auth_orders')])
-            </form>
 		</div>
 	</div>
 </section>

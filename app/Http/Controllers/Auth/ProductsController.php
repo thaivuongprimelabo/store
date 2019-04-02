@@ -22,8 +22,6 @@ use App\ProductDetails;
 class productsController extends AppController
 {
     
-    public $rules = [];
-    
     /**
      * Create a new controller instance.
      *
@@ -35,13 +33,6 @@ class productsController extends AppController
         
         $this->middleware('auth');
         
-        $this->rules = [
-            'name' => 'required|max:' . Common::NAME_MAXLENGTH,
-            'price' => 'required|max:' . Common::PRICE_MAXLENGTH,
-//             'category_id' => 'required',
-//             'vendor_id' => 'required',
-            'image' => 'image|max:' . Utils::formatMemory(Common::IMAGE_MAX_SIZE, true) . '|mimes:'. Common::IMAGE_EXT1
-        ];
     }
     
     public function index(Request $request) {
@@ -112,8 +103,7 @@ class productsController extends AppController
             }
         }
         
-        $name = $this->name;
-        return view('auth.products.create', compact('name'))->withErrors($validator);
+        return view('auth.form', $this->output);
     }
     
     /**
@@ -160,8 +150,8 @@ class productsController extends AppController
             }
         }
         
-        $name = $this->name;
-        return view('auth.products.edit', compact('data', 'name'));
+        $this->output['data'] = $data;
+        return view('auth.form', $this->output);
     }
     
     public function remove(Request $request) {

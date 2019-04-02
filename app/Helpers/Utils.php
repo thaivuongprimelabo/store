@@ -6,6 +6,7 @@ use App\Constants\Common;
 use App\Constants\ContactStatus;
 use App\Constants\Status;
 use App\Constants\StatusOrders;
+use App\Constants\UserRole;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -16,6 +17,7 @@ use Image;
 use App\Category;
 use App\Config;
 use App\Vendor;
+use Carbon\Carbon;
 
 class Utils {
     
@@ -31,11 +33,9 @@ class Utils {
         }
         
         $uploadFolder = Common::UPLOAD_FOLDER;
-        //$nologo = Common::NO_LOGO_FILE;
         if(!self::blank($image)) {
             return url($uploadFolder . $image);
         } else {
-            //return url($uploadFolder . $nologo);
             return '';
         }
     }
@@ -275,10 +275,7 @@ class Utils {
                 return StatusOrders::createSelectList($selected);
                 break;
             default:
-                $data = [
-                    ['id' => Common::ADMIN, 'name' => trans('auth.role.admin')],
-                    ['id' => Common::MEMBER, 'name' => trans('auth.role.member')]
-                ];
+                $data = [];
                 break;
         }
         
@@ -308,10 +305,7 @@ class Utils {
                 $data = DB::table($table)->select('name', 'id')->where('status', Status::ACTIVE)->get();
                 break;
             default:
-                $data = [
-                ['id' => Common::ADMIN, 'name' => trans('auth.role.admin')],
-                ['id' => Common::MEMBER, 'name' => trans('auth.role.member')]
-                ];
+                $data = [];
                 break;
         }
         
@@ -615,17 +609,264 @@ class Utils {
     public static function formatCurrency($input) {
         return number_format($input, 0, ',', '.');
     }
-
-    public static function generateForm($forms, $config, $name, $data = null) {
+    
+    public static function generateList($config, $name, $data = null, $otherData = null, $key = '') {
         
-        $form_html = '';
-        foreach($forms as $key=>$value) {
-            if($key == 'header') {
-                $form_html .= '<h1>' . $value . '</h1>';
+        $html = '';
+        
+        $routes = Route::getRoutes();
+        
+        $table_info = trans('auth.' . $name . '.table_header');
+        if(!self::blank($key)) {
+            $table_info = trans('auth.' . $name . '.' . $key);
+        }
+        $data_count = $data->count();
+        $footers = [];
+        if(count($table_info)) {
+            $colWidth = '';
+            $thead = '<thead><tr>';
+            foreach($table_info as $key=>$info) {
+                if(isset($info['tfoot'])) {
+                    $footers[$key] = $info;
+                    continue;
+                }
+                if(isset($info['hide'])) {
+                    continue;
+                }
+                $colWidth .= '<col width="' . $info['width'] . '">';
+                $thead .= '<th>' . $info['text'] . '</th>';
+                
+            }
+            $thead .= '</thead></tr>';
+            
+            $tbody = '<tbody><tr><td colspan="' . count($table_info) . '">' . trans('auth.no_data_found') .'</td></tr>';
+            if($data_count) {
+                $tbody = '<tbody>';
+                foreach($data as $item) {
+                    $tbody .= '<tr>';
+                    foreach($table_info as $key=>$info) {
+                        if(isset($info['tfoot']) == 'tfoot') {
+                            continue;
+                        }
+                        
+                        switch($key) {
+                            case 'category':
+                                $tbody .= '<td>' . $item->getCategoryName() . '</td>';
+                                break;
+                            case 'vendor':
+                                $tbody .= '<td>' . $item->getVendorName() . '</td>';
+                                break;
+                            case 'banner':
+                                if($item->select_type == 'use_image') {
+                                    $tbody .= '<td><img src="' . self::getImageLink($item->$key) . '" width="200" /></td>';
+                                } else {
+                                    $tbody .= '<td><img src="http://img.youtube.com/vi/' . $item->youtube_id . '/0.jpg" width="200" /></td>';
+                                }
+                                break;
+                                
+                            case 'logo':
+                            case 'avatar':
+                            case 'photo':
+                                $tbody .= '<td><img src="' . self::getImageLink($item->$key) . '" width="80" /></td>';
+                                break;
+                                
+                            case 'images':
+                            case 'image':
+                                $tbody .= '<td><img src="' . $item->getFirstImage() . '" width="80" /></td>';
+                                break;
+                                
+                            case 'status':
+                                $label = '<span class="label label-danger">' . trans('auth.status.unactive') . '</span>';
+                                if($item->status == Status::ACTIVE) {
+                                    $label = '<span class="label label-success">' . trans('auth.status.active') . '</span>';
+                                }
+                                $tbody .= '<td><a href="javascript:void(0)" class="update-status" data-id="' . $item->id . '" data-status="' . $item->status . '">' . $label . '</a></td>';
+                                break;
+                                
+                            case 'role_id':
+                                
+                                $label = '<span class="label label-primary">' . trans('auth.role.super_admin') . '</span>';
+                                
+                                if($item->role_id == UserRole::ADMIN) {
+                                    $label = '<span class="label label-warning">' . trans('auth.role.admin') . '</span>';
+                                }
+                                
+                                $tbody .= '<td><a href="javascript:void(0)" class="update-status">' . $label . '</a></td>';
+                                break;
+                                
+                            case 'price':
+                            case 'cost':
+                                $tbody .= '<td>' . self::formatCurrency($item->$key) . '</td>';
+                                break;
+                                
+                            case 'created_at':
+                            case 'updated_at':
+                            case 'published_at':
+                                $date = self::formatDate($item->$key);
+                                $tbody .= '<td>' . $date . '</td>';
+                                break;
+                            case 'order_status':
+                                $label = '<span class="label label-primary">' . trans('auth.status.order_new') . '</span>';
+                                if($item->status == StatusOrders::ORDER_SHIPPING) {
+                                    $label = '<span class="label label-warning">' . trans('auth.status.order_shipping') . '</span>';
+                                }
+                                if($item->status == StatusOrders::ORDER_DONE) {
+                                    $label = '<span class="label label-success">' . trans('auth.status.order_done') . '</span>';
+                                }
+                                if($item->status == StatusOrders::ORDER_CANCEL) {
+                                    $label = '<span class="label label-danger">' . trans('auth.status.order_cancel') . '</span>';
+                                }
+                                
+                                $tbody .= '<td>' . $label . '</td>';
+                                break;
+                                
+                            case 'edit_action':
+                                if(isset($info['hide'])) {
+                                    continue;
+                                }
+                                
+                                $route = 'auth_' . $name . '_edit';
+                                if($routes->hasNamedRoute($route)) {
+                                    $url = route('auth_' . $name . '_edit',['id' => $item->id]);
+                                    $tbody .= '<td align="center"><a href="javascript:void(0)" data-url="' . $url . '" class="edit" title="Edit"><i class="fa fa-pencil" aria-hidden="true" style="font-size: 24px"></i></a></td>';
+                                } else {
+                                    $tbody .= '<td></td>';
+                                }
+                                break;
+                                
+                            case 'remove_action':
+                                if(isset($info['hide'])) {
+                                    continue;
+                                }
+                                
+                                $route = 'auth_' . $name . '_remove';
+                                if($routes->hasNamedRoute($route)) {
+                                    $url = route('auth_' . $name . '_remove',['id' => $item->id]);
+                                    $tbody .= '<td align="center"><a href="javascript:void(0)" data-url="' . $url . '" class="remove-row" title="Remove"><i class="fa fa-trash" aria-hidden="true" style="font-size: 24px"></i></a></td>';
+                                } else {
+                                    $tbody .= '<td></td>';
+                                }
+                                
+                                break;
+                                
+                            default:
+                                $tbody .= '<td>' . $item->$key . '</td>';
+                                break;
+                        }
+                        
+                    }
+                    
+                    $tbody .= '</tr>';
+                }
             }
             
-            $form_html .= self::createElement($key, $value, $config, $name, $data);
+            $tbody .= '</tbody>';
+            $tfoot = '';
+            if(count($footers)) {
+                $tfoot = '<tfoot>';
+                foreach($footers as $key=>$foot) {
+                    $tfoot .= '<tr><th class="empty" colspan="' . $foot['colspan'] . '"></th><th>' . $foot['text'] . '</th><th class="sub-total"> ' . self::formatCurrency($otherData->$key) . '</th></tr>';
+                }
+                $tfoot .= '</tfoot>';
+            }
+        }
+        
+        $html .= '<table class="table table-hover" style="table-layout: fixed; word-wrap:break-word;">';
+        $html .= $colWidth;
+        $html .= $thead;
+        
+        $html .= $tbody;
+        $html .= $tfoot;
+        $html .= '</table>';
+        
+        return $html;
+    }
+    
+    public static function generateForm($config, $name, $data = null, $forms = null) {
+        
+        $auth_name = trans('auth.' . $name);
+        if($forms == null) {
             
+            $auth_form = $auth_name['form'];
+            if(isset($auth_form['many_form'])) {
+                $multi_form_html = '';
+                foreach($auth_form as $key=>$forms) {
+                    if($key == 'many_form') {
+                        continue;
+                    }
+                    $multi_form_html .= self::generateForm($config, $name, $data, $forms);
+                }
+                return $multi_form_html;
+            } else {
+                $forms = $auth_form;
+            }
+        }
+        
+        $tabForm = isset($auth_name['tab_form']) ? true : false;
+        $id = isset($data->id) ? $data->id : 0;
+        $form_html = '';
+        
+        $header = '<div class="box-header with-border">';
+        if(isset($forms['header'])) {
+            $header .= '<h3 class="box-title">' . $forms['header'] . '</h3>';
+        } else {
+            if($id > 0) {
+                $header .= '<h3 class="box-title">' . trans('auth.edit_box_title') . '</h3>';
+            } else {
+                $header .= '<h3 class="box-title">' . trans('auth.create_box_title') . '</h3>';
+            }
+        }
+        $header .= '</div>';
+        
+        $body = '<div class="box-body">';
+        foreach($forms as $key=>$value) {
+            $body .= self::createElement($key, $value, $config, $name, $data);
+        }
+        $body .= '</div>';
+        
+        if($tabForm) {
+            $form_html .= '<input type="hidden" name="id" id="id_check" value="' . $id . '" />';
+            $form_html = '';
+            $form_html .= '<div class="nav-tabs-custom">';
+            $form_html .= '<ul class="nav nav-tabs">';
+            $form_html .= '<li class="active">';
+            $form_html .= '<a href="#tab-form-1" data-toggle="tab" aria-expanded="true"> '. trans('auth.product_info');
+            $form_html .= '</a>';
+            $form_html .= '</li>';
+            $form_html .= '<li>';
+            $form_html .= '<a href="#tab-form-2" data-toggle="tab"> ' . trans('auth.services');
+            $form_html .= '</a>';
+            $form_html .= '</li>';
+            $form_html .= '</ul>';
+            $form_html .= '<div class="tab-content fields-group">';
+            $form_html .= '<div class="tab-pane active" id="tab-form-1">';
+            $form_html .= $body;
+            $form_html .= '</div>';
+            $form_html .= '<div class="tab-pane" id="tab-form-2">';
+            $form_html .= '<div class="btn-group mb-1">';
+            $form_html .= '<button id="add_new_service" type="button" class="btn btn-sm btn-success" title="Add new services"><i class="fa fa-plus"></i> ' . trans('auth.button.add_service') . '</button>';
+            $form_html .= '</div>';
+            $form_html .= '<div id="services" class="form-group">';
+            if($data != null) {
+                $form_html .= $data->getServices();
+            }
+            $form_html .= '</div>';
+            $form_html .= '</div>';
+            $form_html .= '</div>';
+            $form_html .= '</div>';
+            if($name != 'config') {
+                $form_html .= view('auth.common.button_footer',['back_url' => route('auth_' . $name)])->render();
+            }
+            
+        } else {
+            $form_html = '<div class="box box-primary">';
+            $form_html .= $header;
+            $form_html .= '<input type="hidden" name="id" id="id_check" value="' . $id . '" />';
+            $form_html .= $body;
+            if($name != 'config') {
+                $form_html .= view('auth.common.button_footer',['back_url' => route('auth_' . $name)])->render();
+            }
+            $form_html .= '</div>';
         }
         
         return $form_html;
@@ -870,58 +1111,6 @@ class Utils {
                     $element_html .= '</div>';
                 }
                 
-//                 if(is_array($image_using)) {
-//                     $element_html .= '<div id="preview_list">';
-//                     foreach($image_using as $id=>$image) {
-//                         $element_html .= '<div class="image_product" style="display: inline-block;">';
-//                         $element_html .= '<a href="javascript:void(0)" class="add_image" style="width: ' . $split[0] . 'px; height: ' . $split[1] . 'px">';
-//                         $element_html .= '<img src="' . $image . '" style="width: ' . $split[0] . 'px; height: ' . $split[1] . 'px" />';
-//                         $element_html .= '</a>';
-                        
-//                         $element_html .= '<a href="javascript:void(0)" class="remove" data-id="' . $id . '"><i class="fa fa-trash" aria-hidden="true"></i></a>';
-//                         $element_html .= '<input type="hidden" name="image_ids[]" class="upload_image_id" value="' . $id . '" />';
-//                         $element_html .= '</div>';
-//                     }
-                    
-//                     $element_html .= '<div class="image_product" style="display: inline-block;">';
-//                     $element_html .= '<a href="javascript:void(0)" class="add_image" data-key="' . $key . '" data-demension="' . $image_size . '" data-upload-limit="' . $upload_limit . '" data-file-ext="' . $file_ext . '" style="width: ' . $split[0] . 'px; height: ' . $split[1] . 'px">';
-//                     $element_html .= '<i class="fa fa-upload" style="font-size: 20px;" aria-hidden="true"></i><br/>' . trans('auth.button.add_image');
-//                     $element_html .= '</a>';
-                    
-//                     $element_html .= '<input type="hidden" id="upload_index" value="-1" />';
-//                     $element_html .= '</div>';
-//                     $element_html .= '</div>';
-                    
-//                 } elseif(is_string($image_using)) {
-                    
-//                     $element_html .= '<div id="preview_list">';
-//                     $element_html .= '<div  id="' . $key . '_0" class="image_product" style="display: inline-block;">';
-//                     $element_html .= '<a href="javascript:void(0)" class="upload_image open_upload_dialog" data-demension="' . $image_size . '" data-upload-limit="' . $upload_limit . '" data-file-ext="' . $file_ext . '" style="width: ' . $split[0] . 'px; height: ' . $split[1] . 'px">';
-//                     $element_html .= '<img src="' . $image_using . '" style="width: ' . $split[0] . 'px; height: ' . $split[1] . 'px" />';
-//                     $element_html .= '</a>';
-                    
-//                     $element_html .= '<input type="file" name="image_upload[]" class="upload_image_product" style="display: none" />';
-//                     $element_html .= '<input type="hidden" name="image_upload_url[]" class="upload_image_product_url" />';
-//                     $element_html .= '<input type="hidden" name="image_ids[]" class="upload_image_id" value="9999" />';
-                    
-//                     $element_html .= '</div>';
-//                     $element_html .= '</div>';
-                    
-//                 } else {
-//                     $element_html .= '<div id="preview_list">';
-//                     $element_html .= '<div  id="' . $key . '_0" class="image_product" style="display: inline-block;">';
-//                     $element_html .= '<a href="javascript:void(0)" class="upload_image open_upload_dialog" data-demension="' . $image_size . '" data-upload-limit="' . $upload_limit . '" data-file-ext="' . $file_ext . '" style="width: ' . $split[0] . 'px; height: ' . $split[1] . 'px">';
-//                     $element_html .= '<i class="fa fa-upload" style="font-size: 20px;" aria-hidden="true"></i><br/>' . trans('auth.button.add_image');
-//                     $element_html .= '</a>';
-                    
-//                     $element_html .= '<input type="file" name="image_upload[]" class="upload_image_product" style="display: none" />';
-//                     $element_html .= '<input type="hidden" name="image_upload_url[]" class="upload_image_product_url" />';
-//                     $element_html .= '<input type="hidden" name="image_ids[]" class="upload_image_id" value="9999" />';
-                    
-//                     $element_html .= '</div>';
-//                     $element_html .= '</div>';
-//                 }
-                
                 break;
                 
             case 'select':
@@ -945,5 +1134,83 @@ class Utils {
         return $element_html;
     }
     
+    public static function formatDate($input) {
+        $result="";
+        try {
+            $result = Carbon::createFromFormat('Y-m-d H:i:s', $input)->format('d-m-Y H:i:s');
+        } catch (\Exception $e) {
+            $result="";
+        }
+        return $result;
+    }
     
+    public static function generateValidation($name, $input_rules = []) {
+        
+        $result = [
+            'rules' => [],
+            'messages' => []
+        ];
+        $rules = [];
+        $messages = [];
+        if(!is_array($input_rules)) {
+            return json_encode($result);
+        }
+        
+        foreach($input_rules as $k=>$v) {
+            $rules[$k] = [];
+            $messages[$k] = [];
+            $exp = explode('|', $v);
+            foreach($exp as $kk=>$vv) {
+                
+                $exp1 = explode(':', $vv);
+                $rule_name = '';
+                $rule_check = '';
+                if(isset($exp1[1])) {
+                    $rule_name = $exp1[0];
+                    $rule_check = $exp1[1];
+                } else {
+                    $rule_name = $vv;
+                    $rule_check = true;
+                }
+                
+                $msg_item = '';
+                $item_name = 'auth.' . $name . '.form.' . $k;
+                $value_compare = '';
+                switch($rule_name) {
+                    case 'required':
+                        $msg_item = 'validation.required';
+                        break;
+                    case 'email':
+                        $msg_item = 'validation.email';
+                        break;
+                    case 'max':
+                        $rule_name = 'maxlength';
+                        $msg_item = 'validation.max.string';
+                        $value_compare = $rule_check;
+                        break;
+                    case 'min':
+                        $rule_name = 'minlength';
+                        $msg_item = 'validation.min.string';
+                        $value_compare = $rule_check;
+                    case 'url':
+                        $msg_item = 'validation.url';
+                        $value_compare = $rule_check;
+                        break;
+                    default:
+                        
+                        break;
+                }
+                
+                $rules[$k][$rule_name] = $rule_check;
+                
+                $messages[$k][$rule_name] = self::getValidateMessage($msg_item, $item_name, $value_compare);
+            }
+            
+        }
+        
+        $result['rules'] = $rules;
+        $result['messages'] = $messages;
+        
+        return json_encode($result);
+    }
 }

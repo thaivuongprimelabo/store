@@ -19,9 +19,9 @@ class Product extends Model
      */
     protected $table = Common::PRODUCTS;
     
-    public function getFirstImage($id) {
+    public function getFirstImage($id = '') {
         $image_url = Utils::getImageLink();
-        $image_product = ImageProduct::select('image')->where('product_id', $id)->first();
+        $image_product = ImageProduct::select('image')->where('product_id', $this->id)->first();
         if($image_product) {
             $image_url = Utils::getImageLink($image_product->image);
         }
@@ -49,7 +49,7 @@ class Product extends Model
     }
     
     public function getServices() {
-        $services = ProductDetails::select(
+        $details = ProductDetails::select(
                             'product_detail_groups.id AS group_id', 
                             'product_detail_groups.name AS group_name', 
                             DB::raw('GROUP_CONCAT(product_details.name ORDER BY product_details.id) AS service_names'), 
@@ -61,39 +61,9 @@ class Product extends Model
                         ->get();
         
         $html = '';
-        $table = view('auth.products.details', ['services' => $services])->render();
+        $table = view('auth.products.details', ['details' => $details])->render();
         $html .= $table;
         
-        return $html;
-    }
-    
-    public function getSizes($productSizes) {
-        $arrSizes = explode(',', $productSizes);
-        $sizes = Size::select('name')->whereIn('id', $arrSizes)->get();
-        $html = '';
-        if($sizes->count()) {
-            $html .= '<ul class="size-option">';
-            $html .= '<li><span class="text-uppercase">' . trans('shop.size') . '</span></li>';
-            foreach($sizes as $size) {
-                $html .= '<li><a href="#">' . $size['name'] . '</a></li>';
-            }
-            $html .= '</ul>';
-        }
-        return $html;
-    }
-    
-    public function getColors($productColors) {
-        $arrColors = explode(',', $productColors);
-        $colors = Color::select('name')->whereIn('id', $arrColors)->get();
-        $html = '';
-        if($colors->count()) {
-            $html .= '<ul class="color-option">';
-            $html .= '<li><span class="text-uppercase">' . trans('shop.color') . '</span></li>';
-            foreach($colors as $color) {
-                $html .= '<li><a href="#" style="background-color:'. $color['name'] . ';"></a></li>';
-            }
-            $html .= '</ul>';
-        }
         return $html;
     }
     

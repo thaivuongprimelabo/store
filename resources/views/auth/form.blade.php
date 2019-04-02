@@ -6,12 +6,17 @@
 	<div class="row">
 		<div class="col-md-12">
 			<form role="form" id="submit_form" action="?" method="post" enctype="multipart/form-data">
-    			<input type="hidden" id="table" value="1" />
-    			@if(isset($data) && $data->id)
-    			@include('auth.common.edit_form')
-    			@else
-    			@include('auth.common.create_form')
-    			@endif
+    			{!! Utils::generateForm($config, $name, $data) !!}
+    			@if($name == 'orders')
+    			<div class="box box-primary">
+                    <div class="box-header with-border">
+                      <h3 class="box-title">{{ isset($forms['text']) ? $forms['text'] : trans('auth.edit_box_title') }}</h3>
+                    </div>
+                	<div class="box-body">
+                		{!! Utils::generateList($config, $name, $orderDetails, $data, 'table_product_header') !!}
+                	</div>
+                </div>
+                @endif
             </form>
 		</div>
 	</div>
@@ -35,6 +40,5 @@
     	    form.submit();
     	}
     });
-
 </script>
 @endsection

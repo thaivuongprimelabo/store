@@ -82,13 +82,14 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Auth'], function () {
     Route::get('/users/remove/{id}', 'UsersController@remove')->name('auth_users_remove');
     
     // Config
-    Route::match(['get', 'post'], '/config', 'ConfigController@index')->name('auth_config_edit');
+    Route::match(['get', 'post'], '/config', 'ConfigController@index')->name('auth_config');
     
     // Profile
     Route::match(['get', 'post'], '/profile', 'UsersController@profile')->name('auth_profile');
     
     // Pages
-    Route::match(['get', 'post'], '/pages/about', 'PagesController@about')->name('auth_pages_about');
+    $this->get('/pages', 'PagesController@index')->name('auth_pages');
+    Route::match(['get', 'post'], '/pages/edit/{id}', 'PagesController@edit')->name('auth_pages_edit');
     
     // Forums
     Route::match(['get', 'post'], '/forum', 'ForumController@index')->name('auth_forum');

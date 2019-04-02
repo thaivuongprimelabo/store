@@ -9,12 +9,14 @@ class StatusOrders {
     CONST ORDER_NEW = 0;
     CONST ORDER_SHIPPING = 1;
     CONST ORDER_DONE = 2;
+    CONST ORDER_CANCEL = 3;
     
     public static function getData($key = '') {
         $array = [
             self::ORDER_NEW => trans('auth.status.order_new'),
             self::ORDER_SHIPPING => trans('auth.status.order_shipping'),
             self::ORDER_DONE => trans('auth.status.order_done'),
+            self::ORDER_CANCEL => trans('auth.status.order_cancel'),
         ];
         
         if($key != '') {

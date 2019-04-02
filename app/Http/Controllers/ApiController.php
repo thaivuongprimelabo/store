@@ -15,6 +15,7 @@ use App\Product;
 use App\User;
 use App\Size;
 use App\Helpers\Cart;
+use App\Constants\Common;
 use App\Constants\ContactStatus;
 use App\Constants\PostStatus;
 
@@ -69,42 +70,34 @@ class ApiController extends Controller
         $table = $request->table;
         $object = [];
         switch($table) {
-            case 0; // Vendors table
-            $object = Vendor::find($id);
+            case Common::VENDORS; // Vendors table
+                $object = Vendor::find($id);
                 
                 break;
-            case 1; // Categories table
+            case Common::CATEGORIES; // Categories table
                 $object = Category::find($id);
                 break;
                 
-            case 2; // Banners table
+            case Common::BANNERS; // Banners table
                 $object = Banner::find($id);
                 break;
                 
-            case 3; // Contacts table
+            case Common::CONTACTS; // Contacts table
                 $object = Contact::find($id);
                 break;
                 
-            case 4; // Posts table
+            case Common::POSTS; // Posts table
                 $object = Post::find($id);
                 break;
                 
-            case 5; // Users table
+            case Common::USERS; // Users table
                 $object = User::find($id);
                 break;
                 
-            case 6; // Products table
+            case Common::PRODUCTS; // Products table
                 $object = Product::find($id);
                 break;
                 
-            case 7; // Sizes table
-                $object = Size::find($id);
-                break;
-                
-            case 8; // Colors table
-                $object = Color::find($id);
-                break;
-            
             default:
                 break;
         }

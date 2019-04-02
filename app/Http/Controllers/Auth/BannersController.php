@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Validator;
 
 class BannersController extends AppController
 {
-    public $rules = [];
     
     //
     /**
@@ -23,9 +22,6 @@ class BannersController extends AppController
     {
         parent::__construct();
         
-        $this->rules = [
-            'description' => 'max:' . Common::DESC_MAXLENGTH,
-        ];
     }
     
     public function index(Request $request) {
@@ -81,8 +77,7 @@ class BannersController extends AppController
             }
         }
         
-        $name = $this->name;
-        return view('auth.banners.form', compact('name'));
+        return view('auth.form', $this->output);
     }
     
     /**
@@ -129,8 +124,8 @@ class BannersController extends AppController
                 return redirect(route('auth_banners_edit', ['id' => $request->id]))->with('error', trans('messages.ERROR'));
             }
         }
-        $name = $this->name;
-        return view('auth.banners.form', compact('data', 'name'));
+        $this->output['data'] = $data;
+        return view('auth.form', $this->output);
     }
     
     public function remove(Request $request) {

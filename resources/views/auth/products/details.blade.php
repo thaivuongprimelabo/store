@@ -1,5 +1,5 @@
-@if(isset($services))
-@foreach($services as $key=>$service)
+@if(isset($details))
+@foreach($details as $key=>$service)
 @php
 	$names = explode(',', $service->service_names);
     $prices = explode(',', $service->service_prices);

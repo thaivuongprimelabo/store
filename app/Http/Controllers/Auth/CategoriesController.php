@@ -12,8 +12,6 @@ use App\Category;
 class CategoriesController extends AppController
 {
     
-    public $rules = [];
-    
     /**
      * Create a new controller instance.
      *
@@ -26,9 +24,6 @@ class CategoriesController extends AppController
         
         $this->middleware('auth');
         
-        $this->rules = [
-            'name' => 'required|max:' . Common::NAME_MAXLENGTH,
-        ];
     }
     
     public function index(Request $request) {
@@ -74,8 +69,7 @@ class CategoriesController extends AppController
             }
         }
         
-        $name = $this->name;
-        return view('auth.categories.form', compact('name'));
+        return view('auth.form', $this->output);
     }
     
     /**
@@ -91,8 +85,6 @@ class CategoriesController extends AppController
         $data = Category::find($request->id);
         
         if($request->isMethod('post')) {
-            
-            $maxSize =  Utils::formatMemory(Common::LOGO_MAX_SIZE, true);
             
             $validator = Validator::make($request->all(), $this->rules);
             
@@ -113,8 +105,8 @@ class CategoriesController extends AppController
             
         }
         
-        $name = $this->name;
-        return view('auth.categories.form', compact('data', 'name'));
+        $this->output['data'] = $data;
+        return view('auth.form', $this->output);
     }
     
     public function remove(Request $request) {

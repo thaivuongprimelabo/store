@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\User;
+use App\Constants\UserRole;
 
 class UsersController extends AppController
 {
@@ -26,14 +27,9 @@ class UsersController extends AppController
         
         $this->middleware('auth');
         
-        $this->rules = [
-            'name' => 'required|max:' . Common::NAME_MAXLENGTH,
-            'email' => 'email',
-        ];
-        
         $this->middleware(function ($request, $next) {
             $roleId = Auth::user()->role_id;
-            if($roleId == Common::MOD) {
+            if($roleId == UserRole::MOD) {
                 return redirect(route('auth_products'));
             }
             
@@ -91,8 +87,7 @@ class UsersController extends AppController
             }
         }
         
-        $name = $this->name;
-        return view('auth.users.form', compact('name'));
+        return view('auth.form', $this->output);
     }
     
     /**
@@ -135,19 +130,60 @@ class UsersController extends AppController
             }
         }
         
-        $name = $this->name;
-        return view('auth.users.form', compact('data', 'name'));
+        $this->output['data'] = $data;
+        return view('auth.form', $this->output);
     }
     
-    public function profile(Request $request) {
+    public function test(Request $request) {
+        $request->flash();
+        
+        $validator = [];
+        
+        $data = User::find($request->id);
+        
         if($request->isMethod('post')) {
             
-            $validator = Validator::make($request->all(), [
-                'name' => 'required|max:' . Common::NAME_MAXLENGTH,
-            ]);
+            $validator = Validator::make($request->all(), $this->rules);
             
             if (!$validator->fails()) {
                 $data = User::find($request->id);
+                
+                $filename = $data->avatar;
+                Utils::doUpload($request, Common::AVATAR_FOLDER, $filename);
+                
+                $data->name         = Utils::cnvNull($request->name, '');
+                if(!Utils::blank($request->password)) {
+                    $data->password = Utils::cnvNull($request->password, '');
+                }
+                $data->avatar       = $filename;
+                $data->role_id      = Utils::cnvNull($request->role_id, 1);
+                $data->status       = Utils::cnvNull($request->status, 0);
+                $data->updated_at   = date('Y-m-d H:i:s');
+                
+                if($data->save()) {
+                    return redirect(route('auth_users_edit', ['id' => $request->id]))->with('success', trans('messages.UPDATE_SUCCESS'));
+                }
+                
+            } else {
+                return redirect(route('auth_users_edit', ['id' => $request->id]))->with('error', trans('messages.ERROR'));
+            }
+        }
+        
+        $this->output['data'] = $data;
+        return view('auth.form', $this->output);
+    }
+    
+    public function profile(Request $request) {
+        
+        $data = User::find(Auth::id());
+        
+        if($request->isMethod('post')) {
+            
+            $validator = Validator::make($request->all(), [
+                'name' => 'required',
+            ]);
+            
+            if (!$validator->fails()) {
                 
                 $filename = $data->avatar;
                 
@@ -155,7 +191,7 @@ class UsersController extends AppController
                 
                 $data->name         = Utils::cnvNull($request->name, '');
                 if(!Utils::blank($request->password)) {
-                    $data->password = Utils::cnvNull($request->password, '');
+                    $data->password = Hash::make(Utils::cnvNull($request->password, ''));
                 }
                 $data->avatar       = $filename;
                 $data->updated_at   = date('Y-m-d H:i:s');
@@ -165,11 +201,12 @@ class UsersController extends AppController
                 }
                 
             } else {
-                return redirect(route('auth_profile'))->with('error', trans('messages.ERROR'));
+                return redirect(route('auth_profile'));
             }
         }
         
-        return view('auth.users.profile');
+        $name = $this->name;
+        return view('auth.users.profile', compact('data', 'name'));
     }
     
     public function remove(Request $request) {

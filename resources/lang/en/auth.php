@@ -47,10 +47,7 @@ $auth = [
         'orders' => 'Quản lý đơn hàng',
         'banners' => 'Quản lý banner',
         'posts' => 'Quản lý bài viết',
-        'pages' => [
-            'title' => 'Quản lý trang nội dung',
-            'pages_about' => 'Giới thiệu',
-        ],
+        'pages' => 'Quản lý trang nội dung',
         'contacts' => 'Hộp thư liên hệ',
         'users' => 'Quản lý tài khoản',
         'forum' => [
@@ -60,7 +57,7 @@ $auth = [
             'threads' => 'Chủ đề thảo luận',
             'comments' => 'Bình luận'
         ],
-        'config_edit' => 'Cài đặt',
+        'config' => 'Cài đặt',
     ],
     'banner_type' => $bannerType,
     /*------------ Vendor page ------------------- */
@@ -71,12 +68,14 @@ $auth = [
         'edit_title' => 'Chỉnh sửa nhà cung cấp',
         'search_placeholder' => 'Mã, tên nhà cung cấp',
         'table_header' => [
-            'id' => 'ID',
-            'name' => 'Tên nhà cung cấp',
-            'logo' => 'Logo',
-            'status' => 'Trạng thái',
-            'created_at' => 'Ngày đăng ký',
-            'updated_at' => 'Ngày chỉnh sửa'
+            'id' => ['text' => 'ID', 'width' => '2%'],
+            'name' => ['text' => 'Tên loại sản phẩm', 'width' => '10%'],
+            'logo' => ['text' => 'Logo', 'width' => '10%'],
+            'status' => ['text' => 'Trạng thái', 'width' => '10%'],
+            'created_at' => ['text' => 'Ngày đăng ký', 'width' => '10%'],
+            'updated_at' => ['text' => 'Ngày chỉnh sửa', 'width' => '10%'],
+            'remove_action' => ['text' => '', 'width' => '5%'],
+            'edit_action' => ['text' => '', 'width' => '5%'],
         ],
         'search_form' => [
             'id' => ['type' => 'text', 'placeholder' => 'Lọc theo ID nhà cung cấp'],
@@ -89,14 +88,18 @@ $auth = [
             'status' => ['type' => 'status_select']
         ],
         'form' => [
-            'name' => ['type' => 'text', 'text' => 'Tên nhà cung cấp'],
-            'description' => ['type' => 'textarea', 'text' => 'Mô tả'],
+            'name' => ['type' => 'text', 'text' => 'Tên nhà cung cấp', 'maxlength' => \App\Constants\Common::NAME_MAXLENGTH],
+            'description' => ['type' => 'textarea', 'text' => 'Mô tả', 'maxlength' => \App\Constants\Common::DESC_MAXLENGTH],
             'logo' => [
                 'type' => 'file',
                 'text' => 'Hình ảnh',
             ],
-            'status' => ['type' => 'checkbox', 'text' => 'Đang hoạt động']
-        ]
+            'status' => ['type' => 'checkbox', 'text' => 'Đang hoạt động', 'checked' => true]
+        ],
+        'rules' => [
+            'name' => 'required|max:' . \App\Constants\Common::NAME_MAXLENGTH,
+            'description' => 'required|max:' . \App\Constants\Common::DESC_MAXLENGTH
+        ],
     ],
     /*------------ Category page ------------------- */
     'categories' => [
@@ -106,11 +109,13 @@ $auth = [
         'edit_title' => 'Chỉnh sửa loại sản phẩm',
         'search_placeholder' => 'Mã, tên loại sản phẩm',
         'table_header' => [
-            'id' => 'ID',
-            'name' => 'Tên loại sản phẩm',
-            'status' => 'Trạng thái',
-            'created_at' => 'Ngày đăng ký',
-            'updated_at' => 'Ngày chỉnh sửa'
+            'id' => ['text' => 'ID', 'width' => '2%'],
+            'name' => ['text' => 'Tên loại sản phẩm', 'width' => '20%'],
+            'status' => ['text' => 'Trạng thái', 'width' => '10%'],
+            'created_at' => ['text' => 'Ngày đăng ký', 'width' => '10%'],
+            'updated_at' => ['text' => 'Ngày chỉnh sửa', 'width' => '10%'],
+            'remove_action' => ['text' => '', 'width' => '5%'],
+            'edit_action' => ['text' => '', 'width' => '5%'],
         ],
         'search_form' => [
             'id' => ['type' => 'text', 'placeholder' => 'Lọc theo ID loại sản phẩm'],
@@ -126,7 +131,10 @@ $auth = [
                 'table' => \App\Constants\Common::CATEGORIES
             ],
             'status' => ['type' => 'checkbox', 'text' => 'Đang hoạt động']
-        ]
+        ],
+        'rules' => [
+            'name' => 'required|max:' . \App\Constants\Common::NAME_MAXLENGTH
+        ],
     ],
     /*------------ Banner page ------------------- */
     'banners' => [
@@ -134,13 +142,14 @@ $auth = [
         'create_title' => 'Đăng ký banner',
         'edit_title' => 'Chỉnh sửa banner',
         'table_header' => [
-            'id' => 'ID',
-            'banner' => 'Banner',
-            'link' => 'Đường dẫn',
-            'description' => 'Mô tả',
-            'status' => 'Trạng thái',
-            'created_at' => 'Ngày đăng ký',
-            'updated_at' => 'Ngày chỉnh sửa'
+            'id' => ['text' => 'ID', 'width' => '2%'],
+            'banner' => ['text' => 'Banner', 'width' => '20%'],
+            'link' => ['text' => 'Đường dẫn', 'width' => '10%'],
+            'status' => ['text' => 'Trạng thái', 'width' => '10%'],
+            'created_at' => ['text' => 'Ngày đăng ký', 'width' => '10%'],
+            'updated_at' => ['text' => 'Ngày chỉnh sửa', 'width' => '10%'],
+            'remove_action' => ['text' => '', 'width' => '5%'],
+            'edit_action' => ['text' => '', 'width' => '5%'],
         ],
         'search_form' => [
             'status' => ['type' => 'status_select', 'empty_text' => 'Lọc theo trạng thái'],
@@ -161,20 +170,26 @@ $auth = [
             'youtube_id' => ['type' => 'text', 'text' => 'Youtube URL', 'container_id' => 'use_youtube'],
             'preview_youtube' => ['type' => 'youtube_preview', 'text' => 'Preview', 'container_id' => 'use_youtube'],
             'status' => ['type' => 'checkbox', 'text' => 'Đang hoạt động'],
-        ]
+        ],
+        'rules' => [
+            'link' => 'url|max:' . \App\Constants\Common::LINK_MAXLENGTH,
+            'youtube_id' => 'url|max:' . \App\Constants\Common::LINK_MAXLENGTH,
+        ],
     ],
     /*------------ Contacts page ------------------- */
     'contacts' => [
         'list_title' => 'Danh mục liên hệ',
         'edit_title' => 'Xem thư',
         'table_header' => [
-            'id' => 'ID',
-            'subject' => 'Tựa đề',
-            'email' => 'E-mail',
-            'phone' => 'Số điện thoại',
-            'content' => 'Nội dung',
-            'status' => 'Trạng thái',
-            'created_at' => 'Ngày gửi',
+            'id' => ['text' => 'ID', 'width' => '5%'],
+            'subject' => ['text' => 'Tựa đề', 'width' => '20%'],
+            'email' => ['text' => 'E-mail', 'width' => '15%'],
+            'phone' => ['text' => 'Số điện thoại', 'width' => '10%'],
+            'content' => ['text' => 'Nội dung', 'width' => '15%'],
+            'status' => ['text' => 'Trạng thái', 'width' => '10%'],
+            'created_at' => ['text' => 'Ngày gửi', 'width' => '10%'],
+            'remove_action' => ['text' => '', 'width' => '5%'],
+            'edit_action' => ['text' => '', 'width' => '5%'],
         ],
         'search_form' => [
             'email' => ['type' => 'text', 'placeholder' => 'Lọc theo địa chỉ E-mail'],
@@ -196,13 +211,16 @@ $auth = [
         'create_title' => 'Đăng ký bài viết',
         'edit_title' => 'Chỉnh sửa bài viết',
         'table_header' => [
-            'id' => 'ID',
-            'name' => 'Tựa đề',
-            'photo' => 'Hình ảnh',
-            'description' => 'Mô tả ngắn',
-            'status' => 'Trạng thái',
-            'published_at' => 'Ngày xuất bản',
-            'created_at' => 'Ngày đăng ký',
+            
+            'id' => ['text' => 'ID', 'width' => '2%'],
+            'name' => ['text' => 'Tựa đề', 'width' => '15%'],
+            'photo' => ['text' => 'Hình ảnh', 'width' => '10%'],
+            'description' => ['text' => 'Mô tả ngắn', 'width' => '10%'],
+            'status' => ['text' => 'Trạng thái', 'width' => '10%'],
+            'published_at' => ['text' => 'Ngày xuất bản', 'width' => '10%'],
+            'created_at' => ['text' => 'Ngày đăng ký', 'width' => '10%'],
+            'remove_action' => ['text' => '', 'width' => '5%'],
+            'edit_action' => ['text' => '', 'width' => '5%'],
         ],
         'id_placeholder' => 'Lọc theo Id bài viết',
         'name_placeholder' => 'Lọc theo tựa đề',
@@ -214,18 +232,22 @@ $auth = [
         ],
         'form' => [
             'name' => [
-                'type' => 'text', 'text' => 'Tựa đề', 'maxlength' => 100
+                'type' => 'text', 'text' => 'Tựa đề', 'maxlength' => \App\Constants\Common::NAME_MAXLENGTH
             ],
             'photo' => [
                 'type' => 'file',
                 'text' => 'Hình ảnh',
             ],
             'description' => [
-                'type' => 'textarea', 'text' => 'Mô tả ngắn', 'maxlength' => 200
+                'type' => 'textarea', 'text' => 'Mô tả ngắn', 'maxlength' => \App\Constants\Common::DESC_MAXLENGTH
             ],
             'content' => ['type' => 'editor', 'text' => 'Nội dung'],
             'status' => ['type' => 'checkbox', 'text' => 'Xuất bản'],
         ],
+        'rules' => [
+            'name' => 'required|max:' . \App\Constants\Common::NAME_MAXLENGTH,
+            'description' => 'max:' . \App\Constants\Common::DESC_MAXLENGTH
+        ]
     ],
     'about' => [
         'edit_title' => 'Giới thiệu',
@@ -244,18 +266,27 @@ $auth = [
         'list_title' => 'Danh mục đơn hàng',
         'edit_title' => 'Cập nhật đơn hàng',
         'table_header' => [
-            'id' => 'ID',
-            'name' => 'Tên khách hàng',
-            'email' => 'E-mail',
-            'address' => 'Địa chỉ',
-            'phone' => 'Điện thoại',
-            'status' => 'Trạng thái',
-            'created_at' => 'Ngày đặt hàng',
-            'images' => 'Hình ảnh',
-            'products' => 'Sản phẩm',
-            'qty' => 'Số lượng',
-            'price' => 'Đơn giá',
-            'cost' => 'Thành tiền'
+            'id' => ['text' => 'ID', 'width' => '2%'],
+            'customer_name' => ['text' => 'Tên khách hàng', 'width' => '10%'],
+            'customer_email' => ['text' => 'E-mail', 'width' => '15%'],
+            'customer_address' => ['text' => 'Địa chỉ', 'width' => '15%'],
+            'customer_phone' => ['text' => 'Điện thoại', 'width' => '10%'],
+            'order_status' => ['text' => 'Trạng thái', 'width' => '10%'],
+            'created_at' => ['text' => 'Ngày đăng ký', 'width' => '10%'],
+            'updated_at' => ['text' => 'Ngày chỉnh sửa', 'width' => '10%'],
+            'remove_action' => ['text' => '', 'width' => '5%', 'hide' => true],
+            'edit_action' => ['text' => '', 'width' => '5%'],
+        ],
+        'table_product_header' => [
+            'id' => ['text' => 'ID', 'width' => '2%'],
+            'images' => ['text' => 'Hình ảnh', 'width' => '10%'],
+            'name' => ['text' => 'Sản phẩm', 'width' => '10%'],
+            'qty' => ['text' => 'Số lượng', 'width' => '10%'],
+            'price' => ['text' => 'Đơn giá', 'width' => '10%'],
+            'cost' => ['text' => 'Thành tiền', 'width' => '10%'],
+            'total' => ['text' => 'Tổng tiền', 'tfoot' => true, 'colspan' => 4],
+            'edit_action' => ['text' => 'Sửa', 'width' => '2%'],
+            'remove_action' => ['text' => 'Xóa', 'width' => '2%'],
         ],
         'search_form' => [
             'id' => ['type' => 'text', 'placeholder' => 'Lọc theo ID bài viết'],
@@ -265,6 +296,7 @@ $auth = [
             'status' => ['type' => 'data_select', 'table' => 'STATUS_ORDERS', 'empty_text' => 'Lọc theo trạng thái'],
         ],
         'form' => [
+            'many_form' => true,
             'customer_info' => [
                 'header' => 'Thông tin khách hàng',
                 'customer_name' => ['type' => 'label', 'text' => 'Tên khách hàng: '],
@@ -345,14 +377,16 @@ $auth = [
         'create_title' => 'Đăng ký sản phẩm',
         'edit_title' => 'Chỉnh sửa sản phẩm',
         'table_header' => [
-            'id' => 'ID',
-            'name' => 'Tên sản phẩm',
-            'image' => 'Hình ảnh',
-            'category' => 'Loại SP',
-            'vendor' => 'Nhà cung cấp',
-            'price' => 'Giá bán (VNĐ)',
-            'status' => 'Trạng thái',
-            'created_at' => 'Ngày đăng ký',
+            'id' => ['text' => 'ID', 'width' => '2%'],
+            'name' => ['text' => 'Tên sản phẩm', 'width' => '20%'],
+            'image' => ['text' => 'Hình ảnh', 'width' => '10%'],
+            'category' => ['text' => 'Loại SP', 'width' => '10%'],
+            'vendor' => ['text' => 'Nhà cung cấp', 'width' => '10%'],
+            'price' => ['text' => 'Giá bán (VNĐ)', 'width' => '10%'],
+            'status' => ['text' => 'Trạng thái', 'width' => '10%'],
+            'created_at' => ['text' => 'Ngày đăng ký', 'width' => '10%'],
+            'remove_action' => ['text' => '', 'width' => '5%'],
+            'edit_action' => ['text' => '', 'width' => '5%'],
         ],
         'search_form' => [
             'id' => ['type' => 'text', 'placeholder' => 'Lọc theo Id sản phẩm'],
@@ -361,10 +395,11 @@ $auth = [
             'category_id' => ['type' => 'data_select', 'table' => \App\Constants\Common::CATEGORIES, 'empty_text' => 'Lọc theo loại'],
             'vendor_id' => ['type' => 'data_select', 'table' => \App\Constants\Common::VENDORS, 'empty_text' => 'Lọc theo nhà cung cấp'],
         ],
+        'tab_form' => true,
         'form' => [
-            'name' => ['type' => 'text', 'text' => 'Tên sản phẩm'],
-            'price' => ['type' => 'currency', 'text' => 'Giá bán', 'maxlength' => 10],
-            'discount' => ['type' => 'number', 'text' => 'Tỷ lệ giảm giá (%)', 'value' => 0, 'maxlength' => 3],
+            'name' => ['type' => 'text', 'text' => 'Tên sản phẩm', 'maxlength' => \App\Constants\Common::NAME_MAXLENGTH],
+            'price' => ['type' => 'currency', 'text' => 'Giá bán', 'maxlength' => \App\Constants\Common::PRICE_MAXLENGTH],
+            'discount' => ['type' => 'number', 'text' => 'Tỷ lệ giảm giá (%)', 'value' => 0, 'maxlength' => \App\Constants\Common::DISCOUNT_MAXLENGTH],
             'category_id' => [
                 'type' => 'select',
                 'text' => 'Loại sản phẩm',
@@ -377,8 +412,6 @@ $auth = [
                 'empty_text' => 'Chọn nhà cung cấp',
                 'table' => \App\Constants\Common::VENDORS
             ],
-            'sizes' => ['type' => 'checkbox_multi', 'text' => 'Kích cỡ', 'table' => \App\Constants\Common::SIZES],
-            'colors' => ['type' => 'checkbox_color_multi', 'text' => 'Màu sắc', 'table' => \App\Constants\Common::COLORS],
             'image' => [
                 'type' => 'file',
                 'text' => 'Hình sản phẩm',
@@ -387,97 +420,17 @@ $auth = [
                 'height' => \App\Constants\Common::IMAGE_HEIGHT,
                 'count' => 5
             ],
-            'description' => ['type' => 'editor', 'text' => 'Chi tiết'],
+            'description' => ['type' => 'editor', 'text' => 'Chi tiết', 'maxlength' => \App\Constants\Common::DESC_MAXLENGTH],
             'status' => ['type' => 'checkbox', 'text' => 'Đang hoạt động', 'checked' => true],
             'is_new' => ['type' => 'checkbox', 'text' => 'Sản phẩm mới', 'checked' => true],
             'is_popular' => ['type' => 'checkbox', 'text' => 'Sản phẩm được quan tâm', 'checked' => true],
             'is_best_selling' => ['type' => 'checkbox', 'text' => 'Sản phẩm bán chạy', 'checked' => true],
-        ]
-    ],
-    'accessories' => [
-        'list_title' => 'Danh mục phụ kiện',
-        'create_title' => 'Đăng ký phụ kiện',
-        'edit_title' => 'Chỉnh sửa phụ kiện',
-        'table_header' => [
-            'id' => 'ID',
-            'name' => 'Tên sản phẩm',
-            'image' => 'Hình ảnh',
-            'category' => 'Loại SP',
-            'vendor' => 'Nhà cung cấp',
-            'price' => 'Giá bán (VNĐ)',
-            'status' => 'Trạng thái',
-            'created_at' => 'Ngày đăng ký',
         ],
-        'search_form' => [
-            'id' => ['type' => 'text', 'placeholder' => 'Lọc theo Id sản phẩm'],
-            'name' => ['type' => 'text', 'placeholder' => 'Lọc theo tên sản phẩm'],
-            'status' => ['type' => 'status_select', 'empty_text' => 'Lọc theo trạng thái'],
-            'category_id' => ['type' => 'data_select', 'table' => \App\Constants\Common::CATEGORIES, 'empty_text' => 'Lọc theo loại'],
-            'vendor_id' => ['type' => 'data_select', 'table' => \App\Constants\Common::VENDORS, 'empty_text' => 'Lọc theo nhà cung cấp'],
-        ],
-        'form' => [
-            'name' => ['type' => 'text', 'text' => 'Tên gọi'],
-            'price' => ['type' => 'currency', 'text' => 'Giá bán', 'maxlength' => 10],
-            'discount' => ['type' => 'number', 'text' => 'Tỷ lệ giảm giá (%)', 'value' => 0, 'maxlength' => 3],
-            'category_id' => [
-                'type' => 'select',
-                'text' => 'Loại sản phẩm',
-                'empty_text' => 'Chọn loại sản phẩm',
-                'table' => \App\Constants\Common::CATEGORIES
-            ],
-            'vendor_id' => [
-                'type' => 'select',
-                'text' => 'Nhà cung cấp',
-                'empty_text' => 'Chọn nhà cung cấp',
-                'table' => \App\Constants\Common::VENDORS
-            ],
-            'sizes' => ['type' => 'checkbox_multi', 'text' => 'Kích cỡ', 'table' => \App\Constants\Common::SIZES],
-            'colors' => ['type' => 'checkbox_color_multi', 'text' => 'Màu sắc', 'table' => \App\Constants\Common::COLORS],
-            'image' => [
-                'type' => 'file',
-                'text' => 'Hình sản phẩm',
-                'size' => \App\Constants\Common::IMAGE_MAX_SIZE,
-                'width' => \App\Constants\Common::IMAGE_WIDTH,
-                'height' => \App\Constants\Common::IMAGE_HEIGHT,
-                'count' => 5
-            ],
-            'description' => ['type' => 'editor', 'text' => 'Chi tiết'],
-            'status' => ['type' => 'checkbox', 'text' => 'Đang hoạt động', 'checked' => true],
-            'is_new' => ['type' => 'checkbox', 'text' => 'Sản phẩm mới', 'checked' => true],
-            'is_popular' => ['type' => 'checkbox', 'text' => 'Sản phẩm được quan tâm', 'checked' => true],
-            'is_best_selling' => ['type' => 'checkbox', 'text' => 'Sản phẩm bán chạy', 'checked' => true],
-        ]
-    ],
-    /*------------ Sizes page ------------------- */
-    'sizes' => [
-        'list_title' => 'Danh mục kích cỡ',
-        'edit_create_title' => 'Đăng ký / Chỉnh sửa',
-        'table_header' => [
-            'id' => 'ID',
-            'name' => 'Tên gọi',
-            'status' => 'Trạng thái',
-            'created_at' => 'Ngày đăng ký',
-            'updated_at' => 'Ngày chỉnh sửa'
-        ],
-        'form' => [
-            'name' => ['type' => 'text', 'text' => 'Tên gọi'],
-            'status' => ['type' => 'checkbox', 'text' => 'Đang hoạt động'],
-        ]
-    ],
-    /*------------ Colors page ------------------- */
-    'colors' => [
-        'list_title' => 'Danh mục màu sắc',
-        'edit_create_title' => 'Đăng ký / Chỉnh sửa',
-        'table_header' => [
-            'id' => 'ID',
-            'name' => 'Màu sắc',
-            'status' => 'Trạng thái',
-            'created_at' => 'Ngày đăng ký',
-            'updated_at' => 'Ngày chỉnh sửa'
-        ],
-        'form' => [
-            'name' => ['type' => 'text', 'text' => 'Màu sắc'],
-            'status' => ['type' => 'checkbox', 'text' => 'Đang hoạt động'],
+        'rules' => [
+            'name' => 'required|max:' . \App\Constants\Common::NAME_MAXLENGTH,
+            'price' => 'max:' . \App\Constants\Common::PRICE_MAXLENGTH,
+            'discount' => 'max:' . \App\Constants\Common::DISCOUNT_MAXLENGTH,
+            'description' => 'max:' . \App\Constants\Common::DESC_MAXLENGTH
         ]
     ],
     /*------------ Users page ------------------- */
@@ -486,12 +439,15 @@ $auth = [
         'create_title' => 'Đăng ký tài khoản',
         'edit_title' => 'Chỉnh sửa tài khoản',
         'table_header' => [
-            'id' => 'ID',
-            'name' => 'Tên',
-            'avatar' => 'Hình ảnh',
-            'email' => 'E-mail',
-            'status' => 'Trạng thái',
-            'created_at' => 'Ngày đăng ký',
+            'id' => ['text' => 'ID', 'width' => '2%'],
+            'name' => ['text' => 'Tên', 'width' => '20%'],
+            'avatar' => ['text' => 'Ảnh đại diện', 'width' => '10%'],
+            'email' => ['text' => 'E-mail', 'width' => '15%'],
+            'role_id' => ['text' => 'Quyền hạn', 'width' => '10%'],
+            'status' => ['text' => 'Trạng thái', 'width' => '10%'],
+            'created_at' => ['text' => 'Ngày đăng ký', 'width' => '10%'],
+            'remove_action' => ['text' => '', 'width' => '5%'],
+            'edit_action' => ['text' => '', 'width' => '5%'],
         ],
         'search_form' => [
             'id' => ['type' => 'text', 'placeholder' => 'Lọc theo ID tài khoản'],
@@ -560,10 +516,18 @@ $auth = [
     ],
     /*------------ Members page ------------------- */
     'pages' => [
-        'create_title' => 'Đăng ký',
-        'edit_title' => 'Chỉnh sửa',
+        'list_title' => 'Danh mục trang',
+        'edit_title' => 'Chỉnh sửa tài khoản',
+        'table_header' => [
+            'id' => ['text' => 'ID', 'width' => '2%'],
+            'name' => ['text' => 'Trang', 'width' => '20%'],
+            'created_at' => ['text' => 'Ngày đăng ký', 'width' => '10%'],
+            'updated_at' => ['text' => 'Ngày đăng ký', 'width' => '10%'],
+            'remove_action' => ['text' => '', 'width' => '5%'],
+            'edit_action' => ['text' => '', 'width' => '5%'],
+        ],
         'form' => [
-            'content' => ['type' => 'editor', 'text' => 'Nội dung']
+            'content' => ['type' => 'editor', 'text' => 'Nội dung'],
         ]
     ],
     /*------------ Members page ------------------- */
@@ -574,13 +538,14 @@ $auth = [
         'edit_title' => 'Chỉnh sửa thành viên',
         'search_placeholder' => 'Mã, tên thành viên',
         'table_header' => [
-            'id' => 'ID',
-            'name' => 'Tên',
-            'email' => 'E-mail',
-            'avatar' => 'Ảnh đại diện',
-            'status' => 'Trạng thái',
-            'created_at' => 'Ngày đăng ký',
-            'updated_at' => 'Ngày chỉnh sửa'
+            'id' => ['text' => 'ID', 'width' => '2%'],
+            'name' => ['text' => 'Tên', 'width' => '20%'],
+            'avatar' => ['text' => 'Ảnh đại diện', 'width' => '10%'],
+            'email' => ['text' => 'E-mail', 'width' => '15%'],
+            'status' => ['text' => 'Trạng thái', 'width' => '10%'],
+            'created_at' => ['text' => 'Ngày đăng ký', 'width' => '10%'],
+            'remove_action' => ['text' => '', 'width' => '5%'],
+            'edit_action' => ['text' => '', 'width' => '5%'],
         ],
         'search_form' => [
             'id' => ['type' => 'text', 'placeholder' => 'Lọc theo Id thành viên'],
@@ -622,7 +587,8 @@ $auth = [
         'not_published' => 'Chưa xuất bản',
         'order_new' => 'Đơn hàng mới',
         'order_shipping' => 'Đang giao hàng',
-        'order_done' => 'Hoàn tất'
+        'order_done' => 'Hoàn tất',
+        'order_cancel' => 'Hủy'
     ],
     'role' => [
         'super_admin' => 'Quản trị hệ thống',
@@ -648,7 +614,7 @@ $auth = [
         'add_service' => 'Đăng ký thông tin',
         'add_item' => 'Thêm',
         'copy_service' => 'Sử dụng dịch vụ của sản phẩm khác'
-    ]
+    ],
 ];
 
 return $auth;

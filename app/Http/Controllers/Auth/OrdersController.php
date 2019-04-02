@@ -12,7 +12,6 @@ use App\Product;
 
 class OrdersController extends AppController
 {
-    public $rules = [];
     
     /**
      * Create a new controller instance.
@@ -77,7 +76,8 @@ class OrdersController extends AppController
             }
         }
         
-        $name = $this->name;
-        return view('auth.orders.edit', compact('data', 'orderDetails', 'name'));
+        $this->output['data'] = $data;
+        $this->output['orderDetails'] = $orderDetails;
+        return view('auth.form', $this->output);
     }
 }
