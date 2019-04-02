@@ -85,8 +85,8 @@ class ContactsController extends AppController
             }
         }
         
-        $name = $this->name;
-        return view('auth.contacts.form', compact('data', 'name'));
+        $this->output['data'] = $data;
+        return view('auth.form', $this->output);
     }
     
     public function remove(Request $request) {

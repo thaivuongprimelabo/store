@@ -68,7 +68,7 @@ $auth = [
         'edit_title' => 'Chỉnh sửa nhà cung cấp',
         'search_placeholder' => 'Mã, tên nhà cung cấp',
         'table_header' => [
-            'id' => ['text' => 'ID', 'width' => '2%'],
+            'id' => ['text' => 'ID', 'width' => '3%'],
             'name' => ['text' => 'Tên loại sản phẩm', 'width' => '10%'],
             'logo' => ['text' => 'Logo', 'width' => '10%'],
             'status' => ['text' => 'Trạng thái', 'width' => '10%'],
@@ -109,8 +109,9 @@ $auth = [
         'edit_title' => 'Chỉnh sửa loại sản phẩm',
         'search_placeholder' => 'Mã, tên loại sản phẩm',
         'table_header' => [
-            'id' => ['text' => 'ID', 'width' => '2%'],
+            'id' => ['text' => 'ID', 'width' => '3%'],
             'name' => ['text' => 'Tên loại sản phẩm', 'width' => '20%'],
+            'parent_cate' => ['text' => 'Loại cha', 'width' => '10%'],
             'status' => ['text' => 'Trạng thái', 'width' => '10%'],
             'created_at' => ['text' => 'Ngày đăng ký', 'width' => '10%'],
             'updated_at' => ['text' => 'Ngày chỉnh sửa', 'width' => '10%'],
@@ -130,7 +131,7 @@ $auth = [
                 'empty_text' => '(Không chọn mặc định đây là loại cha)',
                 'table' => \App\Constants\Common::CATEGORIES
             ],
-            'status' => ['type' => 'checkbox', 'text' => 'Đang hoạt động']
+            'status' => ['type' => 'checkbox', 'text' => 'Đang hoạt động', 'checked' => true]
         ],
         'rules' => [
             'name' => 'required|max:' . \App\Constants\Common::NAME_MAXLENGTH
@@ -142,7 +143,7 @@ $auth = [
         'create_title' => 'Đăng ký banner',
         'edit_title' => 'Chỉnh sửa banner',
         'table_header' => [
-            'id' => ['text' => 'ID', 'width' => '2%'],
+            'id' => ['text' => 'ID', 'width' => '3%'],
             'banner' => ['text' => 'Banner', 'width' => '20%'],
             'link' => ['text' => 'Đường dẫn', 'width' => '10%'],
             'status' => ['text' => 'Trạng thái', 'width' => '10%'],
@@ -169,7 +170,7 @@ $auth = [
             'link' => ['type' => 'text', 'text' => 'Đường dẫn', 'container_id' => 'use_image'],
             'youtube_id' => ['type' => 'text', 'text' => 'Youtube URL', 'container_id' => 'use_youtube'],
             'preview_youtube' => ['type' => 'youtube_preview', 'text' => 'Preview', 'container_id' => 'use_youtube'],
-            'status' => ['type' => 'checkbox', 'text' => 'Đang hoạt động'],
+            'status' => ['type' => 'checkbox', 'text' => 'Đang hoạt động', 'checked' => true],
         ],
         'rules' => [
             'link' => 'url|max:' . \App\Constants\Common::LINK_MAXLENGTH,
@@ -204,6 +205,9 @@ $auth = [
             'content' => ['type' => 'textarea', 'text' => 'Nội dung', 'disabled' => true],
             'reply_content' => ['type' => 'editor', 'text' => 'Nội dung trả lời '],
         ],
+        'rules' => [
+            'reply_content' => 'required'
+        ],
     ],
     /*------------ Posts page ------------------- */
     'posts' => [
@@ -212,7 +216,7 @@ $auth = [
         'edit_title' => 'Chỉnh sửa bài viết',
         'table_header' => [
             
-            'id' => ['text' => 'ID', 'width' => '2%'],
+            'id' => ['text' => 'ID', 'width' => '3%'],
             'name' => ['text' => 'Tựa đề', 'width' => '15%'],
             'photo' => ['text' => 'Hình ảnh', 'width' => '10%'],
             'description' => ['text' => 'Mô tả ngắn', 'width' => '10%'],
@@ -222,9 +226,6 @@ $auth = [
             'remove_action' => ['text' => '', 'width' => '5%'],
             'edit_action' => ['text' => '', 'width' => '5%'],
         ],
-        'id_placeholder' => 'Lọc theo Id bài viết',
-        'name_placeholder' => 'Lọc theo tựa đề',
-        'status' => 'Tất cả trạng thái',
         'search_form' => [
             'id' => ['type' => 'text', 'placeholder' => 'Lọc theo ID bài viết'],
             'name' => ['type' => 'text', 'placeholder' => 'Lọc theo tựa đề'],
@@ -242,7 +243,7 @@ $auth = [
                 'type' => 'textarea', 'text' => 'Mô tả ngắn', 'maxlength' => \App\Constants\Common::DESC_MAXLENGTH
             ],
             'content' => ['type' => 'editor', 'text' => 'Nội dung'],
-            'status' => ['type' => 'checkbox', 'text' => 'Xuất bản'],
+            'status' => ['type' => 'checkbox', 'text' => 'Xuất bản', 'checked' => true],
         ],
         'rules' => [
             'name' => 'required|max:' . \App\Constants\Common::NAME_MAXLENGTH,
@@ -266,7 +267,7 @@ $auth = [
         'list_title' => 'Danh mục đơn hàng',
         'edit_title' => 'Cập nhật đơn hàng',
         'table_header' => [
-            'id' => ['text' => 'ID', 'width' => '2%'],
+            'id' => ['text' => 'ID', 'width' => '3%'],
             'customer_name' => ['text' => 'Tên khách hàng', 'width' => '10%'],
             'customer_email' => ['text' => 'E-mail', 'width' => '15%'],
             'customer_address' => ['text' => 'Địa chỉ', 'width' => '15%'],
@@ -278,7 +279,7 @@ $auth = [
             'edit_action' => ['text' => '', 'width' => '5%'],
         ],
         'table_product_header' => [
-            'id' => ['text' => 'ID', 'width' => '2%'],
+            'id' => ['text' => 'ID', 'width' => '3%'],
             'images' => ['text' => 'Hình ảnh', 'width' => '10%'],
             'name' => ['text' => 'Sản phẩm', 'width' => '10%'],
             'qty' => ['text' => 'Số lượng', 'width' => '10%'],
@@ -312,6 +313,7 @@ $auth = [
     'config' => [
         'edit_title' => 'Cài đặt hệ thống',
         'form' => [
+            'many_form' => true,
             'web_info' => [
                 'header' => 'Website informations',
                 'web_title' => ['type' => 'text', 'text' => 'Web name'],
@@ -363,9 +365,11 @@ $auth = [
                 'cash_info' => ['type' => 'editor', 'text' => 'Tiền mặt'],
             ],
             'url_ext' => [
+                'header' => 'URL Extension',
                 'url_ext' => ['type' => 'text', 'text' => 'URL Extension'],
             ],
             'off' => [
+                'header' => 'Tắt hệ thống',
                 'off' => ['type' => 'checkbox', 'text' => 'Tắt hệ thống']
             ],
             
@@ -377,7 +381,7 @@ $auth = [
         'create_title' => 'Đăng ký sản phẩm',
         'edit_title' => 'Chỉnh sửa sản phẩm',
         'table_header' => [
-            'id' => ['text' => 'ID', 'width' => '2%'],
+            'id' => ['text' => 'ID', 'width' => '3%'],
             'name' => ['text' => 'Tên sản phẩm', 'width' => '20%'],
             'image' => ['text' => 'Hình ảnh', 'width' => '10%'],
             'category' => ['text' => 'Loại SP', 'width' => '10%'],
@@ -439,7 +443,7 @@ $auth = [
         'create_title' => 'Đăng ký tài khoản',
         'edit_title' => 'Chỉnh sửa tài khoản',
         'table_header' => [
-            'id' => ['text' => 'ID', 'width' => '2%'],
+            'id' => ['text' => 'ID', 'width' => '3%'],
             'name' => ['text' => 'Tên', 'width' => '20%'],
             'avatar' => ['text' => 'Ảnh đại diện', 'width' => '10%'],
             'email' => ['text' => 'E-mail', 'width' => '15%'],
@@ -465,10 +469,16 @@ $auth = [
                 'width' => \App\Constants\Common::AVATAR_WIDTH,
                 'height' => \App\Constants\Common::AVATAR_HEIGHT
             ],
-            'email' => ['type' => 'email', 'text' => 'E-mail'],
-            'password' => ['type' => 'password', 'text' => 'Mật khẩu'],
+            'email' => ['type' => 'email', 'text' => 'E-mail', 'maxlength' => \App\Constants\Common::EMAIL_MAXLENGTH],
+            'password' => ['type' => 'password', 'text' => 'Mật khẩu', 'maxlength' => \App\Constants\Common::PASSWORD_MAXLENGTH],
             'conf_password' => ['type' => 'password', 'text' => 'Xác nhận mật khẩu'],
-            'status' => ['type' => 'checkbox', 'text' => 'Đang hoạt động'],
+            'status' => ['type' => 'checkbox', 'text' => 'Đang hoạt động', 'checked' => true],
+        ],
+        'rules' => [
+            'name' => 'required|max:' . \App\Constants\Common::NAME_MAXLENGTH,
+            'email' => 'required|email|max:' . \App\Constants\Common::EMAIL_MAXLENGTH,
+            'password' => 'required|max:' . \App\Constants\Common::PASSWORD_MAXLENGTH . '|min:' . \App\Constants\Common::PASSWORD_MINLENGTH,
+            'conf_password' => 'required|max:' . \App\Constants\Common::PASSWORD_MAXLENGTH . '|min:' . \App\Constants\Common::PASSWORD_MINLENGTH . '|same:password' ,
         ]
     ],
     /*------------ Profile page ------------------- */
@@ -485,6 +495,11 @@ $auth = [
             ],
             'password' => ['type' => 'password', 'text' => 'Mật khẩu'],
             'conf_password' => ['type' => 'password', 'text' => 'Xác nhận mật khẩu'],
+        ],
+        'rules' => [
+            'name' => 'required|max:' . \App\Constants\Common::NAME_MAXLENGTH,
+            'password' => 'required|max:' . \App\Constants\Common::PASSWORD_MAXLENGTH . '|min:' . \App\Constants\Common::PASSWORD_MINLENGTH,
+            'conf_password' => 'required|max:' . \App\Constants\Common::PASSWORD_MAXLENGTH . '|min:' . \App\Constants\Common::PASSWORD_MINLENGTH . '|same:password' ,
         ]
     ],
     /*------------ Threads page ------------------- */
@@ -495,16 +510,20 @@ $auth = [
         'edit_title' => 'Chỉnh sửa chủ đề',
         'search_placeholder' => 'Mã, tên chủ đề',
         'table_header' => [
-            'id' => 'ID',
-            'name' => 'Tên chủ đề',
-            'status' => 'Trạng thái',
-            'author' => 'Người đăng',
-            'created_at' => 'Ngày đăng ký',
-            'updated_at' => 'Ngày chỉnh sửa'
+            'id' => ['text' => 'ID', 'width' => '3%'],
+            'name' => ['text' => 'Tên chủ đề', 'width' => '20%'],
+            'status' => ['text' => 'Trạng thái', 'width' => '10%'],
+            'author' => ['text' => 'Người đăng', 'width' => '10%'],
+            'created_at' => ['text' => 'Ngày đăng ký', 'width' => '10%'],
+            'updated_at' => ['text' => 'Ngày chỉnh sửa', 'width' => '10%'],
+            'remove_action' => ['text' => '', 'width' => '5%'],
+            'edit_action' => ['text' => '', 'width' => '5%'],
         ],
-        'id_placeholder' => 'Lọc theo Id chủ đề',
-        'name_placeholder' => 'Lọc theo tên chủ đề',
-        'status' => 'Tất cả trạng thái',
+        'search_form' => [
+            'id' => ['type' => 'text', 'placeholder' => 'Lọc theo ID bài viết'],
+            'name' => ['type' => 'text', 'placeholder' => 'Lọc theo tựa đề'],
+            'status' => ['type' => 'status_select', 'empty_text' => 'Lọc theo trạng thái'],
+        ],
         'form' => [
             'name' => ['type' => 'text', 'text' => 'Chủ đề'],
             'content' => [
@@ -514,12 +533,12 @@ $auth = [
             'status' => ['type' => 'checkbox', 'text' => 'Đang hoạt động']
         ]
     ],
-    /*------------ Members page ------------------- */
+    /*------------ Pages page ------------------- */
     'pages' => [
         'list_title' => 'Danh mục trang',
-        'edit_title' => 'Chỉnh sửa tài khoản',
+        'edit_title' => 'Chỉnh sửa trang nội dung',
         'table_header' => [
-            'id' => ['text' => 'ID', 'width' => '2%'],
+            'id' => ['text' => 'ID', 'width' => '3%'],
             'name' => ['text' => 'Trang', 'width' => '20%'],
             'created_at' => ['text' => 'Ngày đăng ký', 'width' => '10%'],
             'updated_at' => ['text' => 'Ngày đăng ký', 'width' => '10%'],
@@ -527,7 +546,11 @@ $auth = [
             'edit_action' => ['text' => '', 'width' => '5%'],
         ],
         'form' => [
+            'name' =>  ['type' => 'text', 'text' => 'Tên trang'],
             'content' => ['type' => 'editor', 'text' => 'Nội dung'],
+        ],
+        'rules' => [
+            'content' => 'required',
         ]
     ],
     /*------------ Members page ------------------- */
@@ -538,7 +561,7 @@ $auth = [
         'edit_title' => 'Chỉnh sửa thành viên',
         'search_placeholder' => 'Mã, tên thành viên',
         'table_header' => [
-            'id' => ['text' => 'ID', 'width' => '2%'],
+            'id' => ['text' => 'ID', 'width' => '3%'],
             'name' => ['text' => 'Tên', 'width' => '20%'],
             'avatar' => ['text' => 'Ảnh đại diện', 'width' => '10%'],
             'email' => ['text' => 'E-mail', 'width' => '15%'],
@@ -564,7 +587,13 @@ $auth = [
                 'width' => \App\Constants\Common::AVATAR_WIDTH,
                 'height' => \App\Constants\Common::AVATAR_HEIGHT
             ],
-            'status' => ['type' => 'checkbox', 'text' => 'Đang hoạt động']
+            'status' => ['type' => 'checkbox', 'text' => 'Đang hoạt động', 'checked' => true]
+        ],
+        'rules' => [
+            'name' => 'required|max:' . \App\Constants\Common::NAME_MAXLENGTH,
+            'email' => 'required|email|max:' . \App\Constants\Common::EMAIL_MAXLENGTH,
+            'password' => 'required|max:' . \App\Constants\Common::PASSWORD_MAXLENGTH . '|min:' . \App\Constants\Common::PASSWORD_MINLENGTH,
+            'conf_password' => 'required|max:' . \App\Constants\Common::PASSWORD_MAXLENGTH . '|min:' . \App\Constants\Common::PASSWORD_MINLENGTH . '|same:password' ,
         ]
     ],
     'product_type' => $productType,

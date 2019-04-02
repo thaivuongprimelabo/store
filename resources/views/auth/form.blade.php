@@ -6,6 +6,7 @@
 	<div class="row">
 		<div class="col-md-12">
 			<form role="form" id="submit_form" action="?" method="post" enctype="multipart/form-data">
+				{{ csrf_field() }}
     			{!! Utils::generateForm($config, $name, $data) !!}
     			@if($name == 'orders')
     			<div class="box box-primary">
@@ -24,12 +25,14 @@
 @endsection
 @section('script')
 <script type="text/javascript">
-	var validateObject = {!! Utils::generateValidation($name, $rules) !!}
+	var validateObject = {!! Utils::generateValidation($name, $rules, $data) !!}
     var validatorEventSetting = $("#submit_form").validate({
     	onfocusout: false,
     	success: function(label, element) {
         	var jelm = $(element);
-        	jelm.parent().removeClass('has-error');
+        	var parent = jelm.parent().parent();
+        	parent.removeClass('has-error');
+        	parent.find('.help-block').empty();
     	},
     	rules: validateObject.rules,
     	messages: validateObject.messages,

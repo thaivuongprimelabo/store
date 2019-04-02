@@ -24,67 +24,32 @@
     <meta name="keywords" content="{{ $config['web_keywords'] }}" />
     @endif
     
-    <!-- ROBOTS -->
-    <meta name="googlebot" content="noarchive" />
-    <meta name="robots" content="noarchive" />
+	<link rel="stylesheet" href="{{ url('shop/cdn.linearicons.com/free/1.0.0/icon-font.min.css') }}">
+	<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i&amp;subset=vietnamese" rel="stylesheet">
+	<link rel="stylesheet" href="{{ url('shop/maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css') }}">
+	<!-- Plugin CSS -->			
+	<link href="{{ url('shop/bizweb.dktcdn.net/100/308/325/themes/665783/assets/plugin.scss4d7c.css') }}" rel="stylesheet" type="text/css" />
+	
+	<link href="{{ url('shop/bizweb.dktcdn.net/100/308/325/themes/665783/assets/base.scss4d7c.css') }}" rel="stylesheet" type="text/css" />		
+	<link href="{{ url('shop/bizweb.dktcdn.net/100/308/325/themes/665783/assets/style.scss4d7c.css') }}" rel="stylesheet" type="text/css" />				
+	<link href="{{ url('shop/bizweb.dktcdn.net/100/308/325/themes/665783/assets/module.scss4d7c.css') }}" rel="stylesheet" type="text/css" />
+	<link href="{{ url('shop/bizweb.dktcdn.net/100/308/325/themes/665783/assets/responsive.scss4d7c.css') }}" rel="stylesheet" type="text/css" />
 
-	<!-- Google font -->
-	<link href="https://fonts.googleapis.com/css?family=Hind:400,700" rel="stylesheet">
-
-	<!-- Bootstrap -->
-	<link type="text/css" rel="stylesheet" href="{{ url('shop/css/bootstrap.min.css') }}" />
-
-	<!-- Slick -->
-	<link type="text/css" rel="stylesheet" href="{{ url('shop/css/slick.css') }}" />
-	<link type="text/css" rel="stylesheet" href="{{ url('shop/css/slick-theme.css') }}" />
-
-	<!-- nouislider -->
-	<link type="text/css" rel="stylesheet" href="{{ url('shop/css/nouislider.min.css') }}" />
-
-	<!-- Font Awesome Icon -->
-	<link rel="stylesheet" href="{{ url('shop/css/font-awesome.min.css') }}">
-
-	<!-- Custom stlylesheet -->
-	<link type="text/css" rel="stylesheet" href="{{ url('shop/css/style.css') }}" />
-
-	<!-- HTML5 shim and Respond.js') }} for IE8 support of HTML5 elements and media queries -->
-	<!-- WARNING: Respond.js') }} doesn't work if you view the page via file:// -->
-	<!--[if lt IE 9]>
-		  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js') }}"></script>
-		  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js') }}"></script>
-		<![endif]-->
+	<!-- Theme Main CSS -->
+	<link href="{{ url('shop/bizweb.dktcdn.net/100/308/325/themes/665783/assets/bootstrap-theme4d7c.css') }}" rel="stylesheet" type="text/css" />		
+	<link href="{{ url('shop/bizweb.dktcdn.net/100/308/325/themes/665783/assets/style-theme.scss4d7c.css') }}" rel="stylesheet" type="text/css" />
+	<link href="{{ url('shop/bizweb.dktcdn.net/100/308/325/themes/665783/assets/responsive-update.scss4d7c.css') }}" rel="stylesheet" type="text/css" />
+	
+	<link href="{{ url('shop/bizweb.dktcdn.net/100/308/325/themes/665783/assets/iwish4d7c.css') }}" rel="stylesheet" type="text/css" />
+	<!-- Header JS -->	
+	<script src="{{ url('shop/bizweb.dktcdn.net/100/308/325/themes/665783/assets/jquery-2.2.3.min4d7c.js') }}" type="text/javascript"></script> 
 
 </head>
 
 <body>
+	<header>
 	@include('shop.common.header')
-
-	@include('shop.common.main_nav', ['showOnClick' => isset($showOnClick) ? true : false])
-	
-	@if(Route::currentRouteName() == 'home')
-	@include('shop.common.carousel')
-	@endif
-	
-	@include('shop.common.breadcrumb', ['data' => isset($breadcrumb) ? $breadcrumb : []])
-	
-	<!-- section -->
-	<div class="section">
-		@yield('content')
-	</div>
-	<!-- /section -->
-
-	@include('shop.common.footer')
-
-	<!-- jQuery Plugins -->
-	<script src="{{ url('shop/js/jquery.min.js') }}"></script>
-	<script src="{{ url('shop/js/bootstrap.min.js') }}"></script>
-	<script src="{{ url('shop/js/slick.min.js') }}"></script>
-	<script src="{{ url('shop/js/nouislider.min.js') }}"></script>
-	<script src="{{ url('shop/js/jquery.zoom.min.js') }}"></script>
-	<script src="{{ url('shop/js/main.js') }}"></script>
-	<script src="{{ url('admin/js/jquery.validate.js') }}"></script>
-	<script src="{{ url('js/custom.shop.js') }}"></script>
-	<script src="{{ url('js/custom.shop.js') }}"></script>
-	@yield('script')
+	@include('shop.common.main_nav')
+	</header>
 </body>
 </html>

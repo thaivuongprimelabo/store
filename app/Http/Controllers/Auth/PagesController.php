@@ -66,7 +66,7 @@ class PagesController extends AppController
             }
         }
         
-        $name = $this->name;
-        return view('auth.pages.form', compact('data', 'name'));
+        $this->output['data'] = $data;
+        return view('auth.form', $this->output);
     }
 }

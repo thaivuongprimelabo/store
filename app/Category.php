@@ -17,4 +17,9 @@ class Category extends Model
      */
     protected $table = Common::CATEGORIES;
     
+    public function getParentName() {
+        $category = Category::select('name')->where('id', $this->parent_id)->first();
+        return $category ? $category->name : '--';
+    }
+    
 }

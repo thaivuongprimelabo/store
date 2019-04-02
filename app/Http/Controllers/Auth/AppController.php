@@ -94,7 +94,11 @@ class AppController extends Controller
             foreach($search_condition as $key=>$con) {
                 $value = $data[$key];
                 if(!Utils::blank($value)) {
-                    $wheres[] = [$key, '=', $value];
+                    if($key == 'name') {
+                        $wheres[] = [$key, 'LIKE', '%' . $value . '%'];
+                    } else {
+                        $wheres[] = [$key, '=', $value];
+                    }
                 }
             }
         }
@@ -120,7 +124,7 @@ class AppController extends Controller
         $paging = $data_list->toArray();
         
         if($request->ajax()) {
-            $this->result['data'] = view('auth.' . $name . '.ajax_list', compact('data_list', 'paging', 'name'))->render();
+            $this->result['data'] = view('auth.ajax_list', compact('data_list', 'paging', 'name'))->render();
             return response()->json($this->result);
         } else {
             return compact('data_list', 'paging', 'name');

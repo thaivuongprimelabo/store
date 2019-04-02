@@ -78,18 +78,28 @@ class ConfigController extends AppController
                     exit;
                 }
                 
-                DB::table('categories')->truncate();
-                DB::table('vendors')->truncate();
-                DB::table('products')->truncate();
-                DB::table('images_product')->truncate();
-                DB::table('sizes')->truncate();
-                DB::table('colors')->truncate();
-                DB::table('posts')->truncate();
-                DB::table('banners')->truncate();
-                DB::table('orders')->truncate();
-                DB::table('order_details')->truncate();
-                DB::table('customers')->truncate();
-                DB::table('contacts')->truncate();
+                DB::beginTransaction();
+                try {
+                    DB::table('categories')->truncate();
+                    DB::table('vendors')->truncate();
+                    DB::table('products')->truncate();
+                    DB::table('images_product')->truncate();
+                    DB::table('product_details')->truncate();
+                    DB::table('product_detail_groups')->truncate();
+                    DB::table('services')->truncate();
+                    DB::table('service_groups')->truncate();
+                    DB::table('posts')->truncate();
+                    DB::table('banners')->truncate();
+                    DB::table('orders')->truncate();
+                    DB::table('order_details')->truncate();
+                    DB::table('contacts')->truncate();
+                    
+                    DB::commit();
+                } catch(\Exception $e) {
+                    DB::rollback();
+                    echo '=============== ' . $e->getMessage() . ' =============== ';
+                    exit;
+                }
                 echo '=============== Done! =============== ';
                 exit;
             }
@@ -138,8 +148,8 @@ class ConfigController extends AppController
             }
         }
         
-        $name = $this->name;
-        return view('auth.config.index', compact('data', 'name'));
+        $this->output['data'] = $data;
+        return view('auth.form', $this->output);
     }
     
     /**

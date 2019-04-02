@@ -199,6 +199,11 @@ class Utils {
             $param = $param . '.text';
         }
         
+        if(!self::blank($param2) && strpos($param2, 'auth.') !== FALSE) {
+            $param2 = str_replace('.text', '', $param2);
+            $param2 = $param2 . '.text';
+        }
+        
         $message = trans($key);
         $message = str_replace(':size', trans($param2), $message);
         $message = str_replace(':max', trans($param2), $message);
@@ -625,6 +630,7 @@ class Utils {
         if(count($table_info)) {
             $colWidth = '';
             $thead = '<thead><tr>';
+            $number_col = 0;
             foreach($table_info as $key=>$info) {
                 if(isset($info['tfoot'])) {
                     $footers[$key] = $info;
@@ -635,11 +641,12 @@ class Utils {
                 }
                 $colWidth .= '<col width="' . $info['width'] . '">';
                 $thead .= '<th>' . $info['text'] . '</th>';
+                $number_col++;
                 
             }
             $thead .= '</thead></tr>';
             
-            $tbody = '<tbody><tr><td colspan="' . count($table_info) . '">' . trans('auth.no_data_found') .'</td></tr>';
+            $tbody = '<tbody><tr align="center"><td colspan="' . $number_col . '">' . trans('auth.no_data_found') .'</td></tr>';
             if($data_count) {
                 $tbody = '<tbody>';
                 foreach($data as $item) {
@@ -650,6 +657,9 @@ class Utils {
                         }
                         
                         switch($key) {
+                            case 'parent_cate':
+                                $tbody .= '<td>' . $item->getParentName() . '</td>';
+                                break;
                             case 'category':
                                 $tbody .= '<td>' . $item->getCategoryName() . '</td>';
                                 break;
@@ -796,6 +806,7 @@ class Utils {
                     }
                     $multi_form_html .= self::generateForm($config, $name, $data, $forms);
                 }
+                $multi_form_html .= view('auth.common.button_footer',['back_url' => route('auth_' . $name)])->render();
                 return $multi_form_html;
             } else {
                 $forms = $auth_form;
@@ -854,17 +865,15 @@ class Utils {
             $form_html .= '</div>';
             $form_html .= '</div>';
             $form_html .= '</div>';
-            if($name != 'config') {
-                $form_html .= view('auth.common.button_footer',['back_url' => route('auth_' . $name)])->render();
-            }
+            $form_html .= view('auth.common.button_footer',['name' => $name, 'back_url' => route('auth_' . $name)])->render();
             
         } else {
             $form_html = '<div class="box box-primary">';
             $form_html .= $header;
             $form_html .= '<input type="hidden" name="id" id="id_check" value="' . $id . '" />';
             $form_html .= $body;
-            if($name != 'config') {
-                $form_html .= view('auth.common.button_footer',['back_url' => route('auth_' . $name)])->render();
+            if(!isset($auth_name['form']['many_form'])) {
+                $form_html .= view('auth.common.button_footer',['name' => $name, 'back_url' => route('auth_' . $name)])->render();
             }
             $form_html .= '</div>';
         }
@@ -1125,7 +1134,7 @@ class Utils {
                 
             case 'editor':
                 $element_html .= '<label>' .$text . '</label>';
-                $element_html .= '<textarea name="' . $key . '" id="editor_' . $key . '" class="ckeditor" placeholder="' . $placeholder . '">' . $element_value . '</textarea>';
+                $element_html .= '<textarea name="' . $key . '" id="' . $key . '" class="ckeditor" placeholder="' . $placeholder . '">' . $element_value . '</textarea>';
                 break;
                 
         }
@@ -1144,7 +1153,7 @@ class Utils {
         return $result;
     }
     
-    public static function generateValidation($name, $input_rules = []) {
+    public static function generateValidation($name, $input_rules = [], $data = []) {
         
         $result = [
             'rules' => [],
@@ -1179,6 +1188,9 @@ class Utils {
                 switch($rule_name) {
                     case 'required':
                         $msg_item = 'validation.required';
+                        if($k == 'content') {
+                            $rule_name = 'required_ckeditor';
+                        }
                         break;
                     case 'email':
                         $msg_item = 'validation.email';
@@ -1192,18 +1204,30 @@ class Utils {
                         $rule_name = 'minlength';
                         $msg_item = 'validation.min.string';
                         $value_compare = $rule_check;
+                        break;
                     case 'url':
                         $msg_item = 'validation.url';
                         $value_compare = $rule_check;
+                        break;
+                    case 'same':
+                        $rule_name = 'equalTo';
+                        $msg_item = 'validation.confirmed';
+                        $value_compare = 'auth.' . $name . '.form.' . $rule_check;
+                        $rule_check = '#' . $rule_check;
                         break;
                     default:
                         
                         break;
                 }
                 
-                $rules[$k][$rule_name] = $rule_check;
                 
-                $messages[$k][$rule_name] = self::getValidateMessage($msg_item, $item_name, $value_compare);
+                if(!(count($data) > 0 && ($k == 'password' || $k == 'conf_password'))) {
+                    $rules[$k][$rule_name] = $rule_check;
+                    $messages[$k][$rule_name] = self::getValidateMessage($msg_item, $item_name, $value_compare);
+                }
+                
+                
+                
             }
             
         }

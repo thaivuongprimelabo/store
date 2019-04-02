@@ -122,8 +122,14 @@ var previewImageProduct = function(element, size, demension, container) {
 
 var customErrorValidate = function(error, element) {
 	if(error[0].innerHTML !== '') {
-		element.parent().parent().addClass('has-error');
-		element.parent().parent().find('span.help-block').html(error[0].innerHTML);
+		if(element[0].className === 'ckeditor valid-text') {
+			element.parent().addClass('has-error');
+			element.parent().find('span.help-block').html(error[0].innerHTML);
+		} else {
+			element.parent().parent().addClass('has-error');
+			element.parent().parent().find('span.help-block').html(error[0].innerHTML);
+		}
+		
 	}
 }
 
@@ -245,131 +251,11 @@ var getMax = function(element, data) {
 
 $(document).ready(function() {
 	
-	$.validator.addMethod( "extension", function( value, element, param ) {
-    	param = typeof param === "string" ? param.replace( /,/g, "|" ) : "png|jpe?g|gif";
-    	return this.optional( element ) || value.match( new RegExp( "\\.(" + param + ")$", "i" ) );
-    });
-    
-    // Accept a value from a file input based on a required mimetype
-    $.validator.addMethod("accept", function(value, element, param) {
-    	// Split mime on commas in case we have multiple types we can accept
-    	var typeParam = typeof param === "string" ? param.replace(/\s/g, "").replace(/,/g, "|") : "image/*",
-    	optionalValue = this.optional(element),
-    	i, file;
-    
-    	// Element is optional
-    	if (optionalValue) {
-    		return optionalValue;
-    	}
-    
-    	if ($(element).attr("type") === "file") {
-    		// If we are using a wildcard, make it regex friendly
-    		typeParam = typeParam.replace(/\*/g, ".*");
-    
-    		// Check if the element has a FileList before checking each file
-    		if (element.files && element.files.length) {
-    			for (i = 0; i < element.files.length; i++) {
-    				file = element.files[i];
-    				// Grab the mimetype from the loaded file, verify it matches
-    				if (!file.type.match(new RegExp( ".?(" + typeParam + ")$", "i"))) {
-    					return false;
-    				}
-    			}
-    		}
-    	}
-    
-    	// Either return true because we've validated each file, or because the
-    	// browser does not support element.files and the FileList feature
-    	return true;
-    });
-    
-    $.validator.addMethod( "filesize", function( value, element, param ) {
-    	if ($(element).attr("type") === "file") {
-    		var input = element.files[0];
-    		if(input) {
-    			return checkFileSize(input, param);
-    		}
-    	}
-    	return true;
-    });
-    
-    $.validator.addMethod("filesize_multi", function( value, element, params ) {
-    	var param = params.split(',');
-    	var check = true;
-    	if ($(element).attr("type") === "file") {
-    		var element = document.getElementsByName($(element).attr('name'));
-    		if (element.length) {
-	    		for (i = 0; i < element.length; i++) {
-					file = element[i].files[0];
-					// Grab the mimetype from the loaded file, verify it matches
-					if(file && check) {
-						check = checkFileSize(file, param[0]);
-					}
-				}
-    		}
-    	}
-    	return check;
-    }, function(params, element) {
-    	var param = params.split(',');
-    	var message = '';
-    	if ($(element).attr("type") === "file") {
-    		var element = document.getElementsByName($(element).attr('name'));
-    		if (element.length) {
-	    		for (i = 0; i < element.length; i++) {
-					file = element[i].files[0];
-					// Grab the mimetype from the loaded file, verify it matches
-					if(file) {
-						if(!checkFileSize(file, param[0])) {
-							var msg = param[1].replace(':file', file.name);
-							message += '<span class="help-block">' + msg + '</span>';
-						}
-					}
-					
-				}
-    		}
-    	}
-    	return message;
-    });
-    
-    $.validator.addMethod("extension_multi", function( value, element, params ) {
-    	var param = params.split(',');
-    	var check = true;
-    	if ($(element).attr("type") === "file") {
-    		var element = document.getElementsByName($(element).attr('name'));
-    		if (element.length) {
-	    		for (i = 0; i < element.length; i++) {
-					file = element[i].files[0];
-					// Grab the mimetype from the loaded file, verify it matches
-					if(file && check) {
-						var param1 = typeof param[0] === "string" ? param[0].replace( /,/g, "|" ) : "png|jpe?g|gif";
-						check = value.match( new RegExp( "\\.(" + param1 + ")$", "i" ) );
-					}
-				}
-    		}
-    	}
-    	return check;
-    }, function(params, element) {
-    	var param = params.split(',');
-    	var message = '';
-    	if ($(element).attr("type") === "file") {
-    		var element = document.getElementsByName($(element).attr('name'));
-    		if (element.length) {
-	    		for (i = 0; i < element.length; i++) {
-					file = element[i].files[0];
-					// Grab the mimetype from the loaded file, verify it matches
-					if(file) {
-						var param1 = typeof param[0] === "string" ? param[0].replace( /,/g, "|" ) : "png|jpe?g|gif";
-						var check = file.name.match( new RegExp( "\\.(" + param1 + ")$", "i" ) );
-						if(!check) {
-							var msg = param[1].replace(':file', file.name);
-							message += '<span class="help-block">' + msg + '</span>';
-						}
-					}
-					
-				}
-    		}
-    	}
-    	return message;
-    });
+	$.validator.addMethod('required_ckeditor', function(value, element, params) {
+		if (CKEDITOR.instances[element.id].getData() == '') {
+	        return false;
+	    }
+		return true;
+	});
     
 });

@@ -87,7 +87,7 @@ class UsersController extends AppController
             }
         }
         
-        return view('auth.form', $this->output);
+        return view('auth.form', $this->output)->withErrors($validator);
     }
     
     /**
