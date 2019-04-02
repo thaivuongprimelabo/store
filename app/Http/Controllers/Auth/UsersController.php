@@ -205,8 +205,8 @@ class UsersController extends AppController
             }
         }
         
-        $name = $this->name;
-        return view('auth.users.profile', compact('data', 'name'));
+        $this->output['data'] = $data;
+        return view('auth.form', $this->output);
     }
     
     public function remove(Request $request) {
