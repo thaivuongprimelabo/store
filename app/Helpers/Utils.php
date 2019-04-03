@@ -18,6 +18,7 @@ use App\Category;
 use App\Config;
 use App\Vendor;
 use Carbon\Carbon;
+use App\PostGroups;
 
 class Utils {
     
@@ -50,14 +51,14 @@ class Utils {
         }
     }
     
-    public static function doUpload($request, $destFolder, &$filename = '', $product_id = 0, &$arrFilenames = []) {
+    public static function doUpload($request, $destFolder, &$filename = '', $demension = 0, $product_id = 0, &$arrFilenames = []) {
         $image_upload_url = $request->image_upload_url;
         $image_ids = $request->image_ids;
         $files = $request->image_upload;
         
         if(is_array($image_ids) && count($image_ids)) {
             $ids = [];
-            foreach($image_ids as $k=>$v) {
+            foreach($image_ids as $k=>$image_id) {
                 $url = isset($image_upload_url[$k]) ? $image_upload_url[$k] : '';
                 if(!Utils::blank($url)) {
                     $filename = $url;
@@ -65,38 +66,48 @@ class Utils {
                 
                 $file = isset($files[$k]) ? $files[$k] : '';
                 if(!Utils::blank($file)) {
-                    $filename = self::uploadFile($file, $destFolder);
+                    $filename = self::uploadFile($file, $destFolder, $demension);
                 }
                 
-                if($product_id > 0 && !Utils::blank($filename)) {
-                    array_push($arrFilenames, ['product_id' => $product_id, 'image' => $filename]);
+                if(!$product_id) {
+                    break;
                 }
                 
-                if($v != 9999) {
-                    array_push($ids, $v);
-                }
+                if(Utils::blank($filename)) { continue; }
+                
+                array_push($arrFilenames, ['product_id' => $product_id, 'image' => $filename]);
+                
+                $filename = '';
             }
             
-            if($product_id > 0) {
-                if(count($ids)) {
-                    DB::table(Common::IMAGES_PRODUCT)->where('product_id', $product_id)->whereNotIn('id', $ids)->delete();
-                }
-                
-                if(count($arrFilenames)) {
-                    DB::table(Common::IMAGES_PRODUCT)->insert($arrFilenames);
-                }
+            if(count($arrFilenames)) {
+                DB::table(Common::IMAGES_PRODUCT)->where(['product_id' => $product_id])->delete();
+                DB::table(Common::IMAGES_PRODUCT)->insert($arrFilenames);
             }
+        } else {
+            DB::table(Common::IMAGES_PRODUCT)->where(['product_id' => $product_id])->delete();
         }
+        
     }
     
-    public static function uploadFile($file, $destFolder, $resize = false, $maxWidth = 0, $maxHeight = 0) {
+    public static function uploadFile($file, $destFolder, $demension = 0) {
         
         $uploadFolder = Common::UPLOAD_FOLDER;
         $uploadPath = $uploadFolder . $destFolder;
         
         $filename = time() . '_' . $file->getClientOriginalName();
         
-        if($resize) {
+        $maxWidth = 9999;
+        $maxHeight = 9999;
+        if($demension != 0) {
+            $dem = explode('x', $demension);
+            $maxWidth = $dem[0];
+            $maxHeight = $dem[1];
+        }
+        $img = Image::make($file->getRealPath());
+        $image_width = $img->width();
+        $image_height = $img->height();
+        if($image_width > $maxWidth || $image_height > $maxHeight) {
             self::resizeImage($uploadPath, $file, $filename, $maxWidth, $maxHeight);
         } else {
             $file->move($uploadPath, $filename);
@@ -257,6 +268,18 @@ class Utils {
             case Common::CATEGORIES:
                 $data = Category::select('name', 'id')->where('parent_id', 0)->where('status', Status::ACTIVE)->get();
                 break;
+            case 'CATEGORY_PRODUCT':
+                $categories = Category::select('name', 'id')->where('parent_id', 0)->where('status', Status::ACTIVE)->get();
+                foreach($categories as $c) {
+                    array_push($data, $c);
+                    
+                    $child = Category::select('name', 'id')->where('parent_id', $c->id)->where('status', Status::ACTIVE)->get();
+                    foreach($child as $c1) {
+                        $c1->name = '-- ' . $c1->name;
+                        array_push($data, $c1);
+                    }
+                }
+                break;
             case Common::VENDORS:
             case Common::SIZES:
                 $data = DB::table($table)->select('name', 'id')->where('status', Status::ACTIVE)->get();
@@ -278,6 +301,9 @@ class Utils {
                 break;
             case 'STATUS_ORDERS':
                 return StatusOrders::createSelectList($selected);
+                break;
+            case 'POST_GROUPS':
+                $data = PostGroups::select('id', 'name')->where('status', Status::ACTIVE)->get();
                 break;
             default:
                 $data = [];
@@ -793,7 +819,6 @@ class Utils {
     }
     
     public static function generateForm($config, $name, $data = null, $forms = null) {
-        
         $auth_name = trans('auth.' . $name);
         if($forms == null) {
             
@@ -801,12 +826,15 @@ class Utils {
             if(isset($auth_form['many_form'])) {
                 $multi_form_html = '';
                 foreach($auth_form as $key=>$forms) {
+                    if(Auth::user()->role_id == UserRole::ADMIN && ($key == 'mail_settings' || $key == 'upload_settings')) {
+                        continue;
+                    }
                     if($key == 'many_form') {
                         continue;
                     }
                     $multi_form_html .= self::generateForm($config, $name, $data, $forms);
                 }
-                $multi_form_html .= view('auth.common.button_footer',['back_url' => route('auth_' . $name)])->render();
+                $multi_form_html .= view('auth.common.button_footer',['name' => $name, 'back_url' => route('auth_' . $name)])->render();
                 return $multi_form_html;
             } else {
                 $forms = $auth_form;
@@ -885,8 +913,13 @@ class Utils {
         
         $text = isset($value['text']) ? $value['text'] : '';
         $placeholder = isset($value['placeholder']) ? $value['placeholder'] : $text;
-        $maxlength = isset($value['maxlength']) ? $value['maxlength'] : 120;
-        $lengthText = str_replace('{0}', $maxlength, trans('auth.length_text'));
+        $maxlengthValue = isset($value['maxlength']) ? $value['maxlength'] : '';
+        $maxlength = '';
+        $lengthText = '';
+        if(!self::blank($maxlengthValue)) {
+            $maxlength = 'maxlength=' .$maxlengthValue;
+            $lengthText = str_replace('{0}', $maxlengthValue, trans('auth.length_text'));
+        }
         $table = isset($value['table']) ? $value['table'] : '';
         $emptyText = isset($value['empty_text']) ? $value['empty_text'] : '';
         $containerId = isset($value['container_id']) ? $value['container_id'] : '';
@@ -948,9 +981,10 @@ class Utils {
             case 'textarea':
                 
                 $element_html .= $label;
-                $element_html .= '<textarea class="form-control" rows="6" name="' . $key . '" placeholder="' . $placeholder . '" maxlength="' . $maxlength . '" '. $disable . '>' . $element_value . '</textarea>';
+                $element_html .= '<div>';
+                $element_html .= '<textarea class="form-control" rows="6" name="' . $key . '" placeholder="' . $placeholder . '" ' . $maxlength . ' '. $disable . '>' . $element_value . '</textarea>';
                 $element_html .= '<input type="hidden" name="youtube_embed_url" id="youtube_embed_url" value="" />';
-                
+                $element_html .= '</div>';
                 break;
                 
             case 'text':
@@ -961,7 +995,7 @@ class Utils {
                 
                 $element_html .= $label;
                 $element_html .= '<div class="input-group"><span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>';
-                $element_html .= '<input type="text" class="form-control" name="' . $key . '" id="' . $key . '" value="' . $element_value . '" placeholder="' . $placeholder . '" maxlength="' . $maxlength . '" '. $disable . ' />';
+                $element_html .= '<input type="text" class="form-control" name="' . $key . '" id="' . $key . '" value="' . $element_value . '" placeholder="' . $placeholder . '" ' . $maxlength . ' '. $disable . ' />';
                 $element_html .= '</div>';
                 break;
                 
@@ -969,7 +1003,7 @@ class Utils {
                 
                 $element_html .= $label;
                 $element_html .= '<div class="input-group"><span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>';
-                $element_html .= '<input type="number" class="form-control" name="' . $key . '" id="' . $key . '" value="' . $element_value . '" placeholder="' . $placeholder . '" maxlength="' . $maxlength . '" '. $disable . ' />';
+                $element_html .= '<input type="number" class="form-control" name="' . $key . '" id="' . $key . '" value="' . $element_value . '" placeholder="' . $placeholder . '" ' . $maxlength . ' '. $disable . ' />';
                 
                 if(!self::blank($element_value)) {
                     $element_value = self::formatCurrency($element_value);
@@ -983,7 +1017,7 @@ class Utils {
                 
                 $element_html .= $label;
                 $element_html .= '<div class="input-group"><span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>';
-                $element_html .= '<input type="number" class="form-control" name="' . $key . '" id="' . $key . '" value="' . $element_value . '" placeholder="' . $placeholder . '" maxlength="' . $maxlength . '" '. $disable . ' />';
+                $element_html .= '<input type="number" class="form-control" name="' . $key . '" id="' . $key . '" value="' . $element_value . '" placeholder="' . $placeholder . '" ' . $maxlength . ' '. $disable . ' />';
                 $element_html .= '</div>';
                 break;
                 
@@ -991,7 +1025,7 @@ class Utils {
                 
                 $element_html .= $label;
                 $element_html .= '<div class="input-group"><span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>';
-                $element_html .= '<input type="email" class="form-control" name="' . $key . '" id="' . $key . '" value="' . $element_value . '" placeholder="' . $placeholder . '" maxlength="' . $maxlength . '" '. $disable . ' />';
+                $element_html .= '<input type="email" class="form-control" name="' . $key . '" id="' . $key . '" value="' . $element_value . '" placeholder="' . $placeholder . '" ' . $maxlength . ' '. $disable . ' />';
                 $element_html .= '</div>';
                 break;
                 
@@ -999,7 +1033,7 @@ class Utils {
                 
                 $element_html .= $label;
                 $element_html .= '<div class="input-group"><span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>';
-                $element_html .= '<input type="password" class="form-control" name="' . $key . '" id="' . $key . '" value="" placeholder="' . $placeholder . '" maxlength="' . $maxlength . '" '. $disable . ' />';
+                $element_html .= '<input type="password" class="form-control" name="' . $key . '" id="' . $key . '" value="" placeholder="' . $placeholder . '" ' . $maxlength . ' '. $disable . ' />';
                 $element_html .= '</div>';
                 break;
                 
@@ -1008,7 +1042,7 @@ class Utils {
                 $checked = '';
                 
                 $element_html .= '<div class="checkbox">';
-                if($element_value || (isset($value['checked']) && $value['checked'])) {
+                if(self::blank($element_value) || $element_value == (isset($value['checked']) && $value['checked'])) {
                     $checked = 'checked="checked"';
                 }
                 
@@ -1079,12 +1113,15 @@ class Utils {
                     
                     if(count($image_using)) {
                         foreach($image_using as $id=>$image) {
-                            $element_html .= '<div class="image_product" style="display: inline-block;">';
-                            $element_html .= '<a href="javascript:void(0)" class="add_image" style="width: ' . $split[0] . 'px; height: ' . $split[1] . 'px">';
+                            $idEdit = $key . '_edit_' . $id . time();
+                            $element_html .= '<div id="' . $idEdit . '" class="image_product" style="display: inline-block;">';
+                            $element_html .= '<a href="javascript:void(0)" class="add_image" data-key="' . $idEdit . '" data-demension="' . $image_size . '" data-upload-limit="' . $upload_limit . '" data-file-ext="' . $file_ext . '" style="width: ' . $split[0] . 'px; height: ' . $split[1] . 'px">';
                             $element_html .= '<img src="' . $image . '" style="width: ' . $split[0] . 'px; height: ' . $split[1] . 'px" />';
                             $element_html .= '</a>';
                             
                             $element_html .= '<a href="javascript:void(0)" class="remove" data-id="' . $id . '"><i class="fa fa-trash" aria-hidden="true"></i></a>';
+                            $element_html .= '<input type="file" name="image_upload[]" class="upload_image_product" style="display: none" />';
+                            $element_html .= '<input type="hidden" name="image_upload_url[]" class="upload_image_product_url" value="' . $image . '" />';
                             $element_html .= '<input type="hidden" name="image_ids[]" class="upload_image_id" value="' . $id . '" />';
                             $element_html .= '</div>';
                         }
@@ -1221,7 +1258,7 @@ class Utils {
                 }
                 
                 
-                if(!(count($data) > 0 && ($k == 'password' || $k == 'conf_password'))) {
+                if(!($data != null && $data->count() > 0 && ($k == 'password' || $k == 'conf_password'))) {
                     $rules[$k][$rule_name] = $rule_check;
                     $messages[$k][$rule_name] = self::getValidateMessage($msg_item, $item_name, $value_compare);
                 }

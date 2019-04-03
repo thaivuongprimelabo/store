@@ -76,6 +76,7 @@ class AppController extends Controller
         $exp = explode('_', Route::currentRouteName());
         $this->name = isset($exp[1]) ? $exp[1] : '';
         $this->rules = trans('auth.' . $this->name . '.rules');
+        $this->rules = is_array($this->rules) ? $this->rules : [];
         $this->output['name'] =  $this->name;
         $this->output['rules'] = $this->rules;
     }

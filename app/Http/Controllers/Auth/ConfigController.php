@@ -114,6 +114,10 @@ class ConfigController extends AppController
             $data->web_ico         = $icoFile;
             $data->web_email       = Utils::cnvNull($request->web_email, '');
             $data->url_ext         = Utils::cnvNull($request->url_ext, '');
+            $data->web_address = Utils::cnvNull($request->web_address, '');
+            $data->web_email = Utils::cnvNull($request->web_email, '');
+            $data->web_hotline = Utils::cnvNull($request->web_hotline, '');
+            $data->web_working_time = Utils::cnvNull($request->web_working_time, '');
             
             if(Auth::user()->role_id == Common::SUPER_ADMIN) {
                 $data->mail_driver     = Utils::cnvNull($request->mail_driver, '');

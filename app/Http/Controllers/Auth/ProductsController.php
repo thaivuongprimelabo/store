@@ -168,7 +168,7 @@ class productsController extends AppController
     private function addService($productId, $request) {
         $services = $request->service;
         
-        if(count($services)) {
+        if($services != null && $services->count()) {
             ProductDetails::where('product_id', $productId)->delete();
             foreach($services as $key=>$value) {
                 

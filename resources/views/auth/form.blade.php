@@ -25,7 +25,8 @@
 @endsection
 @section('script')
 <script type="text/javascript">
-	var validateObject = {!! Utils::generateValidation($name, $rules, $data) !!}
+	var validateObject = {!! Utils::generateValidation($name, $rules, $data) !!};
+	console.log(validateObject);
     var validatorEventSetting = $("#submit_form").validate({
     	onfocusout: false,
     	success: function(label, element) {

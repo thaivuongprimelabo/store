@@ -47,14 +47,14 @@ class OrdersController extends AppController
         $validator = [];
         
         $data = Order::find($request->id);
-        $orderDetails = Product::select(
+        $orderDetails = OrderDetails::select(
                             'order_details.product_id',
                             'products.name',
                             'order_details.qty',
                             'order_details.price',
                             'order_details.cost'
                         )
-                        ->leftJoin('order_details', 'order_details.product_id', '=', 'products.id')
+                        ->leftJoin('products', 'order_details.product_id', '=', 'products.id')
                         ->where('order_details.order_id', $request->id)->get();
         
         if($request->isMethod('post')) {
@@ -62,8 +62,6 @@ class OrdersController extends AppController
             $validator = Validator::make($request->all(), $this->rules);
             
             if (!$validator->fails()) {
-                
-                $data = Order::find($request->id);
                 
                 $data->status         = Utils::cnvNull($request->status, 0);
                 $data->updated_at     = date('Y-m-d H:i:s');

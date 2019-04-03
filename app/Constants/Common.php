@@ -87,6 +87,7 @@ class Common {
     CONST SERVICE_GROUPS = 'service_groups';
     CONST PRODUCT_DETAILS = 'product_details';
     CONST PRODUCT_DETAIL_GROUPS = 'product_detail_groups';
+    CONST POST_GROUPS = 'post_groups';
     
     /** Role **/
     CONST SUPER_ADMIN = '0';

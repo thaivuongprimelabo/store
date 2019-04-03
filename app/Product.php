@@ -71,6 +71,10 @@ class Product extends Model
         return number_format($price - ($price * ($discount / 100)));
     }
     
+    public function getName() {
+        return $this->name;
+    }
+    
     public function getPrice() {
         if(is_numeric($this->price)) {
             return Utils::formatCurrency($this->price);
@@ -78,5 +82,9 @@ class Product extends Model
             return $input;
         }
         return '';
+    }
+    
+    public function getLinkDetail() {
+        return route('product_details',['slug' => $this->name_url]);
     }
 }

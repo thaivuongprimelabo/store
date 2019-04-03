@@ -69,6 +69,12 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Auth'], function () {
     Route::match(['get', 'post'], '/posts/search', 'PostsController@search')->name('auth_posts_search');
     Route::get('/posts/remove/{id}', 'PostsController@remove')->name('auth_posts_remove');
     
+    $this->get('/post_groups', 'PostGroupsController@index')->name('auth_postgroups');
+    Route::match(['get', 'post'], '/post_groups/create', 'PostGroupsController@create')->name('auth_postgroups_create');
+    Route::match(['get', 'post'], '/post_groups/edit/{id}', 'PostGroupsController@edit')->name('auth_postgroups_edit');
+    Route::match(['get', 'post'], '/post_groups/search', 'PostGroupsController@search')->name('auth_postgroups_search');
+    Route::get('/post_groups/remove/{id}', 'PostGroupsController@remove')->name('auth_postgroups_remove');
+    
     // Orders
     $this->get('/orders', 'OrdersController@index')->name('auth_orders');
     Route::match(['get', 'post'], '/orders/edit/{id}', 'OrdersController@edit')->name('auth_orders_edit');
@@ -132,11 +138,11 @@ Route::group(['prefix' => ''], function () {
     
     $config = Config::first();
     Route::get('/', 'HomeController@index')->name('home');
-    Route::get('/about' . $config['url_ext'], 'HomeController@about')->name('about');
+    Route::get('/gioi-thieu' . $config['url_ext'], 'HomeController@about')->name('about');
     Route::get('/delivery' . $config['url_ext'], 'HomeController@delivery')->name('delivery');
     Route::match(['get', 'post'], '/products' . $config['url_ext'], 'HomeController@products')->name('products');
     Route::get('/cart' . $config['url_ext'], 'CartController@index')->name('cart');
-    Route::match(['get', 'post'], '/contact' . $config['url_ext'], 'HomeController@contact')->name('contact');
+    Route::match(['get', 'post'], '/lien-he' . $config['url_ext'], 'HomeController@contact')->name('contact');
     Route::post('/search' . $config['url_ext'], 'HomeController@search')->name('search');
     Route::match(['get', 'post'], '/login' . $config['url_ext'], 'MembersController@index')->name('member_login');
     Route::post('/register' . $config['url_ext'], 'MembersController@register')->name('register');
@@ -145,8 +151,10 @@ Route::group(['prefix' => ''], function () {
     Route::post('/load-data' . $config['url_ext'], 'HomeController@loadData')->name('loadData');
     
     Route::get('/vendor/{vendor}' . $config['url_ext'], 'HomeController@vendor')->name('vendor');
-    Route::get('/category/{slug}' . $config['url_ext'], 'HomeController@category')->name('category');
-    Route::get('/detail/{slug}/{slug2}' . $config['url_ext'], 'HomeController@productDetails')->name('product_details');
+    Route::get('/danh-muc/{slug}' . $config['url_ext'], 'HomeController@category')->name('category');
+    Route::get('/tin-tuc/{slug}' . $config['url_ext'], 'HomeController@postGroup')->name('post_groups');
+    Route::get('/tin-tuc/{slug}/{slug1}' . $config['url_ext'], 'HomeController@posts')->name('posts');
+    Route::get('/{slug}' . $config['url_ext'], 'HomeController@productDetails')->name('product_details');
     Route::get('refreshcaptcha', 'MembersController@refreshCaptcha')->name('refreshcaptcha');
     Route::post('checkcaptcha', 'MembersController@checkCaptcha')->name('checkCaptcha');
     

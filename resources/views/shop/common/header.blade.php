@@ -3,7 +3,7 @@
 		<i class="fa fa-mobile" style=" font-size: 20px; display: inline-block; position: relative; transform: translateY(2px); "></i> Hotline: 
 		<span>
 													
-			<a href="callto:01676435063"> 01676435063</a>
+			<a href="callto:01676435063"> {{ $config['web_hotline'] }}</a>
 					
 		</span>
 	</div>
@@ -18,14 +18,14 @@
 							<i class="fa fa-mobile" style=" font-size: 20px; display: inline-block; position: relative; transform: translateY(2px); "></i> Hotline: 
 							<span>
 																		
-								<a href="callto:01676435063"> 01676435063</a>
+								<a href="callto:01676435063"> {{ $config['web_hotline'] }}</a>
 										
 							</span>
 						</li>
 						<li class="margin-left-20">
 							<i class="fa fa-map-marker"></i> <b>Địa chỉ</b>: 
 							<span>
-								Hồ Gươm, Việt Nam
+								{{ $config['web_address'] }}
 							</span>
 
 						</li>
@@ -99,7 +99,7 @@
 						</a>
 						<div class="info a-left">
 							<a href="#">Hỗ trợ 24/7</a>
-							<p>Hotline: <a href="callto:19001009"> 19001009</a></p>
+							<p>Hotline: <a href="callto:19001009"> {{ $config['web_hotline'] }}</a></p>
 						</div>
 					</div>	
 					<div class="item-policy d-flex align-items-center">
@@ -108,11 +108,9 @@
 						</a>
 						<div class="info a-left">
 							<a href="#">Giờ làm việc</a>
-							<p>T2 - T7 Giờ hành chính</p>
+							<p>{{ $config['web_working_time'] }}</p>
 						</div>
 					</div>	
-					
-					
 				</div>
 			</div>
 			<div class="col-xs-12 col-md-1 col-lg-2 hidden-sm hidden-xs">

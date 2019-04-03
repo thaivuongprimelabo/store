@@ -17,14 +17,12 @@
 				{{ csrf_field() }}
     			@php
                   	$forms = trans('auth.config.form');
-                  	$accept = [
+                  	$acceptAdmin = [
                   		'web_info', 'payment_method', 'off'
                   	];
                 @endphp
-                @foreach($forms as $key=>$form)
                 {!! Utils::generateForm($form, $config, $name, false, $data) !!}
-                @endforeach
-                @include('auth.common.button_footer',['back_url' => route('auth_' . $name)])
+                @include('auth.common.button_footer', ['name' => $name, 'back_url' => route('auth_' . $name)])
             </form>
 		</div>
 	</div>

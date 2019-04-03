@@ -7,10 +7,10 @@ return [
     'home' => 'Trang chủ',
     'main_nav' => [
         'home' => 'Trang chủ',
-        'about' => 'Giới thiệu',
         'products' => 'Sản phẩm',
-        'delivery' => 'Phương thức giao hàng',
-        'cart' => 'Giỏ hàng',
+        'about' => 'Giới thiệu',
+        'delivery' => 'Tin tức',
+        'ticket_book' => 'Đặt lịch hẹn',
         'contact' => 'Liên hệ'
     ],
     'button' => [

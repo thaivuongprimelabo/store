@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Post;
-use App\Constants\Common;
+use App\PostGroups;
 use App\Helpers\Utils;
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class PostsController extends AppController
+class PostGroupsController extends AppController
 {
     /**
      * Create a new controller instance.
@@ -31,7 +29,7 @@ class PostsController extends AppController
      * @param Request $request
      */
     public function search(Request $request) {
-        return $this->doSearch($request, new Post());
+        return $this->doSearch($request, new PostGroups());
     }
     
     /**
@@ -50,28 +48,19 @@ class PostsController extends AppController
             
             if (!$validator->fails()) {
                 
-                $filename = '';
-                Utils::doUpload($request, Common::PHOTO_FOLDER, $filename);
-                
-                $data = new Post();
+                $data = new PostGroups();
                 $data->name              = Utils::cnvNull($request->name, '');
                 $data->name_url          = Utils::createNameUrl(Utils::cnvNull($request->name, ''));
-                $data->description       = Utils::cnvNull($request->description, 0);
-                $data->content           = Utils::cnvNull($request->content, '');
-                $data->photo             = $filename;
-                $data->published_at      = Utils::cnvNull($request->published_at, '');
-                $data->published_time_at = Utils::cnvNull($request->published_time_at, '');
-                $data->post_group_id      = Utils::cnvNull($request->post_group_id, 0);
                 $data->status            = Utils::cnvNull($request->status, 0);
                 $data->created_at        = date('Y-m-d H:i:s');
                 $data->updated_at        = date('Y-m-d H:i:s');
                 
                 if($data->save()) {
-                    return redirect(route('auth_posts_create'))->with('success', trans('messages.CREATE_SUCCESS'));
+                    return redirect(route('auth_postgroups_create'))->with('success', trans('messages.CREATE_SUCCESS'));
                 }
                 
             } else {
-                return redirect(route('auth_posts_create'))->with('error', trans('messages.ERROR'));
+                return redirect(route('auth_postgroups_create'))->with('error', trans('messages.ERROR'));
             }
         }
         
@@ -88,39 +77,24 @@ class PostsController extends AppController
         
         $validator = [];
         
-        $data = Post::find($request->id);
+        $data = PostGroups::find($request->id);
         
         if($request->isMethod('post')) {
             
             $validator = Validator::make($request->all(), $this->rules);
             
             if (!$validator->fails()) {
-                $data = Post::find($request->id);
-                
-                $filename = $data->photo;
-                Utils::doUpload($request, Common::PHOTO_FOLDER, $filename);
-                
-                $published_at = date('Ymd', strtotime($request->input('published_at', date('Ymd'))));
-                $published_time_at = date('Hi', strtotime($request->input('published_time_at', date('H:i'))));
-                
                 $data->name                 = Utils::cnvNull($request->name, '');
                 $data->name_url             = Utils::createNameUrl(Utils::cnvNull($request->name, ''));
-                $data->description          = Utils::cnvNull($request->description, 0);
-                $data->content              = Utils::cnvNull($request->content, '');
-                $data->photo                = $filename;
-                $data->published_at         = $published_at;
-                $data->published_time_at    = $published_time_at;
                 $data->status               = Utils::cnvNull($request->status, 0);
-                $data->post_group_id      = Utils::cnvNull($request->post_group_id, 0);
-                $data->created_at           = date('Y-m-d H:i:s');
                 $data->updated_at           = date('Y-m-d H:i:s');
                 
                 if($data->save()) {
-                    return redirect(route('auth_posts_edit', ['id' => $request->id]))->with('success', trans('messages.UPDATE_SUCCESS'));
+                    return redirect(route('auth_postgroups_edit', ['id' => $request->id]))->with('success', trans('messages.UPDATE_SUCCESS'));
                 }
                 
             } else {
-                return redirect(route('auth_posts_edit', ['id' => $request->id]))->with('error', trans('messages.ERROR'));
+                return redirect(route('auth_postgroups_edit', ['id' => $request->id]))->with('error', trans('messages.ERROR'));
             }
         }
         
@@ -131,9 +105,9 @@ class PostsController extends AppController
     public function remove(Request $request) {
         if($request->isMethod('get')) {
             $id = $request->id;
-            $data = Post::find($id);
+            $data = PostGroups::find($id);
             if($data->delete()) {
-                return redirect(route('auth_posts'))->with('success', trans('messages.REMOVE_SUCCESS'));
+                return redirect(route('auth_postgroups'))->with('success', trans('messages.REMOVE_SUCCESS'));
             }
         }
     }

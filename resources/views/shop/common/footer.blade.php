@@ -1,97 +1,159 @@
-<!-- FOOTER -->
-<footer id="footer" class="section section-grey">
-	<!-- container -->
-	<div class="container">
-		<!-- row -->
-		<div class="row">
-			<!-- footer widget -->
-			<div class="col-md-3 col-sm-6 col-xs-6">
-				<div class="footer">
-					<!-- footer logo -->
-					<div class="footer-logo">
-						<a class="logo" href="#">
-	            <img src="{{ $config['web_logo'] }}" alt="">
-	          </a>
-					</div>
-					<!-- /footer logo -->
+<footer class="footer">
+	<div class="content">
 
-					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna</p>
+		<div class="site-footer">
 
-					<!-- footer social -->
-					<ul class="footer-social">
-						<li><a href="#"><i class="fa fa-facebook"></i></a></li>
-						<li><a href="#"><i class="fa fa-twitter"></i></a></li>
-						<li><a href="#"><i class="fa fa-instagram"></i></a></li>
-						<li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-						<li><a href="#"><i class="fa fa-pinterest"></i></a></li>
-					</ul>
-					<!-- /footer social -->
-				</div>
-			</div>
-			<!-- /footer widget -->
+			<div class="footer-inner padding-top-35 pb-lg-5">
+				<div class="container">
+					<div class="row">
 
-			<!-- footer widget -->
-			<div class="col-md-3 col-sm-6 col-xs-6">
-				<div class="footer">
-					<h3 class="footer-header">My Account</h3>
-					<ul class="list-links">
-						<li><a href="#">My Account</a></li>
-						<li><a href="#">My Wishlist</a></li>
-						<li><a href="#">Compare</a></li>
-						<li><a href="#">Checkout</a></li>
-						<li><a href="#">Login</a></li>
-					</ul>
-				</div>
-			</div>
-			<!-- /footer widget -->
+						<div class="col-xs-12 col-sm-6 col-lg-3">
+							<div class="footer-widget">
+								<h3 class="hastog"><span>Liên hệ</span></h3>
+									
+								<ul class="list-menu list-showroom">		 						
+									
+									<li style="padding-left: 0;"><p>Chúng tôi chuyên cung cấp các sản phẩm thực phẩm sạch an toàn cho sức khỏe con người</p></li>
 
-			<div class="clearfix visible-sm visible-xs"></div>
+									<li class="clearfix"><i class="block_icon fa fa-map-marker"></i> <p>
+										
+										
+										
+										{{ $config['web_address'] }}
+											
+										</p></li>
 
-			<!-- footer widget -->
-			<div class="col-md-3 col-sm-6 col-xs-6">
-				<div class="footer">
-					<h3 class="footer-header">Customer Service</h3>
-					<ul class="list-links">
-						<li><a href="#">About Us</a></li>
-						<li><a href="#">Shiping & Return</a></li>
-						<li><a href="#">Shiping Guide</a></li>
-						<li><a href="#">FAQ</a></li>
-					</ul>
-				</div>
-			</div>
-			<!-- /footer widget -->
+									<li class="clearfix"><i class="block_icon fa fa-phone"></i>
+										<a href="tel:01676435063">{{ $config['web_hotline'] }}</a>
+										<p>{{ $config['web_working_time'] }}</p>
+									</li>
+									<li class="clearfix"><i class="block_icon fa fa-envelope"></i>
+										<a href="mailto:{{ $config['web_email'] }}">{{ $config['web_email'] }}</a>
 
-			<!-- footer subscribe -->
-			<div class="col-md-3 col-sm-6 col-xs-6">
-				<div class="footer">
-					<h3 class="footer-header">Stay Connected</h3>
-					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor.</p>
-					<form>
-						<div class="form-group">
-							<input class="input" placeholder="Enter Email Address">
+									</li>
+								</ul>
+							</div>
 						</div>
-						<button class="primary-btn">Join Newslatter</button>
-					</form>
+						<div class="col-xs-12 col-sm-6 col-lg-3">
+							<div class="footer-widget">
+								<h3 class="hastog"><span>Danh mục</span></h3>
+								<ul class="list-menu list-blogs">
+									
+									<li><a href="index.html">Trang chủ</a></li>
+									
+									<li><a href="https://dualeo-x.bizwebvietnam.net/collections/all">Sản phẩm</a></li>
+									
+									<li><a href="https://dualeo-x.bizwebvietnam.net/gioi-thieu">Giới thiệu</a></li>
+									
+									<li><a href="https://dualeo-x.bizwebvietnam.net/tin-tuc">Tin tức</a></li>
+									
+									<li><a href="https://dualeo-x.bizwebvietnam.net/lien-he">Liên hệ</a></li>
+									
+									<li><a href="https://dualeo-x.bizwebvietnam.net/chi-duong">Chỉ đường</a></li>
+									
+								</ul>
+							</div>
+						</div>
+
+
+						<div class="col-xs-12 col-sm-6 col-lg-3">
+							<div class="footer-widget">
+								<h3 class="hastog"><span>Hỗ trợ khách hàng</span></h3>
+								<ul class="list-menu list-blogs">
+									
+									<li><a href="index.html">Trang chủ</a></li>
+									
+									<li><a href="https://dualeo-x.bizwebvietnam.net/collections/all">Sản phẩm</a></li>
+									
+									<li><a href="https://dualeo-x.bizwebvietnam.net/gioi-thieu">Giới thiệu</a></li>
+									
+									<li><a href="https://dualeo-x.bizwebvietnam.net/tin-tuc">Tin tức</a></li>
+									
+									<li><a href="https://dualeo-x.bizwebvietnam.net/lien-he">Liên hệ</a></li>
+									
+									<li><a href="https://dualeo-x.bizwebvietnam.net/chi-duong">Chỉ đường</a></li>
+									
+								</ul>
+							</div>
+						</div>
+						<div class="col-xs-12 col-sm-6 col-lg-3">
+							<div class="footer-widget">
+								<h3 class="margin-bottom-20 hastog"><span>Kết nối với Dualeo</span></h3>
+								<div class="list-menu">
+									<div id="fb-root"></div>
+									<script>
+										if(navigator.userAgent.indexOf("Speed Insights") == -1) {
+											(function(d, s, id) {
+												var js, fjs = d.getElementsByTagName(s)[0];
+												if (d.getElementById(id)) return;
+												js = d.createElement(s); js.id = id;
+												js.src = "../connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v2.6";
+												fjs.parentNode.insertBefore(js, fjs);
+											}(document, 'script', 'facebook-jssdk'));
+
+
+										}</script>
+									<div class="footerText">
+										<div class="fb-page" data-href="https://www.facebook.com/sapo.vn/"  data-height="230" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true">
+											<div class="fb-xfbml-parse-ignore">
+												<blockquote cite="https://www.facebook.com/sapo.vn/">
+													<a href="https://www.facebook.com/sapo.vn/">Facebook</a>
+												</blockquote>
+											</div>
+
+
+										</div>
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
 				</div>
 			</div>
-			<!-- /footer subscribe -->
-		</div>
-		<!-- /row -->
-		<hr>
-		<!-- row -->
-		<div class="row">
-			<div class="col-md-8 col-md-offset-2 text-center">
-				<!-- footer copyright -->
-				<div class="footer-copyright">
-					<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-					Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-					<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+
+			<div class="copyright clearfix">
+				<div class="container">
+					<div class="inner clearfix">
+						<div class="row">
+							<div class="col-md-6 text-center text-lg-left">
+								<span>© Bản quyền thuộc về <b>Dualeo</b> <b class="fixline">|</b> Cung cấp bởi <a href="https://www.sapo.vn/?utm_campaign=cpn%3Asite_khach_hang-plm%3Afooter&amp;utm_source=site_khach_hang&amp;utm_medium=referral&amp;utm_content=fm%3Atext_link-km%3A-sz%3A&amp;utm_term=&amp;campaign=site_khach_hang" rel="nofollow" title="Sapo" target="_blank">Sapo</a></span>
+								
+							</div>
+							<div class="col-md-6 text-center text-lg-right hidden-xs">
+								<ul class="list-menu-footer">
+									
+									<li><a href="index.html">Trang chủ</a></li>
+									
+									<li><a href="https://dualeo-x.bizwebvietnam.net/collections/all">Sản phẩm</a></li>
+									
+									<li><a href="https://dualeo-x.bizwebvietnam.net/gioi-thieu">Giới thiệu</a></li>
+									
+									<li><a href="https://dualeo-x.bizwebvietnam.net/tin-tuc">Tin tức</a></li>
+									
+									<li><a href="https://dualeo-x.bizwebvietnam.net/lien-he">Liên hệ</a></li>
+									
+									<li><a href="https://dualeo-x.bizwebvietnam.net/chi-duong">Chỉ đường</a></li>
+									
+								</ul>
+							</div>
+
+						</div>
+					</div>
+					
+					<div class="back-to-top">
+						<i class="fa  fa-angle-up"></i>
+					</div>
+					
+
+					<a href="tel:01676435063" class="suntory-alo-phone bottom-left  suntory-alo-green " id="suntory-alo-phoneIcon">
+
+						<div class="suntory-alo-ph-img-circle"><i class="fa fa-phone"></i></div>
+					</a>
+
 				</div>
-				<!-- /footer copyright -->
 			</div>
 		</div>
-		<!-- /row -->
+
 	</div>
-	<!-- /container -->
 </footer>
-<!-- /FOOTER -->

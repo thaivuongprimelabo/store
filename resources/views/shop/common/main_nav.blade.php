@@ -2,97 +2,46 @@
 	<div class="container">
 		<div class="hidden-sm hidden-xs">
 			<ul class="nav nav-left">
-				<li class="nav-item active"><a class="nav-link" href="index.html">Trang chủ</a></li>
+				<li class="nav-item active"><a class="nav-link" href="/">Trang chủ</a></li>
 				<li class="nav-item  has-mega">
 					<a href="https://dualeo-x.bizwebvietnam.net/collections/all" class="nav-link">Sản phẩm <i class="fa fa-angle-right" data-toggle="dropdown"></i></a>			
 					<div class="mega-content">
 						<div class="level0-wrapper2">
 							<div class="nav-block nav-block-center">
+							   @if($categories->count())
 							   <ul class="level0">
-								   <li class="level1 parent item"> <h2 class="h4"><a href="https://dualeo-x.bizwebvietnam.net/collections/all"><span>Rau củ</span></a></h2> 
+							   	   @foreach($categories as $category)
+								   <li class="level1 parent item"> <h2 class="h4"><a href="{{ route('category',['slug' => $category->name_url]) }}"><span>{{ $category->name }}</span></a></h2> 
+									   @php
+									   		$childCategories = $category->getChildCategory();
+									   @endphp
 									   <ul class="level1">
-										   
-										   <li class="level2"> <a href="https://dualeo-x.bizwebvietnam.net/collections/all"><span>Rau tươi</span></a> </li>
-										   
-										   <li class="level2"> <a href="https://dualeo-x.bizwebvietnam.net/collections/all"><span>Rau vườn</span></a> </li>
-										   
-										   <li class="level2"> <a href="https://dualeo-x.bizwebvietnam.net/collections/all"><span>Rau sạch</span></a> </li>
-										   
-										   <li class="level2"> <a href="https://dualeo-x.bizwebvietnam.net/collections/all"><span>Củ nhập khẩu</span></a> </li>
-										   
+										   @foreach($childCategories as $child)
+										   <li class="level2"> <a href="{{ route('category',['slug' => $child->name_url]) }}"><span>{{ $child->name }}</span></a> </li>
+										   @endforeach
 									   </ul>
 								   </li>
-								   
-							   
-								   
-								   <li class="level1 parent item"> <h2 class="h4"><a href="https://dualeo-x.bizwebvietnam.net/collections/all"><span>Hoa quả</span></a></h2> 
-									   <ul class="level1">
-										   
-										   <li class="level2"> <a href="https://dualeo-x.bizwebvietnam.net/collections/all"><span>Trái cây tươi</span></a> </li>
-										   
-										   <li class="level2"> <a href="https://dualeo-x.bizwebvietnam.net/collections/all"><span>Hoa quả sạch</span></a> </li>
-										   
-										   <li class="level2"> <a href="https://dualeo-x.bizwebvietnam.net/collections/all"><span>Hoa quả nhập khẩu</span></a> </li>
-										   
-										   <li class="level2"> <a href="index.html"><span>Hoa quả tươi</span></a> </li>
-										   
-									   </ul>
-								   </li>
-								   
-							   
-								   
-								   <li class="level1 parent item"> <h2 class="h4"><a href="https://dualeo-x.bizwebvietnam.net/collections/all"><span>Thịt</span></a></h2> 
-									   <ul class="level1">
-										   
-										   <li class="level2"> <a href="https://dualeo-x.bizwebvietnam.net/collections/all"><span>Thị gà</span></a> </li>
-										   
-										   <li class="level2"> <a href="https://dualeo-x.bizwebvietnam.net/collections/all"><span>Thịt lượn</span></a> </li>
-										   
-										   <li class="level2"> <a href="https://dualeo-x.bizwebvietnam.net/collections/all"><span>Thịt bò</span></a> </li>
-										   
-										   <li class="level2"> <a href="https://dualeo-x.bizwebvietnam.net/collections/all"><span>Thịt vịt</span></a> </li>
-										   
-									   </ul>
-								   </li>
-								   
-							   
-								   
-								   <li class="level1 parent item"> <h2 class="h4"><a href="https://dualeo-x.bizwebvietnam.net/collections/all"><span>Hải sản</span></a></h2> 
-									   <ul class="level1">
-										   
-										   <li class="level2"> <a href="https://dualeo-x.bizwebvietnam.net/collections/all"><span>Ngao</span></a> </li>
-										   
-										   <li class="level2"> <a href="https://dualeo-x.bizwebvietnam.net/collections/all"><span>Sò huyết</span></a> </li>
-										   
-										   <li class="level2"> <a href="https://dualeo-x.bizwebvietnam.net/collections/all"><span>Cua</span></a> </li>
-										   
-										   <li class="level2"> <a href="https://dualeo-x.bizwebvietnam.net/collections/all"><span>Tôm</span></a> </li>
-										   
-									   </ul>
-								   </li>
+								   @endforeach
 							   </ul>
+							   @endif
 							</div>
 						</div>
 					</div>
 				</li>
-				<li class="nav-item "><a class="nav-link" href="https://dualeo-x.bizwebvietnam.net/gioi-thieu">Giới thiệu</a></li>
+				<li class="nav-item "><a class="nav-link" href="{{ route('about') }}">Giới thiệu</a></li>
 				<li class="nav-item ">
-					<a href="https://dualeo-x.bizwebvietnam.net/tin-tuc" class="nav-link">Tin tức <i class="fa fa-angle-right" data-toggle="dropdown"></i></a>			
+					<a href="javascript:void(0)" class="nav-link">Tin tức <i class="fa fa-angle-right" data-toggle="dropdown"></i></a>			
+					@if($post_groups->count())
 					<ul class="dropdown-menu">
+						@foreach($post_groups as $group)
 						<li class="nav-item-lv2">
-							<a class="nav-link" href="https://dualeo-x.bizwebvietnam.net/collections/all">Tin mới</a>
+							<a class="nav-link" href="{{ route('post_groups', ['slug' => $group->name_url]) }}">{{ $group->name }}</a>
 						</li>
-						<li class="nav-item-lv2">
-							<a class="nav-link" href="https://dualeo-x.bizwebvietnam.net/collections/all">Tin quốc tế</a>
-						</li>
-						<li class="nav-item-lv2">
-							<a class="nav-link" href="https://dualeo-x.bizwebvietnam.net/collections/all">Tin trong nước</a>
-						</li>
+						@endforeach
 					</ul>
-					
+					@endif
 				</li>
-				<li class="nav-item "><a class="nav-link" href="https://dualeo-x.bizwebvietnam.net/lien-he">Liên hệ</a></li>
-				<li class="nav-item "><a class="nav-link" href="https://dualeo-x.bizwebvietnam.net/chi-duong">Chỉ đường</a></li>
+				<li class="nav-item "><a class="nav-link" href="{{ route('contact') }}">Liên hệ</a></li>
 			</ul>	
 
 			<div class="menu-search f-right bbbbb">										
@@ -132,16 +81,15 @@
 
 					<li class="li-search">
 						<div class="header_search search_form">
-	<form class="input-group search-bar search_form" action="https://dualeo-x.bizwebvietnam.net/search" method="get" role="search">		
-		<input type="search" name="query" value="" placeholder="Tìm sản phẩm" class="input-group-field st-default-search-input search-text" autocomplete="off">
-		<span class="input-group-btn">
-			<button class="btn icon-fallback-text">
-				<i class="fa fa-search"></i>
-			</button>
-		</span>
-	</form>
-</div>						
-
+                        	<form class="input-group search-bar search_form" action="https://dualeo-x.bizwebvietnam.net/search" method="get" role="search">		
+                        		<input type="search" name="query" value="" placeholder="Tìm sản phẩm" class="input-group-field st-default-search-input search-text" autocomplete="off">
+                        		<span class="input-group-btn">
+                        			<button class="btn icon-fallback-text">
+                        				<i class="fa fa-search"></i>
+                        			</button>
+                        		</span>
+                        	</form>
+						</div>						
 					</li>
 				</ul>
 				<div class="menuclose"><i class="fa fa-close"></i></div>
@@ -150,25 +98,14 @@
 				<li class="h3">
 					MENU
 				</li>
-
-				
-
-
-				
 				<li class="nav-item active"><a class="nav-link" href="index.html">Trang chủ</a></li>		
-				
-				
-
-
-				
 				<li class="nav-item ">
 					<a href="https://dualeo-x.bizwebvietnam.net/collections/all" class="nav-link">Sản phẩm <i class="fa faa fa-angle-right"></i></a>
-
+					@if($categories->count())
 					<ul class="dropdown-menu">
-						
-						
+						@foreach($categories as $category)
 						<li class="dropdown-submenu nav-item-lv2">
-							<a class="nav-link" href="https://dualeo-x.bizwebvietnam.net/collections/all">Rau củ <i class="fa faa fa-angle-right"></i></a>
+							<a class="nav-link" href="{{ route('category',['slug' => $category->name_url]) }}">{{ $category->name }} <i class="fa faa fa-angle-right"></i></a>
 
 							<ul class="dropdown-menu">
 														
@@ -190,9 +127,7 @@
 								
 							</ul>                      
 						</li>
-						
-						
-						
+						@endforeach
 						<li class="dropdown-submenu nav-item-lv2">
 							<a class="nav-link" href="https://dualeo-x.bizwebvietnam.net/collections/all">Hoa quả <i class="fa faa fa-angle-right"></i></a>
 
@@ -216,9 +151,6 @@
 								
 							</ul>                      
 						</li>
-						
-						
-						
 						<li class="dropdown-submenu nav-item-lv2">
 							<a class="nav-link" href="https://dualeo-x.bizwebvietnam.net/collections/all">Thịt <i class="fa faa fa-angle-right"></i></a>
 
@@ -242,9 +174,6 @@
 								
 							</ul>                      
 						</li>
-						
-						
-						
 						<li class="dropdown-submenu nav-item-lv2">
 							<a class="nav-link" href="https://dualeo-x.bizwebvietnam.net/collections/all">Hải sản <i class="fa faa fa-angle-right"></i></a>
 
@@ -268,61 +197,26 @@
 								
 							</ul>                      
 						</li>
-						
-						
 					</ul>
+					@endif
 				</li>
-				
-				
-
-
-				
 				<li class="nav-item "><a class="nav-link" href="https://dualeo-x.bizwebvietnam.net/gioi-thieu">Giới thiệu</a></li>		
-				
-				
-
-
-				
 				<li class="nav-item ">
 					<a href="https://dualeo-x.bizwebvietnam.net/tin-tuc" class="nav-link">Tin tức <i class="fa faa fa-angle-right"></i></a>
-
 					<ul class="dropdown-menu">
-						
-						
 						<li class="nav-item-lv2">
 							<a class="nav-link" href="https://dualeo-x.bizwebvietnam.net/collections/all">Tin mới</a>
 						</li>
-						
-						
-						
 						<li class="nav-item-lv2">
 							<a class="nav-link" href="https://dualeo-x.bizwebvietnam.net/collections/all">Tin quốc tế</a>
 						</li>
-						
-						
-						
 						<li class="nav-item-lv2">
 							<a class="nav-link" href="https://dualeo-x.bizwebvietnam.net/collections/all">Tin trong nước</a>
 						</li>
-						
-						
 					</ul>
 				</li>
-				
-				
-
-
-				
 				<li class="nav-item "><a class="nav-link" href="https://dualeo-x.bizwebvietnam.net/lien-he">Liên hệ</a></li>		
-				
-				
-
-
-				
 				<li class="nav-item "><a class="nav-link" href="https://dualeo-x.bizwebvietnam.net/chi-duong">Chỉ đường</a></li>		
-				
-				
-
 			</ul>
 		</div>
 	</div>

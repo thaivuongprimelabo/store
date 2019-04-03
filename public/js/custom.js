@@ -122,6 +122,7 @@ var previewImageProduct = function(element, size, demension, container) {
 
 var customErrorValidate = function(error, element) {
 	if(error[0].innerHTML !== '') {
+		console.log(element);
 		if(element[0].className === 'ckeditor valid-text') {
 			element.parent().addClass('has-error');
 			element.parent().find('span.help-block').html(error[0].innerHTML);
@@ -183,6 +184,7 @@ var checkFileUpload = function(element, params, messages, container) {
 	var error_msg = checkExtMultiFile(element, params[0], messages[0]);
 	error_msg += checkSizeMultiFile(element, params[1], messages[1]);
 
+	$(container).html('');
 	if(error_msg !== '') {
 		$(container).addClass('has-error');
 		$(container).append(error_msg);
@@ -205,8 +207,14 @@ var selectImage = function(id, demension) {
 	var img = $('#preview').attr('src');
 	var arr = demension.split('x');
 	$('#' + id).css({'display': 'inline-block'});
-	$('#' + id).find('a.upload_image').css({'width': arr[0], 'height': arr[1]});
-	$('#' + id).find('a.upload_image').html('<img src="' + img + '" style="width:' + arr[0] + 'px; height:' + arr[1] + 'px" />');
+	
+	var className = 'upload_image';
+	if(id.indexOf('edit') >= 0) {
+		className = 'add_image';
+	}
+	
+	$('#' + id).find('a.' + className).css({'width': arr[0], 'height': arr[1]});
+	$('#' + id).find('a.' + className).html('<img src="' + img + '" style="width:' + arr[0] + 'px; height:' + arr[1] + 'px" />');
 	if(img.indexOf('http') !== -1 || img.indexOf('https') !== -1) {
 		$('#' + id).find('.upload_image_product_url').val(img);
 	}

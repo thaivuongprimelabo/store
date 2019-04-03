@@ -18,6 +18,7 @@ use App\Helpers\Cart;
 use App\Constants\Common;
 use App\Constants\ContactStatus;
 use App\Constants\PostStatus;
+use App\PostGroups;
 
 class ApiController extends Controller
 {
@@ -45,6 +46,9 @@ class ApiController extends Controller
                 break;
             case 4; // Users table
                 $data = User::select('id')->where($col, $value)->first();
+                break;
+            case 5: // Post Groups table
+                $data = PostGroups::select('id')->where($col, $value)->first();
                 break;
             default:
                 break;
@@ -98,6 +102,9 @@ class ApiController extends Controller
                 $object = Product::find($id);
                 break;
                 
+            case 'postgroups': // Post Groups table
+                $object = PostGroups::find($id);
+                
             default:
                 break;
         }
@@ -106,25 +113,16 @@ class ApiController extends Controller
         if($object->save()) {
             $this->output['code'] = 200;
             switch($table) {
-                case 0; // Vendors table
-                case 1; // Categories table
-                case 2; // Banners table
-                case 6; // Products table
-                case 7; // Sizes table
-                case 8; // Colors table
-                case 5; // Users table
-                    $this->output['data'] = ['status' => $object->status, 'text' => Status::getData($object->status)];
-                    break;
-                
-                case 3; // Contacts table
+                case Common::CONTACTS; // Contacts table
                     $this->output['data'] = ['status' => $object->status, 'text' => ContactStatus::getData($object->status)];
                     break;
                 
-                case 4; // Posts table
+                case Common::POSTS; // Posts table
                     $this->output['data'] = ['status' => $object->status, 'text' => PostStatus::getData($object->status)];
                     break;
                 
                 default:
+                    $this->output['data'] = ['status' => $object->status, 'text' => Status::getData($object->status)];
                     break;
             }
         }

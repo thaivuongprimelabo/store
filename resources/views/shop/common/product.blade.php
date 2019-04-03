@@ -1,59 +1,79 @@
-<!-- row -->
-@if($data->count())
-<div class="row">
-	<!-- section title -->
-	@if(!Utils::blank($title))
-	<div class="col-md-12">
-		<div class="section-title">
-			<h2 class="title">{{ $title }}</h2>
+<div class="e-tabs not-dqtab ajax-tab-1"  data-section="ajax-tab-1">
+	<div class="row row-noGutter">
+		<div class="col-sm-12">
+			<div class="content">
+				<div class="section-title">
+					<h2>
+						{{ $title }}
+					</h2>
+				</div>
+				<div>
+					<ul class="tabs tabs-title tab-mobile clearfix hidden-sm hidden-md hidden-lg">
+						<li class="prev"><i class="fa fa-angle-left"></i></li>
+						<li class="tab-link tab-title hidden-sm hidden-md hidden-lg current tab-titlexs" data-tab="tab-1">
+							
+							<span>Rau củ</span>
+							
+						</li>
+						<li class="next"><i class="fa fa-angle-right"></i></li>
+					</ul>
+					<ul class="tabs tabs-title ajax clearfix hidden-xs">
+						@if($categories->count())
+						@foreach($categories as $key=>$category)
+						<li class="tab-link has-content" data-tab="tab-{{ $key }}" data-url="">
+							<span>{{ $category->name }}</span>
+						</li>
+						@endforeach
+						@endif
+						
+					</ul>
+					@if($categories->count())
+					@foreach($categories as $key=>$category)
+					<div class="tab-{{ $key }} tab-content">
+						<div class="products products-view-grid">
+							@php
+								$products = $category->getProductInCategory();
+							@endphp
+							<div class="products products-view-grid">
+								<div class="row">
+									@foreach($products as $k=>$product)
+									<div class="col-xs-6 col-xss-6 col-sm-4 col-md-3 col-lg-3">
+										<div class="product-box">															
+											<div class="product-thumbnail flexbox-grid">	
+												<a href="{{ $product->getLinkDetail() }}" title="Vải thiều loại to">
+													<img src="{{ $product->getFirstImage() }}"  data-lazyload="{{ $product->getFirstImage() }}" alt="Vải thiều loại to">
+												</a>	
+												<div class="product-action hidden-md hidden-sm hidden-xs clearfix">
+													<div>
+														<input type="hidden" name="variantId" value="17898181" />
+														<button class="btn-buy btn-cart btn btn-primary   left-to add_to_cart" data-toggle="tooltip" title="Đặt hàng">
+															<i class="fa fa-shopping-bag"></i>						
+														</button>
+														
+														<a href="https://dualeo-x.bizwebvietnam.net/cherry-do-canada-loai-to" data-handle="cherry-do-canada-loai-to" data-toggle="tooltip" title="Xem nhanh" class="btn-gray btn_view btn right-to quick-view">
+														<i class="fa fa-eye"></i></a>
+													</div>
+												</div>
+											</div>
+											<div class="product-info a-center">
+												<h3 class="product-name"><a href="{{ $product->getLinkDetail() }}" title="Vải thiều loại to">{{ $product->getName() }}</a></h3>
+												<div class="price-box clearfix">
+													<div class="special-price">
+														<span class="price product-price">{{ $product->getPrice() }}₫</span>
+													</div>											
+												</div>
+											</div>
+										</div>
+									</div>
+									@endforeach
+								</div>
+							</div>
+						</div>
+					</div>
+					@endforeach
+					@endif
+				</div>
+			</div>
 		</div>
 	</div>
-	@endif
-	<!-- section title -->
-	@foreach($data as $product)
-	<!-- Product Single -->
-	<div class="col-md-3 col-sm-6 col-xs-6">
-		<div class="product product-single">
-			<div class="product-thumb">
-				<div class="product-label">
-					@if($product->is_new == Status::IS_NEW)
-					<span>New</span>
-					@endif
-					@if($product->discount)
-					<span class="sale">-{{ $product->discount }}%</span>
-					@endif
-				</div>
-				<a href="{{ route('product_details', ['slug' => $product->category_name_url, 'slug2' => $product->name_url]) }}" class="main-btn quick-view"><i class="fa fa-search-plus"></i> {{ trans('shop.quick_view') }}</a>
-				<img src="{{ Utils::getImageLink($product->image) }}" alt="">
-			</div>
-			<div class="product-body">
-				<h3 class="product-price">
-					
-					@if($product->discount)
-						{{ $product->getDiscount($product->price, $product->discount) }}
-						<del class="product-old-price">{{ number_format($product->price) }}</del>
-					@else
-						{{ number_format($product->price) }}
-					@endif
-				</h3>
-				<div class="product-rating">
-					<i class="fa fa-star"></i>
-					<i class="fa fa-star"></i>
-					<i class="fa fa-star"></i>
-					<i class="fa fa-star"></i>
-					<i class="fa fa-star-o empty"></i>
-				</div>
-				<h2 class="product-name"><a href="#">{{ $product->name }}</a></h2>
-				<div class="product-btns">
-					<button class="primary-btn add-to-cart" onclick="return addItem('{{ route('cart.addItem') }}','{{ $product }}')">
-						<i class="fa fa-shopping-cart"></i> {{ trans('shop.button.add_to_cart') }}
-					</button>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- /Product Single -->
-	@endforeach
 </div>
-@endif
-<!-- /row -->

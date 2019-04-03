@@ -15,6 +15,9 @@ use App\Constants\Status;
 use App\Helpers\Utils;
 use App\Category;
 use App\Contact;
+use App\PostGroups;
+use App\Post;
+use App\Constants\PostStatus;
 
 class HomeController extends AppController
 {
@@ -41,9 +44,17 @@ class HomeController extends AppController
     {
         $banners = Banner::where('status', Status::ACTIVE)->get();
         
-        $showSidebar = 'show';
+        $categories = Category::select('id', 'name', 'name_url')->where('status', Status::ACTIVE)->where('parent_id', 0)->get();
         
-        return view('shop.home', compact('banners', 'showSidebar'));
+        $postGroups = PostGroups::select('id', 'name', 'name_url')->where('status', Status::ACTIVE)->get();
+        
+        $posts = Post::where('status', PostStatus::PUBLISHED)->get();
+        
+        $this->output['banners'] = $banners;
+        $this->output['categories'] = $categories;
+        $this->output['post_groups'] = $postGroups;
+        $this->output['posts'] = $posts;
+        return view('shop.home', $this->output);
     }
     
     public function vendor(Request $request) {
