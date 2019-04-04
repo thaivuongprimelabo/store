@@ -19,23 +19,28 @@ class Product extends Model
      */
     protected $table = Common::PRODUCTS;
     
-    public function getFirstImage($id = '') {
+    public function getFirstImage($thumb = 'medium') {
         $image_url = Utils::getImageLink();
-        $image_product = ImageProduct::select('image')->where('product_id', $this->id)->first();
+        $image_product = ImageProduct::select('image','medium')->where('product_id', $this->id)->first();
         if($image_product) {
-            $image_url = Utils::getImageLink($image_product->image);
+            $image_url = Utils::getImageLink($image_product->image, $image_product->$thumb);
         }
         return $image_url;
     }
     
-    public function getAllImage($id) {
+    public function getAllImage($id = '') {
         $output = [];
-        $image_product = ImageProduct::select('id', 'image')->where('product_id', $id)->get();
+        $image_product = ImageProduct::select('id', 'image')->where('product_id', $this->id)->get();
         foreach($image_product as $image) {
             $image_url = Utils::getImageLink($image->image);
             $output[$image->id] = $image_url;
         }
         return $output;
+    }
+    
+    public function getImageDetails() {
+        $image_product = ImageProduct::where('product_id', $this->id)->get();
+        return $image_product;
     }
     
     public function getCategoryName() {
@@ -84,7 +89,15 @@ class Product extends Model
         return '';
     }
     
-    public function getLinkDetail() {
+    public function getSummary() {
+        return $this->summary;
+    }
+    
+    public function getDescription() {
+        return $this->description;
+    }
+    
+    public function getLink() {
         return route('product_details',['slug' => $this->name_url]);
     }
 }

@@ -16,4 +16,12 @@ class PostGroups extends Model
      * @var array
      */
     protected $table = Common::POST_GROUPS;
+    
+    public function getLink() {
+        return route('postgroups', ['slug' => $this->name_url]);
+    }
+    
+    public function getName() {
+        return $this->name;
+    }
 }

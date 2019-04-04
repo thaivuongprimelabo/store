@@ -76,6 +76,7 @@ class productsController extends AppController
                     $data->vendor_id     = Utils::cnvNull($request->vendor_id, '0');
                     $data->discount      = Utils::cnvNull($request->discount, 0);
                     $data->description   = Utils::cnvNull($request->description, '');
+                    $data->summary   = Utils::cnvNull($request->summary, '');
                     $data->status        = Utils::cnvNull($request->status, 0);
                     $data->is_new        = Utils::cnvNull($request->is_new, 0);
                     $data->is_popular        = Utils::cnvNull($request->is_popular, 0);
@@ -85,7 +86,8 @@ class productsController extends AppController
                     if($data->save()) {
                         $arrFilenames = [];
                         $filename = '';
-                        Utils::doUpload($request, Common::IMAGE_FOLDER, $filename, $data->id, $arrFilenames);
+                        $listSizes = isset($this->config['config']['products_thumbnail_size']) ? $this->config['config']['products_thumbnail_size'] : '';
+                        Utils::doUpload($request, Common::IMAGE_FOLDER, $filename, $listSizes, $data->id, $arrFilenames);
                         
                         $this->addService($data->id, $request);
                         
@@ -131,6 +133,7 @@ class productsController extends AppController
                 $data->vendor_id     = Utils::cnvNull($request->vendor_id, '0');
                 $data->discount      = Utils::cnvNull($request->discount, '');
                 $data->description   = Utils::cnvNull($request->description, '');
+                $data->summary       = Utils::cnvNull($request->summary, '');
                 $data->status        = Utils::cnvNull($request->status, 0);
                 $data->is_new        = Utils::cnvNull($request->is_new, 0);
                 $data->is_popular        = Utils::cnvNull($request->is_popular, 0);
@@ -141,7 +144,8 @@ class productsController extends AppController
                     
                     $arrFilenames = [];
                     $filename = '';
-                    Utils::doUpload($request, Common::IMAGE_FOLDER, $filename, $data->id, $arrFilenames);
+                    $listSizes = isset($this->config['config']['products_thumbnail_size']) ? $this->config['config']['products_thumbnail_size'] : '';
+                    Utils::doUpload($request, Common::IMAGE_FOLDER, $filename, $listSizes, $data->id, $arrFilenames);
                     
                     $this->addService($data->id, $request);
                     

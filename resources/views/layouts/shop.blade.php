@@ -51,31 +51,32 @@
 	@include('shop.common.header')
 	@include('shop.common.main_nav')
 	</header>
-	@include('shop.common.sidebar')
 	@yield('content')
 	@include('shop.common.footer')
 	
-	<!-- Bizweb javascript -->
-	<script src="{{ url('shop/bizweb.dktcdn.net/100/308/325/themes/665783/assets/option-selectors4d7c.js') }}" type="text/javascript"></script>
-	<script src="{{ url('shop/bizweb.dktcdn.net/assets/themes_support/api.jquerya87f.js') }}" type="text/javascript"></script> 
-
 	<!-- Plugin JS -->
-
 	<script src="{{ url('shop/bizweb.dktcdn.net/100/308/325/themes/665783/assets/appear4d7c.js') }}" type="text/javascript"></script>
 	<script src="{{ url('shop/bizweb.dktcdn.net/100/308/325/themes/665783/assets/owl.carousel.min4d7c.js') }}" type="text/javascript"></script>		
 	<script src="{{ url('shop/maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js') }}"></script>
 
-	<script src="{{ url('shop/bizweb.dktcdn.net/100/308/325/themes/665783/assets/dl_function4d7c.js') }}" type="text/javascript"></script>
-	<script src="{{ url('shop/bizweb.dktcdn.net/100/308/325/themes/665783/assets/dl_api4d7c.js') }}" type="text/javascript"></script>
-	<script src="{{ url('shop/bizweb.dktcdn.net/100/308/325/themes/665783/assets/rx-all-min4d7c.js') }}" type="text/javascript"></script>
-
-	<!-- Quick view -->
-				
-	<script src="{{ url('shop/bizweb.dktcdn.net/100/308/325/themes/665783/assets/quickview4d7c.js') }}" type="text/javascript"></script>				
-	
 	<!-- Main JS -->	
 	<script src="{{ url('shop/bizweb.dktcdn.net/100/308/325/themes/665783/assets/dl_main4d7c.js') }}" type="text/javascript"></script>
-
-	<script src="{{ url('shop/ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js') }}"></script>	
+	
+	<script src="https://bizweb.dktcdn.net/100/308/325/themes/665783/assets/jquery.elevatezoom308.min.js" type="text/javascript"></script>	
+	
+	<script>
+		$('.zoomContainer').remove();				
+		 $('#zoom_01').elevateZoom({
+			 gallery:'gallery_01', 
+			 zoomWindowWidth:420,
+			 zoomWindowHeight:500,
+			 zoomWindowOffetx: 10,
+			 easing : true,
+			 scrollZoom : false,
+			 cursor: 'pointer', 
+			 galleryActiveClass: 'active', 
+			 imageCrossfade: true
+		 });
+	</script>
 </body>
 </html>

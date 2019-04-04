@@ -40,6 +40,16 @@ class AppController extends Controller
             $web_logo = Utils::getImageLink($config->web_logo);
             $web_ico = Utils::getImageLink($config->web_ico);
             
+            $products_sizes = Utils::cnvNull($config->products_image_size, '100x100');
+            $products_medium_size = '';
+            if(strpos($products_sizes, ',') !== FALSE) {
+                $products_sizes = explode(',', Utils::cnvNull($config->products_image_size, '100x100'));
+                $products_medium_size = $products_sizes[0];
+                $products_small_size = $products_sizes[1];
+            } else {
+                $products_medium_size = $products_sizes;
+            }
+            
             $this->config = [
                 'config' => [
                     'web_logo' => $web_logo,
@@ -56,7 +66,8 @@ class AppController extends Controller
                     
                     'banners_image_size' => Utils::cnvNull($config->banners_image_size, '100x100'),
                     'vendors_image_size' => Utils::cnvNull($config->vendors_image_size, '100x100'),
-                    'products_image_size' => Utils::cnvNull($config->products_image_size, '100x100'),
+                    'products_image_size' => $products_medium_size,
+                    'products_thumbnail_size' => $products_sizes,
                     'posts_image_size'   => Utils::cnvNull($config->posts_image_size, '100x100'),
                     'web_logo_image_size'   => Utils::cnvNull($config->web_logo_image_size, '100x100'),
                     'web_ico_image_size'   => Utils::cnvNull($config->web_ico_image_size, '100x100'),

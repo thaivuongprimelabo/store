@@ -46,13 +46,10 @@ class HomeController extends AppController
         
         $categories = Category::select('id', 'name', 'name_url')->where('status', Status::ACTIVE)->where('parent_id', 0)->get();
         
-        $postGroups = PostGroups::select('id', 'name', 'name_url')->where('status', Status::ACTIVE)->get();
-        
         $posts = Post::where('status', PostStatus::PUBLISHED)->get();
         
         $this->output['banners'] = $banners;
         $this->output['categories'] = $categories;
-        $this->output['post_groups'] = $postGroups;
         $this->output['posts'] = $posts;
         return view('shop.home', $this->output);
     }
@@ -89,55 +86,23 @@ class HomeController extends AppController
     
     public function productDetails(Request $request) {
         $slug = $request->slug;
-        $slug2 = $request->slug2;
         
-        $products = Product::select(
+        $product = Product::select(
                         'products.name',
                         'products.price',
                         'products.id',
                         'products.description',
-                        'products.sizes',
-                        'products.colors',
+                        'products.summary',
                         'products.category_id',
                         'products.is_new',
                         'products.is_best_selling',
                         'products.is_popular',
-                        'products.discount',
-                        'images_product.image'
+                        'products.discount'
                     )
-                    ->leftJoin('images_product','images_product.product_id', '=', 'products.id')
-                    ->where(['products.status' => Status::ACTIVE, 'products.name_url' => $slug2])->get();
+                    ->where(['products.status' => Status::ACTIVE, 'products.name_url' => $slug])->first();
         
-        $category = Category::select('id', 'name')->where('name_url', $slug)->first();
-        
-        $another_products = Product::select(
-                        'products.name',
-                        'products.price',
-                        'products.id',
-                        'products.is_new',
-                        'products.is_best_selling',
-                        'products.is_popular',
-                        'products.discount',
-                        'categories.name_url AS category_name_url',
-                        'products.name_url',
-                        'images_product.image'
-                    )
-                    ->leftJoin('images_product','images_product.product_id', '=', 'products.id')
-                    ->leftJoin('categories', 'categories.id', '=', 'products.category_id')
-                    ->where([
-                        ['products.status', '=',  Status::ACTIVE],
-                        ['products.category_id', '=', $category->id],
-                        ['products.id', '!=', $products->first()->id]
-                    ])
-                    ->get();
-            
-            $this->breadcrumb[route('category',['slug' => $slug])] = $category->name;
-            $this->breadcrumb['active'] = $products->first()->name;
-            
-            $breadcrumb  = $this->breadcrumb;
-            $showSidebar = 'hide';
-            
-            return view('shop.product_detail', compact('products', 'breadcrumb', 'showSidebar', 'another_products'));
+        $this->output['data'] = $product;
+        return view('shop.product_detail', $this->output);
         
     }
     

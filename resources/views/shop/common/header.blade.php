@@ -15,7 +15,7 @@
 				<div class="col-sm-6 col-md-9 a-left">
 					<ul class="list-inline f-left">
 						<li>
-							<i class="fa fa-mobile" style=" font-size: 20px; display: inline-block; position: relative; transform: translateY(2px); "></i> Hotline: 
+							<i class="fa fa-mobile" style=" font-size: 20px; display: inline-block; position: relative; transform: translateY(2px); "></i> {{ trans('shop.hotline_txt') }}: 
 							<span>
 																		
 								<a href="callto:01676435063"> {{ $config['web_hotline'] }}</a>
@@ -37,11 +37,11 @@
 					<ul class="list-inline f-right">
 						
 						<li>
-							<a data-toggle="modal" data-target="#dangnhap" href="https://dualeo-x.bizwebvietnam.net/account/login"><i class="fa fa-user"></i> Đăng nhập</a>
+							<a data-toggle="modal" data-target="#dangnhap" href="https://dualeo-x.bizwebvietnam.net/account/login"><i class="fa fa-user"></i> {{ trans('shop.button.login') }}</a>
 
 						</li>
 						<li><span>hoặc</span></li>
-						<li><a data-toggle="modal" data-target="#dangky" href="https://dualeo-x.bizwebvietnam.net/account/register">Đăng ký</a>
+						<li><a data-toggle="modal" data-target="#dangky" href="https://dualeo-x.bizwebvietnam.net/account/register">{{ trans('shop.button.register') }}</a>
 
 						</li>
 						
@@ -52,7 +52,7 @@
 								<div class="content a-center">										
 									<div class="header_search search_form">
 										<form class="input-group search-bar search_form" action="https://dualeo-x.bizwebvietnam.net/search" method="get" role="search">		
-											<input type="search" name="query" value="" placeholder="Tìm sản phẩm" class="input-group-field st-default-search-input search-text" autocomplete="off">
+											<input type="search" name="query" value="" placeholder="{{ trans('shop.search_txt') }}" class="input-group-field st-default-search-input search-text" autocomplete="off">
 											<span class="input-group-btn">
 												<button class="btn icon-fallback-text">
 													<i class="fa fa-search"></i>
@@ -89,7 +89,7 @@
 							<img src="{{ url('shop/bizweb.dktcdn.net/thumb/medium/100/308/325/themes/665783/assets/policy14d7c.png') }}"  alt="DuaLeo-X" >
 						</a>
 						<div class="info a-left">
-							<a href="#">Miễn phí vận chuyển</a>
+							<a href="#">{{ trans('shop.free_ship_txt') }}</a>
 							<p>Bán kính 100 km</p>
 						</div>
 					</div>	
@@ -98,8 +98,8 @@
 							<img src="{{ url('shop/bizweb.dktcdn.net/thumb/medium/100/308/325/themes/665783/assets/policy24d7c.png') }}"  alt="DuaLeo-X" >
 						</a>
 						<div class="info a-left">
-							<a href="#">Hỗ trợ 24/7</a>
-							<p>Hotline: <a href="callto:19001009"> {{ $config['web_hotline'] }}</a></p>
+							<a href="#">{{ trans('shop.support_txt') }}</a>
+							<p>{{ trans('shop.hotline_txt') }}: <a href="callto:{{ $config['web_hotline'] }}"> {{ $config['web_hotline'] }}</a></p>
 						</div>
 					</div>	
 					<div class="item-policy d-flex align-items-center">
@@ -107,7 +107,7 @@
 							<img src="{{ url('shop/bizweb.dktcdn.net/thumb/medium/100/308/325/themes/665783/assets/policy34d7c.png') }}"  alt="DuaLeo-X" >
 						</a>
 						<div class="info a-left">
-							<a href="#">Giờ làm việc</a>
+							<a href="#">{{ trans('shop.working_txt') }}</a>
 							<p>{{ $config['web_working_time'] }}</p>
 						</div>
 					</div>	
@@ -123,7 +123,7 @@
 									<span class="cartCount count_item_pr hidden-lg" id="cart-total">0</span>
 								</div>
 								<div class="right-content hidden-md">
-									<span class="label">Giỏ hàng</span>
+									<span class="label">{{ trans('shop.cart_txt') }}</span>
 									(<span class="cartCount2">0</span>)
 								</div>
 							</a>
@@ -137,17 +137,17 @@
 									<ul>
 										<li class="li-fix-1">
 											<div class="top-subtotal">
-												Tổng tiền thanh toán:
+												{{ trans('shop.cart.txt') }}:
 												<span class="price"></span>
 											</div>
 										</li>
 										<li class="li-fix-2" style="">
 											<div class="actions">
 												<a href="https://dualeo-x.bizwebvietnam.net/cart" class="btn btn-primary">
-													<span>Giỏ hàng</span>
+													<span>{{ trans('shop.cart.txt') }}</span>
 												</a>
 												<a href="https://dualeo-x.bizwebvietnam.net/checkout" class="btn btn-checkout btn-gray">
-													<span>Thanh toán</span>
+													<span>{{ trans('shop.button.checkout') }}</span>
 												</a>
 											</div>
 										</li>

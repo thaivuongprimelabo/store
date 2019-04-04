@@ -16,13 +16,15 @@ use Illuminate\Support\Facades\Storage;
 use Image;
 use App\Category;
 use App\Config;
+use App\Product;
 use App\Vendor;
 use Carbon\Carbon;
 use App\PostGroups;
+use App\Constants\ProductStatus;
 
 class Utils {
     
-    public static function getImageLink($image = '') {
+    public static function getImageLink($image = '', $thumb = '') {
         
         if(strpos($image, ',') !== FALSE) {
             $arrImage = explode(',', $image);
@@ -35,6 +37,9 @@ class Utils {
         
         $uploadFolder = Common::UPLOAD_FOLDER;
         if(!self::blank($image)) {
+            if(!self::blank($thumb)) {
+                return url($uploadFolder . $thumb);
+            }
             return url($uploadFolder . $image);
         } else {
             return '';
@@ -51,7 +56,7 @@ class Utils {
         }
     }
     
-    public static function doUpload($request, $destFolder, &$filename = '', $demension = 0, $product_id = 0, &$arrFilenames = []) {
+    public static function doUpload($request, $destFolder, &$filename = '', $listSizes = null, $product_id = 0, &$arrFilenames = []) {
         $image_upload_url = $request->image_upload_url;
         $image_ids = $request->image_ids;
         $files = $request->image_upload;
@@ -64,9 +69,11 @@ class Utils {
                     $filename = $url;
                 }
                 
+                $thumbnail_medium = '';
+                $thumbnail_small = '';
                 $file = isset($files[$k]) ? $files[$k] : '';
                 if(!Utils::blank($file)) {
-                    $filename = self::uploadFile($file, $destFolder, $demension);
+                    $filename = self::uploadFile($file, $destFolder, $listSizes, $thumbnail_medium, $thumbnail_small);
                 }
                 
                 if(!$product_id) {
@@ -75,7 +82,7 @@ class Utils {
                 
                 if(Utils::blank($filename)) { continue; }
                 
-                array_push($arrFilenames, ['product_id' => $product_id, 'image' => $filename]);
+                array_push($arrFilenames, ['product_id' => $product_id, 'image' => $filename, 'medium' => $thumbnail_medium, 'small' => $thumbnail_small]);
                 
                 $filename = '';
             }
@@ -90,28 +97,22 @@ class Utils {
         
     }
     
-    public static function uploadFile($file, $destFolder, $demension = 0) {
+    public static function uploadFile($file, $destFolder, $listSizes = null, &$thumbnail_medium = '', &$thumbnail_small = '') {
         
         $uploadFolder = Common::UPLOAD_FOLDER;
         $uploadPath = $uploadFolder . $destFolder;
         
         $filename = time() . '_' . $file->getClientOriginalName();
         
-        $maxWidth = 9999;
-        $maxHeight = 9999;
-        if($demension != 0) {
-            $dem = explode('x', $demension);
-            $maxWidth = $dem[0];
-            $maxHeight = $dem[1];
+        if($listSizes != null) {
+            
+            $uploadFolder = Common::UPLOAD_FOLDER . $destFolder;
+            $thumbnail_medium =  $destFolder . '/' . $listSizes[0] . '/' . $filename;
+            $thumbnail_small =  $destFolder . '/' . $listSizes[1] . '/' . $filename;
         }
-        $img = Image::make($file->getRealPath());
-        $image_width = $img->width();
-        $image_height = $img->height();
-        if($image_width > $maxWidth || $image_height > $maxHeight) {
-            self::resizeImage($uploadPath, $file, $filename, $maxWidth, $maxHeight);
-        } else {
-            $file->move($uploadPath, $filename);
-        }
+        
+        self::resizeImage($uploadPath, $file, $filename, $listSizes);
+        $file->move($uploadPath, $filename);
         
         $filename = $destFolder . $filename;
         
@@ -146,16 +147,28 @@ class Utils {
         
     }
     
-    public static function resizeImage($uploadPath, $file, $filename, $width = '', $height = '') {
+    public static function resizeImage($uploadPath, $file, $filename, $listSizes = null) {
         
-        $image_resize = Image::make($file->getRealPath());
-        $image_resize->resize($width, $height);
-        
-        if(!file_exists(public_path($uploadPath))) {
-            mkdir(public_path($uploadPath));
+        if($listSizes == null) {
+            return;
         }
         
-        $image_resize->save(public_path($uploadPath . $filename));
+        foreach($listSizes as $size) {
+            $d = explode('x', $size);
+            $image_resize = Image::make($file->getRealPath());
+            $image_resize->resize($d[0], $d[1]);
+            
+            if(!file_exists(public_path($uploadPath))) {
+                mkdir(public_path($uploadPath));
+            }
+            
+            $folderResize = $uploadPath . '/' . $size;
+            if(!file_exists(public_path($folderResize))) {
+                mkdir(public_path($folderResize));
+            }
+            
+            $image_resize->save(public_path($folderResize .  '/' . $filename));
+        }
     }
     
     public static function removeFile($file) {
@@ -419,19 +432,6 @@ class Utils {
         return $html;
     }
     
-    public static function createSidebarShop() {
-       $html = '<ul class="category-list">';
-       $category = Category::select('id', 'name', 'name_url')->where('avail_flg', 1)->paginate(7);
-       foreach($category as $cate) {
-           $html .= '<li>';
-           $html .= '<a href="' . route('category', ['slug' => $cate->name_url]) . '">' . $cate->name . '</a>';
-           $html .= '</li>';
-       }
-       $html .= '</ul>';
-       return $html;
-        
-    }
-    
     public static function getConfig() {
         
         $config = Config::first();
@@ -638,7 +638,7 @@ class Utils {
     }
     
     public static function formatCurrency($input) {
-        return number_format($input, 0, ',', '.');
+        return number_format($input, 0, ',', '.') . Common::CURRENCY;
     }
     
     public static function generateList($config, $name, $data = null, $otherData = null, $key = '') {
@@ -1039,14 +1039,21 @@ class Utils {
                 
             case 'checkbox':
                 
-                $checked = '';
+                $checked = 'checked="checked"';
                 
                 $element_html .= '<div class="checkbox">';
-                if(self::blank($element_value) || $element_value == (isset($value['checked']) && $value['checked'])) {
-                    $checked = 'checked="checked"';
+                
+                if(isset($value['checked']) && !$value['checked']) {
+                    $checked = '';
                 }
                 
-                $element_html .= '<label><input type="checkbox" name="' . $key . '" value="1" ' . $checked . ' />' . $text . '</label>';
+                if(!self::blank($element_value) && !$element_value) {
+                    $checked = '';
+                }
+                
+                $valueCheckbox = isset($value['value']) ? $value['value'] : 1;
+                
+                $element_html .= '<label><input type="checkbox" name="' . $key . '" value="' . $valueCheckbox . '" ' . $checked . ' />' . $text . '</label>';
                 
                 $element_html .= '</div>';
                 break;
@@ -1257,14 +1264,10 @@ class Utils {
                         break;
                 }
                 
-                
                 if(!($data != null && $data->count() > 0 && ($k == 'password' || $k == 'conf_password'))) {
                     $rules[$k][$rule_name] = $rule_check;
                     $messages[$k][$rule_name] = self::getValidateMessage($msg_item, $item_name, $value_compare);
                 }
-                
-                
-                
             }
             
         }
@@ -1273,5 +1276,355 @@ class Utils {
         $result['messages'] = $messages;
         
         return json_encode($result);
+    }
+    
+    /*============================== Shop ============================*/
+    public static function createNavigation($postition = 'web') {
+        $mainNav = trans('shop.main_nav');
+        $html = '';
+        if($postition == 'web') {
+            $html = '<ul class="nav nav-left">';
+            $categories = Category::select('id', 'name', 'name_url')->where('status', Status::ACTIVE)->where('parent_id', 0)->get();
+            foreach($mainNav as $route=>$nav) {
+                switch($route) {
+                    case 'products':
+                        $html .= '<li class="nav-item  has-mega">';
+                        $html .= '<a href="javascript:void(0)" class="nav-link">' . $nav['text'] . ' <i class="fa fa-angle-right" data-toggle="dropdown"></i></a>';
+                        $html .= '<div class="mega-content">';
+                        $html .= '<div class="level0-wrapper2">';
+                        $html .= '<div class="nav-block nav-block-center">';
+                        if($categories->count()) {
+                            $html .= '<ul class="level0">';
+                            foreach($categories as $category) {
+                                $html .= '<li class="level1 parent item"> <h2 class="h4"><a href="' . $category->getLink() . '"><span>' . $category->getName() . '</span></a></h2> ';
+                                
+                                $childCategories = $category->getChildCategory();
+                                $html .= '<ul class="level1">';
+                                foreach($childCategories as $child) {
+                                    $html .= '<li class="level2"> <a href="' . $child->getLink() . '"><span>' . $child->getName() . '</span></a> </li>';
+                                }
+                                $html .= '</ul>';
+                                
+                                $html .= '</li>';
+                            }
+                            $html .= '</li>';
+                            $html .= '</ul>';
+                        }
+                        $html .= '</div>';
+                        $html .= '</div>';
+                        $html .= '</div>';
+                        $html .= '</li>';
+                        break;
+                        
+                    case 'postgroups':
+                        $postGroups = PostGroups::select('id', 'name', 'name_url')->where('status', Status::ACTIVE)->get();
+                        
+                        $html .= '<li class="nav-item">';
+                        $html .= '<a href="javascript:void(0)" class="nav-link">' . $nav['text'] . ' <i class="fa fa-angle-right" data-toggle="dropdown"></i></a>';
+                        if($postGroups->count()) {
+                            $html .= '<ul class="dropdown-menu">';
+                            foreach($postGroups as $group) {
+                                $html .= '<li class="nav-item-lv2">';
+                                $html .= '<a class="nav-link" href="' . $group->getLink() . '">' . $group->getName() . '</a>';
+                                $html .= '</li>';
+                            }
+                            $html .= '</ul>';
+                        }
+                        break;
+                        
+                    default:
+                        $html .= '<li class="nav-item ' . ($route == 'home' ? "active" : "") . '"><a class="nav-link" href="' . route($route) .'">' . $nav['text'] . '</a></li>';
+                        break;
+                }
+            }
+            
+            $html .= '</ul>';
+        }
+        
+        if($postition == 'mobile') {
+            
+            $html .= 'ul id="nav-mobile" class="nav hidden-md hidden-lg">';
+            $html .= '       <li class="h3">';
+            $html .= '               MENU';
+            $html .= '       </li>';
+            
+            foreach($mainNav as $route=>$nav) {
+                switch($route) {
+                    case 'products':
+                        $categories = Category::select('id', 'name', 'name_url')->where('status', Status::ACTIVE)->where('parent_id', 0)->get();
+                        
+                        $html .= '<li class="nav-item ">';
+                        $html .= '<a href="javascript:void(0)" class="nav-link">' . $nav['text'] . ' <i class="fa faa fa-angle-right"></i></a>';
+                        if($categories->count()) {
+                            $html .= '<ul class="dropdown-menu">';
+                            foreach($categories as $category) {
+                                $html .= '<li class="nav-item-lv3">';
+                                $html .= '<a class="nav-link" href="' . $category->getLink() . '">' . $category->getName() . '</a>';
+                                $html .= '</li>';
+                            }
+                            $html .= '</ul>';
+                        }
+                        $html .= '</li>';
+                        break;
+                        
+                    case 'postgroups':
+                        $postGroups = PostGroups::select('id', 'name', 'name_url')->where('status', Status::ACTIVE)->get();
+                        $html .= '<li class="nav-item ">';
+                        $html .= '<a href="javascript:void(0)" class="nav-link">' . $nav['text'] . ' <i class="fa faa fa-angle-right"></i></a>';
+                        if($postGroups->count()) {
+                            $html .= '<ul class="dropdown-menu">';
+                            foreach($postGroups as $group) {
+                                $html .= '<li class="nav-item-lv2">';
+                                $html .= '<a class="nav-link" href="' . $group->getLink() . '">' . $group->getName() . '</a>';
+                                $html .= '</li>';
+                            }
+                            $html .= '</ul>';
+                        }
+                        
+                        $html .= '</li>';
+                        break;
+                        
+                    default:
+                        $html .= '<li class="nav-item active"><a class="nav-link" href="#">' . $nav['text'] . '</a></li>';
+                        break;
+                }
+            }
+            $html .= '</ul>';
+        }
+        
+        if($postition == 'sub_footer') {
+            $html .= '<ul class="list-menu list-blogs">';
+            $routes = Route::getRoutes();
+            foreach($mainNav as $route=>$nav) {
+                $html .= '<li><a href="' . route($route) . '">' . $nav['text'] . '</a></li>';
+            }
+            $html .= '</ul>';
+        }
+        
+        if($postition == 'footer') {
+            $html .= '<ul class="list-menu-footer">';
+            $routes = Route::getRoutes();
+            foreach($mainNav as $route=>$nav) {
+                $html .= '<li><a href="' . route($route) . '">' . $nav['text'] . '</a></li>';
+            }
+            $html .= '</ul>';
+        }
+        
+        return $html;
+        
+    }
+    
+    public static function createSidebarShop($position = 'left') {
+        $html = '';
+        $categories = Category::select('id', 'name', 'name_url')->where('status', Status::ACTIVE)->where('parent_id', 0)->get();
+        if($position == 'left') {
+            $html .= '<aside class="blog-aside aside-item sidebar-category">';
+            $html .= '<div class="aside-title text-center text-xl-left">';
+            $html .= '<h2 class="title-head"><span>' . trans('shop.category_txt') . '</span></h2>';
+            $html .= '</div>';
+            
+            $html .= '<div class="aside-content">';
+            $html .= '<div class="nav-category  navbar-toggleable-md" >';
+            $html .= '        <ul class="nav navbar-pills">';
+            
+            if($categories->count()) {
+                foreach($categories as $category) {
+                    $html .= '                <li class="nav-item">';
+                    $html .= '                        <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>';
+                    $html .= '                        <a class="nav-link" href="' . $category->getLink() . '">' . $category->getName() . '</a>';
+                    $childCategories = $category->getChildCategory();
+                    if($childCategories->count()) {
+                        $html .= '                                <i class="fa fa-angle-down" ></i>';
+                        $html .= '                                <ul class="dropdown-menu">';
+                        foreach($childCategories as $child) {
+                            $html .= '                                        <li class="dropdown-submenu nav-item">';
+                            $html .= '                                                <a class="nav-link" href="' . $child->getLink() . '">' . $child->getName() . '</a>';
+                            $html .= '                                        </li>';
+                        }
+                        $html .= '                                </ul>';
+                    }
+                    $html .= '                </li>';
+                }
+                $html .= '                <li class="xemthem  nav-item">';
+                $html .= '                        <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>';
+                $html .= '                        <a  class="nav-link" href="javascript:void(0)">';
+                $html .= '                                <span> Xem thêm</span>                  ';
+                $html .= '                        </a> ';
+                $html .= '                </li>';
+                $html .= '                <li class="thugon nav-item">';
+                $html .= '                        <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>';
+                $html .= '                        <a class="nav-link"  href="javascript:void(0)">';
+                $html .= '                                <span> Thu gọn</span>                   ';
+                $html .= '                        </a> ';
+                $html .= '                </li>';
+            }
+            $html .= '        </ul>';
+            $html .= '</div>';
+            $html .= '</div>';
+            $html .= '</aside>';
+        }
+        
+        if($position == 'right') {
+            $html .= '<aside class="aside-item sidebar-category collection-category">';
+            $html .= '<div class="aside-title">';
+            $html .= '<h2 class="title-head margin-top-0"><span>' . trans('shop.category_txt') . '</span></h2>';
+            $html .= '</div>';
+            
+            $html .= '<div class="aside-content">';
+            $html .= '<div class="nav-category  navbar-toggleable-md" >';
+            $html .= '        <ul class="nav navbar-pills">';
+            if($categories->count()) {
+                foreach($categories as $category) {
+                    $html .= '                <li class="nav-item">';
+                    $html .= '                        <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>';
+                    $html .= '                        <a class="nav-link" href="' . $category->getLink() . '">' . $category->getName() . '</a>';
+                    $childCategories = $category->getChildCategory();
+                    if($childCategories->count()) {
+                        $html .= '                                <i class="fa fa-angle-down" ></i>';
+                        $html .= '                                <ul class="dropdown-menu">';
+                        foreach($childCategories as $child) {
+                            $html .= '                                        <li class="dropdown-submenu nav-item">';
+                            $html .= '                                                <a class="nav-link" href="' . $child->getLink() . '">' . $child->getName() . '</a>';
+                            $html .= '                                        </li>';
+                        }
+                        $html .= '                                </ul>';
+                    }
+                    $html .= '                </li>';
+                }
+            }
+            $html .= '        </ul>';
+            $html .= '</div>';
+            $html .= '</div>';
+            $html .= '</aside>';
+            
+            
+            $html .= '<div class="aside-item aside-mini-list-product mb-5">';
+            $html .= '<div>';
+            $html .= '<div class="aside-title">';
+            $html .= '<h2 class="title-head">';
+            $html .= '<a href="' . route('products') . '" title="' . trans('shop.popular_txt') . '">' . trans('shop.popular_txt') . '</a>';
+            $html .= '</h2>';
+            $html .= '</div>';
+            $html .= '<div class="aside-content related-product">';
+            $html .= '<div class="product-mini-lists">';
+            $html .= '<div class="products">';
+            
+            $products = Product::where('status', Status::ACTIVE)->where('is_popular', ProductStatus::IS_POPULAR)->get();
+            
+            foreach($products as $product) {
+                $html .= '<div class="row row-noGutter">';
+                $html .= '  <div class="col-sm-12">';
+                $html .= '      <div class="product-mini-item clearfix  ">';
+                $html .= '      <div class="product-img relative">';
+                $html .= '          <a href="' . $product->getLink() . '">';
+                $html .= '              <img src="' . $product->getFirstImage() . '" alt="' . $product->getName() . '">';
+                $html .= '          </a>';
+                $html .= '      </div>';
+                $html .= '      <div class="product-info">';
+                $html .= '          <h3><a href="' . $product->getLink() . '" title="' . $product->getName() . '" class="product-name">' . $product->getName() . '</a></h3>';
+                $html .= '          <div class="price-box">';
+                $html .= '              <div class="special-price"><span class="price product-price">' . $product->getPrice() . '</span> </div> <!-- Giá -->';
+                $html .= '           </div>';
+                $html .= '       </div>';
+                $html .= '      </div>';
+                $html .= '  </div>';
+                $html .= '</div>';
+            }
+            
+            $html .= '</div>';
+            $html .= '</div>';
+            $html .= '</div>';
+            $html .= '</div>';
+            $html .= '</div>';
+        }
+        return $html;
+        
+    }
+    
+    public static function createProductTab($title, $type, $tab = 1) {
+        $html = '';
+        $categories = Category::select('id', 'name', 'name_url')->where('status', Status::ACTIVE)->where('parent_id', 0)->get();
+        if(!$categories->count()) {
+            return $html;
+        }
+        
+        $html .= '<div class="row"><div class="col-lg-12 col-sm-12"><div class="e-tabs not-dqtab ajax-tab-' . $tab . '"  data-section="ajax-tab-' . $tab . '">';
+        $html .= '<div class="row row-noGutter">';
+        $html .= '<div class="col-sm-12">';
+        $html .= '  <div class="content">';
+        $html .= '      <div class="section-title">';
+        $html .= '      <h2>' . $title . '</h2>';
+        $html .= '      </div>';
+        $html .= '      <div>';
+        $html .= '      <ul class="tabs tabs-title tab-mobile clearfix hidden-sm hidden-md hidden-lg">';
+        $html .= '          <li class="prev"><i class="fa fa-angle-left"></i></li>';
+        $html .= '          <li class="tab-link tab-title hidden-sm hidden-md hidden-lg current tab-titlexs" data-tab="tab-1">';
+        $html .= '              <span>Rau củ</span>';
+        $html .= '          </li>';
+        $html .= '          <li class="next"><i class="fa fa-angle-right"></i></li>';
+        $html .= '      </ul>';
+        
+        if($categories->count()) {
+            $html .= '  <ul class="tabs tabs-title ajax clearfix hidden-xs">';
+            foreach($categories as $key=>$category) {
+                $html .= '<li class="tab-link has-content" data-tab="tab-' . $key .  '" data-url="">';
+                $html .= '<span>' . $category->getName() . '</span>';
+                $html .= '</li>';
+            }
+            $html .= '  </ul>';
+            
+            foreach($categories as $key=>$category) {
+                $html .= '<div class="tab-' . $key . ' tab-content">';
+                $html .= '<div class="products products-view-grid">';
+                $products = $category->getProductInCategory($type);
+                
+                $html .= '<div class="products products-view-grid">';
+                $html .= '<div class="row">';
+                foreach($products as $k=>$product) {
+                    $html .= '        <div class="col-xs-6 col-xss-6 col-sm-4 col-md-3 col-lg-3">';
+                    $html .= '                <div class="product-box">';
+                    $html .= '                        <div class="product-thumbnail flexbox-grid">    ';
+                    $html .= '                                <a href="' . $product->getLink() . '" title="Vải thiều loại to">';
+                    $html .= '                                        <img src="' . $product->getFirstImage() . '"  data-lazyload="' . $product->getFirstImage() . '" alt="Vải thiều loại to">';
+                    $html .= '                                </a>    ';
+                    $html .= '                                <div class="product-action hidden-md hidden-sm hidden-xs clearfix">';
+                    $html .= '                                        <div>';
+                    $html .= '                                                <input type="hidden" name="variantId" value="17898181" />';
+                    $html .= '                                                <button class="btn-buy btn-cart btn btn-primary   left-to add_to_cart" title="Đặt hàng">';
+                    $html .= '                                                        <i class="fa fa-shopping-bag"></i>                                              ';
+                    $html .= '                                                </button>';
+                    $html .= '                                                <a href="' . $product->getLink()  . '" class="btn-gray btn_view btn right-to">';
+                    $html .= '                                                <i class="fa fa-eye"></i></a>';
+                    $html .= '                                        </div>';
+                    $html .= '                                </div>';
+                    $html .= '                        </div>';
+                    $html .= '                        <div class="product-info a-center">';
+                    $html .= '                                <h3 class="product-name"><a href="' . $product->getLink() . '" title="Vải thiều loại to">' . $product->getName() . '</a></h3>';
+                    $html .= '                                <div class="price-box clearfix">';
+                    $html .= '                                        <div class="special-price">';
+                    $html .= '                                                <span class="price product-price">' . $product->getPrice() . '</span>';
+                    $html .= '                                        </div>                                                                                  ';
+                    $html .= '                                </div>';
+                    $html .= '                        </div>';
+                    $html .= '                </div>';
+                    $html .= '        </div>';
+                }
+                $html .= '</div>';
+                $html .= '</div>';
+                
+                $html .= '</div>';
+                $html .= '</div>';
+            }
+        }
+        $html .= '  </div>';
+        $html .= '  </div>';
+        
+        $html .= '</div>';
+        $html .= '</div>';
+        $html .= '</div>';
+        $html .= '</div>';
+        $html .= '</div>';
+        
+        return $html;
     }
 }

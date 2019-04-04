@@ -1042,37 +1042,44 @@ $auth = [
                 'height' => \App\Constants\Common::IMAGE_HEIGHT,
                 'count' => 5
             ],
+            'summary' => [
+                'type' => 'textarea',
+                'text' => 'Mô tả',
+                'maxlength' => \App\Constants\Common::DESC_MAXLENGTH
+            ],
             'description' => [
                 'type' => 'editor',
                 'text' => 'Chi tiết',
-                'maxlength' => \App\Constants\Common::DESC_MAXLENGTH
             ],
             'status' => [
                 'type' => 'checkbox',
                 'text' => 'Đang hoạt động',
-                'checked' => true
+                'checked' => true,
             ],
             'is_new' => [
                 'type' => 'checkbox',
                 'text' => 'Sản phẩm mới',
-                'checked' => true
+                'checked' => true,
+                'value' => \App\Constants\ProductStatus::IS_NEW
             ],
             'is_popular' => [
                 'type' => 'checkbox',
                 'text' => 'Sản phẩm được quan tâm',
-                'checked' => true
+                'checked' => true,
+                'value' => \App\Constants\ProductStatus::IS_POPULAR
             ],
             'is_best_selling' => [
                 'type' => 'checkbox',
                 'text' => 'Sản phẩm bán chạy',
-                'checked' => true
+                'checked' => true,
+                'value' => \App\Constants\ProductStatus::IS_BEST_SELLING
             ]
         ],
         'rules' => [
             'name' => 'required|max:' . \App\Constants\Common::NAME_MAXLENGTH,
             'price' => 'max:' . \App\Constants\Common::PRICE_MAXLENGTH,
             'discount' => 'max:' . \App\Constants\Common::DISCOUNT_MAXLENGTH,
-            'description' => 'max:' . \App\Constants\Common::DESC_MAXLENGTH
+            'summary' => 'max:' . \App\Constants\Common::DESC_MAXLENGTH,
         ]
     ],
     /*------------ Users page ------------------- */

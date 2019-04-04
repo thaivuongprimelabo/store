@@ -32,7 +32,7 @@
 					<div class="tab-{{ $key }} tab-content">
 						<div class="products products-view-grid">
 							@php
-								$products = $category->getProductInCategory();
+								$products = $category->getProductInCategory($type);
 							@endphp
 							<div class="products products-view-grid">
 								<div class="row">
@@ -46,11 +46,11 @@
 												<div class="product-action hidden-md hidden-sm hidden-xs clearfix">
 													<div>
 														<input type="hidden" name="variantId" value="17898181" />
-														<button class="btn-buy btn-cart btn btn-primary   left-to add_to_cart" data-toggle="tooltip" title="Đặt hàng">
+														<button class="btn-buy btn-cart btn btn-primary   left-to add_to_cart" title="Đặt hàng">
 															<i class="fa fa-shopping-bag"></i>						
 														</button>
 														
-														<a href="https://dualeo-x.bizwebvietnam.net/cherry-do-canada-loai-to" data-handle="cherry-do-canada-loai-to" data-toggle="tooltip" title="Xem nhanh" class="btn-gray btn_view btn right-to quick-view">
+														<a href="{{ $product->getLinkDetail() }}" class="btn-gray btn_view btn right-to">
 														<i class="fa fa-eye"></i></a>
 													</div>
 												</div>

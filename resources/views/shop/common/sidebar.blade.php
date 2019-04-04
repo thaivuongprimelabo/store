@@ -20,38 +20,7 @@
     			</div>
     			@endif
     			<div class="col-md-3 col-md-pull-9 mt-5 hidden-xs aside-vetical-menu">
-    				<aside class="blog-aside aside-item sidebar-category">	
-    					<div class="aside-title text-center text-xl-left">
-    						<h2 class="title-head"><span>Danh mục</span></h2>
-    					</div>	
-    					<div class="aside-content">
-    						<div class="nav-category  navbar-toggleable-md" >
-    							<ul class="nav navbar-pills">
-    								@if($categories->count())
-    								@foreach($categories as $category)
-    								<li class="nav-item">
-    									<i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
-    									<a class="nav-link" href="{{ $category->getLink() }}">{{ $category->getName() }}</a>
-    									@php
-									   		$childCategories = $category->getChildCategory();
-									   	@endphp
-									   	@if($childCategories->count())
-									   	<i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
-									   	<ul class="dropdown-menu">
-									   		@foreach($childCategories as $child)
-									   		<li class="dropdown-submenu nav-item">
-									   			<a class="nav-link" href="{{ $child->getLink() }}">{{ $child->getName() }}</a>
-									   		</li>
-									   		@endforeach
-									   	</ul>
-									  	@endif
-    								</li>
-    								@endforeach
-    								@endif
-    							</ul>
-    						</div>
-    					</div>
-    				</aside>
+    				{!! Utils::createSidebarShop(); !!}
     			</div>
 			</div>
 		</div>

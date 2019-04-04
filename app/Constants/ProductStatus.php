@@ -5,8 +5,8 @@ namespace App\Constants;
 class ProductStatus {
     
     CONST IS_NEW = 1;
-    CONST IS_POPULAR = 1;
-    CONST IS_BEST_SELLING = 1;
+    CONST IS_POPULAR = 2;
+    CONST IS_BEST_SELLING = 3;
     
     public static function getData($key = '') {
         $array = [

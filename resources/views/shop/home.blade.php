@@ -1,29 +1,26 @@
 @extends('layouts.shop')
-
 @section('content')
+@include('shop.common.sidebar')
 <section class="awe-section-3" id="awe-section-3">
 	<div class="section section-collection section-collection-1">
 		<div class="container">
 			<div class="collection-border">
 				<div class="collection-main">
-					<div class="row">
-						<div class="col-lg-12 col-sm-12">
-    						@include('shop.common.product',['title' => 'Sản phẩm mới'])
-    						@include('shop.common.product',['title' => 'Bán chạy nhất'])
-						</div>
-						
-					</div>
+						{!! Utils::createProductTab(trans('shop.new_product_txt'), ProductStatus::IS_NEW, 1) !!}
+						{!! Utils::createProductTab(trans('shop.best_selling_txt'), ProductStatus::IS_BEST_SELLING, 2) !!}
+						{!! Utils::createProductTab(trans('shop.popular_txt'), ProductStatus::IS_POPULAR, 3) !!}
 				</div>
 			</div>
 		</div>
 	</div>
 </section>
+@if($posts->count())
 <section class="awe-section-8" id="awe-section-8">	
 	<div class="section section_blog">
 		<div class="container">
     		<div class="section-title a-center">
-    			<h2><a href="https://dualeo-x.bizwebvietnam.net/tin-tuc">Tin cập nhật</a></h2>			
-    			<p>Tin tức vệ sinh an toàn thực phẩm cập nhật mới nhất<br> mỗi ngày cho bạn</p>
+    			<h2><a href="https://dualeo-x.bizwebvietnam.net/tin-tuc">{{ trans('shop.news_txt') }}</a></h2>			
+    			<p>{!! trans('shop.news_short_txt') !!}</p>
     		</div>
     		<div class="section-content">
     			<div class="blog-slider owl-carousel" data-lg-items='3' data-md-items='3' data-sm-items='2' data-xs-items="2" data-nav="true">
@@ -51,6 +48,7 @@
     	</div>
 	</div>
 </section>
+@endif
 @endsection
 @section('script')
 <script type="text/javascript">

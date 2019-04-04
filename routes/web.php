@@ -139,7 +139,8 @@ Route::group(['prefix' => ''], function () {
     $config = Config::first();
     Route::get('/', 'HomeController@index')->name('home');
     Route::get('/gioi-thieu' . $config['url_ext'], 'HomeController@about')->name('about');
-    Route::get('/delivery' . $config['url_ext'], 'HomeController@delivery')->name('delivery');
+    Route::get('/dat-lich-hen' . $config['url_ext'], 'HomeController@booking')->name('booking');
+    Route::get('/nhom-trao-doi' . $config['url_ext'], 'HomeController@forum')->name('forum');
     Route::match(['get', 'post'], '/products' . $config['url_ext'], 'HomeController@products')->name('products');
     Route::get('/cart' . $config['url_ext'], 'CartController@index')->name('cart');
     Route::match(['get', 'post'], '/lien-he' . $config['url_ext'], 'HomeController@contact')->name('contact');
@@ -150,9 +151,9 @@ Route::group(['prefix' => ''], function () {
     
     Route::post('/load-data' . $config['url_ext'], 'HomeController@loadData')->name('loadData');
     
-    Route::get('/vendor/{vendor}' . $config['url_ext'], 'HomeController@vendor')->name('vendor');
+    Route::get('/nhan-hieu/{vendor}' . $config['url_ext'], 'HomeController@vendor')->name('vendor');
     Route::get('/danh-muc/{slug}' . $config['url_ext'], 'HomeController@category')->name('category');
-    Route::get('/tin-tuc/{slug}' . $config['url_ext'], 'HomeController@postGroup')->name('post_groups');
+    Route::get('/tin-tuc/{slug?}' . $config['url_ext'], 'HomeController@postGroup')->name('postgroups');
     Route::get('/tin-tuc/{slug}/{slug1}' . $config['url_ext'], 'HomeController@posts')->name('posts');
     Route::get('/{slug}' . $config['url_ext'], 'HomeController@productDetails')->name('product_details');
     Route::get('refreshcaptcha', 'MembersController@refreshCaptcha')->name('refreshcaptcha');

@@ -103,6 +103,8 @@ class Common {
     /** Size */
     CONST UPLOAD_SIZE_LIMIT = ['51200', '102400', '512000', '1024000'];
     
+    CONST CURRENCY = '₫';
+    
     public static function getValue($key) {
         return constant('Common::' . $key);
     }
