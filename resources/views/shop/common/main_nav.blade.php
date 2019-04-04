@@ -21,11 +21,11 @@
 				<ul class="list-inline">
 					
 					<li>
-						<a href="https://dualeo-x.bizwebvietnam.net/account/login"><i class="fa fa-user"></i> Đăng nhập</a>
+						<a href="https://dualeo-x.bizwebvietnam.net/account/login"><i class="fa fa-user"></i> {{ trans('shop.button.login') }}</a>
 
 					</li>
 					<li><span>hoặc</span></li>
-					<li><a href="https://dualeo-x.bizwebvietnam.net/account/register">Đăng ký</a>						
+					<li><a href="https://dualeo-x.bizwebvietnam.net/account/register">{{ trans('shop.button.register') }}</a>						
 					</li>
 					
 

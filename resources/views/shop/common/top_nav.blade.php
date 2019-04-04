@@ -1,21 +1,48 @@
-<div class="navbar navbar-inverse navbar-fixed-top">
-	<div class="topNav">
-		<div class="container">
-			<div class="alignR">
-				<div class="pull-left socialNw">
-					<a href="#"><span class="icon-twitter"></span></a> <a href="#"><span
-						class="icon-facebook"></span></a> <a href="#"><span
-						class="icon-youtube"></span></a> <a href="#"><span
-						class="icon-tumblr"></span></a>
-				</div>
-				<a class="active" href="index.html"> <span class="icon-home"></span>
-					{{ trans('shop.top_nav.home') }}
-				</a> 
-				<a href="contact.html"><span class="icon-envelope"></span>
-					{{ trans('shop.top_nav.contact') }}</a> <a href="cart.html"><span
-					class="icon-shopping-cart"></span> {{ trans('shop.top_nav.cart') }} - <span
-					class="badge badge-warning"> 0 VNĐ</span></a>
-			</div>
-		</div>
-	</div>
-</div>
+@php
+	$mainNav = trans('shop.main_nav');
+@endphp
+<ul class="nav nav-left">
+	@foreach($mainNav as $route=>$nav)
+		@if($route == 'products')
+			<li class="nav-item  has-mega">
+				<a href="{{ route($route) }}" class="nav-link">{{ $nav['text'] }} <i class="fa fa-angle-right" data-toggle="dropdown"></i></a>			
+				<div class="mega-content">
+                    <div class="level0-wrapper2">
+                       <div class="nav-block nav-block-center">
+                       	   @if($categories->count())
+                		   <ul class="level0">
+                		   	   @foreach($categories as $category)
+                			   
+                			   <li class="level1 parent item"> <h2 class="h4"><a href="{{ $category->getLink() }}"><span>{{ $category->getName() }}</span></a></h2> 
+                				   @php $childCategories = $category->getChildCategory(); @endphp
+                				   <ul class="level1">
+                					   @foreach($childCategories as $child)
+                					   <li class="level2"> <a href="{{ $child->getLink() }}"><span>{{ $child->getName() }}</span></a> </li>
+                					   @endforeach
+                				   </ul>
+                			   </li>
+                			   @endforeach
+                		   </ul>
+                		   @endif
+                	   </div>
+                	 </div>
+                </div>
+			</li>
+		@elseif($route == 'postgroups')
+			<li class="nav-item ">
+				<a href="{{ route($route) }}" class="nav-link">{{ $nav['text'] }} <i class="fa fa-angle-right" data-toggle="dropdown"></i></a>			
+				@if($postGroups->count())
+				<ul class="dropdown-menu">
+					@foreach($postGroups as $group)
+					<li class="nav-item-lv2">
+						<a class="nav-link" href="{{ $group->getLink() }}">{{ $group->getName() }}</a>
+					</li>
+					@endforeach
+				</ul>
+				@endif
+			</li>
+		@else
+			<li class="nav-item @if($route == 'home'){{'active'}}@endif"><a class="nav-link" href="{{ route($route) }}">{{ $nav['text'] }}</a></li>
+		@endif
+	@endforeach
+</ul>

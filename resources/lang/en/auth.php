@@ -742,7 +742,8 @@ $auth = [
     ],
     /*------------ Config page ------------------- */
     'config' => [
-        'edit_title' => 'Cài đặt hệ thống',
+        'list_title' => 'Cài đặt hệ thống',
+        'edit_title' => 'Cài đặt',
         'form' => [
             'many_form' => true,
             'web_info' => [

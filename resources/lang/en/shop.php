@@ -18,6 +18,7 @@ return [
     'support_customer_txt' => 'Hỗ trợ khách hàng',
     'connect_social' => 'Kết nối với {0}',
     'share_url' => 'Chia sẻ',
+    'price_search' => 'Giá sản phẩm',
     'main_nav' => [
         'home' => ['text' => 'Trang chủ'],
         'products' => ['text' => 'Sản phẩm'],

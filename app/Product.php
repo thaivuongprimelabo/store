@@ -48,6 +48,11 @@ class Product extends Model
         return $category ? $category->name : '';
     }
     
+    public function getCategoryLink() {
+        $category = Category::select('name_url')->where('id', $this->category_id)->first();
+        return $category ? route('category', ['slug' => $category->name_url]) : '';
+    }
+    
     public function getVendorName() {
         $vendor = Vendor::select('name')->where('id', $this->vendor_id)->first();
         return $vendor ? $vendor->name : '';
@@ -99,5 +104,13 @@ class Product extends Model
     
     public function getLink() {
         return route('product_details',['slug' => $this->name_url]);
+    }
+    
+    public function getImageWidth() {
+        return '280';
+    }
+    
+    public function getImageHeight() {
+        return '280';
     }
 }

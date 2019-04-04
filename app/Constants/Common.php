@@ -74,8 +74,6 @@ class Common {
     CONST CONFIG = 'config';
     CONST PRODUCTS = 'products';
     CONST IMAGES_PRODUCT = 'images_product';
-    CONST SIZES = 'sizes';
-    CONST COLORS = 'colors';
     CONST PAGES = 'pages';
     CONST ORDERS = 'orders';
     CONST ORDER_DETAILS = 'order_details';

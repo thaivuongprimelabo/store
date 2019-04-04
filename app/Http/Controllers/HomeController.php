@@ -70,18 +70,17 @@ class HomeController extends AppController
     }
     
     public function category(Request $request) {
-        $slug = str_replace($this->config['config']['url_ext'], '', $request->slug);
+        $category = Category::select('id', 'name')->where('name_url', $request->slug)->first();
         
-        $category = Category::select('name')->where('name_url', $slug)->first();
-        
-        if($category) {
-            $this->breadcrumb['active'] = $category->name;
-        }
-        
-        $breadcrumb  = $this->breadcrumb;
-        $showSidebar = 'hide';
-        
-        return view('shop.category', compact('breadcrumb', 'showSidebar'));
+        $this->output['breadcrumbs'] = [
+            ['link' => '#', 'text' => $category->getName()]
+        ];
+        $this->output['data'] = $category;
+        $products = $category->getProductInCategory();
+        $this->output['products'] = $products;
+        $this->output['paging'] = $products->toArray();
+        $this->output['type'] = 'list';
+        return view('shop.category', $this->output);
     }
     
     public function productDetails(Request $request) {
@@ -101,6 +100,10 @@ class HomeController extends AppController
                     )
                     ->where(['products.status' => Status::ACTIVE, 'products.name_url' => $slug])->first();
         
+        $this->output['breadcrumbs'] = [
+            ['link' => $product->getCategoryLink(), 'text' => $product->getCategoryName()],
+            ['link' => '#', 'text' => trans('shop.main_nav.about.text')]
+        ];
         $this->output['data'] = $product;
         return view('shop.product_detail', $this->output);
         
@@ -117,13 +120,13 @@ class HomeController extends AppController
     }
     
     public function about(Request $request) {
-        $this->breadcrumb['active'] = trans('shop.main_nav.about');
-        
-        $breadcrumb  = $this->breadcrumb;
-        $showSidebar = 'hide';
         
         $about = Page::find(1);
-        return view('shop.about', compact('about', 'breadcrumb', 'showSidebar'));
+        $this->output['breadcrumbs'] = [
+            ['link' => '#', 'text' => trans('shop.main_nav.about.text')]
+        ];
+        $this->output['about'] = $about;
+        return view('shop.about', $this->output);
     }
     
     public function delivery(Request $request) {

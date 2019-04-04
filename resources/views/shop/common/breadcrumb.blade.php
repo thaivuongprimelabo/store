@@ -5,18 +5,19 @@
 				<ul class="breadcrumb" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">	
 
 					<li class="home">
-						<a itemprop="url" href="/"><span itemprop="title">Trang chủ</span></a>						
+						<a itemprop="url" href="/"><span itemprop="title">{{ trans('shop.main_nav.home.text') }}</span></a>						
 						<span> <i class="fa fa-angle-right"></i> </span>
 					</li>
-					
-					
+					@foreach($breadcrumbs as $key=>$item)
+					@if($key == (count($breadcrumbs) - 1))
+					<li><strong><span itemprop="title">{{ $item['text'] }}</span></strong></li><li>
+					@else
 					<li>
-						<a itemprop="url" href="/san-pham-noi-bat"><span itemprop="title">Sản phẩm nổi bật</span></a>						
+						<a itemprop="url" href="{{ $item['link'] }}"><span itemprop="title">{{ $item['text'] }}</span></a>						
 						<span> <i class="fa fa-angle-right"></i> </span>
 					</li>
-					
-					<li><strong><span itemprop="title">Dưa leo Đà Lạt</span></strong></li><li>
-					
+					@endif
+					@endforeach
 				</li></ul>
 			</div>
 		</div>

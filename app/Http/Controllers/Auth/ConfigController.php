@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use DB;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 class ConfigController extends AppController
 {
     //
@@ -93,6 +94,47 @@ class ConfigController extends AppController
                     DB::table('orders')->truncate();
                     DB::table('order_details')->truncate();
                     DB::table('contacts')->truncate();
+                    
+                    DB::query('ALTER TABLE categories AUTO_INCREMENT = 1');
+                    DB::query('ALTER TABLE vendors AUTO_INCREMENT = 1');
+                    DB::query('ALTER TABLE products AUTO_INCREMENT = 1');
+                    DB::query('ALTER TABLE posts AUTO_INCREMENT = 1');
+                    DB::query('ALTER TABLE banners AUTO_INCREMENT = 1');
+                    DB::query('ALTER TABLE orders AUTO_INCREMENT = 1');
+                    DB::query('ALTER TABLE order_details AUTO_INCREMENT = 1');
+                    DB::query('ALTER TABLE contacts AUTO_INCREMENT = 1');
+                    DB::query('ALTER TABLE images_product AUTO_INCREMENT = 1');
+                    DB::query('ALTER TABLE product_details AUTO_INCREMENT = 1');
+                    DB::query('ALTER TABLE product_detail_groups AUTO_INCREMENT = 1');
+                    DB::query('ALTER TABLE services AUTO_INCREMENT = 1');
+                    DB::query('ALTER TABLE service_groups AUTO_INCREMENT = 1');
+                    
+                    $users = [
+                        ['id' => 1, 'name' => 'Super Administrator',
+                            'email' => 'super.admin@admin.com',
+                            'password' => Hash::make('!23456Abc'),
+                            'role_id' => Common::SUPER_ADMIN,
+                            'created_at' => date('Y-m-d H:i:s'),
+                            'updated_at' => date('Y-m-d H:i:s')
+                        ],
+                        ['id' => 2, 'name' => 'Administrator',
+                            'email' => 'admin@admin.com',
+                            'password' => Hash::make('!23456Abc'),
+                            'role_id' => Common::ADMIN,
+                            'created_at' => date('Y-m-d H:i:s'),
+                            'updated_at' => date('Y-m-d H:i:s')
+                        ]
+                    ];
+                    DB::table(Common::USERS)->delete();
+                    DB::table(Common::USERS)->insert($users);
+                    
+                    $config = [
+                        [
+                            'id' => 1
+                        ]
+                    ];
+                    DB::table(Common::CONFIG)->delete();
+                    DB::table(Common::CONFIG)->insert($config);
                     
                     DB::commit();
                 } catch(\Exception $e) {

@@ -30,7 +30,7 @@ class Category extends Model
         return $categories;
     }
     
-    public function getProductInCategory($type) {
+    public function getProductInCategory($type = '') {
         
         $wheres = [
             ['status', '=', Status::ACTIVE]
@@ -55,7 +55,7 @@ class Category extends Model
         
         $whereIn = 'category_id IN (SELECT id FROM categories WHERE parent_id = ' . $this->id . ' OR id = ' . $this->id . ')';
         
-        $products = Product::where($wheres)->whereRaw($whereIn)->get();
+        $products = Product::where($wheres)->whereRaw($whereIn)->paginate(4);
         return $products;
     }
     

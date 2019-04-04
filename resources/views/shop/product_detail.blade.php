@@ -105,7 +105,7 @@
 								</div>
 							</div>
 							<div class="tab-2 tab-content">
-								{{ $data->getDescription() }}
+								{!! $data->getDescription() !!}
 							</div>
 						</div>
 					</div>
@@ -113,7 +113,8 @@
 			</div>
 		</div>
 		<aside class="dqdt-sidebar sidebar right left-content col-lg-3">
-            {!! Utils::createSidebarShop('right') !!}
+			{!! Utils::createSidebarShop('category_list') !!}
+            {!! Utils::createSidebarShop('popular_products') !!}
 		</aside>
 		
 	</div>

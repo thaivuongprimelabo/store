@@ -40,7 +40,7 @@
 									<div class="col-xs-6 col-xss-6 col-sm-4 col-md-3 col-lg-3">
 										<div class="product-box">															
 											<div class="product-thumbnail flexbox-grid">	
-												<a href="{{ $product->getLinkDetail() }}" title="Vải thiều loại to">
+												<a href="{{ $product->getLink() }}" title="Vải thiều loại to">
 													<img src="{{ $product->getFirstImage() }}"  data-lazyload="{{ $product->getFirstImage() }}" alt="Vải thiều loại to">
 												</a>	
 												<div class="product-action hidden-md hidden-sm hidden-xs clearfix">
@@ -50,13 +50,13 @@
 															<i class="fa fa-shopping-bag"></i>						
 														</button>
 														
-														<a href="{{ $product->getLinkDetail() }}" class="btn-gray btn_view btn right-to">
+														<a href="{{ $product->getLink() }}" class="btn-gray btn_view btn right-to">
 														<i class="fa fa-eye"></i></a>
 													</div>
 												</div>
 											</div>
 											<div class="product-info a-center">
-												<h3 class="product-name"><a href="{{ $product->getLinkDetail() }}" title="Vải thiều loại to">{{ $product->getName() }}</a></h3>
+												<h3 class="product-name"><a href="{{ $product->getLink() }}" title="Vải thiều loại to">{{ $product->getName() }}</a></h3>
 												<div class="price-box clearfix">
 													<div class="special-price">
 														<span class="price product-price">{{ $product->getPrice() }}₫</span>
