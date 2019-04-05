@@ -22,8 +22,11 @@ class Common {
     CONST FILE_MIMES = 'image/jpg, image/jpeg, image/gif, image/png, application/pdf, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/msword, 	application/vnd.ms-excel';
     CONST NO_LOGO_FILE = 'upload/no-image-icon-6.png';
     CONST NO_AVATAR = 'admin/dist/img/user2-160x160.jpg';
-    CONST ROW_PER_PAGE = 4;
-    CONST LIMIT_PRODUCT_SHOW = 8;
+    CONST ROW_PER_PAGE = 10;
+    CONST LIMIT_PRODUCT_SHOW = 9;
+    CONST LIMIT_PRODUCT_SHOW_SIDEBAR = 5;
+    CONST LIMIT_PRODUCT_SHOW_TAB = 8;
+    CONST LIMIT_POST_SHOW = 6;
     CONST LOGO_MAX_SIZE = '512000';
     CONST LOGO_WIDTH = '120';
     CONST LOGO_HEIGHT = '100';

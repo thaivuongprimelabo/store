@@ -9,6 +9,7 @@ return [
     'cart_txt' => 'Giỏ hàng',
     'search_txt' => 'Tìm sản phẩm',
     'category_txt' => 'Danh mục',
+    'products_txt' => 'Tất cả sản phẩm',
     'new_product_txt' => 'Sản phẩm mới',
     'best_selling_txt' => 'Bán chạy nhất',
     'popular_txt' => 'Sản phẩm nổi bật',
@@ -19,11 +20,15 @@ return [
     'connect_social' => 'Kết nối với {0}',
     'share_url' => 'Chia sẻ',
     'price_search' => 'Giá sản phẩm',
+    'postgroups_txt' => 'Danh mục tin',
+    'search_suggestion' => 'Sản phẩm gợi ý',
+    'search_product' => 'Tìm sản phẩm',
+    'search_results' => 'Kết quả tìm kiếm với từ khóa ":keyword"',
     'main_nav' => [
         'home' => ['text' => 'Trang chủ'],
         'products' => ['text' => 'Sản phẩm'],
         'about' => ['text' => 'Giới thiệu'],
-        'postgroups' => ['text' => 'Tin tức'],
+        'posts' => ['text' => 'Tin tức'],
         'booking' => ['text' => 'Đặt lịch hẹn'],
         'forum' => ['text' => 'Nhóm trao đổi'],
         'contact' => ['text' => 'Liên hệ']
@@ -33,6 +38,14 @@ return [
         'qty_txt' => 'Số lượng',
         'subtotal' => 'Tổng tiền thanh toán',
     ],
+    'contact' => [
+        'name' => 'Họ tên*',
+        'email' => 'E-mail*',
+        'phone' => 'Số điện thoại*',
+        'subject' => 'Tựa đề*',
+        'captcha' => 'Captcha*',
+        'comment' => 'Nội dung*'
+    ],
     'button' => [
         'detail_view' => 'Chi tiết',
         'add_to_cart' => 'Đặt hàng ngay',
@@ -41,6 +54,7 @@ return [
         'update_qty' => 'Cập nhật số lượng',
         'send' => 'Gửi ý kiến',
         'login' => 'Đăng nhập',
-        'register' => 'Đăng ký'
+        'register' => 'Đăng ký',
+        'send_contact' => 'Gửi liên hệ'
     ],
 ];

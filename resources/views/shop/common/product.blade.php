@@ -3,8 +3,8 @@
 		<div class="col-sm-12">
 			<div class="content">
 				<div class="section-title">
-					<h2>
-						{{ $title }}
+					<h2 class="title-head">
+						<a href="{{ $route }}" title="{{ $title }}">{{ $title }}</a>
 					</h2>
 				</div>
 				<div>
@@ -40,9 +40,10 @@
 									<div class="col-xs-6 col-xss-6 col-sm-4 col-md-3 col-lg-3">
 										<div class="product-box">															
 											<div class="product-thumbnail flexbox-grid">	
-												<a href="{{ $product->getLink() }}" title="Vải thiều loại to">
-													<img src="{{ $product->getFirstImage() }}"  data-lazyload="{{ $product->getFirstImage() }}" alt="Vải thiều loại to">
-												</a>	
+												<a href="{{ $product->getLink() }}" title="{{ $product->getName() }}">
+													<img src="{{ $product->getFirstImage() }}"  data-lazyload="{{ $product->getFirstImage() }}" alt="{{ $product->getName() }}">
+												</a>
+												{!! $product->getDisCount() !!} 	
 												<div class="product-action hidden-md hidden-sm hidden-xs clearfix">
 													<div>
 														<input type="hidden" name="variantId" value="17898181" />
@@ -56,7 +57,7 @@
 												</div>
 											</div>
 											<div class="product-info a-center">
-												<h3 class="product-name"><a href="{{ $product->getLink() }}" title="Vải thiều loại to">{{ $product->getName() }}</a></h3>
+												<h3 class="product-name"><a href="{{ $product->getLink() }}" title="{{ $product->getName() }}">{{ $product->getName() }}</a></h3>
 												<div class="price-box clearfix">
 													<div class="special-price">
 														<span class="price product-price">{{ $product->getPrice() }}₫</span>

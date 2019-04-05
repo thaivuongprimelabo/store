@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Constants\Common;
+use App\Constants\Status;
 use Illuminate\Database\Eloquent\Model;
 
 class PostGroups extends Model
@@ -23,5 +24,9 @@ class PostGroups extends Model
     
     public function getName() {
         return $this->name;
+    }
+    
+    public function scopeActive($query) {
+        return $query->where('status', Status::ACTIVE);
     }
 }

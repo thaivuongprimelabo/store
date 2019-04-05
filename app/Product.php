@@ -6,6 +6,8 @@ use App\Constants\Common;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use App\Helpers\Utils;
+use App\Constants\ProductStatus;
+use App\Constants\Status;
 
 class Product extends Model
 {
@@ -77,8 +79,15 @@ class Product extends Model
         return $html;
     }
     
-    public function getDiscount($price, $discount) {
-        return number_format($price - ($price * ($discount / 100)));
+    public function getDiscountPrice() {
+        return number_format($this->price - ($this->price * ($this->discount / 100)));
+    }
+    
+    public function getDiscount() {
+        if($this->discount) {
+            return '<div class="sale-flash"><div class="before"></div>-' . $this->discount . '%</div>';
+        }
+        return '';
     }
     
     public function getName() {
@@ -112,5 +121,21 @@ class Product extends Model
     
     public function getImageHeight() {
         return '280';
+    }
+    
+    public function scopeActive($query) {
+        return $query->where('status', Status::ACTIVE);
+    }
+    
+    public function scopeIsNew($query) {
+        return $query->where('is_new', ProductStatus::IS_NEW);
+    }
+    
+    public function scopeIsPopular($query) {
+        return $query->where('is_popular', ProductStatus::IS_POPULAR);
+    }
+    
+    public function scopeIsBestSelling($query) {
+        return $query->where('is_best_selling', ProductStatus::IS_BEST_SELLING);
     }
 }

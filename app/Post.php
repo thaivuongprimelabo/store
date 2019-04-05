@@ -31,8 +31,24 @@ class Post extends Model
         return $this->description;
     }
     
+    public function getCreatedAt() {
+        return Utils::formatDate($this->created_at);
+    }
+    
+    public function getPhoto() {
+        return Utils::getImageLink($this->photo);
+    }
+    
+    public function getContent() {
+        return $this->content;
+    }
+    
     public function getLink() {
         $postGroups = PostGroups::select('id','name_url')->where('id', $this->post_group_id)->where('status', Status::ACTIVE)->first();
-        return route('posts', ['slug' => $postGroups->name_url, 'slug1' => $this->name_url]);
+        return route('postDetails', ['slug' => $postGroups->name_url, 'slug1' => $this->name_url]);
+    }
+    
+    public function scopeActive($query) {
+        return $query->where('status', Status::ACTIVE);
     }
 }

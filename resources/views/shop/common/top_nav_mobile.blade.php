@@ -27,7 +27,7 @@
 			</ul>
 			@endif
 		</li>
-		@elseif($route == 'postgroups')
+		@elseif($route == 'posts')
 		<li class="nav-item ">
 			<a href="{{ route($route) }}" class="nav-link">{{ $nav['text'] }} <i class="fa faa fa-angle-right"></i></a>
 			@if($postGroups->count())

@@ -28,7 +28,7 @@
 				@else
 				<li class="nav-item">
 					<i class="fa fa-caret-right"></i>
-					<a class="nav-link" href="/">Trang chủ</a>
+					<a class="nav-link" href="{{ $category->getLink() }}">{{ $category->getName() }}</a>
 				</li>
 				@endif
 				@endforeach

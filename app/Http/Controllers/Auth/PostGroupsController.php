@@ -52,6 +52,7 @@ class PostGroupsController extends AppController
                 $data->name              = Utils::cnvNull($request->name, '');
                 $data->name_url          = Utils::createNameUrl(Utils::cnvNull($request->name, ''));
                 $data->status            = Utils::cnvNull($request->status, 0);
+                $data->parent_id         = Utils::cnvNull($request->parent_id, 0);
                 $data->created_at        = date('Y-m-d H:i:s');
                 $data->updated_at        = date('Y-m-d H:i:s');
                 
@@ -87,6 +88,7 @@ class PostGroupsController extends AppController
                 $data->name                 = Utils::cnvNull($request->name, '');
                 $data->name_url             = Utils::createNameUrl(Utils::cnvNull($request->name, ''));
                 $data->status               = Utils::cnvNull($request->status, 0);
+                $data->parent_id            = Utils::cnvNull($request->parent_id, 0);
                 $data->updated_at           = date('Y-m-d H:i:s');
                 
                 if($data->save()) {

@@ -28,7 +28,7 @@
                 	 </div>
                 </div>
 			</li>
-		@elseif($route == 'postgroups')
+		@elseif($route == 'posts')
 			<li class="nav-item ">
 				<a href="{{ route($route) }}" class="nav-link">{{ $nav['text'] }} <i class="fa fa-angle-right" data-toggle="dropdown"></i></a>			
 				@if($postGroups->count())

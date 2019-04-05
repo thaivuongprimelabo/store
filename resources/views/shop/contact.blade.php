@@ -1,106 +1,132 @@
 @extends('layouts.shop')
 
 @section('content')
-
-<div class="container">
-	@include('shop.common.alert')
+@include('shop.common.breadcrumb')
+<div class="container container-fix-hd contact margin-bottom-30">
+	<div class="box-heading hidden relative">
+		<h1 class="title-head">Liên hệ</h1>
+	</div>	
+	<h2 class="title-head"><span> Gửi tin nhắn cho chúng tôi</span></h2>
 	<div class="row">
-		<div class="col-md-6">
-			<div class="mapouter">
-				<iframe width="550" height="400" id="gmap_canvas" src="https://maps.google.com/maps?q=10.762402%2C%20106.663424&t=&z=13&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>
+		<div class="col-sm-12">
+			<div class="row">
+				<div class="col-md-6">
+					<div id="login">
+						@include('shop.common.alert')
+						<form accept-charset="UTF-8" action="?" id="contact" method="post">
+							{{ csrf_field() }}
+    						<div id="emtry_contact" class="form-signup form_contact clearfix">
+    							<div class="row row-8Gutter">
+    								<div class="col-md-12">
+    									<fieldset class="form-group">							
+    										<input type="text" placeholder="{{ trans('shop.contact.name') }}" name="name" id="name" class="form-control  form-control-lg" required="">
+    									</fieldset>
+    								</div>
+    								<div class="col-md-12">
+    									<fieldset class="form-group">							
+    										<input type="email" placeholder="{{ trans('shop.contact.email') }}" name="email" pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,63}$" data-validation="email" id="email" class="form-control form-control-lg" required="">
+    									</fieldset>
+    								</div>
+    								<div class="col-md-12">
+    									<fieldset class="form-group">						
+    										<input type="tel" placeholder="{{ trans('shop.contact.phone') }}" name="phone" class="form-control form-control-lg fixnumber" required="">
+    									</fieldset>
+    								</div>
+    								<div class="col-md-12">
+    									<fieldset class="form-group">						
+    										<input type="text" placeholder="{{ trans('shop.contact.subject') }}" name="subject" class="form-control form-control-lg" required="">
+    									</fieldset>
+    								</div>
+    								<div class="col-md-12">
+    									<fieldset class="form-group">							
+            								<textarea placeholder="{{ trans('shop.contact.comment') }}" name="content" class="form-control form-control-lg" rows="6" required=""></textarea>
+            							</fieldset>
+    								</div>
+    								<div class="col-md-12 form-inline">
+    									<span id="captcha-img">{!! captcha_img('flat') !!}</span>
+    									<fieldset class="form-group">
+    										<input type="text" placeholder="{{ trans('shop.contact.captcha') }}" name="captcha" class="form-control form-control-lg" required="">					
+    									</fieldset>
+    								</div>
+    							</div>
+    							<div class="mt-2">
+    								<button tyle="summit" class="btn btn-primary" style="padding:0 40px;text-transform: inherit;">{{ trans('shop.button.send_contact') }}</button>
+    							</div> 
+    						</div>
+						</form>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="contact-box-info clearfix margin-bottom-30">
+						<div>
+							<div class="item">		
+
+								<div><i class="fa fa-map-marker"></i> 
+									<div class="info">
+										<label>{{ trans('shop.address_txt') }}</label>
+										{{ $config['web_address'] }}
+									</div>
+								</div>
+								<div>
+									<i class="fa fa-phone"></i> 
+									<div class="info">
+										<label>{{ trans('shop.hotline_txt') }}</label>
+										<a href="tel:{{ $config['web_hotline'] }}">{{ $config['web_hotline'] }}</a>
+										<p>{{ $config['web_working_time'] }}</p>
+									</div>
+								</div>
+								<div><i class="fa fa-envelope"></i> 
+									<div class="info">
+										<label>Email</label>
+										<a href="mailto:{{ $config['web_email'] }}">{{ $config['web_email'] }}
+										</a>
+									</div>
+								</div>																			
+								
+							</div>
+							
+
+						</div>		
+
+					</div>
+				</div>
+
 			</div>
 		</div>
-		<div class="col-md-6">
-    		<form role="form" id="contact_form" action="?" method="post" enctype="multipart/form-data">
-    			{{ csrf_field() }}
-    			<div class="billing-details">
-    				<div class="section-title">
-    					<h3 class="title">{{ trans('shop.contact.title') }}</h3>
-    				</div>
-    				<div class="form-group">
-    					<input class="input" type="text" name="name" maxlength="200" placeholder="{{ trans('shop.contact.name') }}">
-    				</div>
-    				<div class="form-group">
-    					<input class="input" type="email" name="email" maxlength="200" placeholder="{{ trans('shop.contact.email') }}">
-    				</div>
-    				<div class="form-group">
-    					<input class="input" type="tel" name="phone" maxlength="15" placeholder="{{ trans('shop.contact.phone') }}">
-    				</div>
-    				<div class="form-group">
-    					<input class="input" type="tel" name="subject" maxlength="255" placeholder="{{ trans('shop.contact.subject') }}">
-    				</div>
-    				<div class="form-group">
-    					<textarea class="form-control" name="content" rows="5" placeholder="{{ trans('shop.contact.comment') }}"></textarea>
-    				</div>
-    				<div class="form-group captcha">
-    					<span id="captcha-img">{!! captcha_img('flat') !!}</span>
-    					<button id="refresh" type="button" class="btn btn-success"><i class="fa fa-refresh"></i></button>
-    					<input class="input" type="text" id="captcha" name="captcha" maxlength="255" placeholder="{{ trans('shop.register_form.captcha') }}">
-    					<span id="captcha-error" class="valid-text"></span>
-    				</div>
-    				<div class="pull-right">
-    					<button type="button" class="primary-btn" id="send">{{ trans('shop.button.send') }}</button>
-    				</div>
-    			</div>
-			</form>
+		<div class="col-sm-12">
+			<div class="box-maps margin-bottom-30">
+				<div class="iFrameMap">
+					<div class="google-map">
+						<div id="contact_map" class="map"></div>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
+
 </div>
+<style>
+	.google-map {width:100%;}
+	.google-map .map {width:100%; height:450px; background:#dedede}
+</style>
 @endsection
 @section('script')
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAOvgMzMavm0loFdwqNrzzVh42X_-lDZ3w&callback=initMap"></script>
+
+<script src="//bizweb.dktcdn.net/100/308/325/themes/665783/assets/jquery.gmap.min.js?1554441903190" type="text/javascript"></script>
 <script type="text/javascript">
     $(document).ready(function() {
-        var validator = $("#contact_form").validate({
-        	onfocusout: false,
-        	rules: {
-        		name: {
-            		required: true
-        		},
-        		email: {
-        			required: true,
-        			email: true
-        		},
-        		phone: {
-        			required: true,
-        			number: true
-        		},
-        		subject: {
-    				required: true
-        		},
-        		content: {
-    				required: true
-        		},
-        		captcha: {
-        			required: true
-        		}
-        	},
-        	messages: {
-        		name : {
-        			required : "{{ Utils::getValidateMessage('validation.shop_required', '') }}",
-        		},
-        		email : {
-        			required : "{{ Utils::getValidateMessage('validation.shop_required', '') }}",
-        			email : "{{ trans('validation.email') }}"
-        		},
-        		phone : {
-        			required : "{{ Utils::getValidateMessage('validation.shop_required', '') }}",
-        			number: "{{ trans('validation.numeric') }}"
-        		},
-        		subject: {
-        			required : "{{ Utils::getValidateMessage('validation.shop_required', '') }}",
-        		},
-        		content: {
-        			required : "{{ Utils::getValidateMessage('validation.shop_required', '') }}",
-        		},
-        		captcha: {
-        			required : "{{ Utils::getValidateMessage('validation.shop_required', '') }}",
-        		}
-        	},
-        	submitHandler: function(form) {
-        		form.submit();
-            }
-        });
 
+    	$('#contact_map').gMap({
+			zoom: 16,
+		    scrollwheel: false,
+		    maptype: 'ROADMAP',
+		    markers:[{
+    		   		address: '{{ $config['web_address'] }}',
+    		   		html: '_address'
+		   		}]
+		   });
+		   
         $('#refresh').click(function(){
       		  $.ajax({
       		     type:'GET',

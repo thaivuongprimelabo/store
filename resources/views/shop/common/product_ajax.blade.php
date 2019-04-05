@@ -1,6 +1,6 @@
-@if($products->count())
-@foreach($products as $product)
-@if($type == 'grid')
+@if($data->count())
+@foreach($data as $product)
+@if($view_type == 'grid')
 <div class="col-xs-6 col-xss-6 col-sm-4 col-md-4 col-lg-4">
 	<div class="product-box">															
     	<div class="product-thumbnail flexbox-grid">	

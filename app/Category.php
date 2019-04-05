@@ -30,7 +30,11 @@ class Category extends Model
         return $categories;
     }
     
-    public function getProductInCategory($type = '') {
+    public function getProductInCategory($type = '', $get = true) {
+        
+        if(!$get) {
+            return [];
+        }
         
         $wheres = [
             ['status', '=', Status::ACTIVE]
@@ -55,7 +59,7 @@ class Category extends Model
         
         $whereIn = 'category_id IN (SELECT id FROM categories WHERE parent_id = ' . $this->id . ' OR id = ' . $this->id . ')';
         
-        $products = Product::where($wheres)->whereRaw($whereIn)->paginate(4);
+        $products = Product::where($wheres)->whereRaw($whereIn)->orderBy('created_at', 'DESC')->limit(Common::LIMIT_PRODUCT_SHOW_TAB)->get();
         return $products;
     }
     
@@ -65,5 +69,9 @@ class Category extends Model
     
     public function getName() {
         return $this->name;
+    }
+    
+    public function scopeActive($query) {
+        return $query->where('status', Status::ACTIVE);
     }
 }

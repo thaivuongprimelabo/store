@@ -2,7 +2,7 @@
 	<div>
 		<div class="aside-title">
 			<h2 class="title-head">
-				<a href="/san-pham-noi-bat" title="Sản phẩm nổi bật">{{ trans('shop.popular_txt') }}</a>
+				<a href="{{ route('popularProducts') }}" title="{{ trans('shop.popular_txt') }}">{{ trans('shop.popular_txt') }}</a>
 			</h2>
 		</div>
 		<div class="aside-content related-product">

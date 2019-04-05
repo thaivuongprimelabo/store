@@ -55,32 +55,26 @@ class HomeController extends AppController
     }
     
     public function vendor(Request $request) {
-        $slug = str_replace($this->config['config']['url_ext'], '', $request->vendor);
         
-        $vendor = Vendor::select('name')->where('name_url', $slug)->first();
-        
-        if($vendor) {
-            $this->breadcrumb['active'] = $vendor->name;
-        }
-        
-        $breadcrumb  = $this->breadcrumb;
-        $showSidebar = 'hide';
-        
-        return view('shop.vendor', compact('breadcrumb', 'showSidebar'));
+        $vendor = Vendor::select('id', 'name')->active()->where('name_url', $request->slug)->first();
+        $this->output['breadcrumbs'] = [
+            ['link' => '#', 'text' => $vendor->getName()]
+        ];
+        $this->output['data'] = $vendor;
+        $this->output['view_type'] = 'grid';
+        $this->output['page_name'] = 'vendor-page';
+        return view('shop.product_list', $this->output);
     }
     
     public function category(Request $request) {
-        $category = Category::select('id', 'name')->where('name_url', $request->slug)->first();
-        
+        $category = Category::select('id', 'name')->active()->where('name_url', $request->slug)->first();
         $this->output['breadcrumbs'] = [
             ['link' => '#', 'text' => $category->getName()]
         ];
         $this->output['data'] = $category;
-        $products = $category->getProductInCategory();
-        $this->output['products'] = $products;
-        $this->output['paging'] = $products->toArray();
-        $this->output['type'] = 'list';
-        return view('shop.category', $this->output);
+        $this->output['view_type'] = 'grid';
+        $this->output['page_name'] = 'category-page';
+        return view('shop.product_list', $this->output);
     }
     
     public function productDetails(Request $request) {
@@ -109,14 +103,45 @@ class HomeController extends AppController
         
     }
     
+    public function newProducts(Request $request) {
+        $this->output['breadcrumbs'] = [
+            ['link' => '#', 'text' => trans('shop.new_product_txt')]
+        ];
+        
+        $this->output['view_type'] = 'grid';
+        $this->output['page_name'] = 'new-products-page';
+        return view('shop.product_list', $this->output);
+    }
+    
+    public function popularProducts(Request $request) {
+        $this->output['breadcrumbs'] = [
+            ['link' => '#', 'text' => trans('shop.popular_txt')]
+        ];
+        
+        $this->output['view_type'] = 'grid';
+        $this->output['page_name'] = 'popular-products-page';
+        return view('shop.product_list', $this->output);
+    }
+    
+    public function bestSellProducts(Request $request) {
+        $this->output['breadcrumbs'] = [
+            ['link' => '#', 'text' => trans('shop.best_selling_txt')]
+        ];
+        
+        $this->output['view_type'] = 'grid';
+        $this->output['page_name'] = 'best-selling-products-page';
+        return view('shop.product_list', $this->output);
+        
+    }
+    
     public function products(Request $request) {
+        $this->output['breadcrumbs'] = [
+            ['link' => '#', 'text' => trans('shop.products_txt')]
+        ];
         
-        $this->breadcrumb['active'] = trans('shop.main_nav.products');
-        
-        $breadcrumb  = $this->breadcrumb;
-        $showSidebar = 'hide';
-                    
-        return view('shop.products', compact('breadcrumb', 'showSidebar'));
+        $this->output['view_type'] = 'grid';
+        $this->output['page_name'] = 'all-products-page';
+        return view('shop.product_list', $this->output);
     }
     
     public function about(Request $request) {
@@ -129,23 +154,8 @@ class HomeController extends AppController
         return view('shop.about', $this->output);
     }
     
-    public function delivery(Request $request) {
-
-        $this->breadcrumb['active'] = trans('shop.main_nav.delivery');
-        
-        $breadcrumb  = $this->breadcrumb;
-        $showSidebar = 'hide';
-        
-        $delivery = Page::find(2);
-        return view('shop.delivery', compact('delivery', 'breadcrumb', 'showSidebar'));
-    }
-    
     public function contact(Request $request) {
         
-        $this->breadcrumb['active'] = trans('shop.main_nav.contact');
-        
-        $breadcrumb  = $this->breadcrumb;
-        $showSidebar = 'hide';
         
         if($request->isMethod('post')) {
             
@@ -183,55 +193,69 @@ class HomeController extends AppController
                 return redirect(route('contact'))->with('error', trans('messages.ERROR'));
             }
         }
-        return view('shop.contact', compact('breadcrumb', 'showSidebar'));
+        
+        $this->output['breadcrumbs'] = [
+            ['link' => '#', 'text' => trans('shop.main_nav.contact.text')]
+        ];
+        
+        return view('shop.contact', $this->output);
     }
     
     public function search(Request $request) {
-        $keyword = $request->keyword;
-        $category_id = $request->category_id;
         
-        $title = str_replace('{0}', $keyword, trans('shop.search_result'));
-        
-        $this->breadcrumb['active'] = $title;
-        
-        $breadcrumb  = $this->breadcrumb;
-        $showSidebar = 'hide';
-        
-        $conditions = [
-            ['products.name', 'LIKE', '%' . $keyword . '%'],
-            ['products.category_id', '=', $category_id]
+        $keyword = $request->q;
+        $this->output['breadcrumbs'] = [
+            ['link' => '#', 'text' => trans('shop.search_results', compact('keyword'))]
         ];
         
-        $products = $this->doSearch($conditions);
-        
-        return view('shop.search', compact('products', 'breadcrumb', 'showSidebar', 'title'));
+        return view('shop.search', $this->output);
     }
-        
-    private function doSearch($conditions = []) {
-        $wheres = [
-            ['products.status', '=', Status::ACTIVE]
+    
+    public function posts(Request $request) {
+        $this->output['breadcrumbs'] = [
+            ['link' => '#', 'text' => trans('shop.main_nav.posts.text')]
         ];
         
-        $wheres = array_merge($wheres, $conditions);
+        $this->output['title'] = trans('shop.main_nav.posts.text');
+        $this->output['page_name'] = 'posts-page';
         
-        $object = Product::select(
-                    'products.name',
-                    'products.price',
-                    'products.id',
-                    'categories.name_url AS category_name_url',
-                    'products.name_url',
-                    'products.is_new',
-                    'products.is_best_selling',
-                    'products.is_popular',
-                    'products.discount',
-                    DB::raw('GROUP_CONCAT(images_product.image) AS image')
-                )
-                ->leftJoin('categories', 'categories.id', '=', 'products.category_id')
-                ->leftJoin('images_product','images_product.product_id', '=', 'products.id')
-                ->where($wheres)
-                ->groupBy('products.id')->paginate(Common::LIMIT_PRODUCT_SHOW);
+        return view('shop.posts', $this->output);
+    }
+    
+    public function postDetails(Request $request) {
         
-        return $object;
+        $slug = $request->slug;
+        $slug1 = $request->slug1;
+        
+        $postGroup = PostGroups::select('id', 'name')->active()->where('name_url', $slug)->first();
+        $post = Post::active()->where('name_url', $slug1)->first();
+        
+        $this->output['breadcrumbs'] = [
+            ['link' => route('posts'), 'text' => trans('shop.main_nav.posts.text')],
+            ['link' => '#', 'text' => $postGroup->getName()],
+        ];
+        
+        $this->output['page_name'] = 'post-details-page';
+        $this->output['data'] = $post;
+            
+        return view('shop.post_details', $this->output);
+    }
+    
+    public function postGroup(Request $request) {
+        
+        $slug = $request->slug;
+        $postGroup = PostGroups::select('id', 'name')->active()->where('name_url', $slug)->first();
+        
+        $this->output['breadcrumbs'] = [
+            ['link' => route('posts'), 'text' => trans('shop.main_nav.posts.text')],
+            ['link' => '#', 'text' => $postGroup->getName()],
+        ];
+        
+        $this->output['title'] = $postGroup->getName();
+        $this->output['data'] = $postGroup;
+        $this->output['page_name'] = 'posts-group-page';
+        
+        return view('shop.posts', $this->output);
     }
     
     public function loadData(Request $request) {
@@ -241,94 +265,80 @@ class HomeController extends AppController
         ];
         
         if($request->ajax()) {
+            $id = $request->id;
+            $view_type = $request->view_type;
             $page = $request->page_name;
+            $sort_by = $request->sort_by;
+            $price_search = $request->price_search;
+            $orderBy = 'products.id ASC';
+            $keyword = $request->keyword;
             
+            if(!Utils::blank($sort_by)) {
+                $sort = explode(',', $sort_by);
+                $orderBy = $sort[0] . ' ' . $sort[1];
+            }
+            
+            if(!Utils::blank($price_search)) {
+                $whereIn .= ' AND ' . $price_search;
+            }
+            
+            $view = 'shop.common.product_ajax';
+            $count = 0;
             switch($page) {
-                case 'home-page':
-                    $new_products          = $this->getProducts([['products.is_new', '=', Status::IS_NEW]])['products'];
-                    $discount_products     = $this->getProducts([['products.discount', '>', 0]])['products'];
-                    $best_selling_products = $this->getProducts([['products.is_best_selling', '=', Status::IS_BEST_SELLING]])['products'];
-                    
-                    $news = view('shop.common.product', ['title' => trans('shop.new_products'), 'data' => $new_products])->render();
-                    $discount = view('shop.common.product',['title' => trans('shop.discount_products'), 'data' => $discount_products])->render();
-                    $best_selling = view('shop.common.product',['title' => trans('shop.best_selling'), 'data' => $best_selling_products])->render();
-                    
-                    $result['code'] = 200;
-                    $result['data'] = $news . $discount . $best_selling;
-                    break;
                     
                 case 'category-page':
-                    $slug = $request->slug;
-                    $products = $this->getProducts([['categories.name_url', '=', $slug]]);
-                    $result['code'] = 200;
-                    $result['data'] = view('shop.common.product',['title' => '', 'data' => $products['products']])->render();
-                    $result['paging'] =  $products['paging'];
+                    $whereIn = 'category_id IN (SELECT id FROM categories WHERE parent_id = ' . $id . ' OR id = ' . $id . ')';
+                    $data = Product::active()->whereRaw($whereIn)->orderByRaw($orderBy)->paginate(Common::LIMIT_PRODUCT_SHOW);
                     break;
                     
+                case 'new-products-page':
+                    $data = Product::active()->isNew()->orderByRaw($orderBy)->paginate(Common::LIMIT_PRODUCT_SHOW);
+                    break;
+                    
+                case 'popular-products-page':
+                    $data = Product::active()->isPopular()->orderByRaw($orderBy)->paginate(Common::LIMIT_PRODUCT_SHOW);
+                    break;
+                    
+                case 'best-selling-products-page':
+                    $data = Product::active()->isBestSelling()->orderByRaw($orderBy)->paginate(Common::LIMIT_PRODUCT_SHOW);
+                    break;
+                    
+                case 'all-products-page':
+                    $data = Product::active()->orderByRaw($orderBy)->paginate(Common::LIMIT_PRODUCT_SHOW);
+                    break;
+                
                 case 'vendor-page':
-                    $slug = $request->slug;
-                    $products = $this->getProducts([['vendors.name_url', '=', $slug]]);
-                    $result['code'] = 200;
-                    $result['data'] = view('shop.common.product',['title' => '', 'data' => $products['products']])->render();
-                    $result['paging'] =  $products['paging'];
+                    $data = Product::active()->where('vendor_id', $id)->paginate(Common::LIMIT_PRODUCT_SHOW);
+                    break;
+                
+                case 'posts-page':
+                    $data = Post::active()->paginate(Common::LIMIT_POST_SHOW);
+                    $view = 'shop.common.post_ajax';
                     break;
                     
-                case 'product-page':
-                    $sort = $request->sort;
-                    $products = $this->getProducts([], $sort);
-                    $result['code'] = 200;
-                    $result['data'] = view('shop.common.product_ajax', ['data' => $products['products']])->render();
-                    $result['paging'] =  $products['paging'];
+                case 'posts-group-page':
+                    $data = Post::active()->where('post_group_id', $id)->paginate(Common::LIMIT_POST_SHOW);
+                    $view = 'shop.common.post_ajax';
+                    break;
                     
-                    $discount_products     = $this->getProducts([['products.discount', '>', 0]], '', 5)['products'];
-                    $best_selling_products = $this->getProducts([['products.is_best_selling', '=', Status::IS_BEST_SELLING]], '', 5)['products'];
-                    
-                    $result['widget'] = view('shop.common.widget',['title' => trans('shop.discount_products'), 'data' => $discount_products])->render() .
-                                        view('shop.common.widget',['title' => trans('shop.best_selling'), 'data' => $best_selling_products])->render();
+                case 'search-suggestion-page':
+                    $obj = Product::active()->where('name', 'LIKE', '%' . $keyword . '%')->paginate(Common::LIMIT_POST_SHOW);
+                    $view = 'shop.common.search_suggestion';
+                case 'search-page':
+                    $obj = Product::active()->where('name', 'LIKE', '%' . $keyword . '%');
+                    $count = $obj->count();
+                    $data = $obj->paginate(Common::LIMIT_POST_SHOW);
                     break;
             }
         }
+        
+        $paging = $data->toArray();
+        $result['code'] = 200;
+        $result['data'] = view($view, compact('data', 'view_type'))->render();
+        $result['paging'] =  $data->links('shop.common.paging', compact('paging'))->toHtml();
+        $result['count'] = $count;
         
         return response()->json($result);
     }
     
-    private function getProducts($wheres = [], $sort = '', $limit = Common::LIMIT_PRODUCT_SHOW) {
-        
-        $column = 'products.id';
-        $order = 'asc';
-        
-        if(!Utils::blank($sort)) {
-            $arrSort = explode('_', $sort);
-            if(count($arrSort)) {
-                $column = $arrSort[0];
-                $order = $arrSort[1];
-            }
-        }
-        
-        array_push($wheres, ['products.status', '=', Status::ACTIVE]);
-        
-        $products = Product::select(
-                        'products.name',
-                        'products.price',
-                        'products.id',
-                        'categories.name_url AS category_name_url',
-                        'products.name_url',
-                        'products.is_new',
-                        'products.is_best_selling',
-                        'products.is_popular',
-                        'products.discount',
-                        DB::raw('GROUP_CONCAT(images_product.image) AS image')
-                  )
-                  ->leftJoin('categories', 'categories.id', '=', 'products.category_id')
-                  ->leftJoin('vendors', 'vendors.id', '=', 'products.vendor_id')
-                  ->leftJoin('images_product','images_product.product_id', '=', 'products.id')
-                  ->where($wheres)
-                  ->groupBy('products.id')
-                  ->orderBy($column, $order)
-                  ->paginate($limit);
-        
-        $paging = $products->links('shop.common.paging', ['paging' => $products->toArray()])->toHtml();
-        
-        return compact('products', 'paging');
-    }
 }

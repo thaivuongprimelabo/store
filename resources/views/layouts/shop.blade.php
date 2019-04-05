@@ -41,6 +41,8 @@
 	<link href="{{ url('shop/bizweb.dktcdn.net/100/308/325/themes/665783/assets/responsive-update.scss4d7c.css') }}" rel="stylesheet" type="text/css" />
 	
 	<link href="{{ url('shop/bizweb.dktcdn.net/100/308/325/themes/665783/assets/iwish4d7c.css') }}" rel="stylesheet" type="text/css" />
+	
+	<link href="{{ url('shop/shop.custom.css') }}" rel="stylesheet" type="text/css" />
 	<!-- Header JS -->	
 	<script src="{{ url('shop/bizweb.dktcdn.net/100/308/325/themes/665783/assets/jquery-2.2.3.min4d7c.js') }}" type="text/javascript"></script> 
 
@@ -63,20 +65,51 @@
 	<script src="{{ url('shop/bizweb.dktcdn.net/100/308/325/themes/665783/assets/dl_main4d7c.js') }}" type="text/javascript"></script>
 	
 	<script src="https://bizweb.dktcdn.net/100/308/325/themes/665783/assets/jquery.elevatezoom308.min.js" type="text/javascript"></script>	
-	
+	<script type="text/javascript" src="{{ url('js/shop.custom.js') }}" ></script>
 	<script>
-		$('.zoomContainer').remove();				
-		 $('#zoom_01').elevateZoom({
-			 gallery:'gallery_01', 
-			 zoomWindowWidth:420,
-			 zoomWindowHeight:500,
-			 zoomWindowOffetx: 10,
-			 easing : true,
-			 scrollZoom : false,
-			 cursor: 'pointer', 
-			 galleryActiveClass: 'active', 
-			 imageCrossfade: true
-		 });
+		$(document).ready(function() {
+			
+    		 $('.zoomContainer').remove();
+    		 $('#zoom_01').elevateZoom({
+    			 gallery:'gallery_01', 
+    			 zoomWindowWidth:420,
+    			 zoomWindowHeight:500,
+    			 zoomWindowOffetx: 10,
+    			 easing : true,
+    			 scrollZoom : false,
+    			 cursor: 'pointer', 
+    			 galleryActiveClass: 'active', 
+    			 imageCrossfade: true
+    		 });
+
+    		 $(document).on('keyup', '#keyword', function(e) {
+        		 var value = $(this).val().trim();
+        		 var page_name = 'search-suggestion-page';
+        		 if(value.length > 0) {
+        			var data = {
+    		    		type : 'post',
+    		    		async : true,
+    		    		keyword: $(this).val(),
+    		    		page_name: page_name,
+    		    		container: '#product_results',
+    		    		paging: '',
+    		    	}
+    				$('#search_suggestion').show();
+      		    	$('.show_more span').html($(this).val());
+    		    	callAjax('{{ route('loadData') }}', data, page_name);
+        		 } else {
+        			 $('#search_suggestion').hide();
+        		 }
+    		 });
+		});
+
+		$(document).mouseup(function(e) {
+		    var container = $("#search_suggestion");
+		    if (!container.is(e.target) && container.has(e.target).length === 0) {
+		        container.hide();
+		    }
+		});
 	</script>
+	@yield('script')
 </body>
 </html>

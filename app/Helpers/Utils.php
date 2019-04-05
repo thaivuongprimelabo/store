@@ -315,7 +315,7 @@ class Utils {
                 return StatusOrders::createSelectList($selected);
                 break;
             case 'POST_GROUPS':
-                $data = PostGroups::select('id', 'name')->where('status', Status::ACTIVE)->get();
+                $data = PostGroups::select('id', 'name')->active()->get();
                 break;
             default:
                 $data = [];
@@ -1318,12 +1318,17 @@ class Utils {
             $html .= view('shop.common.category_list',compact('categories'))->render();
         }
         
+        if($position == 'postgroups_list') {
+            $postGroups = PostGroups::select('id', 'name', 'name_url')->active()->get();
+            $html .= view('shop.common.postgroups_list',compact('postGroups'))->render();
+        }
+        
         if($position == 'price_search') {
             $html .= view('shop.common.price_search')->render();
         }
         
         if($position == 'popular_products') {
-            $products = Product::where('status', Status::ACTIVE)->where('is_popular', ProductStatus::IS_POPULAR)->get();
+            $products = Product::where('status', Status::ACTIVE)->where('is_popular', ProductStatus::IS_POPULAR)->paginate(Common::LIMIT_PRODUCT_SHOW_SIDEBAR);
             $html .= view('shop.common.popular_products', compact('products'))->render();
         }
         return $html;
@@ -1336,7 +1341,24 @@ class Utils {
         if(!$categories->count()) {
             return $html;
         }
-        $html .= view('shop.common.product', compact('categories', 'title', 'type'))->render();
+        
+        $route = '';
+        if($type == ProductStatus::IS_NEW) {
+            $route = route('newProducts');
+        }
+        if($type == ProductStatus::IS_BEST_SELLING) {
+            $route = route('bestSellProducts');
+        }
+        if($type == ProductStatus::IS_POPULAR) {
+            $route = route('popularProducts');
+        }
+        $html .= view('shop.common.product', compact('categories', 'title', 'type', 'route'))->render();
+        return $html;
+    }
+    
+    public static function createVendorSection() {
+        $vendors = Vendor::active()->get();
+        $html = view('shop.common.vendors', compact('vendors'))->render();
         return $html;
     }
 }

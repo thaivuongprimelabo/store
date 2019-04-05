@@ -14,9 +14,13 @@
 use Illuminate\Support\Facades\Auth;
 use App\Config;
 
-Route::group(['prefix' => 'admin', 'namespace' => 'Auth'], function () {
+Route::group(['prefix' => 'auth', 'namespace' => 'Auth'], function () {
     
     // Authentication Routes...
+    Route::get('/', function () {
+        return redirect()->route('auth_products');
+    });
+    
     $this->get('/login', 'LoginController@showLoginForm')->name('login');
     $this->post('/login', 'LoginController@login');
     $this->get('/logout', 'LoginController@logout')->name('logout');
@@ -141,20 +145,24 @@ Route::group(['prefix' => ''], function () {
     Route::get('/gioi-thieu' . $config['url_ext'], 'HomeController@about')->name('about');
     Route::get('/dat-lich-hen' . $config['url_ext'], 'HomeController@booking')->name('booking');
     Route::get('/nhom-trao-doi' . $config['url_ext'], 'HomeController@forum')->name('forum');
-    Route::match(['get', 'post'], '/products' . $config['url_ext'], 'HomeController@products')->name('products');
+    Route::get('/san-pham' . $config['url_ext'], 'HomeController@products')->name('products');
     Route::get('/cart' . $config['url_ext'], 'CartController@index')->name('cart');
     Route::match(['get', 'post'], '/lien-he' . $config['url_ext'], 'HomeController@contact')->name('contact');
-    Route::post('/search' . $config['url_ext'], 'HomeController@search')->name('search');
+    Route::get('/search' . $config['url_ext'], 'HomeController@search')->name('search');
     Route::match(['get', 'post'], '/login' . $config['url_ext'], 'MembersController@index')->name('member_login');
     Route::post('/register' . $config['url_ext'], 'MembersController@register')->name('register');
     Route::get('/logout' . $config['url_ext'], 'MembersController@logout')->name('member_logout');
     
-    Route::post('/load-data' . $config['url_ext'], 'HomeController@loadData')->name('loadData');
+    Route::post('/load-data', 'HomeController@loadData')->name('loadData');
     
-    Route::get('/nhan-hieu/{vendor}' . $config['url_ext'], 'HomeController@vendor')->name('vendor');
+    Route::get('/nhan-hieu/{slug}' . $config['url_ext'], 'HomeController@vendor')->name('vendor');
+    Route::get('/san-pham-noi-bat' . $config['url_ext'], 'HomeController@popularProducts')->name('popularProducts');
+    Route::get('/san-pham-moi' . $config['url_ext'], 'HomeController@newProducts')->name('newProducts');
+    Route::get('/san-pham-ban-chay' . $config['url_ext'], 'HomeController@bestSellProducts')->name('bestSellProducts');
     Route::get('/danh-muc/{slug}' . $config['url_ext'], 'HomeController@category')->name('category');
-    Route::get('/tin-tuc/{slug?}' . $config['url_ext'], 'HomeController@postGroup')->name('postgroups');
-    Route::get('/tin-tuc/{slug}/{slug1}' . $config['url_ext'], 'HomeController@posts')->name('posts');
+    Route::get('/tin-tuc' . $config['url_ext'], 'HomeController@posts')->name('posts');
+    Route::get('/tin-tuc/{slug}' . $config['url_ext'], 'HomeController@postGroup')->name('postgroups');
+    Route::get('/tin-tuc/{slug}/{slug1}' . $config['url_ext'], 'HomeController@postDetails')->name('postDetails');
     Route::get('/{slug}' . $config['url_ext'], 'HomeController@productDetails')->name('product_details');
     Route::get('refreshcaptcha', 'MembersController@refreshCaptcha')->name('refreshcaptcha');
     Route::post('checkcaptcha', 'MembersController@checkCaptcha')->name('checkCaptcha');

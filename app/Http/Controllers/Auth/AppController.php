@@ -54,6 +54,8 @@ class AppController extends Controller
                 'config' => [
                     'web_logo' => $web_logo,
                     'web_ico' => $web_ico,
+                    'mail_from' => Utils::cnvNull($config->mail_from, 'support@gmail.com'),
+                    'mail_name' => Utils::cnvNull($config->mail_name, 'Mail System'),
                     'banners_maximum_upload' => Utils::cnvNull($config->banners_maximum_upload, 51200),
                     'vendors_maximum_upload' => Utils::cnvNull($config->vendors_maximum_upload, 51200),
                     'products_maximum_upload' => Utils::cnvNull($config->products_maximum_upload, 51200),

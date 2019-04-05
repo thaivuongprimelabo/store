@@ -66,6 +66,8 @@ class ContactsController extends AppController
                 
                 // Config mail
                 $config = [
+                    'from' => $this->config['config']['mail_from'],
+                    'from_name' => $this->config['config']['mail_name'],
                     'subject' => '[Reply to: '.$data->email . ']' . $data->subject,
                     'msg' => ['content' => $data->reply_content],
                     'to' => $data->email
