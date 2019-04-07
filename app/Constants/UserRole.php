@@ -7,6 +7,7 @@ class UserRole {
     CONST SUPER_ADMIN = '0';
     CONST ADMIN = '1';
     CONST MOD = '2';
+    CONST MEMBERS = '3';
     
     public static function getData($key = '') {
         $array = [

@@ -21,10 +21,10 @@
 	</div>
 	<div class="col-xs-12">
 		<div class="products-view-grid products">
-			<div id="search_results" class="row row-gutter-14">
+			<div id="ajax_list" class="row row-gutter-14">
 				
 			</div>
-			<div id="paging_link"></div>
+			<div id="ajax_paging"></div>
 		</div>
 	</div>
 </div>
@@ -42,21 +42,21 @@
     		keyword: $('#keyword_search').val(),
     		page_name: page_name,
     		view_type: 'grid',
-    		container: '#search_results',
-    		paging: '#paging_link',
+    		container: ['#ajax_list', '#ajax_paging', '#result_count'],
+    		spinner: '#ajax_list'
     	}
     
     	callAjax('{{ route('loadData') }}', data, page_name);
 
     	$(document).on('click', '.page-link', function(e) {
 			var page_number = $(this).attr('data-page-number');
-			callAjax('{{ route('loadData') }}?page=' + page_number, data, page_name);
+			callAjax('{{ route('loadData') }}?page=' + page_number, data);
     	});
 
     	$(document).on('click', '#search', function(e) {
         	data.keyword = $('#keyword_search').val();
-    		callAjax('{{ route('loadData') }}', data, page_name);
-    	});
+    		callAjax('{{ route('loadData') }}', data);
+    	}
     })
 </script>
 @endsection

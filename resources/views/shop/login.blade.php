@@ -1,193 +1,59 @@
 @extends('layouts.shop')
 
 @section('content')
+@include('shop.common.breadcrumb')
 <div class="container">
 	@include('shop.common.alert')
-	@if ($errors->any())
-      <div class="alert alert-danger">
-          <ul>
-              @foreach ($errors->all() as $error)
-                  <li>{{ $error }}</li>
-              @endforeach
-          </ul>
-      </div><br />
-      @endif
+	<h1 class="title-head"><span>{{ trans('shop.login') }}</span></h1>
 	<div class="row">
-		<div class="col-md-6">
-    		<form role="form" id="login_form" action="?" method="post" enctype="multipart/form-data">
-    			{{ csrf_field() }}
-    			<div class="billing-details">
-    				<div class="section-title">
-    					<h3 class="title">{{ trans('shop.login') }}</h3>
-    				</div>
-    				<div class="form-group">
-    					<input class="input" type="email" name="email" maxlength="191" placeholder="{{ trans('shop.login_form.email') }}">
-    				</div>
-    				<div class="form-group">
-    					<input class="input" type="password" name="password" maxlength="40" placeholder="{{ trans('shop.login_form.password') }}">
-    				</div>
-    				<div class="pull-right">
-    					<button class="primary-btn">{{ trans('shop.button.login') }}</button>
-    				</div>
-    			</div>
-			</form>
+		<div class="col-lg-6">
+			<div class="page-login margin-bottom-30">
+				<div id="login">
+					<span>
+						{{ trans('shop.login_txt') }}
+					</span>
+					<form accept-charset="UTF-8" action="?" id="customer_login" method="post">
+						{{ csrf_field() }}
+                        <input name="FormType" type="hidden" value="customer_login">
+                        <input name="utf8" type="hidden" value="true">
+    					<div class="form-signup clearfix">
+    						<fieldset class="form-group">
+    							<label>{{ trans('shop.user.email') }}: </label>
+    							<input type="email" class="form-control form-control-lg" value="" name="email" id="email" placeholder="{{ trans('shop.user.email') }}" maxlength="150" required>
+    						</fieldset>
+    						<fieldset class="form-group">
+    							<label>{{ trans('shop.user.password') }}: </label>
+    							<input type="password" class="form-control form-control-lg" value="" name="password" id="password" placeholder="{{ trans('shop.user.password') }}" maxlength="40" required>
+    						</fieldset>
+    						<div class="pull-xs-left" style="margin-top: 25px;">
+    							<input class="btn btn-primary" type="submit" id="login_btn" value="Đăng nhập">
+    							<a href="{{ route('account_register') }}" class="btn-link-style btn-register" style="margin-left: 20px;text-decoration: underline; ">{{ trans('shop.button.register') }}</a>
+    						</div>
+    					</div>
+					</form>
+				</div>
+			</div>
 		</div>
-		<div class="col-md-6">
-    		<form role="form" id="register_form" action="{{ route('register') }}" method="post" enctype="multipart/form-data">
-    			{{ csrf_field() }}
-    			<div class="billing-details">
-    				<div class="section-title">
-    					<h3 class="title">{{ trans('shop.register') }}</h3>
+		<div class="col-lg-6">
+			<div id="recover-password" class="form-signup">
+				<span>
+					{{ trans('shop.forgot_password') }}
+				</span>					
+				<form accept-charset="UTF-8" action="{{ route('account_recover') }}" id="recover_customer_password" method="post">
+					{{ csrf_field() }}
+    				<div class="form-signup clearfix">
+    					<fieldset class="form-group">
+    						<label>{{ trans('shop.user.email') }}: </label>
+    						<input type="email" class="form-control form-control-lg" value="" name="recover_email" id="recover_email" placeholder="{{ trans('shop.user.email') }}">
+    					</fieldset>
     				</div>
-    				<div class="form-group">
-    					<input class="input" type="text" name="name" maxlength="191" placeholder="{{ trans('shop.register_form.name') }}">
+    				<div class="action_bottom">
+    					<input class="btn btn-primary" style="margin-top: 25px;" type="submit" value="{{ trans('shop.button.recover_password') }}">
     				</div>
-    				<div class="form-group">
-    					<input class="input" type="email" name="email" maxlength="191" placeholder="{{ trans('shop.register_form.email') }}">
-    				</div>
-    				<div class="form-group">
-    					<input class="input" type="password" id="password" name="password" maxlength="40" placeholder="{{ trans('shop.register_form.password') }}">
-    				</div>
-    				<div class="form-group">
-    					<input class="input" type="password" name="conf_password" maxlength="40" placeholder="{{ trans('shop.register_form.conf_password') }}">
-    				</div>
-    				<div class="form-group">
-    					<input class="input" type="tel" name="phone" maxlength="20" placeholder="{{ trans('shop.register_form.phone') }}">
-    				</div>
-    				<div class="form-group">
-    					<input class="input" type="text" name="address" maxlength="255" placeholder="{{ trans('shop.register_form.address') }}">
-    				</div>
-    				<div class="form-group captcha">
-    					<span id="captcha-img">{!! captcha_img('flat') !!}</span>
-    					<button id="refresh" type="button" class="btn btn-success"><i class="fa fa-refresh"></i></button>
-    					<input class="input" type="text" id="captcha" name="captcha" maxlength="255" placeholder="{{ trans('shop.register_form.captcha') }}">
-    					<span id="captcha-error" class="valid-text"></span>
-    				</div>
-    				<div class="pull-right">
-    					<button type="button" class="primary-btn" id="register">{{ trans('shop.button.register') }}</button>
-    				</div>
-    			</div>
-			</form>
+				</form>
+			</div>
 		</div>
 	</div>
 </div>
 @endsection
 @section('script')
-<script type="text/javascript">
-	$(document).ready(function() {
-		var validatorLogin = $("#login_form").validate({
-	    	onfocusout: false,
-	    	rules: {
-	    		email: {
-	    			required: true,
-	    			email: true
-	    		},
-	    		password: {
-					required: true
-	    		}
-	    	},
-	    	messages: {
-	    		email : {
-	    			required : "{{ Utils::getValidateMessage('validation.shop_required', '') }}",
-	    			email : "{{ trans('validation.email') }}"
-	    		},
-	    		password: {
-	    			required : "{{ Utils::getValidateMessage('validation.shop_required', '') }}",
-	    		}
-	    	},
-	    	submitHandler: function(form) {
-	    		form.submit();
-	        }
-	    });
-
-	    var validatorReg = $("#register_form").validate({
-	    	onfocusout: false,
-	    	rules: {
-	    		name: {
-	        		required: true
-	    		},
-	    		email: {
-	    			required: true,
-	    			email: true
-	    		},
-	    		phone: {
-	    			required: true,
-	    			number: true
-	    		},
-	    		password: {
-					required: true
-	    		},
-	    		conf_password: {
-					required: true,
-					equalTo: '#password'
-	    		},
-	    		address: {
-					required: true
-	    		},
-	    		captcha: {
-	    			required: true
-	    		}
-	    	},
-	    	messages: {
-	    		name : {
-	    			required : "{{ Utils::getValidateMessage('validation.shop_required', '') }}",
-	    		},
-	    		email : {
-	    			required : "{{ Utils::getValidateMessage('validation.shop_required', '') }}",
-	    			email : "{{ trans('validation.email') }}"
-	    		},
-	    		phone : {
-	    			required : "{{ Utils::getValidateMessage('validation.shop_required', '') }}",
-	    			number: "{{ trans('validation.numeric') }}"
-	    		},
-	    		password: {
-	    			required : "{{ Utils::getValidateMessage('validation.shop_required', '') }}",
-	    		},
-	    		conf_password: {
-	    			required : "{{ Utils::getValidateMessage('validation.shop_required', '') }}",
-	    			equalTo: '{{ Utils::getValidateMessage('validation.password_match', '') }}'
-	    		},
-	    		address: {
-	    			required : "{{ Utils::getValidateMessage('validation.shop_required', '') }}",
-	    		},
-	    		captcha: {
-	    			required : "{{ Utils::getValidateMessage('validation.shop_required', '') }}",
-	    		}
-	    	},
-	    	submitHandler: function(form) {
-	    		form.submit();
-	        }
-	    });
-	    
-		$('#refresh').click(function(){
-		  $.ajax({
-		     type:'GET',
-		     url:'{{ route('refreshcaptcha') }}',
-		     success:function(data){
-		        $("#captcha-img").html(data.captcha);
-		     }
-		  });
-		});
-
-		$('#register').click(function(){
-			 if($("#register_form").valid()) {
-				 var data = {
-					type : 'post',
-					async : false,
-					page: 'checkcaptcha',
-					captcha: $('#captcha').val(),
-					container: '#captcha-error',
-					new_captcha: '#captcha-img'
-				 }
-
-
-				 if(checkCaptcha('{{ route('checkCaptcha') }}', data)) {
-					 $("#register_form").submit();
-				 }
-
-			 }
-		});
-	});
-
-</script>
-@endsection

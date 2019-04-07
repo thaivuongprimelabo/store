@@ -1,0 +1,9 @@
+h2.title-head a {
+	color: #ffffff !important;
+}
+
+.article-content img {
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
+}

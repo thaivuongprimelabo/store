@@ -15,6 +15,11 @@ $productType = [
     'accessories' => 'Phụ kiện'
 ];
 
+$product_status = [
+    'out_of_stock' => 'Hết hàng',
+    'available' => 'Còn hàng'
+];
+
 $auth = [
     
     /*
@@ -28,7 +33,7 @@ $auth = [
      * |
      */
     
-    'failed' => 'These credentials do not match our records.',
+    'failed' => 'Tài khoản hoặc mật khẩu không chính xác.',
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
     'title' => 'Control Panel',
     /*------------ Login page ------------------- */
@@ -339,23 +344,19 @@ $auth = [
             ],
             'email' => [
                 'text' => 'E-mail',
-                'width' => '15%'
+                'width' => '20%'
             ],
             'phone' => [
                 'text' => 'Số điện thoại',
                 'width' => '10%'
             ],
-            'content' => [
-                'text' => 'Nội dung',
-                'width' => '15%'
-            ],
-            'status' => [
+            'contact_status' => [
                 'text' => 'Trạng thái',
                 'width' => '10%'
             ],
             'created_at' => [
                 'text' => 'Ngày gửi',
-                'width' => '10%'
+                'width' => '15%'
             ],
             'remove_action' => [
                 'text' => '',
@@ -907,14 +908,14 @@ $auth = [
             ],
             'payment_method' => [
                 'header' => 'Phương thức thanh toán',
+                'cash_info' => [
+                    'type' => 'editor',
+                    'text' => 'Thanh toán khi giao hàng (COD)'
+                ],
                 'bank_info' => [
                     'type' => 'editor',
                     'text' => 'Chuyển khoản ngân hàng'
                 ],
-                'cash_info' => [
-                    'type' => 'editor',
-                    'text' => 'Tiền mặt'
-                ]
             ],
             'url_ext' => [
                 'header' => 'URL Extension',
@@ -964,7 +965,7 @@ $auth = [
                 'text' => 'Giá bán (VNĐ)',
                 'width' => '10%'
             ],
-            'status' => [
+            'product_status' => [
                 'text' => 'Trạng thái',
                 'width' => '10%'
             ],
@@ -990,7 +991,7 @@ $auth = [
                 'type' => 'text',
                 'placeholder' => 'Lọc theo tên sản phẩm'
             ],
-            'status' => [
+            'product_status' => [
                 'type' => 'status_select',
                 'empty_text' => 'Lọc theo trạng thái'
             ],
@@ -1054,26 +1055,26 @@ $auth = [
             ],
             'status' => [
                 'type' => 'checkbox',
-                'text' => 'Đang hoạt động',
+                'text' => $product_status['available'],
                 'checked' => true,
             ],
             'is_new' => [
                 'type' => 'checkbox',
                 'text' => 'Sản phẩm mới',
                 'checked' => true,
-                'value' => \App\Constants\ProductStatus::IS_NEW
+                'value' => \App\Constants\ProductType::IS_NEW
             ],
             'is_popular' => [
                 'type' => 'checkbox',
                 'text' => 'Sản phẩm được quan tâm',
                 'checked' => true,
-                'value' => \App\Constants\ProductStatus::IS_POPULAR
+                'value' => \App\Constants\ProductType::IS_POPULAR
             ],
             'is_best_selling' => [
                 'type' => 'checkbox',
                 'text' => 'Sản phẩm bán chạy',
                 'checked' => true,
-                'value' => \App\Constants\ProductStatus::IS_BEST_SELLING
+                'value' => \App\Constants\ProductType::IS_BEST_SELLING
             ]
         ],
         'rules' => [
@@ -1189,7 +1190,8 @@ $auth = [
     ],
     /*------------ Profile page ------------------- */
     'profile' => [
-        'edit_title' => 'Chỉnh sửa tài khoản',
+        'list_title' => 'Chỉnh sửa tài khoản',
+        'edit_title' => 'Chỉnh sửa',
         'form' => [
             'name' => [
                 'type' => 'text',
@@ -1432,7 +1434,7 @@ $auth = [
     'edit_box_title' => 'Thông tin cập nhật',
     'length_text' => ' (Tối đã {0} ký tự)',
     'product_info' => 'Thông tin sản phẩm',
-    'services' => 'Thông tin thêm',
+    'services' => 'Đăng ký các gói bảo hành, phụ kiện, combo, khuyến mãi...',
     'status' => [
         'unactive' => 'Tạm dừng',
         'active' => 'Đang hoạt động',
@@ -1443,7 +1445,9 @@ $auth = [
         'order_new' => 'Đơn hàng mới',
         'order_shipping' => 'Đang giao hàng',
         'order_done' => 'Hoàn tất',
-        'order_cancel' => 'Hủy'
+        'order_cancel' => 'Hủy',
+        'out_of_stock' => $product_status['out_of_stock'],
+        'available' => $product_status['available'],
     ],
     'role' => [
         'super_admin' => 'Quản trị hệ thống',

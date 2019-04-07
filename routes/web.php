@@ -146,14 +146,23 @@ Route::group(['prefix' => ''], function () {
     Route::get('/dat-lich-hen' . $config['url_ext'], 'HomeController@booking')->name('booking');
     Route::get('/nhom-trao-doi' . $config['url_ext'], 'HomeController@forum')->name('forum');
     Route::get('/san-pham' . $config['url_ext'], 'HomeController@products')->name('products');
-    Route::get('/cart' . $config['url_ext'], 'CartController@index')->name('cart');
     Route::match(['get', 'post'], '/lien-he' . $config['url_ext'], 'HomeController@contact')->name('contact');
     Route::get('/search' . $config['url_ext'], 'HomeController@search')->name('search');
-    Route::match(['get', 'post'], '/login' . $config['url_ext'], 'MembersController@index')->name('member_login');
-    Route::post('/register' . $config['url_ext'], 'MembersController@register')->name('register');
-    Route::get('/logout' . $config['url_ext'], 'MembersController@logout')->name('member_logout');
+    Route::match(['get', 'post'], 'account/login' . $config['url_ext'], 'MembersController@login')->name('account_login');
+    Route::match(['get', 'post'], '/account/register' . $config['url_ext'], 'MembersController@register')->name('account_register');
+    Route::get('/account/logout' . $config['url_ext'], 'MembersController@logout')->name('account_logout');
+    Route::post('/account/recover' . $config['url_ext'], 'MembersController@recover')->name('account_recover');
+    Route::get('/account/active/{token}', 'MembersController@active')->name('account_active');
+    Route::get('/account/unactive', 'MembersController@unactive')->name('account_unactive');
     
     Route::post('/load-data', 'HomeController@loadData')->name('loadData');
+    
+    Route::get('/cart' . $config['url_ext'], 'CartController@index')->name('cart');
+    Route::post('/cart/add-to-cart', 'CartController@addToCart')->name('addToCart');
+    Route::post('/cart/update-cart', 'CartController@updateCart')->name('updateCart');
+    Route::post('/cart/remove-item', 'CartController@removeItem')->name('removeItem');
+    Route::match(['get', 'post'], '/cart/checkout' . $config['url_ext'], 'CartController@checkout')->name('checkout');
+    Route::get('/cart/checkout/success' . $config['url_ext'], 'CartController@checkoutSuccess')->name('checkoutSuccess');
     
     Route::get('/nhan-hieu/{slug}' . $config['url_ext'], 'HomeController@vendor')->name('vendor');
     Route::get('/san-pham-noi-bat' . $config['url_ext'], 'HomeController@popularProducts')->name('popularProducts');
@@ -164,7 +173,7 @@ Route::group(['prefix' => ''], function () {
     Route::get('/tin-tuc/{slug}' . $config['url_ext'], 'HomeController@postGroup')->name('postgroups');
     Route::get('/tin-tuc/{slug}/{slug1}' . $config['url_ext'], 'HomeController@postDetails')->name('postDetails');
     Route::get('/{slug}' . $config['url_ext'], 'HomeController@productDetails')->name('product_details');
-    Route::get('refreshcaptcha', 'MembersController@refreshCaptcha')->name('refreshcaptcha');
+    Route::post('refreshcaptcha', 'MembersController@refreshCaptcha')->name('refreshcaptcha');
     Route::post('checkcaptcha', 'MembersController@checkCaptcha')->name('checkCaptcha');
     
     Route::get('/offline' . $config['url_ext'], function() {

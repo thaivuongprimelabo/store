@@ -27,6 +27,7 @@
 <script type="text/javascript">
 	var validateObject = {!! Utils::generateValidation($name, $rules, $data) !!}
     var validatorEventSetting = $("#submit_form").validate({
+        ignore: '',
     	onfocusout: false,
     	success: function(label, element) {
         	var jelm = $(element);

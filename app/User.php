@@ -5,6 +5,7 @@ namespace App;
 use App\Constants\Common;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Constants\UserRole;
 
 class User extends Authenticatable
 {
@@ -29,4 +30,12 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+    
+    public function isAdmin() {
+        if($this->role_id == UserRole::SUPER_ADMIN || $this->role_id == UserRole::ADMIN) {
+            return true;
+        }
+        
+        return false;
+    }
 }

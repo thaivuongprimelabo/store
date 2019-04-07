@@ -6,9 +6,9 @@
 		<div class="container">
 			<div class="collection-border">
 				<div class="collection-main">
-						{!! Utils::createProductTab(trans('shop.new_product_txt'), ProductStatus::IS_NEW, 1) !!}
-						{!! Utils::createProductTab(trans('shop.best_selling_txt'), ProductStatus::IS_BEST_SELLING, 2) !!}
-						{!! Utils::createProductTab(trans('shop.popular_txt'), ProductStatus::IS_POPULAR, 3) !!}
+						{!! Utils::createProductTab(trans('shop.new_product_txt'), ProductType::IS_NEW, 1) !!}
+						{!! Utils::createProductTab(trans('shop.best_selling_txt'), ProductType::IS_BEST_SELLING, 2) !!}
+						{!! Utils::createProductTab(trans('shop.popular_txt'), ProductType::IS_POPULAR, 3) !!}
 				</div>
 			</div>
 		</div>

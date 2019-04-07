@@ -13,7 +13,7 @@
 						<div class="col-xs-12 col-sm-12 col-md-5">
 							<div class="large-image">
 								<a href="{{ $images->first()->getImageLink() }}" data-rel="">
-									<img id="zoom_01" src="{{ $images->first()->getImageLink() }}" alt="Dưa leo Đà Lạt">
+									<img id="zoom_01" src="{{ $images->first()->getImageLink() }}" alt="{{ $data->getName() }}">
 								</a>
 								<div class="hidden">
 									<div class="item">
@@ -27,7 +27,7 @@
     							@foreach($images as $img)
     							<div class="item">
 									<a class="clearfix" href="#" data-image="{{ $img->getImageLink('small') }}" data-zoom-image="{{ $img->getImageLink('small') }}">
-										<img  src="{{ $img->getImageLink('small') }}" alt="Dưa leo Đà Lạt">
+										<img  src="{{ $img->getImageLink('small') }}" alt="{{ $data->getName() }}">
 									</a>
 								</div>
 								@endforeach
@@ -36,12 +36,28 @@
 						<div class="col-xs-12 col-sm-12 col-md-7 details-pro">
 							<h1 class="title-head">{{ $data->getName() }}</h1>
 							<div class="status clearfix">
-								Trạng thái: <span class="inventory">
-								<i class="fa fa-check"></i> Còn hàng
-								</span>
+								{{ trans('shop.status_txt') }}: 
+								<span class="inventory"><i class="fa fa-check"></i> {{ $data->getStatusName() }}</span>
 							</div>
 							<div class="price-box clearfix">
 							<div class="special-price"><span class="price product-price">{{ $data->getPrice() }}</span> </div> <!-- Giá -->
+							
+							@php
+								$productDetails = $data->getProductDetails();
+							@endphp
+							@foreach($productDetails as $detail)
+							<div class="status clearfix mt-5">
+								{{ $detail->group_name }}:
+								@php
+									$ids = explode(',', $detail['detail_id']);
+									$names = explode(',', $detail['detail_name']);
+									$prices = explode(',', $detail['detail_price']);
+								@endphp
+								@foreach($ids as $k=>$id)
+								<span class="label label-default detail-item" style="cursor: pointer;padding:5px 10px;" data-id="{{ $id }}" data-product-id="{{ $data->id }}" data-name="{{ $names[$k] }}"> {{ $names[$k] }}</span>
+								@endforeach
+							</div>
+							@endforeach
 						</div>
 						<div class="product-summary product_description margin-bottom-15">
 							<div class="rte description">
@@ -49,18 +65,18 @@
 							</div>
 						</div>
 						<div class="form-product ">
-							<form enctype="multipart/form-data" id="add-to-cart-form" action="/cart/add" method="post" class="form-inline margin-bottom-10 dqdt-form">
+							<form enctype="multipart/form-data" id="add-to-cart-form" action="?" method="post" class="form-inline margin-bottom-10 dqdt-form">
 								<div class="box-variant clearfix ">
 									<input type="hidden" name="variantId" value="17898174">
 								</div>
 								<div class="form-group form-groupx form-detail-action clearfix ">
 									<label class="f-left">{{ trans('shop.cart.qty_txt') }}: </label>
 									<div class="custom custom-btn-number">
-										<span class="qtyminus" data-field="quantity">-</span>
-										<input type="text" class="input-text qty" data-field="quantity" title="Só lượng" value="1" maxlength="12" id="qty" name="quantity" onkeypress="if ( isNaN(this.value + String.fromCharCode(event.keyCode) )) return false;" onchange="if(this.value == '')this.value=1;">
-										<span class="qtyplus" data-field="quantity">+</span>
+										<span class="qtyminus" data-id="{{ $data->id }}">-</span>
+										<input type="text" class="input-text qty" title="Só lượng" value="1" maxlength="12" id="qty" name="quantity"  data-id="{{ $data->id }}">
+										<span class="qtyplus" data-id="{{ $data->id }}">+</span>
 									</div>
-									<button type="submit" class="btn btn-lg btn-primary btn-cart btn-cart2 add_to_cart btn_buy add_to_cart" title="Cho vào giỏ hàng">
+									<button type="button" class="btn btn-lg btn-primary btn-cart btn-cart2 add_to_cart btn_buy" title="{{ trans('shop.button.add_to_cart') }}"  data-id="{{ $data->id }}"  data-qty="1">
 										<span>{{ trans('shop.button.add_to_cart') }}  <i class="fa .fa-caret-right"></i></span>
 									</button>
 								</div>
@@ -120,4 +136,30 @@
 	</div>
 		
 </div>
+@endsection
+@section('script')
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('.detail-item').click(function(e) {
+			$('.detail-item').removeClass('label-success').addClass('label-default');
+			$('.detail-item').find('i').remove();
+			$(this).prepend('<i class="fa fa-check"></i>');
+			$(this).removeClass('label-default').addClass('label-success');
+			var id = $(this).data('id');
+			var pid = $(this).attr('data-product-id');
+
+			var data = {
+				type : 'post',
+	    		async : true,
+	    		id: id,
+	    		pid: pid,
+	    		item_type: '{{ ProductType::IS_DETAIL_ITEM }}',
+	    		container: ['.cartCount2', '#top_cart'],
+			}
+
+			callAjax('{{ route('addToCart') }}', data);
+
+		});
+	});
+</script>
 @endsection

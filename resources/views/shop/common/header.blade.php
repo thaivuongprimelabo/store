@@ -35,34 +35,18 @@
 				<div class="col-sm-6 col-md-3">
 
 					<ul class="list-inline f-right">
-						
+						@if(Auth::check())
 						<li>
-							<a data-toggle="modal" data-target="#dangnhap" href="https://dualeo-x.bizwebvietnam.net/account/login"><i class="fa fa-user"></i> {{ trans('shop.button.login') }}</a>
-
+							<a href="javascript:void(0)"><i class="fa fa-user"></i> {{ Auth::user()->name }}</a> | <a href="{{ route('account_logout') }}">{{ trans('shop.button.logout') }}</a>
+						</li>
+						@else
+						<li>
+							<a data-toggle="modal" href="{{ route('account_login') }}"><i class="fa fa-user"></i> {{ trans('shop.button.login') }}</a>
 						</li>
 						<li><span>hoặc</span></li>
-						<li><a data-toggle="modal" data-target="#dangky" href="https://dualeo-x.bizwebvietnam.net/account/register">{{ trans('shop.button.register') }}</a>
-
+						<li><a data-toggle="modal" href="{{ route('account_register') }}">{{ trans('shop.button.register') }}</a>
 						</li>
-						
-
-						<li class="li-search hidden"><a href="javscrript:;">
-							<i class="fa fa-search"></i></a>
-							<div class="dropdown topbar-dropdown hidden-md hidden-sm hidden-xs">
-								<div class="content a-center">										
-									<div class="header_search search_form">
-										<form class="input-group search-bar search_form" action="https://dualeo-x.bizwebvietnam.net/search" method="get" role="search">		
-											<input type="search" name="query" value="" placeholder="{{ trans('shop.search_txt') }}" class="input-group-field st-default-search-input search-text" autocomplete="off">
-											<span class="input-group-btn">
-												<button class="btn icon-fallback-text">
-													<i class="fa fa-search"></i>
-												</button>
-											</span>
-										</form>
-									</div>
-								</div>									
-							</div>
-						</li>
+						@endif
 					</ul>
 
 				</div>
@@ -124,37 +108,13 @@
 								</div>
 								<div class="right-content hidden-md">
 									<span class="label">{{ trans('shop.cart_txt') }}</span>
-									(<span class="cartCount2">0</span>)
+									(<span class="cartCount2">{{ $cart->getCount() }}</span>)
 								</div>
 							</a>
 						</div>
-						<div class="top-cart-content">
-							<ul id="cart-sidebar" class="mini-products-list count_li">
-								<li class="list-item">
-									<ul></ul>
-								</li>
-								<li class="action">
-									<ul>
-										<li class="li-fix-1">
-											<div class="top-subtotal">
-												{{ trans('shop.cart.txt') }}:
-												<span class="price"></span>
-											</div>
-										</li>
-										<li class="li-fix-2" style="">
-											<div class="actions">
-												<a href="https://dualeo-x.bizwebvietnam.net/cart" class="btn btn-primary">
-													<span>{{ trans('shop.cart.txt') }}</span>
-												</a>
-												<a href="https://dualeo-x.bizwebvietnam.net/checkout" class="btn btn-checkout btn-gray">
-													<span>{{ trans('shop.button.checkout') }}</span>
-												</a>
-											</div>
-										</li>
-									</ul>
-								</li>
-							</ul>
-						</div>
+						<div id="top_cart">
+						{!! $cart->getTopCart() !!}
+						</div>				
 					</div>
 				</div>
 			</div>

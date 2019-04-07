@@ -4,15 +4,13 @@ namespace App\Constants;
 
 class ProductStatus {
     
-    CONST IS_NEW = 1;
-    CONST IS_POPULAR = 2;
-    CONST IS_BEST_SELLING = 3;
+    CONST OUT_OF_STOCK = 0;
+    CONST AVAILABLE = 1;
     
     public static function getData($key = '') {
         $array = [
-            self::IS_NEW => trans('auth.products.form.is_new.text'),
-            self::IS_POPULAR => trans('auth.products.form.is_popular.text'),
-            self::IS_BEST_SELLING => trans('auth.products.form.is_best_selling.text'),
+            self::OUT_OF_STOCK => trans('auth.status.out_of_stock'),
+            self::AVAILABLE => trans('auth.status.available'),
         ];
         
         if($key != '') {

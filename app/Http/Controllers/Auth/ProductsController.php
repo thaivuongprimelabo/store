@@ -172,7 +172,7 @@ class productsController extends AppController
     private function addService($productId, $request) {
         $services = $request->service;
         
-        if($services != null && $services->count()) {
+        if($services != null && count($services)) {
             ProductDetails::where('product_id', $productId)->delete();
             foreach($services as $key=>$value) {
                 
@@ -182,11 +182,15 @@ class productsController extends AppController
                     continue;
                 }
                 
-                $productDetailGroup               = new ProductDetailGroups();
-                $productDetailGroup->name         = strip_tags($value['group_name']);
-                $productDetailGroup->created_at   = date('Y-m-d H:i:s');
+                $productDetailGroup = ProductDetailGroups::where('name', trim($value['group_name']))->first();
+                if(!$productDetailGroup) {
+                    $productDetailGroup               = new ProductDetailGroups();
+                    $productDetailGroup->name         = strip_tags($value['group_name']);
+                    $productDetailGroup->created_at   = date('Y-m-d H:i:s');
+                    $productDetailGroup->save();
+                }
                 
-                if($productDetailGroup->save()) {
+                if($productDetailGroup->id) {
                     
                     foreach($items as $item) {
                         

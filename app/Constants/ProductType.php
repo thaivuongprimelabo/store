@@ -4,13 +4,16 @@ namespace App\Constants;
 
 class ProductType {
     
-    CONST NORMAL = 0;
-    CONST ACCESSORIES = 1;
+    CONST IS_NEW = 1;
+    CONST IS_POPULAR = 2;
+    CONST IS_BEST_SELLING = 3;
+    CONST IS_DETAIL_ITEM = 4;
     
     public static function getData($key = '') {
         $array = [
-            self::NORMAL => trans('auth.product_type.normal'),
-            self::ACCESSORIES => trans('auth.product_type.accessories'),
+            self::IS_NEW => trans('auth.products.form.is_new.text'),
+            self::IS_POPULAR => trans('auth.products.form.is_popular.text'),
+            self::IS_BEST_SELLING => trans('auth.products.form.is_best_selling.text'),
         ];
         
         if($key != '') {

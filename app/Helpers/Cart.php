@@ -1,182 +1,144 @@
 <?php
 
 namespace App\Helpers;
-use App\Constants\Common;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Session;
-use App\Order;
+
+use Illuminate\Http\Request;
+
 class Cart {
 
-    public static function topCart($cart = null) {
-        
-        if(is_null($cart)) {
-            $cart = [
-                'sub_total' => 0,
-                'total' => 0,
-                'sum_item' => 0,
-                'items' => []
-            ];
-            if(session('cart')) {
-                $cart = session('cart');
-            }
-        }
-        return view('shop.common.top_cart', ['cart' => $cart])->render();
+    private $cart = [];
+    private $total = 0;
+    private $totalFormat = 0;
+    private $count = 0;
+    private $cartItem = null;
+    private $session = null;
+    private $checkoutInfo = null;
+    public static $instance;
+    
+    public function __construct() {
+        self::$instance = self::$instance;
     }
     
-    public static function mainCart() {
-        $cart = [
-            'sub_total' => 0,
-            'total' => 0,
-            'sum_item' => 0,
-            'items' => []
-        ];
-        
-        if(session('cart')) {
-            $cart = session('cart');
-        }
-        return view('shop.common.checkout', ['cart' => $cart])->render();
-    }
-    
-    
-    public static function addItem($item = []) {
-        $cart = [
-            'total' => 0,
-            'sum_item' => 0,
-            'items' => []
-        ];
-        
-        $item['price_discount'] = $item['price'];
-        
-        if($item['discount']) {
-            $item['price_discount'] = Utils::getDiscountPrice($item['price'], $item['discount']);
-        }
-        
-        if(session('cart')) {
-            $cart = session('cart');
-            
-            if(!key_exists($item['id'], $cart)) {
-                $cart['items'][$item['id']] = $item;
-                self::updateCart($cart);
+    public static function getInstance($session) {
+        if (self::$instance === null) {
+            if($session->has('cart')) {
+                self::$instance = $session->get('cart');
             } else {
-                $cart['items'][$item['id']]['qty'] = $cart['items'][$item['id']]['qty'] + $item['qty'];
+                self::$instance = new self();
             }
+            
+            self::$instance->session = $session;
+        }
+        return self::$instance;
+    }
+    
+    public function getCart() {
+        return $this->cart;
+    }
+    
+    public function setCart($_cart) {
+        $this->cart = $_cart;
+        if(!count($this->cart)) {
+            $this->session->remove('cart');
         } else {
-            $cart['items'][$item['id']] = $item;
-            self::updateCart($cart);
+            $this->session->put('cart', $this);
         }
-        
-        return $cart;
     }
     
-    public static function removeItem($id) {
-        $cart = [
-            'total' => 0,
-            'sum_item' => 0,
-            'items' => []
-        ];
-        
-        if(session('cart')) {
-            $cart = session('cart');
-            unset($cart['items'][$id]);
-            self::updateCart($cart);
-        }
-        
-        return $cart;
+    public function setCheckoutInfo($_info) {
+        $this->checkoutInfo = $_info;
     }
     
-    public static function updateItem($items) {
-        $cart = [
-            'total' => 0,
-            'sum_item' => 0,
-            'items' => []
-        ];
-        
-        if(session('cart')) {
-            $cart = session('cart');
-            foreach($items as $item) {
-                $cart['items'][$item['id']]['qty'] = $item['qty'];
+    public function setCount($_count) {
+        $this->count = $_count;
+    }
+    
+    public function getTotal() {
+        $this->total = 0;
+        foreach($this->cart as $cartItem) {
+            $this->total += $cartItem->getCost();
+        }
+        return $this->total;
+    }
+    
+    public function getCheckoutInfo() {
+        return $this->checkoutInfo;
+    }
+    
+    public function getTotalFormat() {
+        return Utils::formatCurrency($this->getTotal());
+    }
+    
+    public function addItem(CartItem $cartItem) {
+        $flg = false;
+        foreach($this->cart as $cItem) {
+            if($cItem->getId() == $cartItem->getId()) {
+                $cItem->setQty($cartItem->getQty());
+                $flg = true;
+                break;
             }
-            self::updateCart($cart);
         }
-        
-        return $cart;
+        if(!$flg) {
+            array_push($this->cart, $cartItem);
+        }
+        $this->cartItem = $cartItem;
+        $this->session->put('cart', $this);
     }
     
-    public static function updateCart(&$cart) {
-        $total = 0;
-        $sum_item = 0;
-        $items = $cart['items'];
-        foreach($items as $item) {
-            $cost = ($item['price_discount'] * $item['qty']);
-            $total += $cost;
-            $sum_item++;
-            $cart['items'][$item['id']]['cost'] = $cost;
-        }
-        
-        $cart['sub_total'] = $total;
-        $cart['total'] = $total;
-        $cart['sum_item'] = $sum_item;
-        
-        session(['cart' => $cart]);
-        
-    }
-    
-    public static function checkout($checkout) {
-        
-        $orderId = 0;
-        
-        if(session('cart')) {
-            $cart = session('cart');
-            
-            DB::beginTransaction();
-            
-            try {
-                
-                $order = new Order();
-                $order->customer_name       = Utils::cnvNull($checkout['customer_name'], '');
-                $order->customer_email      = Utils::cnvNull($checkout['customer_email'], '');
-                $order->customer_address    = Utils::cnvNull($checkout['customer_address'], '');
-                $order->customer_phone      = Utils::cnvNull($checkout['customer_phone'], '');
-                $order->payment_method      = Utils::cnvNull($checkout['payment_method'], '');
-                $order->total               = $cart['total'];
-                $order->created_at          = date('Y-m-d H:i:s');
-                $order->updated_at          = date('Y-m-d H:i:s');
-                
-                if($order->save()) {
-                    $orderDetails = [];
-                    foreach($cart['items'] as $item) {
-                        $detail = [
-                            'order_id'      => $order->id,
-                            'product_id'    => $item['id'],
-                            'qty'           => $item['qty'],
-                            'price'         => $item['price'],
-                            'cost'          => $item['cost'],
-                            'sizes'         => '',
-                            'colors'        => '',
-                            'created_at'    => date('Y-m-d H:i:s'),
-                            'updated_at'    => date('Y-m-d H:i:s')
-                        ];
-                        
-                        array_push($orderDetails, $detail);
-                    }
-                    
-                    DB::table(Common::ORDER_DETAILS)->insert($orderDetails);
-                    
-                    $orderId = $order->id;
-                }
-                
-                DB::commit();
-                
-            }  catch(\Exception $e) {
-                DB::rollBack();
+    public function addDetailItem($id, CartItem $detailItem) {
+        foreach($this->cart as $cartItem) {
+            if($cartItem->getId() == $id) {
+//                 $detailList = [];
+//                 array_push($detailList, $detailItem);
+                $cartItem->addDetailItem($detailItem);
+                break;
             }
         }
         
-        if($orderId) {
-            session()->remove('cart');
+        $this->cartItem = $cartItem;
+        $this->session->put('cart', $this);
+    }
+    
+    public function getCartItem() {
+        return $this->cartItem;
+    }
+    
+    public function getCount() {
+        $this->count = count($this->cart);
+        return $this->count;
+    }
+    
+    public function getTopCart() {
+        return view('shop.common.top_cart', ['cart' => $this])->render();
+    }
+    
+    public function getMainCart() {
+        return view('shop.common.main_cart', ['cart' => $this])->render();
+    }
+    
+    public function updateCart($id, $qty) {
+        foreach($this->cart as $cartItem) {
+            if($cartItem->getId() == $id) {
+                $cartItem->setQty($qty);
+            }
         }
         
-        return $orderId;
+        $this->session->put('cart', $this);
+    }
+    
+    public function removeItem($id) {
+        $cart = [];
+        foreach($this->cart as $cartItem) {
+            if($cartItem->getId() != $id) {
+                array_push($cart, $cartItem);
+            }
+        }
+        
+        $this->setCart($cart);
+    }
+    
+    public function destroy() {
+        $this->session->remove('cart');
     }
 }
 ?>

@@ -10,11 +10,11 @@
 			</div>
 			<section class="list-blogs blog-main">
             	<div class="row">
-            		<div id="posts_block">
+            		<div id="ajax_list">
             		</div>	
             	</div>
 			</section>
-			<div id="paging_link">
+			<div id="ajax_paging">
 			</div>
 		</section>
 		<aside class="dqdt-sidebar sidebar left left-content col-lg-3 col-lg-pull-9">
@@ -33,11 +33,11 @@
     		async : true,
     		id: $('#id').val(),
     		page_name: $('#page_name').val(),
-    		container: '#posts_block',
-    		paging: '#paging_link',
+    		container: ['#ajax_list','#ajax_paging'],
+    		spinner: '#ajax_list'
     	}
     
-    	callAjax('{{ route('loadData') }}', data, page_name);
+    	callAjax('{{ route('loadData') }}', data);
 
     	$(document).on('click', '.page-link', function(e) {
 			var page_number = $(this).attr('data-page-number');

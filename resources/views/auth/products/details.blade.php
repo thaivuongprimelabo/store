@@ -34,13 +34,12 @@
 <table class="table box table-bordered table-responsive toy-item" data-index="-1" data-row-index="-1">
     <thead style="cursor: pointer;">
       <tr>
-        <th colspan="2">{service_group_name}
+        <th colspan="2"><span class="service-group-name-title"></span>
         	<input type="hidden" name="" class="service-group-name" value="" /></th>
         <th>
         	<button type="button" class="btn btn-danger btn-xs remove-group" title="Remove group"><span class="glyphicon glyphicon-remove"></span> {{ trans('auth.button.remove') }}</button>
         </th>
       </tr>
-      
     </thead>
     <tbody>
       @include('auth.products.detail_row',['class' => 'hide_element'])

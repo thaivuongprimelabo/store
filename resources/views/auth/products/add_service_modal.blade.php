@@ -12,7 +12,7 @@
               <div class="form-group">
               	<div class="input-group">
               		<span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>
-            		<input type="text" class="form-control" id="name" name="name" value="" placeholder="Vui lòng nhập tên dịch vụ" />
+            		<input type="text" class="form-control" id="service_name" name="service_name" value="" placeholder="Vui lòng nhập tên dịch vụ" />
             	</div>
               </div>
         </form>

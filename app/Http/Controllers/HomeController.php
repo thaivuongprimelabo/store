@@ -82,6 +82,7 @@ class HomeController extends AppController
         
         $product = Product::select(
                         'products.name',
+                        'products.name_url',
                         'products.price',
                         'products.id',
                         'products.description',
@@ -90,9 +91,14 @@ class HomeController extends AppController
                         'products.is_new',
                         'products.is_best_selling',
                         'products.is_popular',
-                        'products.discount'
+                        'products.discount',
+                        'products.status'
                     )
                     ->where(['products.status' => Status::ACTIVE, 'products.name_url' => $slug])->first();
+        
+        if(!$product) {
+            return redirect('/');
+        }
         
         $this->output['breadcrumbs'] = [
             ['link' => $product->getCategoryLink(), 'text' => $product->getCategoryName()],
@@ -157,23 +163,35 @@ class HomeController extends AppController
     public function contact(Request $request) {
         
         
-        if($request->isMethod('post')) {
+        if($request->ajax()) {
             
-            $validator = Validator::make($request->all(), [
+            $rules = [
                 'name' => 'required',
-                'email' => 'required',
+                'email' => 'required|email',
                 'phone' => 'required',
                 'content' => 'required',
                 'subject' => 'required',
-                'captcha' => 'required'
-            ]);
+            ];
             
             if($request->getSession()->has('captcha')) {
                 $rules['captcha'] = 'required|captcha';
             }
             
+            $messages = [
+                'name.required' => trans('validation.required', ['attribute' => 'Họ tên']),
+                'email.required' => trans('validation.required', ['attribute' => 'E-mail']),
+                'phone.required' => trans('validation.required', ['attribute' => 'Số điện thoại']),
+                'subject.required' => trans('validation.required', ['attribute' => 'Tựa đề']),
+                'content.required' => trans('validation.required', ['attribute' => 'Nội dung']),
+                'email.email' => trans('validation.email'),
+            ];
+            
+            $validator = Validator::make($request->all(), $rules, $messages);
+            
             if($validator->fails()) {
-                return redirect(route('contact'))->with('error', trans('messages.ERROR'));
+                $errors = $validator->errors();
+                $result['#contact_error'] = $this->createErrorList($errors->toArray());
+                return response()->json($result);
             }
             
             $contact = new Contact();
@@ -188,10 +206,11 @@ class HomeController extends AppController
             $contact->updated_at    = date('Y-m-d H:i:s');
             
             if($contact->save()) {
-                return redirect(route('contact'))->with('success', trans('messages.SEND_CONTACT_SUCCESS'));
+                $result['#contact_success'] = trans('messages.SEND_CONTACT_SUCCESS');
             } else {
-                return redirect(route('contact'))->with('error', trans('messages.ERROR'));
+                $result['#contact_error'] = trans('messages.ERROR');
             }
+            return response()->json($result);
         }
         
         $this->output['breadcrumbs'] = [
@@ -260,9 +279,7 @@ class HomeController extends AppController
     
     public function loadData(Request $request) {
         
-        $result = [
-            'code' => 404,
-        ];
+        $result = [];
         
         if($request->ajax()) {
             $id = $request->id;
@@ -278,8 +295,9 @@ class HomeController extends AppController
                 $orderBy = $sort[0] . ' ' . $sort[1];
             }
             
+            $wherePriceSearch = '1 = 1';
             if(!Utils::blank($price_search)) {
-                $whereIn .= ' AND ' . $price_search;
+                $wherePriceSearch .= ' AND (' . $price_search . ')';
             }
             
             $view = 'shop.common.product_ajax';
@@ -288,27 +306,27 @@ class HomeController extends AppController
                     
                 case 'category-page':
                     $whereIn = 'category_id IN (SELECT id FROM categories WHERE parent_id = ' . $id . ' OR id = ' . $id . ')';
-                    $data = Product::active()->whereRaw($whereIn)->orderByRaw($orderBy)->paginate(Common::LIMIT_PRODUCT_SHOW);
+                    $data = Product::active()->whereRaw($whereIn)->whereRaw($wherePriceSearch)->orderByRaw($orderBy)->paginate(Common::LIMIT_PRODUCT_SHOW);
                     break;
                     
                 case 'new-products-page':
-                    $data = Product::active()->isNew()->orderByRaw($orderBy)->paginate(Common::LIMIT_PRODUCT_SHOW);
+                    $data = Product::active()->isNew()->whereRaw($wherePriceSearch)->orderByRaw($orderBy)->paginate(Common::LIMIT_PRODUCT_SHOW);
                     break;
                     
                 case 'popular-products-page':
-                    $data = Product::active()->isPopular()->orderByRaw($orderBy)->paginate(Common::LIMIT_PRODUCT_SHOW);
+                    $data = Product::active()->isPopular()->whereRaw($wherePriceSearch)->orderByRaw($orderBy)->paginate(Common::LIMIT_PRODUCT_SHOW);
                     break;
                     
                 case 'best-selling-products-page':
-                    $data = Product::active()->isBestSelling()->orderByRaw($orderBy)->paginate(Common::LIMIT_PRODUCT_SHOW);
+                    $data = Product::active()->isBestSelling()->whereRaw($wherePriceSearch)->orderByRaw($orderBy)->paginate(Common::LIMIT_PRODUCT_SHOW);
                     break;
                     
                 case 'all-products-page':
-                    $data = Product::active()->orderByRaw($orderBy)->paginate(Common::LIMIT_PRODUCT_SHOW);
+                    $data = Product::active()->orderByRaw($orderBy)->whereRaw($wherePriceSearch)->paginate(Common::LIMIT_PRODUCT_SHOW);
                     break;
                 
                 case 'vendor-page':
-                    $data = Product::active()->where('vendor_id', $id)->paginate(Common::LIMIT_PRODUCT_SHOW);
+                    $data = Product::active()->where('vendor_id', $id)->whereRaw($wherePriceSearch)->paginate(Common::LIMIT_PRODUCT_SHOW);
                     break;
                 
                 case 'posts-page':
@@ -322,21 +340,22 @@ class HomeController extends AppController
                     break;
                     
                 case 'search-suggestion-page':
-                    $obj = Product::active()->where('name', 'LIKE', '%' . $keyword . '%')->paginate(Common::LIMIT_POST_SHOW);
+                    $data = Product::active()->where('name', 'LIKE', '%' . $keyword . '%')->paginate(Common::LIMIT_POST_SHOW);
                     $view = 'shop.common.search_suggestion';
+                    $result['#product_results'] = view($view, compact('data'))->render();
+                    return response()->json($result);
                 case 'search-page':
                     $obj = Product::active()->where('name', 'LIKE', '%' . $keyword . '%');
                     $count = $obj->count();
                     $data = $obj->paginate(Common::LIMIT_POST_SHOW);
+                    $result['#result_count'] = $count;
                     break;
             }
         }
         
         $paging = $data->toArray();
-        $result['code'] = 200;
-        $result['data'] = view($view, compact('data', 'view_type'))->render();
-        $result['paging'] =  $data->links('shop.common.paging', compact('paging'))->toHtml();
-        $result['count'] = $count;
+        $result['#ajax_list'] = view($view, compact('data', 'view_type'))->render();
+        $result['#ajax_paging'] =  $data->links('shop.common.paging', compact('paging'))->toHtml();
         
         return response()->json($result);
     }

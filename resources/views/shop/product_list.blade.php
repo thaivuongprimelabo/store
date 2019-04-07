@@ -48,10 +48,10 @@
 					</div>
 				</div>
 				<section class="products-view products-view-{{ $view_type }}">
-					<div id="product_block" class="row row-noGutter">
+					<div id="ajax_list" class="row row-noGutter">
 					</div>
 				</section>
-				<div id="paging_link">
+				<div id="ajax_paging">
 				</div>
 			</div>
 		</section>
@@ -75,11 +75,11 @@
     		id: $('#id').val(),
     		page_name: $('#page_name').val(),
     		view_type: $('#view_type').val(),
-    		container: '#product_block',
-    		paging: '#paging_link',
+    		container: ['#ajax_list', '#ajax_paging'],
+    		spinner: '#ajax_list'
     	}
     
-    	callAjax('{{ route('loadData') }}', data, page_name);
+    	callAjax('{{ route('loadData') }}', data);
 
     	$(document).on('click', '.view-type', function(e) {
         	$('.view-type b').removeClass('active');
@@ -87,12 +87,12 @@
 			var view_type = $(this).attr('data-view');
 			$('.products-view').attr('class', 'products-view products-view-' + view_type);
 			data['view_type'] = view_type;
-			callAjax('{{ route('loadData') }}', data, page_name);
+			callAjax('{{ route('loadData') }}', data);
     	});
 
     	$(document).on('click', '.page-link', function(e) {
 			var page_number = $(this).attr('data-page-number');
-			callAjax('{{ route('loadData') }}?page=' + page_number, data, page_name);
+			callAjax('{{ route('loadData') }}?page=' + page_number, data);
     	});
 
     	$(document).on('click', '.sort-by', function(e) {
@@ -100,7 +100,7 @@
         	$('.val').html(text);
 			var sort_by = $(this).attr('data-sort');
 			data['sort_by'] = sort_by;
-			callAjax('{{ route('loadData') }}', data, page_name);
+			callAjax('{{ route('loadData') }}', data);
     	});
 
     	$(document).on('click', '.price-search', function(e) {
@@ -112,7 +112,7 @@
 			});
 
 			data['price_search'] = price_search.join(' OR ');
-			callAjax('{{ route('loadData') }}', data, page_name);
+			callAjax('{{ route('loadData') }}', data);
     	});
 
     })

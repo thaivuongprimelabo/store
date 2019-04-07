@@ -47,7 +47,7 @@
 												<div class="product-action hidden-md hidden-sm hidden-xs clearfix">
 													<div>
 														<input type="hidden" name="variantId" value="17898181" />
-														<button class="btn-buy btn-cart btn btn-primary   left-to add_to_cart" title="Đặt hàng">
+														<button class="btn-buy btn-cart btn btn-primary left-to add_to_cart" data-qty="1" data-id="{{ $product->id }}" title="{{ trans('shop.cart.order') }}">
 															<i class="fa fa-shopping-bag"></i>						
 														</button>
 														
@@ -60,7 +60,7 @@
 												<h3 class="product-name"><a href="{{ $product->getLink() }}" title="{{ $product->getName() }}">{{ $product->getName() }}</a></h3>
 												<div class="price-box clearfix">
 													<div class="special-price">
-														<span class="price product-price">{{ $product->getPrice() }}₫</span>
+														<span class="price product-price">{{ $product->getPrice() }}</span>
 													</div>											
 												</div>
 											</div>

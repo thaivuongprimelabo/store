@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use App\Helpers\Utils;
 use App\Constants\ProductStatus;
+use App\Constants\ProductType;
 use App\Constants\Status;
 
 class Product extends Model
@@ -23,7 +24,7 @@ class Product extends Model
     
     public function getFirstImage($thumb = 'medium') {
         $image_url = Utils::getImageLink();
-        $image_product = ImageProduct::select('image','medium')->where('product_id', $this->id)->first();
+        $image_product = ImageProduct::select('image','medium','small')->where('product_id', $this->id)->first();
         if($image_product) {
             $image_url = Utils::getImageLink($image_product->image, $image_product->$thumb);
         }
@@ -95,12 +96,11 @@ class Product extends Model
     }
     
     public function getPrice() {
-        if(is_numeric($this->price)) {
+        if($this->price > 0) {
             return Utils::formatCurrency($this->price);
-        } else {
-            return $input;
         }
-        return '';
+        
+        return '(Liên hệ)';
     }
     
     public function getSummary() {
@@ -113,6 +113,18 @@ class Product extends Model
     
     public function getLink() {
         return route('product_details',['slug' => $this->name_url]);
+    }
+    
+    public function getStatus() {
+        return $this->status;
+    }
+    
+    public function getStatusName() {
+        $status = trans('auth.status.out_of_stock');
+        if($this->status == ProductStatus::AVAILABLE) {
+            $status = trans('auth.status.available');
+        }
+        return $status;
     }
     
     public function getImageWidth() {
@@ -128,14 +140,34 @@ class Product extends Model
     }
     
     public function scopeIsNew($query) {
-        return $query->where('is_new', ProductStatus::IS_NEW);
+        return $query->where('is_new', ProductType::IS_NEW);
     }
     
     public function scopeIsPopular($query) {
-        return $query->where('is_popular', ProductStatus::IS_POPULAR);
+        return $query->where('is_popular', ProductType::IS_POPULAR);
     }
     
     public function scopeIsBestSelling($query) {
-        return $query->where('is_best_selling', ProductStatus::IS_BEST_SELLING);
+        return $query->where('is_best_selling', ProductType::IS_BEST_SELLING);
+    }
+    
+    public function getProductDetails() {
+        $productDetails = ProductDetails::select(
+                            'product_detail_groups.id AS group_id',
+                            'product_detail_groups.name AS group_name',
+                            DB::raw('GROUP_CONCAT(product_details.id ORDER BY product_details.id) AS detail_id'), 
+                            DB::raw('GROUP_CONCAT(product_details.name) AS detail_name'), 
+                            DB::raw('GROUP_CONCAT(product_details.price) AS detail_price')
+                          )
+                          ->leftJoin('product_detail_groups', function($join) {
+                              $join->on('product_detail_groups.id', '=', 'product_details.product_detail_group_id');
+                          })
+                          ->where('product_details.product_id', $this->id)
+                          ->groupBy('product_detail_groups.id', 'product_detail_groups.name')
+                          ->orderBy('product_detail_groups.id')->get();
+        
+        
+        return $productDetails;
+        
     }
 }

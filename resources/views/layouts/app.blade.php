@@ -153,6 +153,7 @@
     </footer>
     @include('auth.products.upload_modal')
     @include('auth.common.alert')
+    @include('auth.products.add_service_modal')
 </div>
 @endif
 <!-- jQuery 3 -->
@@ -407,7 +408,7 @@
     	$('#serviceModal').modal();
     });
     $('#serviceModal').on('show.bs.modal', function (event) {
-    	$('#name').val('');
+    	$('#service_name').val('');
     });
     $(document).on('click', '.toy-item thead', function(e) {
 		var style = $(this).find('tbody').attr('style');
@@ -417,36 +418,43 @@
 			$(this).find('tbody').fadeIn();
 		}
 	});
-    var group_index = -1;
-    var row_index = -1;
     
     $('#service_submit').click(function(e) {
-		var service_group_name = $('#name').val().trim();
+		var service_group_name = $('#service_name').val().trim();
 		if(service_group_name.length > 0) {
-			group_index++;
+			var data_index = getMax('.toy-item', 'data-index');
+			$('#clone').find('.service-group-name-title').html(service_group_name);
 			$('#clone').find('.service-group-name').val(service_group_name);
-			$('#clone').find('.group_index').val(group_index);
+			$('#clone').find('table').attr('data-index', data_index);
 			var clone = $('#clone').html();
-			$('#services').append(clone.replace('{service_group_name}', service_group_name));
+			$('#services').append(clone);
 		}
 		$('#serviceModal').modal('hide');
     });
     
     $(document).on('click', '.add-service-item', function(e) {
     	var parentElement = $(this).parent().parent().parent().parent();
-    	var group_index = parentElement.find('.group_index').val();
-    	var row_index = Number(parentElement.find('.row_index').val()) + 1;
+    	var group_index =  parentElement.attr('data-index');
+    	var row_index = Number(parentElement.attr('data-row-index')) + 1;
     	var row = 'service[' + group_index + ']';
 		var service_group_name_tag = row + '[group_name]';
     	var service_name_tag = row + '[item][' + row_index + '][name]';
         var service_price_tag = row + '[item][' + row_index + '][price]';
-        var service_group_name = $(this).parent().parent().parent().parent().find('.service-group-name').val();
+        
 		var service_item = $('#hidden-item').clone().removeClass('hide_element');
 		service_item.find('.service-name').attr('name', service_name_tag);
 		service_item.find('.service-price').attr('name', service_price_tag);
 		parentElement.find('.service-group-name').attr('name', service_group_name_tag);
-		parentElement.find('.row_index').val(row_index);
+		parentElement.attr('data-row-index', row_index);
 		service_item.insertBefore(parentElement.find('tr.add-item'));
+    });
+
+    $(document).on('click', '.remove-group', function(e) {
+		$(this).parent().parent().parent().parent().remove();
+    });
+
+    $(document).on('click', '.remove-detail', function(e) {
+		$(this).parent().parent().remove();
     });
 
   });

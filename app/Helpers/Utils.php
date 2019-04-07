@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use App\Constants\Common;
 use App\Constants\ContactStatus;
+use App\Constants\ProductType;
 use App\Constants\Status;
 use App\Constants\StatusOrders;
 use App\Constants\UserRole;
@@ -452,8 +453,6 @@ class Utils {
     
     public static function sendMail($config_email = []) {
         
-//         self::setConfigMail();
-
         $message = '';
         
         try {
@@ -716,12 +715,24 @@ class Utils {
                                 $tbody .= '<td><a href="javascript:void(0)" class="update-status" data-id="' . $item->id . '" data-status="' . $item->status . '">' . $label . '</a></td>';
                                 break;
                                 
+                            case 'product_status':
+                                $label = '<span class="label label-success">' . trans('auth.status.available') . '</span>';
+                                if($item->status == ProductStatus::OUT_OF_STOCK) {
+                                    $label = '<span class="label label-danger">' . trans('auth.status.out_of_stock') . '</span>';
+                                }
+                                $tbody .= '<td><a href="javascript:void(0)" class="update-status" data-id="' . $item->id . '" data-status="' . $item->status . '">' . $label . '</a></td>';
+                                break;
+                                
                             case 'role_id':
                                 
                                 $label = '<span class="label label-primary">' . trans('auth.role.super_admin') . '</span>';
                                 
                                 if($item->role_id == UserRole::ADMIN) {
                                     $label = '<span class="label label-warning">' . trans('auth.role.admin') . '</span>';
+                                }
+                                
+                                if($item->role_id == UserRole::MEMBERS) {
+                                    $label = '<span class="label label-default">' . trans('auth.role.member') . '</span>';
                                 }
                                 
                                 $tbody .= '<td><a href="javascript:void(0)" class="update-status">' . $label . '</a></td>';
@@ -751,6 +762,14 @@ class Utils {
                                 }
                                 
                                 $tbody .= '<td>' . $label . '</td>';
+                                break;
+                            
+                            case 'contact_status':
+                                $label = '<span class="label label-primary">' . trans('auth.status.new') . '</span>';
+                                if($item->status == Status::ACTIVE) {
+                                    $label = '<span class="label label-success">' . trans('auth.status.replied') . '</span>';
+                                }
+                                $tbody .= '<td><a href="javascript:void(0)" class="update-status" data-id="' . $item->id . '" data-status="' . $item->status . '">' . $label . '</a></td>';
                                 break;
                                 
                             case 'edit_action':
@@ -1073,6 +1092,11 @@ class Utils {
                 
             case 'label':
                 
+                if($key == 'payment_method') {
+                    $payment_methods = trans('auth.config.form.payment_method');
+                    $element_value = $payment_methods[$element_value]['text'];
+                }
+                
                 $element_html .= '<label>' .$text . '</label>&nbsp;&nbsp;&nbsp;';
                 $element_html .= '<span>' . $element_value . '</span>';
                 break;
@@ -1328,7 +1352,7 @@ class Utils {
         }
         
         if($position == 'popular_products') {
-            $products = Product::where('status', Status::ACTIVE)->where('is_popular', ProductStatus::IS_POPULAR)->paginate(Common::LIMIT_PRODUCT_SHOW_SIDEBAR);
+            $products = Product::where('status', Status::ACTIVE)->where('is_popular', ProductType::IS_POPULAR)->paginate(Common::LIMIT_PRODUCT_SHOW_SIDEBAR);
             $html .= view('shop.common.popular_products', compact('products'))->render();
         }
         return $html;
@@ -1343,13 +1367,13 @@ class Utils {
         }
         
         $route = '';
-        if($type == ProductStatus::IS_NEW) {
+        if($type == ProductType::IS_NEW) {
             $route = route('newProducts');
         }
-        if($type == ProductStatus::IS_BEST_SELLING) {
+        if($type == ProductType::IS_BEST_SELLING) {
             $route = route('bestSellProducts');
         }
-        if($type == ProductStatus::IS_POPULAR) {
+        if($type == ProductType::IS_POPULAR) {
             $route = route('popularProducts');
         }
         $html .= view('shop.common.product', compact('categories', 'title', 'type', 'route'))->render();

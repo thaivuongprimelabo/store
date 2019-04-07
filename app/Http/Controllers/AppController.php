@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Utils;
+use App\Helpers\Cart;
+use Illuminate\Http\Request;
 use View;
 class AppController extends Controller
 {
@@ -15,8 +17,14 @@ class AppController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
+    public function __construct() {
+        
+        $this->middleware(function ($request, $next) {
+            $this->output['cart'] = Cart::getInstance($request->getSession());
+            return $next($request);
+        });
+        
+        
         // Config
         $config = Utils::getConfig();
 
@@ -34,6 +42,8 @@ class AppController extends Controller
                     'web_keywords' => Utils::cnvNull($config->web_keywords, $config->web_name),
                     'web_logo' => $web_logo,
                     'web_ico' => $web_ico,
+                    'mail_from' => Utils::cnvNull($config->mail_from, 'support@gmail.com'),
+                    'mail_name' => Utils::cnvNull($config->mail_name, 'Mail System'),
                     'web_email' => Utils::cnvNull($config->web_email, ''),
                     'web_hotline' => Utils::cnvNull($config->web_hotline, ''),
                     'web_working_time' => Utils::cnvNull($config->web_working_time, ''),
@@ -57,9 +67,11 @@ class AppController extends Controller
                     'web_ico_image_size'   => Utils::cnvNull($config->web_ico_image_size, '100x100'),
                     'users_image_size'   => Utils::cnvNull($config->users_image_size, '100x100'),
                     'avatar_image_size' => Utils::cnvNull($config->users_image_size, '100x100'),
+                    'bank_info' => Utils::cnvNull($config->bank_info, ''),
+                    'cash_info' => Utils::cnvNull($config->cash_info, ''),
                     
                     'url_ext' => Utils::cnvNull($config->url_ext, '.html'),
-                ]
+                ],
             ];
             
             if($config->off == 1) {
@@ -67,6 +79,17 @@ class AppController extends Controller
             }
             
         }
+    }
+    
+    
+    protected function createErrorList($errors) {
+        
+        $html = '<ul>';
+        foreach($errors as $err) {
+            $html .= '<li><i class="fa fa-exclamation"></i> ' . $err[0] .'</li>';
+        }
+        $html .= '</ul>';
+        return $html;
     }
     
 }

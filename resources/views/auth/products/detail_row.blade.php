@@ -5,7 +5,7 @@
 	$k = isset($k) ? $k : -1;
 @endphp
 @if($k >= 0)
-<tr id="hidden-item" class="{{ $class }}">
+<tr class="{{ $class }}">
     <td>
     	<div class="input-group">
     		<span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>

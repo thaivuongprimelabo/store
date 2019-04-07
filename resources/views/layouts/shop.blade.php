@@ -42,7 +42,7 @@
 	
 	<link href="{{ url('shop/bizweb.dktcdn.net/100/308/325/themes/665783/assets/iwish4d7c.css') }}" rel="stylesheet" type="text/css" />
 	
-	<link href="{{ url('shop/shop.custom.css') }}" rel="stylesheet" type="text/css" />
+	<link href="{{ url('shop/css/custom.shop.css') }}" rel="stylesheet" type="text/css" />
 	<!-- Header JS -->	
 	<script src="{{ url('shop/bizweb.dktcdn.net/100/308/325/themes/665783/assets/jquery-2.2.3.min4d7c.js') }}" type="text/javascript"></script> 
 
@@ -55,7 +55,7 @@
 	</header>
 	@yield('content')
 	@include('shop.common.footer')
-	
+	@include('shop.modal.add_to_cart')
 	<!-- Plugin JS -->
 	<script src="{{ url('shop/bizweb.dktcdn.net/100/308/325/themes/665783/assets/appear4d7c.js') }}" type="text/javascript"></script>
 	<script src="{{ url('shop/bizweb.dktcdn.net/100/308/325/themes/665783/assets/owl.carousel.min4d7c.js') }}" type="text/javascript"></script>		
@@ -65,7 +65,7 @@
 	<script src="{{ url('shop/bizweb.dktcdn.net/100/308/325/themes/665783/assets/dl_main4d7c.js') }}" type="text/javascript"></script>
 	
 	<script src="https://bizweb.dktcdn.net/100/308/325/themes/665783/assets/jquery.elevatezoom308.min.js" type="text/javascript"></script>	
-	<script type="text/javascript" src="{{ url('js/shop.custom.js') }}" ></script>
+	<script type="text/javascript" src="{{ url('js/custom.shop.js') }}" ></script>
 	<script>
 		$(document).ready(function() {
 			
@@ -91,16 +91,133 @@
     		    		async : true,
     		    		keyword: $(this).val(),
     		    		page_name: page_name,
-    		    		container: '#product_results',
-    		    		paging: '',
+    		    		container: ['#product_results']
     		    	}
     				$('#search_suggestion').show();
       		    	$('.show_more span').html($(this).val());
-    		    	callAjax('{{ route('loadData') }}', data, page_name);
+    		    	callAjax('{{ route('loadData') }}', data);
         		 } else {
         			 $('#search_suggestion').hide();
         		 }
     		 });
+
+    		 $(document).on('click', '.show_more', function(e) {
+				window.location = '{{ route('search') }}?q=' + $('#keyword').val();
+    		 });
+
+    		 $(document).on('click', '.add_to_cart', function(e) {
+ 				 var data = {
+					type : 'post',
+		    		async : true,
+		    		pid: $(this).attr('data-id'),
+		    		qty: $(this).attr('data-qty'),
+		    		container: ['#cart_1', '.cartCount2', '#top_cart'],
+		    		dialog: '#popupCartModal'
+ 				 }
+
+ 				 callAjax('{{ route('addToCart') }}', data);
+     		 });
+
+    		 $(document).on('click', '.btn-minus', function(e) {
+        		 var qty = Number($(this).next('.number-sidebar').val()) - 1;
+        		 if(qty === 0) {
+					return false;
+        		 }
+
+        		 $(this).next('.number-sidebar').val(qty);
+
+        		 var data = {
+ 					type : 'post',
+ 		    		async : true,
+ 		    		pid: $(this).attr('data-id'),
+ 		    		qty: qty,
+ 		    		container: ['#top_cart', '.cartCount2', '#main_cart'],
+  				 }
+
+  				 callAjax('{{ route('updateCart') }}', data);
+
+        		 
+     		 });
+    		 
+    		 $(document).on('click', '.btn-plus', function(e) {
+        		 var qty = Number($(this).prev('.number-sidebar').val()) + 1;
+        		 if(qty > 20) {
+					return false;
+        		 }
+        		 
+        		 $(this).prev('.number-sidebar').val(qty);
+
+        		 var data = {
+  					type : 'post',
+  		    		async : true,
+  		    		pid: $(this).attr('data-id'),
+  		    		qty: qty,
+  		    		container: ['#top_cart', '.cartCount2', '#main_cart'],
+   				 }
+
+   				 callAjax('{{ route('updateCart') }}', data);
+        		 
+    		 });
+
+    		 $(document).on('click', '.qtyminus', function(e) {
+        		 var id = $(this).attr('data-id');
+        		 var qty = Number($(this).next('.qty').val()) - 1;
+        		 if(qty === 0) {
+					return false;
+        		 }
+        		 
+        		 $(this).next('.qty').val(qty);
+
+				 $(this).parent().parent().find('.add_to_cart').attr('data-id', id);
+				 $(this).parent().parent().find('.add_to_cart').attr('data-qty', qty);	 
+    		 });
+
+    		 $(document).on('click', '.qtyplus', function(e) {
+    			 var id = $(this).attr('data-id');
+        		 var qty = Number($(this).prev('.qty').val()) + 1;
+        		 if(qty > 20) {
+					return false;
+        		 }
+        		 
+        		 $(this).prev('.qty').val(qty);
+
+        		 $(this).parent().parent().find('.add_to_cart').attr('data-id', id);  
+        		 $(this).parent().parent().find('.add_to_cart').attr('data-qty', qty);      		 
+    		 });
+
+    		 $(document).on('keyup', '.qty', function(e) {
+        		 var qty = $(this).val();
+        		 var id = $(this).attr('data-id');
+        		 $(this).parent().parent().find('.add_to_cart').attr('data-id', id);  
+        		 $(this).parent().parent().find('.add_to_cart').attr('data-qty', qty);    
+     		 });
+
+    		 $(document).on('keyup', '.number-sidebar', function(e) {
+        		 var qty = $(this).val();
+
+        		 var data = {
+  					type : 'post',
+  		    		async : true,
+  		    		pid: $(this).attr('data-id'),
+  		    		qty: qty,
+  		    		container: ['#top_cart', '.cartCount2', '#main_cart'],
+   				 }
+
+   				 callAjax('{{ route('updateCart') }}', data);
+     		 });
+
+    		 $(document).on('click', '.remove-item-cart', function(e) {
+
+        		 var data = {
+  					type : 'post',
+  		    		async : true,
+  		    		id: $(this).attr('data-id'),
+  		    		container: ['#top_cart', '.cartCount2', '#main_cart'],
+  		    		checkout_btn: '#checkout_btn'
+   				 }
+
+   				 callAjax('{{ route('removeItem') }}', data);
+     		 });
 		});
 
 		$(document).mouseup(function(e) {

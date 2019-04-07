@@ -253,8 +253,7 @@ var getMax = function(element, data) {
 	  	var value = parseInt($(this).attr(data));
 	  	max = (value > max) ? value : max;
 	});
-
-	return max
+	return (max + 1);
 }
 
 $(document).ready(function() {

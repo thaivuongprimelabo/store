@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Auth;
 
 use App\Member;
 use App\Constants\Common;
+use App\Constants\UserRole;
 use App\Helpers\Utils;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use App\User;
 
 class MembersController extends AppController
 {
@@ -40,7 +42,7 @@ class MembersController extends AppController
      * @param Request $request
      */
     public function search(Request $request, $type) {
-        return $this->doSearch($request, new Member());
+        return $this->doSearch($request, new User(), 'members');
     }
     
     /**
@@ -62,11 +64,12 @@ class MembersController extends AppController
             $filename = '';
             Utils::doUpload($request, Common::AVATAR_FOLDER, $filename);
             
-            $data = new Member();
+            $data = new User();
             $data->name = Utils::cnvNull($request->name, '');
             $data->email = Utils::cnvNull($request->email, '');
             $data->password = Hash::make(Utils::cnvNull($request->password, ''));
             $data->avatar = $filename;
+            $data->role_id = UserRole::MEMBERS;
             $data->status = Utils::cnvNull($request->status, 0);
             $data->created_at = date('Y-m-d H:i:s');
             $data->updated_at = date('Y-m-d H:i:s');
@@ -89,7 +92,7 @@ class MembersController extends AppController
         
         $validator = [];
         
-        $data = Member::find($request->id);
+        $data = User::find($request->id);
         
         if($request->isMethod('post')) {
             

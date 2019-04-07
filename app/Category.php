@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Constants\Common;
+use App\Constants\ProductType;
 use App\Constants\Status;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -41,15 +42,15 @@ class Category extends Model
         ];
         
         switch($type) {
-            case ProductStatus::IS_NEW:
+            case ProductType::IS_NEW:
                 array_push($wheres, ['is_new', '=', $type]);
                 break;
                 
-            case ProductStatus::IS_BEST_SELLING:
+            case ProductType::IS_BEST_SELLING:
                 array_push($wheres, ['is_best_selling', '=', $type]);
                 break;
                 
-            case ProductStatus::IS_POPULAR:
+            case ProductType::IS_POPULAR:
                 array_push($wheres, ['is_popular', '=', $type]);
                 break;
             default:
