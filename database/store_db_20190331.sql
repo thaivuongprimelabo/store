@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.17, for Win64 (x86_64)
 --
 -- Host: localhost    Database: store_db
 -- ------------------------------------------------------
--- Server version	5.7.19
+-- Server version	5.7.21
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -45,6 +45,36 @@ LOCK TABLES `banners` WRITE;
 /*!40000 ALTER TABLE `banners` DISABLE KEYS */;
 INSERT INTO `banners` VALUES (4,'banner/1554382709_slider_3.jpg','','https://forums.voz.vn/forumdisplay.php?f=17',NULL,1,1,'use_image','2019-04-04 05:58:29','2019-04-04 05:58:29'),(5,'https://bizweb.dktcdn.net/100/308/325/themes/665783/assets/slider_2.jpg?1547035845538','','https://forums.voz.vn/forumdisplay.php?f=17',NULL,1,1,'use_image','2019-04-04 05:58:41','2019-04-04 05:58:41'),(6,NULL,'',NULL,'6KNPNJHrv9I',1,1,'use_youtube','2019-04-04 05:59:01','2019-04-04 05:59:01');
 /*!40000 ALTER TABLE `banners` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `booking`
+--
+
+DROP TABLE IF EXISTS `booking`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `booking` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `phone` varchar(15) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `booking_date` varchar(12) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `booking_time` varchar(12) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `note` varchar(300) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` int(11) DEFAULT '0',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `booking`
+--
+
+LOCK TABLES `booking` WRITE;
+/*!40000 ALTER TABLE `booking` DISABLE KEYS */;
+/*!40000 ALTER TABLE `booking` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -338,12 +368,13 @@ DROP TABLE IF EXISTS `order_details`;
 CREATE TABLE `order_details` (
   `order_id` int(10) unsigned NOT NULL,
   `product_id` int(10) unsigned NOT NULL,
+  `product_detail_id` int(11) NOT NULL,
   `qty` int(10) unsigned NOT NULL,
   `price` decimal(10,0) NOT NULL,
   `cost` decimal(10,0) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`order_id`,`product_id`)
+  PRIMARY KEY (`order_id`,`product_id`,`product_detail_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -353,7 +384,7 @@ CREATE TABLE `order_details` (
 
 LOCK TABLES `order_details` WRITE;
 /*!40000 ALTER TABLE `order_details` DISABLE KEYS */;
-INSERT INTO `order_details` VALUES (6,12,1,120000,120000,'2019-04-07 06:42:05','2019-04-07 06:42:05'),(6,13,1,250000,250000,'2019-04-07 06:42:05','2019-04-07 06:42:05'),(7,12,1,120000,120000,'2019-04-07 06:43:17','2019-04-07 06:43:17'),(7,13,1,250000,250000,'2019-04-07 06:43:17','2019-04-07 06:43:17'),(8,12,1,120000,120000,'2019-04-07 06:44:07','2019-04-07 06:44:07'),(8,13,1,250000,250000,'2019-04-07 06:44:07','2019-04-07 06:44:07'),(9,12,1,120000,120000,'2019-04-07 06:45:03','2019-04-07 06:45:03'),(9,13,1,250000,250000,'2019-04-07 06:45:03','2019-04-07 06:45:03'),(10,12,1,120000,120000,'2019-04-07 06:48:40','2019-04-07 06:48:40'),(10,13,1,250000,250000,'2019-04-07 06:48:40','2019-04-07 06:48:40'),(11,12,1,120000,120000,'2019-04-07 06:49:51','2019-04-07 06:49:51'),(11,13,1,250000,250000,'2019-04-07 06:49:51','2019-04-07 06:49:51'),(12,12,1,120000,120000,'2019-04-07 06:51:06','2019-04-07 06:51:06'),(12,13,1,250000,250000,'2019-04-07 06:51:06','2019-04-07 06:51:06'),(13,4,1,30000,30000,'2019-04-07 06:54:15','2019-04-07 06:54:15'),(13,9,1,150000,150000,'2019-04-07 06:54:15','2019-04-07 06:54:15');
+INSERT INTO `order_details` VALUES (6,12,0,1,120000,120000,'2019-04-07 06:42:05','2019-04-07 06:42:05'),(6,13,0,1,250000,250000,'2019-04-07 06:42:05','2019-04-07 06:42:05'),(7,12,0,1,120000,120000,'2019-04-07 06:43:17','2019-04-07 06:43:17'),(7,13,0,1,250000,250000,'2019-04-07 06:43:17','2019-04-07 06:43:17'),(8,12,0,1,120000,120000,'2019-04-07 06:44:07','2019-04-07 06:44:07'),(8,13,0,1,250000,250000,'2019-04-07 06:44:07','2019-04-07 06:44:07'),(9,12,0,1,120000,120000,'2019-04-07 06:45:03','2019-04-07 06:45:03'),(9,13,0,1,250000,250000,'2019-04-07 06:45:03','2019-04-07 06:45:03'),(10,12,0,1,120000,120000,'2019-04-07 06:48:40','2019-04-07 06:48:40'),(10,13,0,1,250000,250000,'2019-04-07 06:48:40','2019-04-07 06:48:40'),(11,12,0,1,120000,120000,'2019-04-07 06:49:51','2019-04-07 06:49:51'),(11,13,0,1,250000,250000,'2019-04-07 06:49:51','2019-04-07 06:49:51'),(12,12,0,1,120000,120000,'2019-04-07 06:51:06','2019-04-07 06:51:06'),(12,13,0,1,250000,250000,'2019-04-07 06:51:06','2019-04-07 06:51:06'),(13,4,0,1,30000,30000,'2019-04-07 06:54:15','2019-04-07 06:54:15'),(13,9,0,1,150000,150000,'2019-04-07 06:54:15','2019-04-07 06:54:15'),(15,15,0,1,200000,200000,'2019-04-07 20:51:02','2019-04-07 20:51:02'),(15,17,0,1,200000,200000,'2019-04-07 20:51:03','2019-04-07 20:51:03'),(15,18,0,1,300000,300000,'2019-04-07 20:50:58','2019-04-07 20:50:58'),(19,14,0,1,65000,65000,'2019-04-07 22:31:19','2019-04-07 22:31:19'),(19,17,0,1,50000,50000,'2019-04-07 22:31:26','2019-04-07 22:31:26'),(19,17,19,1,300000,300000,'2019-04-07 22:31:28','2019-04-07 22:31:28'),(19,18,0,2,300000,600000,'2019-04-07 22:31:22','2019-04-07 22:31:22'),(19,18,15,1,200000,200000,'2019-04-07 22:31:24','2019-04-07 22:31:24'),(19,18,17,1,200000,200000,'2019-04-07 22:31:25','2019-04-07 22:31:25'),(20,1,0,1,80000,80000,'2019-04-07 23:21:32','2019-04-07 23:21:32'),(20,18,0,1,300000,300000,'2019-04-07 23:21:32','2019-04-07 23:21:32'),(20,18,15,1,200000,200000,'2019-04-07 23:21:32','2019-04-07 23:21:32'),(20,18,17,1,200000,200000,'2019-04-07 23:21:32','2019-04-07 23:21:32'),(22,1,0,1,80000,80000,'2019-04-07 23:39:16','2019-04-07 23:39:16'),(22,18,0,1,300000,300000,'2019-04-07 23:39:16','2019-04-07 23:39:16'),(22,18,15,1,200000,200000,'2019-04-07 23:39:16','2019-04-07 23:39:16'),(22,18,17,1,200000,200000,'2019-04-07 23:39:16','2019-04-07 23:39:16'),(23,1,0,1,80000,80000,'2019-04-07 23:41:00','2019-04-07 23:41:00'),(23,18,0,1,300000,300000,'2019-04-07 23:41:00','2019-04-07 23:41:00'),(23,18,15,1,200000,200000,'2019-04-07 23:41:00','2019-04-07 23:41:00'),(23,18,17,1,200000,200000,'2019-04-07 23:41:00','2019-04-07 23:41:00'),(24,1,0,1,80000,80000,'2019-04-07 23:42:50','2019-04-07 23:42:50'),(24,18,0,1,300000,300000,'2019-04-07 23:42:50','2019-04-07 23:42:50'),(24,18,15,1,200000,200000,'2019-04-07 23:42:50','2019-04-07 23:42:50'),(24,18,17,1,200000,200000,'2019-04-07 23:42:50','2019-04-07 23:42:50');
 /*!40000 ALTER TABLE `order_details` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -379,7 +410,7 @@ CREATE TABLE `orders` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -388,7 +419,7 @@ CREATE TABLE `orders` (
 
 LOCK TABLES `orders` WRITE;
 /*!40000 ALTER TABLE `orders` DISABLE KEYS */;
-INSERT INTO `orders` VALUES (6,'Vuong Luu','thai.vuong@primelabo.com.vn','XXXXXXXXXXX','0779924902','79','771','cash_info','XXXXXXXXXXXXXXXXXXX',0,370000,'2019-04-07 06:42:05','2019-04-07 06:42:05'),(7,'XXXXXXXXXXXXXXxx','thai.vuong@primelabo.com.vn','AAAAAAAAAAAAAAAA','1111111111111','79','771','cash_info','XXXXXXXXXXXXXXX',0,370000,'2019-04-07 06:43:17','2019-04-07 06:43:17'),(8,'XXXXXXXXXXXXXXX','thai.vuong@primelabo.com.vn','YYYYYYYYYYYYYYYY','42424242','79','771','cash_info','NNNNNNNNNNNNNNNNN',0,370000,'2019-04-07 06:44:07','2019-04-07 06:44:07'),(9,'XXXXXXXXXXXXXXX','thai.vuong@primelabo.com.vn','1234567','1229924902','92','925','cash_info','asdasdasdasd',0,370000,'2019-04-07 06:45:03','2019-04-07 06:45:03'),(10,'Vuong Luu','thai.vuong@primelabo.com.vn','185/16 Nguyễn Lâm','0779924902','Thành phố Hồ Chí Minh','Quận 10','cash_info','XXXXXXXXXXXXXXXXXXXX',0,370000,'2019-04-07 06:48:40','2019-04-07 06:48:40'),(11,'Vuong Luu','thai.vuong@primelabo.com.vn','1234567','1229924902','Tỉnh Quảng Ninh','Thành phố Cẩm Phả','cash_info','XXXXXXXXXXXXXXXX',3,370000,'2019-04-07 06:49:51','2019-04-07 06:59:57'),(12,'Vuong Luu','thai.vuong@primelabo.com.vn','1234567','1229924902','Tỉnh Bắc Kạn','Huyện Ngân Sơn','cash_info','XXXXXXXXXXXXXXXXXX',2,370000,'2019-04-07 06:51:06','2019-04-07 06:59:49'),(13,'Vuong Luu','thai.vuong@primelabo.com.vn','1234567','1229924902','Tỉnh Lạng Sơn','Huyện Cao Lộc','bank_info','XXXXXXXXXXXXXXXXXXXX',1,180000,'2019-04-07 06:54:15','2019-04-07 06:59:38');
+INSERT INTO `orders` VALUES (6,'Vuong Luu','thai.vuong@primelabo.com.vn','XXXXXXXXXXX','0779924902','79','771','cash_info','XXXXXXXXXXXXXXXXXXX',0,370000,'2019-04-07 06:42:05','2019-04-07 06:42:05'),(7,'XXXXXXXXXXXXXXxx','thai.vuong@primelabo.com.vn','AAAAAAAAAAAAAAAA','1111111111111','79','771','cash_info','XXXXXXXXXXXXXXX',0,370000,'2019-04-07 06:43:17','2019-04-07 06:43:17'),(8,'XXXXXXXXXXXXXXX','thai.vuong@primelabo.com.vn','YYYYYYYYYYYYYYYY','42424242','79','771','cash_info','NNNNNNNNNNNNNNNNN',0,370000,'2019-04-07 06:44:07','2019-04-07 06:44:07'),(9,'XXXXXXXXXXXXXXX','thai.vuong@primelabo.com.vn','1234567','1229924902','92','925','cash_info','asdasdasdasd',0,370000,'2019-04-07 06:45:03','2019-04-07 06:45:03'),(10,'Vuong Luu','thai.vuong@primelabo.com.vn','185/16 Nguyễn Lâm','0779924902','Thành phố Hồ Chí Minh','Quận 10','cash_info','XXXXXXXXXXXXXXXXXXXX',0,370000,'2019-04-07 06:48:40','2019-04-07 06:48:40'),(11,'Vuong Luu','thai.vuong@primelabo.com.vn','1234567','1229924902','Tỉnh Quảng Ninh','Thành phố Cẩm Phả','cash_info','XXXXXXXXXXXXXXXX',3,370000,'2019-04-07 06:49:51','2019-04-07 06:59:57'),(12,'Vuong Luu','thai.vuong@primelabo.com.vn','1234567','1229924902','Tỉnh Bắc Kạn','Huyện Ngân Sơn','cash_info','XXXXXXXXXXXXXXXXXX',2,370000,'2019-04-07 06:51:06','2019-04-07 06:59:49'),(13,'Vuong Luu','thai.vuong@primelabo.com.vn','1234567','1229924902','Tỉnh Lạng Sơn','Huyện Cao Lộc','bank_info','XXXXXXXXXXXXXXXXXXXX',1,180000,'2019-04-07 06:54:15','2019-04-07 06:59:38'),(15,'Vuong Luu','thai.vuong@primelabo.com.vn','XXXXXXXXXXXXXXXXX','0779924902','Thành phố Hồ Chí Minh','Quận 10','cash_info','XXXXXXXXXXXXXXXXXXXXX',0,700000,'2019-04-07 20:50:56','2019-04-07 20:50:56'),(19,'Le Giang','thai.vuong@primelabo.com.vn','DD','666688888','Thành phố Hồ Chí Minh','Quận 10','cash_info','XXXXXXXXXXXXXXX',0,1415000,'2019-04-07 22:31:15','2019-04-07 22:31:15'),(20,'Lưu Thái Vượng','thai.vuong@primelabo.com.vn','185/16 Nguyễn Lâm P6 Q10','0779924902','Thành phố Hồ Chí Minh','Quận 10','cash_info','AAAAAAAAAAAAAAAAAAAAA',0,780000,'2019-04-07 23:21:32','2019-04-07 23:21:32'),(22,'Lưu Thái Vượng','thai.vuong@primelabo.com.vn','185/16 Nguyễn Lâm P6 Q10','0779924902','Thành phố Hồ Chí Minh','Quận 10','cash_info','XXXXXXXXXXXXXXXXXXXXXX',0,780000,'2019-04-07 23:39:16','2019-04-07 23:39:16'),(23,'Lưu Thái Vượng','thai.vuong@primelabo.com.vn','185/16 Nguyễn Lâm P6 Q10','0779924902','Thành phố Hồ Chí Minh','Quận 10','bank_info','Giao hàng nhé',0,780000,'2019-04-07 23:41:00','2019-04-07 23:41:00'),(24,'Lưu Thái Vượng','thai.vuong@primelabo.com.vn','185/16 Nguyễn Lâm P6 Q10','0775544545','Thành phố Hồ Chí Minh','Quận 10','bank_info','AAAAAAAAAAAAAAAAAAAAAAAAAA',0,780000,'2019-04-07 23:42:50','2019-04-07 23:42:50');
 /*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -638,7 +669,6 @@ CREATE TABLE `services` (
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `price` decimal(10,0) DEFAULT NULL,
   `image` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `product_id` int(11) DEFAULT NULL,
   `service_group_id` int(11) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
@@ -682,6 +712,32 @@ CREATE TABLE `threads` (
 LOCK TABLES `threads` WRITE;
 /*!40000 ALTER TABLE `threads` DISABLE KEYS */;
 /*!40000 ALTER TABLE `threads` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `times`
+--
+
+DROP TABLE IF EXISTS `times`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `times` (
+  `id` int(11) NOT NULL,
+  `name` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `times`
+--
+
+LOCK TABLES `times` WRITE;
+/*!40000 ALTER TABLE `times` DISABLE KEYS */;
+INSERT INTO `times` VALUES (1,'19:00','2019-04-08 09:03:27','2019-04-08 09:03:27'),(2,'20:00','2019-04-08 09:03:27','2019-04-08 09:03:27'),(3,'21:00','2019-04-08 09:03:27','2019-04-08 09:03:27'),(4,'22:00','2019-04-08 09:03:27','2019-04-08 09:03:27');
+/*!40000 ALTER TABLE `times` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -759,4 +815,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-04-08  0:09:26
+-- Dump completed on 2019-04-08 17:33:06
