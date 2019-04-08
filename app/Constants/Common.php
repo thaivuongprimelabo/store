@@ -56,6 +56,7 @@ class Common {
     CONST ICO_HEIGHT = '16';
     CONST ADMIN_IMAGE_WIDTH = '50';
     CONST NAME_MAXLENGTH = 120;
+    CONST PHONE_MAXLENGTH = 15;
     CONST LINK_MAXLENGTH = 255;
     CONST DESC_MAXLENGTH = 300;
     CONST PRICE_MAXLENGTH = 11;
@@ -63,6 +64,8 @@ class Common {
     CONST PASSWORD_MAXLENGTH = 40;
     CONST PASSWORD_MINLENGTH = 6;
     CONST DISCOUNT_MAXLENGTH = 3;
+    CONST BOOKING_DATE_MAXLENGTH = 12;
+    CONST BOOKING_TIME_MAXLENGTH = 12;
     
     CONST U = '_maximum_upload';
     CONST S = '_image_size';
@@ -89,6 +92,8 @@ class Common {
     CONST PRODUCT_DETAILS = 'product_details';
     CONST PRODUCT_DETAIL_GROUPS = 'product_detail_groups';
     CONST POST_GROUPS = 'post_groups';
+    CONST BOOKING = 'booking';
+    CONST TIMES = 'times';
     
     /** Role **/
     CONST SUPER_ADMIN = '0';

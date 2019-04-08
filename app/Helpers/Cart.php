@@ -56,7 +56,7 @@ class Cart {
     public function getTotal() {
         $this->total = 0;
         foreach($this->cart as $cartItem) {
-            $this->total += $cartItem->getCost();
+            $this->total += $cartItem->getCostIncludeDetail();
         }
         return $this->total;
     }
@@ -74,6 +74,7 @@ class Cart {
         foreach($this->cart as $cItem) {
             if($cItem->getId() == $cartItem->getId()) {
                 $cItem->setQty($cartItem->getQty());
+                $cItem->setDetailList($cartItem->getDetailList());
                 $flg = true;
                 break;
             }
@@ -135,6 +136,23 @@ class Cart {
         }
         
         $this->setCart($cart);
+    }
+    
+    public function removeDetailItem($pid, $id) {
+        foreach($this->cart as $cartItem) {
+            if($cartItem->getId() == $pid) {
+                $detailList = [];
+                foreach($cartItem->getDetailList() as $detail) {
+                    if($detail->getId() != $id) {
+                        array_push($detailList, $detail);
+                    }
+                }
+                
+                $cartItem->setDetailList($detailList);
+            }
+        }
+        
+        $this->setCart($this->cart);
     }
     
     public function destroy() {

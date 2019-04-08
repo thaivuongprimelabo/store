@@ -49,13 +49,13 @@ class OrdersController extends AppController
         $data = Order::find($request->id);
         $orderDetails = OrderDetails::select(
                             'order_details.product_id',
-                            'products.name',
                             'order_details.qty',
                             'order_details.price',
                             'order_details.cost'
                         )
-                        ->leftJoin('products', 'order_details.product_id', '=', 'products.id')
-                        ->where('order_details.order_id', $request->id)->get();
+                        ->where('order_details.order_id', $request->id)
+                        ->where('order_details.product_detail_id', 0)
+                        ->get();
         
         if($request->isMethod('post')) {
             
@@ -75,7 +75,6 @@ class OrdersController extends AppController
         }
         
         $this->output['data'] = $data;
-        $this->output['orderDetails'] = $orderDetails;
-        return view('auth.form', $this->output);
+        return view('auth.orders.form', $this->output);
     }
 }

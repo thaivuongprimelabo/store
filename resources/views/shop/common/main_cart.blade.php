@@ -17,7 +17,7 @@
 			<div class="cart-tbody">
 				@if($cart->getCount())
 				@foreach($cart->getCart() as $cartItem)
-				<div class="item-cart">
+				<div class="item-cart main-item-cart">
 					<div style="width: 19%" class="image">
 						<a class="product-image" title="{{ $cartItem->getName() }}" href="{{ $cartItem->getLink() }}">
 							<img alt="{{ $cartItem->getName() }}" src="{{ $cartItem->getImage('small') }}" />
@@ -49,6 +49,38 @@
 						<a class="button remove-item remove-item-cart" title="Xóa" href="javascript:void(0)" data-id="{{ $cartItem->getId() }}"><span><i class="fa fa-remove"></i></span></a>
 					</div>
 				</div>
+    				@php
+    					$detailList = $cartItem->getDetailList();
+    				@endphp
+    				@foreach($detailList as $detail)
+    				<div class="item-cart detail-item-cart">
+    					<div style="width: 19%" class="image">
+    					</div>
+    					<div style="width: 28%; align-items: flex-start;"
+    						class="a-center">
+    						<h2 class="product-name">
+    							<a href="#"><strong>{{ $detail->getGroupName() }}</strong>: {{ $detail->getName() }}</a>
+    						</h2>
+    						<div
+    							style="height: 30px; position: relative; width: 78px; padding: 10px 0; border: none;"></div>
+    					</div>
+    					<div style="width: 17%" class="a-center">
+    						<span class="item-price"> <span class="price">{{ $detail->getPriceFormat() }}</span></span>
+    					</div>
+    					<div style="width: 18%" class="a-center">
+    						<div class="input_qty_pr relative ">
+    							{{ $detail->getQty() }}
+    						</div>
+    					</div>
+    					<div style="width: 13%;" class="a-center">
+    						<span class="cart-price"> <span class="price">{{ $detail->getCostFormat() }}</span>
+    						</span>
+    					</div>
+    					<div style="width: 5%" class="a-center">
+    						<a class="button remove-item remove-detail-item" title="Xóa" href="javascript:void(0)" data-product-id="{{ $cartItem->getId() }}" data-id="{{ $detail->getId() }}"><span><i class="fa fa-remove"></i></span></a>
+    					</div>
+    				</div>
+    				@endforeach
 				@endforeach
 				@endif
 			</div>

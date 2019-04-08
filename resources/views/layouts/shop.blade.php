@@ -218,6 +218,21 @@
 
    				 callAjax('{{ route('removeItem') }}', data);
      		 });
+
+    		 $(document).on('click', '.remove-detail-item', function(e) {
+				 var pid = $(this).attr('data-product-id');
+				 var id = $(this).attr('data-id');
+    			 var data = {
+  					type : 'post',
+  		    		async : true,
+  		    		pid: pid,
+  		    		id: id,
+  		    		container: ['#top_cart', '.cartCount2', '#main_cart'],
+   				 }
+
+   				 callAjax('{{ route('removeDetailItem') }}', data);
+     		 });
+
 		});
 
 		$(document).mouseup(function(e) {

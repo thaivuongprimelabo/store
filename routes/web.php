@@ -124,6 +124,20 @@ Route::group(['prefix' => 'auth', 'namespace' => 'Auth'], function () {
     Route::match(['get', 'post'], '/forum/threads/search', 'ThreadsController@search')->name('auth_threads_search');
     Route::match(['get', 'post'], '/forum/threads/remove/{id?}', 'ThreadsController@remove')->name('auth_threads_remove');
     
+    // Booking
+    $this->get('/booking/', 'BookingController@index')->name('auth_booking');
+    Route::match(['get', 'post'], '/booking/create', 'BookingController@create')->name('auth_booking_create');
+    Route::match(['get', 'post'], '/booking/edit/{id}', 'BookingController@edit')->name('auth_booking_edit');
+    Route::match(['get', 'post'], '/booking/search', 'BookingController@search')->name('auth_booking_search');
+    Route::match(['get', 'post'], '/booking/remove/{id?}', 'BookingController@remove')->name('auth_booking_remove');
+    
+    // Times
+    $this->get('/booking/times', 'BookingController@time')->name('auth_times');
+    Route::match(['get', 'post'], '/booking/times/create', 'BookingController@createTime')->name('auth_times_create');
+    Route::match(['get', 'post'], '/booking/times/edit/{id}', 'BookingController@editTime')->name('auth_times_edit');
+    Route::match(['get', 'post'], '/booking/times/search', 'BookingController@searchTime')->name('auth_times_search');
+    Route::match(['get', 'post'], '/booking/times/remove/{id?}', 'BookingController@removeTime')->name('auth_times_remove');
+    
     
     
     // Registration Routes...
@@ -161,6 +175,7 @@ Route::group(['prefix' => ''], function () {
     Route::post('/cart/add-to-cart', 'CartController@addToCart')->name('addToCart');
     Route::post('/cart/update-cart', 'CartController@updateCart')->name('updateCart');
     Route::post('/cart/remove-item', 'CartController@removeItem')->name('removeItem');
+    Route::post('/cart/remove-detail-item', 'CartController@removeDetailItem')->name('removeDetailItem');
     Route::match(['get', 'post'], '/cart/checkout' . $config['url_ext'], 'CartController@checkout')->name('checkout');
     Route::get('/cart/checkout/success' . $config['url_ext'], 'CartController@checkoutSuccess')->name('checkoutSuccess');
     

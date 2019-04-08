@@ -93,7 +93,7 @@ class AppController extends Controller
         $this->output['rules'] = $this->rules;
     }
     
-    public function doSearch($request, Model $model, $type = '') {
+    public function doSearch($request, Model $model, $type = '', $view = 'auth.ajax_list') {
         
         $wheres = [];
         $route = Route::currentRouteName();
@@ -141,7 +141,7 @@ class AppController extends Controller
         $paging = $data_list->toArray();
         
         if($request->ajax()) {
-            $this->result['data'] = view('auth.ajax_list', compact('data_list', 'paging', 'name'))->render();
+            $this->result['data'] = view($view, compact('data_list', 'paging', 'name'))->render();
             return response()->json($this->result);
         } else {
             return compact('data_list', 'paging', 'name');

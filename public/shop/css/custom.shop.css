@@ -7,3 +7,20 @@ h2.title-head a {
 	margin-right: auto;
 	display: block;
 }
+
+.main-container .col-main .cart .cart-tbody .main-item-cart {
+	border-bottom:none !important;
+	border-top: 1px solid #ebebeb !important;
+}
+
+.main-container .col-main .cart .cart-tbody .detail-item-cart {
+	border-bottom:none !important;
+}
+
+.main-container .col-main .cart .cart-tbody .detail-item-cart:last-child {
+	border-bottom: 1px solid #ebebeb !important;
+}
+
+.main-container .col-main .cart .cart-tbody .detail-item-cart div {
+	height:50px;
+}

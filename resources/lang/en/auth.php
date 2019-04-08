@@ -64,6 +64,11 @@ $auth = [
         'pages' => 'Quản lý trang nội dung',
         'contacts' => 'Hộp thư liên hệ',
         'users' => 'Quản lý tài khoản',
+        'booking' => [
+            'title' => 'Quản lý lịch hẹn',
+            'booking' => 'Đặt chỗ',
+            'times' => 'Thời gian',
+        ],
         'forum' => [
             'title' => 'Diễn đàn',
             'members' => 'Thành viên',
@@ -240,6 +245,100 @@ $auth = [
         ],
         'rules' => [
             'name' => 'required|max:' . \App\Constants\Common::NAME_MAXLENGTH
+        ]
+    ],
+    /*------------ Category page ------------------- */
+    'booking' => [
+        'list_title' => 'Danh mục đặt hẹn',
+        'create_title' => 'Đăng ký hẹn',
+        'edit_title' => 'Chỉnh sửa hẹn',
+        'table_header' => [
+            'id' => [
+                'text' => 'ID',
+                'width' => '3%'
+            ],
+            'name' => [
+                'text' => 'Tên khách',
+                'width' => '20%'
+            ],
+            'booking_date' => [
+                'text' => 'Ngày đặt hẹn',
+                'width' => '10%'
+            ],
+            'booking_time' => [
+                'text' => 'Thời gian',
+                'width' => '10%'
+            ],
+            'status' => [
+                'text' => 'Trạng thái',
+                'width' => '10%'
+            ],
+            'updated_at' => [
+                'text' => 'Ngày chỉnh sửa',
+                'width' => '10%'
+            ],
+            'remove_action' => [
+                'text' => '',
+                'width' => '5%'
+            ],
+            'edit_action' => [
+                'text' => '',
+                'width' => '5%'
+            ]
+        ],
+        'search_form' => [
+            'id' => [
+                'type' => 'text',
+                'placeholder' => 'Lọc theo mã đặt chỗ'
+            ],
+            'name' => [
+                'type' => 'text',
+                'placeholder' => 'Lọc theo tên khách'
+            ],
+            'phone' => [
+                'type' => 'text',
+                'placeholder' => 'Lọc theo số điện thoại'
+            ],
+            'status' => [
+                'type' => 'booking_status_select'
+            ]
+        ],
+        'form' => [
+            'name' => [
+                'type' => 'text',
+                'text' => 'Tên khách'
+            ],
+            'phone' => [
+                'type' => 'text',
+                'text' => 'Số điện thoại'
+            ],
+            'booking_date' => [
+                'type' => 'text',
+                'text' => 'Ngày đặt hẹn'
+            ],
+            'booking_time' => [
+                'type' => 'select',
+                'text' => 'Thời gian',
+                'empty_text' => '--- Chọn thời gian ---',
+                'table' => \App\Constants\Common::TIMES
+            ],
+            'note' => [
+                'type' => 'textarea',
+                'text' => 'Ghi chú'
+            ],
+            'status' => [
+                'type' => 'select',
+                'text' => 'Trạng thái',
+                'empty_text' => '--- Chọn trạng thái ---',
+                'table' => 'BOOKING_STATUS'
+            ]
+        ],
+        'rules' => [
+            'name' => 'required|max:' . \App\Constants\Common::NAME_MAXLENGTH,
+            'phone' => 'required|max:' . \App\Constants\Common::PHONE_MAXLENGTH,
+            'booking_date' => 'required|max:' . \App\Constants\Common::BOOKING_DATE_MAXLENGTH,
+            'booking_time' => 'required|max:' . \App\Constants\Common::BOOKING_TIME_MAXLENGTH,
+            'status' => 'required_select'
         ]
     ],
     /*------------ Banner page ------------------- */
@@ -615,6 +714,7 @@ $auth = [
     'orders' => [
         'list_title' => 'Danh mục đơn hàng',
         'edit_title' => 'Cập nhật đơn hàng',
+        'order_info_title' => 'Thông tin đơn hàng',
         'table_header' => [
             'id' => [
                 'text' => 'ID',
@@ -659,13 +759,17 @@ $auth = [
             ]
         ],
         'table_product_header' => [
-            'id' => [
+            'product_id' => [
                 'text' => 'Mã sản phẩm',
+                'width' => '15%'
+            ],
+            'product_image' => [
+                'text' => 'Hình ảnh',
                 'width' => '10%'
             ],
-            'name' => [
-                'text' => 'Sản phẩm',
-                'width' => '10%'
+            'product_name' => [
+                'text' => 'Tên mục',
+                'width' => '15%'
             ],
             'qty' => [
                 'text' => 'Số lượng',
@@ -679,16 +783,11 @@ $auth = [
                 'text' => 'Thành tiền',
                 'width' => '10%'
             ],
-            'total' => [
-                'text' => 'Tổng tiền',
-                'tfoot' => true,
-                'colspan' => 3
-            ],
         ],
         'search_form' => [
             'id' => [
                 'type' => 'text',
-                'placeholder' => 'Lọc theo ID bài viết'
+                'placeholder' => 'Lọc theo mã đơn hàng'
             ],
             'name' => [
                 'type' => 'text',
@@ -738,7 +837,7 @@ $auth = [
                     'text' => 'Trạng thái đơn hàng',
                     'empty_text'
                 ]
-            ]
+            ],
         ]
     ],
     /*------------ Config page ------------------- */
@@ -1445,9 +1544,13 @@ $auth = [
         'order_new' => 'Đơn hàng mới',
         'order_shipping' => 'Đang giao hàng',
         'order_done' => 'Hoàn tất',
-        'order_cancel' => 'Hủy',
+        'order_cancel' => 'Đã hủy',
         'out_of_stock' => $product_status['out_of_stock'],
         'available' => $product_status['available'],
+        'booking_cancel' => 'Đã hủy',
+        'booking_confirm' => 'Đang đợi xác nhận',
+        'booking_available' => 'Đã chốt lịch',
+        'booking_done' => 'Đã hoàn thành'
     ],
     'role' => [
         'super_admin' => 'Quản trị hệ thống',

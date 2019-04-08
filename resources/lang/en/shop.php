@@ -100,6 +100,12 @@ return [
         'captcha' => 'Captcha*',
         'comment' => 'Nội dung*'
     ],
+    'booking' => [
+        'title' => 'Đặt lịch',
+        'name' => 'Họ tên*',
+        'phone' => 'Số điện thoại*',
+        'note' => 'Ghi chú*'
+    ],
     'button' => [
         'detail_view' => 'Chi tiết',
         'add_to_cart' => 'Đặt hàng ngay',
@@ -119,6 +125,7 @@ return [
     ],
     'mail_subject' => [
         'register' => 'Kích hoạt tài khoản',
-        'reset_password' => 'Mật khẩu mới'
+        'reset_password' => 'Mật khẩu mới',
+        'order_success' => 'Xác nhận đơn hàng #:order_id'
     ]
 ];

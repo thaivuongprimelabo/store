@@ -12,7 +12,7 @@
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
 	<link href="//bizweb.dktcdn.net/assets/themes_support/bootstrap.min.css?20171025" rel="stylesheet" type="text/css" />
 	<link href="//bizweb.dktcdn.net/assets/themes_support/font-awesome.min.css?20171025" rel="stylesheet" type="text/css" />
-	<link href="//bizweb.dktcdn.net/assets/themes_support/thankyou.css?20181105" rel="stylesheet" type="text/css" />
+	<link href="{{ url('shop/css/thankyou.css') }}" rel="stylesheet" type="text/css" />
 
 </head>
 
@@ -68,7 +68,7 @@
                                                     <div class="product-thumbnail__wrapper">
                                                         <img src="{{ $cartItem->getImage() }}" alt="{{ $cartItem->getName() }}" class="product-thumbnail__image" />
                                                     </div>
-                                                    <span class="product-thumbnail__quantity unprint" aria-hidden="true">2</span>
+                                                    <span class="product-thumbnail__quantity unprint" aria-hidden="true">{{ $cartItem->getQty() }}</span>
                                                 </div>
                                                 <div class="product-info pull-left">
                                                     <span class="product-info-name">
@@ -80,6 +80,24 @@
                                                     {{ $cartItem->getCostFormat() }}
                                                 </strong>
                                             </li>
+                                            @php
+                            					$detailList = $cartItem->getDetailList();
+                            			    @endphp
+                            			    @foreach($detailList as $detail)
+                                			   <li class="product product-has-image clearfix">
+                                                    <div class="product-thumbnail pull-left" style="background: none">
+                                                    </div>
+                                                    <div class="product-info pull-left">
+                                                        <span class="product-info-name">
+                                                            <strong>{{ $detail->getGroupName() }}:</strong> {{ $detail->getName() }}
+                                                            <label class="print">x{{ $detail->getQty() }}</label>
+                                                        </span>
+                                                    </div>
+                                                    <strong class="product-price pull-right">
+                                                        {{ $detail->getCostFormat() }}
+                                                    </strong>
+                                                </li>
+                            			    @endforeach
                                             @endforeach
                                         </ul>
                                     </div>

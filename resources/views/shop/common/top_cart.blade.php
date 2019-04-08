@@ -15,7 +15,23 @@
     						</div>
     						<div class="product-details-bottom">
     							<span class="price">{{ $cartItem->getPriceFormat() }}</span>
-    								<a href="javascript:void(0)" title="Xóa" class="remove-item-cart fa fa-remove" data-id="{{ $cartItem->getId() }}">&nbsp;</a>
+    							@php
+    								$detailList = $cartItem->getDetailList();
+    							@endphp
+    							@if(count($detailList))
+    							<div class="detail-item-list">
+    								<ul>
+    									@foreach($detailList as $detail)
+    									<li style="position: relative;">
+    										<small style="display: block;height:15px;">{{ $detail->getGroupName() }}:</small>
+    										<span class="label label-success" style="color:#ffffff; font-weight: bold; margin-left: 10px;">{{ $detail->getName() }} - {{ $detail->getPriceFormat() }}</span>
+    										<a href="javascript:void(0)" class="remove-detail-item" title="Xóa {{ $detail->getGroupName() }}" data-product-id="{{ $cartItem->getId() }}" data-id="{{ $detail->getId() }}"><i class="fa fa-remove" style="top:16px;"></i></a>
+    									</li>
+    									@endforeach
+    								</ul>
+    							</div>
+    							@endif
+    							<a href="javascript:void(0)" title="Xóa" class="remove-item-cart fa fa-remove" data-id="{{ $cartItem->getId() }}">&nbsp;</a>
     							<div class="quantity-select qty_drop_cart">
     								<button class="btn_reduced reduced items-count btn-minus" type="button"  data-id="{{ $cartItem->getId() }}">–</button>
     								<input type="text" maxlength="12" min="0" class="input-text number-sidebar" value="{{ $cartItem->getQty() }}"  data-id="{{ $cartItem->getId() }}">

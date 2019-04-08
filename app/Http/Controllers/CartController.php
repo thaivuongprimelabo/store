@@ -48,33 +48,34 @@ class CartController extends AppController
             $pid = $request->pid;
             $id = $request->id;
             $qty = $request->qty;
-            $item_type = $request->item_type;
+            $items = $request->items;
             $cart = Cart::getInstance($request->getSession());
-            if($item_type != ProductType::IS_DETAIL_ITEM) {
-                $product = Product::find($pid);
+            
+            $product = Product::find($pid);
+            if($product) {
+                $cartItem = new CartItem();
+                $cartItem->setId($product->id);
+                $cartItem->setName($product->getName());
+                $cartItem->setImage($product->getFirstImage('small'));
+                $cartItem->setPrice($product->price);
+                $cartItem->setQty($qty);
+                $cartItem->setLink($product->getLink());
                 
-                if($product) {
-                    $cartItem = new CartItem();
-                    $cartItem->setId($product->id);
-                    $cartItem->setName($product->getName());
-                    $cartItem->setImage($product->getFirstImage('small'));
-                    $cartItem->setQty($qty);
-                    $cartItem->setPrice($product->price);
-                    $cartItem->setLink($product->getLink());
+                $cart->addItem($cartItem);
+                
+                if($items != null && count($items)) {
+                    foreach($items as $item) {
+                        $detailItem = new CartItem();
+                        $detailItem->setId($item['id']);
+                        $detailItem->setName($item['name']);
+                        $detailItem->setPrice($item['price']);
+                        $detailItem->setQty(1);
+                        $detailItem->setGroupId($item['group_id']);
+                        $detailItem->setGroupName($item['group_name']);
+                        $cart->addDetailItem($pid, $detailItem);
+                    }
                     
-                    $cart->addItem($cartItem);
                 }
-            } else {
-                $productDetail = ProductDetails::find($id);
-                
-                $detailItem = new CartItem();
-                $detailItem->setId($productDetail->id);
-                $detailItem->setName($productDetail->name);
-                $detailItem->setQty(1);
-                $detailItem->setPrice($productDetail->price);
-                
-                $cart->addDetailItem($pid, $detailItem);
-                
             }
             
             $result['#cart_1'] = view('shop.common.cart_item', ['cart' => $cart])->render();
@@ -89,11 +90,11 @@ class CartController extends AppController
     public function updateCart(Request $request) {
         $result = [];
         if($request->ajax()) {
-            $id = $request->id;
+            $pid = $request->pid;
             $qty = $request->qty;
             
             $cart = Cart::getInstance($request->getSession());
-            $cart->updateCart($id, $qty);
+            $cart->updateCart($pid, $qty);
             
             $result['.cartCount2'] = $cart->getCount();
             $result['#top_cart'] = $cart->getTopCart();
@@ -109,6 +110,22 @@ class CartController extends AppController
             
             $cart = Cart::getInstance($request->getSession());
             $cart->removeItem($id);
+            
+            $result['.cartCount2'] = $cart->getCount();
+            $result['#top_cart'] = $cart->getTopCart();
+            $result['#main_cart'] = $cart->getMainCart();
+            return response()->json($result);
+        }
+    }
+    
+    public function removeDetailItem(Request $request) {
+        $result = [];
+        if($request->ajax()) {
+            $id = $request->id;
+            $pid = $request->pid;
+            
+            $cart = Cart::getInstance($request->getSession());
+            $cart->removeDetailItem($pid, $id);
             
             $result['.cartCount2'] = $cart->getCount();
             $result['#top_cart'] = $cart->getTopCart();
@@ -138,7 +155,6 @@ class CartController extends AppController
                     'customer_email' => Utils::cnvnull($request->customer_email, ''),
                     'customer_phone' => Utils::cnvnull($request->customer_phone, ''),
                     'customer_address' => Utils::cnvnull($request->customer_address, ''),
-                    'customer_address' => Utils::cnvnull($request->customer_address, ''),
                     'customer_province' => Utils::cnvnull($request->customer_province, ''),
                     'customer_district' => Utils::cnvnull($request->customer_district, ''),
                     'customer_note' => Utils::cnvnull($request->customer_note, ''),
@@ -152,14 +168,16 @@ class CartController extends AppController
                 $id = DB::table(Common::ORDERS)->insertGetId($order);
                 
                 if($id) {
+                    $order['id'] = $id;
                     $cart->setCheckoutInfo($order);
                     $orderDetails = [];
                     
                     foreach($cart->getCart() as $cartItem) {
                         
-                        $detail = [
+                        $orderDetail = [
                             'order_id' => $id,
                             'product_id' => $cartItem->getId(),
+                            'product_detail_id' => 0,
                             'qty' => $cartItem->getQty(),
                             'price' => $cartItem->getPrice(),
                             'cost' => $cartItem->getCost(),
@@ -167,15 +185,53 @@ class CartController extends AppController
                             'updated_at' => Carbon::now(),
                         ];
                         
-                        array_push($orderDetails, $detail);
+                        array_push($orderDetails, $orderDetail);
+                        
+                        $detailList = $cartItem->getDetailList();
+                        foreach($detailList as $detail) {
+                            
+                            $orderDetail = [
+                                'order_id' => $id,
+                                'product_id' => $cartItem->getId(),
+                                'product_detail_id' => $detail->getId(),
+                                'qty' => $detail->getQty(),
+                                'price' => $detail->getPrice(),
+                                'cost' => $detail->getCost(),
+                                'created_at' => Carbon::now(),
+                                'updated_at' => Carbon::now(),
+                            ];
+                            
+                            array_push($orderDetails, $orderDetail);
+                        }
+                        
                     }
                     
                     DB::table(Common::ORDER_DETAILS)->insert($orderDetails);
                 }
                 
-                $result['checkout_result'] = true;
+                // Config mail
+                $config = [
+                    'from' => $this->output['config']['mail_from'],
+                    'from_name' => $this->output['config']['mail_name'],
+                    'subject' => '[' . $this->output['config']['web_name'] . '] '  . trans('shop.mail_subject.order_success', ['order_id' => $id]),
+                    'msg' => [
+                        'cart' => $cart,
+                        'web_name' => $this->output['config']['web_name'],
+                        'web_email' => $this->output['config']['web_email']
+                    ],
+                    'to'       => $order['customer_email'],
+                    'template' => 'shop.emails.order_success'
+                ];
                 
-                DB::commit();
+                $message = Utils::sendMail($config);
+                if(Utils::blank($message)) {
+                    DB::commit();
+                    $result['checkout_result'] = true;
+                } else {
+                    \Log::error($message);
+                }
+                
+                
             } catch(\Exception $e) {
                 $result['checkout_result'] = false;
                 DB::rollBack();
@@ -188,6 +244,11 @@ class CartController extends AppController
     }
     
     public function checkoutSuccess(Request $request) {
+        
+        if(!$request->session()->has('cart')) {
+            return redirect('/');
+        }
+        
         $cart = Cart::getInstance($request->getSession());
         $cart->destroy();
         return view('shop.checkout_success', $this->output);

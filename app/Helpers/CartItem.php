@@ -12,6 +12,9 @@ class CartItem {
     private $cost = 0;
     private $link = '';
     
+    private $groupId = 0;
+    private $groupName = '';
+    
     private $detailList = [];
     
     public function setId($_id) {
@@ -28,6 +31,7 @@ class CartItem {
     
     public function setQty($_qty) {
         $this->qty = $_qty;
+        $this->cost = $this->price * $this->qty;
     }
     
     public function setPrice($_price) {
@@ -40,6 +44,14 @@ class CartItem {
     
     public function setLink($_link) {
         $this->link = $_link;
+    }
+    
+    public function setGroupId($_groupid) {
+        $this->groupId = $_groupid;
+    }
+    
+    public function setGroupName($_groupname) {
+        $this->groupName = $_groupname;
     }
     
     public function setDetailList($_detailList) {
@@ -71,13 +83,23 @@ class CartItem {
     }
     
     public function getCost() {
-        $this->cost = $this->price * $this->qty;
+        //$this->cost = $this->price * $this->qty;
+//         if(count($this->detailList)) {
+//             foreach($this->detailList as $detail) {
+//                 $this->cost += $detail->getCost();
+//             }
+//         }
+        return $this->cost;
+    }
+    
+    public function getCostIncludeDetail() {
+        $cost = $this->price * $this->qty;
         if(count($this->detailList)) {
             foreach($this->detailList as $detail) {
-                $this->cost += $detail->getCost();
+                $cost += $detail->getCost();
             }
         }
-        return $this->cost;
+        return $cost;
     }
     
     public function getCostFormat() {
@@ -90,6 +112,14 @@ class CartItem {
     
     public function getDetailList() {
         return $this->detailList;
+    }
+    
+    public function getGroupId() {
+        return $this->groupId;
+    }
+    
+    public function getGroupName() {
+        return $this->groupName;
     }
     
     public function addDetailItem(CartItem $cartItem) {

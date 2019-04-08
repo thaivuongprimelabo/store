@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use App\Constants\BookingStatus;
 use App\Constants\Common;
 use App\Constants\ContactStatus;
 use App\Constants\ProductType;
@@ -15,6 +16,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Image;
+use App\Booking;
 use App\Category;
 use App\Config;
 use App\Product;
@@ -22,6 +24,7 @@ use App\Vendor;
 use Carbon\Carbon;
 use App\PostGroups;
 use App\Constants\ProductStatus;
+use App\Times;
 
 class Utils {
     
@@ -317,6 +320,12 @@ class Utils {
                 break;
             case 'POST_GROUPS':
                 $data = PostGroups::select('id', 'name')->active()->get();
+                break;
+            case 'BOOKING_STATUS':
+                return BookingStatus::createSelectList($selected);
+                break;
+            case Common::TIMES:
+                $data = Times::select('id', 'name')->get();
                 break;
             default:
                 $data = [];
@@ -704,7 +713,7 @@ class Utils {
                                 
                             case 'images':
                             case 'image':
-                                $tbody .= '<td><img src="' . $item->getFirstImage() . '" width="80" /></td>';
+                                $tbody .= '<td><img src="' . $item->getFirstImage('small') . '" width="80" /></td>';
                                 break;
                                 
                             case 'status':
@@ -1256,6 +1265,10 @@ class Utils {
                         if($k == 'content') {
                             $rule_name = 'required_ckeditor';
                         }
+                        break;
+                    case 'required_select':
+                        $msg_item = 'validation.required_select';
+                        $rule_name = 'required';
                         break;
                     case 'email':
                         $msg_item = 'validation.email';

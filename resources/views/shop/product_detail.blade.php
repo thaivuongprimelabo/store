@@ -40,7 +40,10 @@
 								<span class="inventory"><i class="fa fa-check"></i> {{ $data->getStatusName() }}</span>
 							</div>
 							<div class="price-box clearfix">
-							<div class="special-price"><span class="price product-price">{{ $data->getPrice() }}</span> </div> <!-- Giá -->
+							<div class="special-price">
+								<span id="product_price_format" class="price product-price">{{ $data->getPrice() }}</span>
+								<input type="hidden" id="product_price" value="{{ $data->price }}" /> 
+							</div> <!-- Giá -->
 							
 							@php
 								$productDetails = $data->getProductDetails();
@@ -54,7 +57,7 @@
 									$prices = explode(',', $detail['detail_price']);
 								@endphp
 								@foreach($ids as $k=>$id)
-								<span class="label label-default detail-item" style="cursor: pointer;padding:5px 10px;" data-id="{{ $id }}" data-product-id="{{ $data->id }}" data-name="{{ $names[$k] }}"> {{ $names[$k] }}</span>
+								<span class="label label-default detail-item group-{{ $detail['group_id'] }}" style="cursor: pointer;padding:5px 10px;" data-group-id="{{ $detail['group_id'] }}" data-group-name="{{ $detail['group_name'] }}" data-id="{{ $id }}" data-product-id="{{ $data->id }}" data-name="{{ $names[$k] }}" data-price="{{ $prices[$k] }}"> {{ $names[$k] }}</span>
 								@endforeach
 							</div>
 							@endforeach
@@ -76,7 +79,7 @@
 										<input type="text" class="input-text qty" title="Só lượng" value="1" maxlength="12" id="qty" name="quantity"  data-id="{{ $data->id }}">
 										<span class="qtyplus" data-id="{{ $data->id }}">+</span>
 									</div>
-									<button type="button" class="btn btn-lg btn-primary btn-cart btn-cart2 add_to_cart btn_buy" title="{{ trans('shop.button.add_to_cart') }}"  data-id="{{ $data->id }}"  data-qty="1">
+									<button type="button" class="btn btn-lg btn-primary btn-cart btn-cart2 btn-buy" title="{{ trans('shop.button.add_to_cart') }}"  data-id="{{ $data->id }}" data-qty="1">
 										<span>{{ trans('shop.button.add_to_cart') }}  <i class="fa .fa-caret-right"></i></span>
 									</button>
 								</div>
@@ -141,25 +144,60 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 		$('.detail-item').click(function(e) {
-			$('.detail-item').removeClass('label-success').addClass('label-default');
-			$('.detail-item').find('i').remove();
+			var groupId = $(this).attr('data-group-id');
+			$('.group-' + groupId).removeClass('label-success').addClass('label-default');
+			$('.group-' + groupId).find('i').remove();
 			$(this).prepend('<i class="fa fa-check"></i>');
 			$(this).removeClass('label-default').addClass('label-success');
 			var id = $(this).data('id');
 			var pid = $(this).attr('data-product-id');
+			var product_price = Number($('#product_price').val());
+			var new_price = 0;
+			
+			$('.detail-item').each(function(index, item) {
+				var item = $(item);
+				if(item.hasClass('label-success')) {
+					var price = item.attr('data-price');
+					product_price += Number(price);
+				}
+			});
 
-			var data = {
-				type : 'post',
-	    		async : true,
-	    		id: id,
-	    		pid: pid,
-	    		item_type: '{{ ProductType::IS_DETAIL_ITEM }}',
-	    		container: ['.cartCount2', '#top_cart'],
-			}
-
-			callAjax('{{ route('addToCart') }}', data);
+			new_price = Number(product_price);
+			$('#product_price_format').html(formatCurrency(new_price, '.', '.'));
 
 		});
 	});
+
+	$(document).on('click', '.btn-buy', function(e) {
+		 var qty = $('.qty').val();
+		 var items = [];
+		 var data = {
+			type : 'post',
+       		async : true,
+       		pid: $(this).attr('data-id'),
+       		qty: qty,
+       		items: [],
+       		container: ['#cart_1', '.cartCount2', '#top_cart'],
+       		dialog: '#popupCartModal'
+		 }
+
+		 $('.detail-item').each(function(index, item) {
+			var item = $(item);
+			if(item.hasClass('label-success')) {
+				var item = {
+					id: item.attr('data-id'),
+					name: item.attr('data-name'),
+					price: item.attr('data-price'),
+					group_id: item.attr('data-group-id'),
+					group_name: item.attr('data-group-name')
+				}
+
+				items.push(item);
+			}
+		 });
+
+		 data.items = items;
+		 callAjax('{{ route('addToCart') }}', data);
+	 });
 </script>
 @endsection

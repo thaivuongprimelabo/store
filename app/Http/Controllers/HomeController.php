@@ -277,6 +277,15 @@ class HomeController extends AppController
         return view('shop.posts', $this->output);
     }
     
+    public function booking(Request $request) {
+        
+        $this->output['breadcrumbs'] = [
+            ['link' => '#', 'text' => trans('shop.main_nav.booking.text')]
+        ];
+        
+        return view('shop.booking', $this->output);
+    }
+    
     public function loadData(Request $request) {
         
         $result = [];

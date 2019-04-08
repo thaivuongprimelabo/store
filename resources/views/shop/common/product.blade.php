@@ -45,15 +45,18 @@
 												</a>
 												{!! $product->getDisCount() !!} 	
 												<div class="product-action hidden-md hidden-sm hidden-xs clearfix">
-													<div>
-														<input type="hidden" name="variantId" value="17898181" />
-														<button class="btn-buy btn-cart btn btn-primary left-to add_to_cart" data-qty="1" data-id="{{ $product->id }}" title="{{ trans('shop.cart.order') }}">
-															<i class="fa fa-shopping-bag"></i>						
-														</button>
-														
-														<a href="{{ $product->getLink() }}" class="btn-gray btn_view btn right-to">
-														<i class="fa fa-eye"></i></a>
-													</div>
+													<form action="?" method="post" class="variants form-nut-grid margin-bottom-0" enctype="multipart/form-data">
+    													<div>
+    														<input type="hidden" name="variantId" value="17898181" />
+    														<a class="btn-buy btn-cart btn btn-primary left-to add_to_cart" data-qty="1" data-id="{{ $product->id }}" title="{{ trans('shop.cart.order') }}">
+    															<i class="fa fa-shopping-bag"></i>						
+    														</a>
+    														
+    														<a href="{{ $product->getLink() }}" class="btn-gray btn_view btn right-to">
+    															<i class="fa fa-eye"></i>
+    														</a>
+    													</div>
+													</form>
 												</div>
 											</div>
 											<div class="product-info a-center">
