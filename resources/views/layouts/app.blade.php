@@ -344,6 +344,10 @@
     	}
     });
 
+    $(document).on('change', '.upload-simple', function(e) {
+    	readURL($(this));
+    });
+
     $('input.select_type').on('ifChecked', function(event){
     	var className = $(this).val();
     	$('.select_type').addClass('hide_element');

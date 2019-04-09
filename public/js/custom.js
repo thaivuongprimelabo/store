@@ -256,6 +256,19 @@ var getMax = function(element, data) {
 	return (max + 1);
 }
 
+var readURL = function readURL(input) {
+  if (input[0].files && input[0].files[0]) {
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      var preview_id = input.attr('data-preview-control');
+      $('#' + preview_id).attr('src', e.target.result).show();
+      
+    }
+
+    reader.readAsDataURL(input[0].files[0]);
+  }
+}
+
 $(document).ready(function() {
 	
 	$.validator.addMethod('required_ckeditor', function(value, element, params) {

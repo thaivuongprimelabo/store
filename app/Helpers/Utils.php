@@ -25,6 +25,7 @@ use Carbon\Carbon;
 use App\PostGroups;
 use App\Constants\ProductStatus;
 use App\Times;
+use App\Constants\UploadPath;
 
 class Utils {
     
@@ -123,32 +124,42 @@ class Utils {
         return $filename;
     }
     
-    public static function createIcoFile($request, &$icoFile = '') {
-        if($request->hasFile('web_ico')) {
-            
-            $file = $request->web_ico;
-            
-            $uploadPath = Common::UPLOAD_FOLDER;
-            $resizePath = $uploadPath . Common::ICO_FOLDER;
-            $image_resize = Image::make($file->getRealPath());
-            
-            $image_resize->resize(Common::ICO_WIDTH, null, function ($constraint) {
-                $constraint->aspectRatio();
-            });
-            
-            if(!file_exists(public_path($uploadPath))) {
-                mkdir(public_path($uploadPath));
+    public static function doUploadSimple($request, $key, &$filename) {
+        if($request->hasFile($key)) {
+            $file = $request->$key;
+            $filename = time() . '_' . $file->getClientOriginalName();
+            if($key == 'web_ico') {
+                $filename = 'favicon.png';
             }
             
-            if(!file_exists(public_path($resizePath))) {
-                mkdir(public_path($resizePath));
+            $uploadPath = UploadPath::getUploadPath($key);
+            $filePath = UploadPath::getFilePath($key, $filename);
+            
+            if($file->move(public_path($uploadPath), $filename)) {
+                $filename = $filePath . $filename;
             }
             
-            $icoFile = Common::ICO_FOLDER . time() . '_ico.png';
             
-            $image_resize->save(public_path($uploadPath . $icoFile));
+//             $uploadPath = Common::UPLOAD_FOLDER;
+//             $resizePath = $uploadPath . Common::ICO_FOLDER;
+//             $image_resize = Image::make($file->getRealPath());
+            
+//             $image_resize->resize(Common::ICO_WIDTH, null, function ($constraint) {
+//                 $constraint->aspectRatio();
+//             });
+            
+//             if(!file_exists(public_path($uploadPath))) {
+//                 mkdir(public_path($uploadPath));
+//             }
+            
+//             if(!file_exists(public_path($resizePath))) {
+//                 mkdir(public_path($resizePath));
+//             }
+            
+//             $icoFile = Common::ICO_FOLDER . 'favicon.png';
+            
+//             $image_resize->save(public_path($uploadPath . $icoFile));
         }
-        
     }
     
     public static function resizeImage($uploadPath, $file, $filename, $listSizes = null) {
@@ -1116,6 +1127,20 @@ class Utils {
                 $element_html .= '<a href="mailto:' . $element_value . '">' . $element_value . '</a>';
                 break;
                 
+            case 'file_simple':
+                $image_size = isset($config[$name . '_image_size']) ? $config[$name . '_image_size'] : $config[$key . '_image_size'];
+                $split = explode('x', $image_size);
+                $element_html .= $label;
+                $preview_control_id = 'preview_' . $key;
+                $element_html .= '<input type="file" class="form-control upload-simple" name="' . $key . '" data-preview-control="' . $preview_control_id . '" />';
+                if(!self::blank($element_value)) {
+                    $element_html .= '<img id="' . $preview_control_id . '" src="' . self::getImageLink($element_value) . '" class="img-thumbnail" alt="Cinque Terre" width="' . $split[0] . '" height="' . $split[1] . '" style="margin-top:10px;">';
+                } else {
+                    $element_html .= '<img id="' . $preview_control_id . '" src="' . self::getImageLink($element_value) . '" class="img-thumbnail" alt="Cinque Terre" width="' . $split[0] . '" height="' . $split[1] . '" style="display:none;margin-top:10px;">';
+                }
+                
+                break;
+                
             case 'file':
                 
                 if($name != 'accessories') {
@@ -1157,7 +1182,7 @@ class Utils {
                             $element_html .= '</a>';
                             
                             $element_html .= '<a href="javascript:void(0)" class="remove" data-id="' . $id . '"><i class="fa fa-trash" aria-hidden="true"></i></a>';
-                            $element_html .= '<input type="file" name="image_upload[]" class="upload_image_product" style="display: none" />';
+                            $element_html .= '<input type="file" name="' . $key . '_image_upload[]" class="upload_image_product" style="display: none" />';
                             $element_html .= '<input type="hidden" name="image_upload_url[]" class="upload_image_product_url" value="' . $image . '" />';
                             $element_html .= '<input type="hidden" name="image_ids[]" class="upload_image_id" value="' . $id . '" />';
                             $element_html .= '</div>';
@@ -1186,7 +1211,7 @@ class Utils {
                     
                     $element_html .= '</a>';
                     
-                    $element_html .= '<input type="file" name="image_upload[]" class="upload_image_product" style="display: none" />';
+                    $element_html .= '<input type="file" name="' . $key . '_image_upload[]" class="upload_image_product" style="display: none" />';
                     $element_html .= '<input type="hidden" name="image_upload_url[]" class="upload_image_product_url" />';
                     $element_html .= '<input type="hidden" name="image_ids[]" class="upload_image_id" value="9999" />';
                     

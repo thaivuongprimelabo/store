@@ -39,8 +39,8 @@ return [
         'products' => ['text' => 'Sản phẩm'],
         'about' => ['text' => 'Giới thiệu'],
         'posts' => ['text' => 'Tin tức'],
-        'booking' => ['text' => 'Đặt lịch hẹn'],
-        'forum' => ['text' => 'Nhóm trao đổi'],
+//         'booking' => ['text' => 'Đặt lịch hẹn'],
+//         'forum' => ['text' => 'Nhóm trao đổi'],
         'contact' => ['text' => 'Liên hệ']
     ],
     'cart' => [

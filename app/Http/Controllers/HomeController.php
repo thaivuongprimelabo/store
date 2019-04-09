@@ -18,6 +18,8 @@ use App\Contact;
 use App\PostGroups;
 use App\Post;
 use App\Constants\PostStatus;
+use Artesaos\SEOTools\Facades\OpenGraph;
+use Artesaos\SEOTools\Facades\SEOMeta;
 
 class HomeController extends AppController
 {
@@ -51,6 +53,9 @@ class HomeController extends AppController
         $this->output['banners'] = $banners;
         $this->output['categories'] = $categories;
         $this->output['posts'] = $posts;
+        
+        $this->setSEO(['title' => trans('shop.main_nav.home.text')]);
+        
         return view('shop.home', $this->output);
     }
     
@@ -63,6 +68,9 @@ class HomeController extends AppController
         $this->output['data'] = $vendor;
         $this->output['view_type'] = 'grid';
         $this->output['page_name'] = 'vendor-page';
+        
+        $this->setSEO(['title' => $vendor->getName(), 'link' => $vendor->getLink()]);
+        
         return view('shop.product_list', $this->output);
     }
     
@@ -74,6 +82,9 @@ class HomeController extends AppController
         $this->output['data'] = $category;
         $this->output['view_type'] = 'grid';
         $this->output['page_name'] = 'category-page';
+        
+        $this->setSEO(['title' => $category->getName(), 'link' => $category->getLink()]);
+        
         return view('shop.product_list', $this->output);
     }
     
@@ -95,6 +106,16 @@ class HomeController extends AppController
                         'products.status'
                     )
                     ->where(['products.status' => Status::ACTIVE, 'products.name_url' => $slug])->first();
+        
+        $this->setSEO([
+            'title' => $product->name,
+            'summary' => $product->summary,
+            'section' => $product->getCategoryName(),
+            'keywords' => [$product->name, $product->getCategoryName(), $this->output['config']['web_name']],
+            'link' => $product->getLink(),
+            'type' => 'product',
+            'image' => $product->getFirstImage('medium')
+        ]);
         
         if(!$product) {
             return redirect('/');
@@ -147,6 +168,9 @@ class HomeController extends AppController
         
         $this->output['view_type'] = 'grid';
         $this->output['page_name'] = 'all-products-page';
+        
+        $this->setSEO(['title' => trans('shop.main_nav.products.text'), 'link' => route('products')]);
+        
         return view('shop.product_list', $this->output);
     }
     
@@ -157,6 +181,9 @@ class HomeController extends AppController
             ['link' => '#', 'text' => trans('shop.main_nav.about.text')]
         ];
         $this->output['about'] = $about;
+        
+        $this->setSEO(['title' => trans('shop.main_nav.about.text'), 'link' => route('about')]);
+        
         return view('shop.about', $this->output);
     }
     
@@ -217,6 +244,8 @@ class HomeController extends AppController
             ['link' => '#', 'text' => trans('shop.main_nav.contact.text')]
         ];
         
+        $this->setSEO(['title' => trans('shop.main_nav.contact.text'), 'link' => route('contact')]);
+        
         return view('shop.contact', $this->output);
     }
     
@@ -238,6 +267,8 @@ class HomeController extends AppController
         $this->output['title'] = trans('shop.main_nav.posts.text');
         $this->output['page_name'] = 'posts-page';
         
+        $this->setSEO(['title' => trans('shop.main_nav.posts.text'), 'link' => route('posts')]);
+        
         return view('shop.posts', $this->output);
     }
     
@@ -256,6 +287,16 @@ class HomeController extends AppController
         
         $this->output['page_name'] = 'post-details-page';
         $this->output['data'] = $post;
+        
+        $this->setSEO([
+            'title' => $post->name,
+            'summary' => $post->description,
+            'section' => $postGroup->getName(),
+            'keywords' => [$post->name, $postGroup->getName(), $this->output['config']['web_name']],
+            'link' => $post->getLink(),
+            'type' => 'post',
+            'image' => $post->getImage()
+        ]);
             
         return view('shop.post_details', $this->output);
     }
@@ -273,6 +314,8 @@ class HomeController extends AppController
         $this->output['title'] = $postGroup->getName();
         $this->output['data'] = $postGroup;
         $this->output['page_name'] = 'posts-group-page';
+        
+        $this->setSEO(['title' => $postGroup->getName(), 'link' => $postGroup->getLink()]);
         
         return view('shop.posts', $this->output);
     }

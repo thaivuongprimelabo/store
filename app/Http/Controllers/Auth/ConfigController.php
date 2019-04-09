@@ -145,15 +145,17 @@ class ConfigController extends AppController
                 echo '=============== Done! =============== ';
                 exit;
             }
-            $icoFile = $data->web_ico;
-            $filename = $data->web_logo;
-            Utils::doUpload($request, Common::WEBLOGO_FOLDER, $filename);
-            Utils::createIcoFile($request, $icoFile);
+            $web_ico = $data->web_ico;
+            $web_logo = $data->web_logo;
+//             Utils::doUpload($request, Common::WEBLOGO_FOLDER, $filename);
+            Utils::doUploadSimple($request, 'web_logo', $web_logo);
+            Utils::doUploadSimple($request, 'web_ico', $web_ico);
+//             Utils::doUpload($request, Common::ICO_FOLDER, $filename);
             $data->web_title       = Utils::cnvNull($request->web_title, '');
             $data->web_description = Utils::cnvNull($request->web_description, '');
             $data->web_keywords    = Utils::cnvNull($request->web_keywords, '');
-            $data->web_logo        = $filename;
-            $data->web_ico         = $icoFile;
+            $data->web_logo        = $web_logo;
+            $data->web_ico         = $web_ico;
             $data->web_email       = Utils::cnvNull($request->web_email, '');
             $data->url_ext         = Utils::cnvNull($request->url_ext, '');
             $data->web_address = Utils::cnvNull($request->web_address, '');

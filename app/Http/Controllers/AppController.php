@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Utils;
 use App\Helpers\Cart;
+use Artesaos\SEOTools\Facades\OpenGraph;
+use Artesaos\SEOTools\Facades\SEOMeta;
 use Illuminate\Http\Request;
 use View;
 class AppController extends Controller
@@ -79,6 +81,31 @@ class AppController extends Controller
             }
             
         }
+    }
+    
+    protected function setSEO($data = []) {
+        
+        $title = isset($data['title']) ? $data['title'] : 'Index';
+        $summary = isset($data['summary']) ? $data['summary'] : $this->output['config']['web_description'];
+        $section = isset($data['section']) ? $data['section'] : '';
+        $keywords = isset($data['keywords']) ? $data['keywords'] : [$this->output['config']['web_keywords']];
+        $link = isset($data['link']) ? $data['link'] : route('home');
+        $type = isset($data['type']) ? $data['type'] : 'product';
+        $image = isset($data['image']) ? $data['image'] : $this->output['config']['web_logo'];
+        
+        SEOMeta::setTitleDefault($this->output['config']['web_name']);
+        SEOMeta::setTitle($title);
+        SEOMeta::setDescription($summary);
+        SEOMeta::addMeta('article:section', $section, 'property');
+        SEOMeta::addKeyword($keywords);
+        
+        OpenGraph::setDescription($summary);
+        OpenGraph::setTitle($title);
+        OpenGraph::setUrl($link);
+        OpenGraph::addProperty('type', $type);
+        OpenGraph::addImage(['url' => $image, 'size' => 300]);
+        OpenGraph::addImage($image, ['height' => 300, 'width' => 300]);
+        
     }
     
     

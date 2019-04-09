@@ -15,6 +15,8 @@
                     </div>
                 	<div class="box-body">
                 		{!! Utils::generateList($config, $name, $orderDetails, $data, 'table_product_header') !!}
+                		
+                		
                 	</div>
                 </div>
                 @endif

@@ -64,18 +64,18 @@ $auth = [
         'pages' => 'Quản lý trang nội dung',
         'contacts' => 'Hộp thư liên hệ',
         'users' => 'Quản lý tài khoản',
-        'booking' => [
-            'title' => 'Quản lý lịch hẹn',
-            'booking' => 'Đặt chỗ',
-            'times' => 'Thời gian',
-        ],
-        'forum' => [
-            'title' => 'Diễn đàn',
-            'members' => 'Thành viên',
-            'groups' => 'Nhóm thảo luận',
-            'threads' => 'Chủ đề thảo luận',
-            'comments' => 'Bình luận'
-        ],
+//         'booking' => [
+//             'title' => 'Quản lý lịch hẹn',
+//             'booking' => 'Đặt chỗ',
+//             'times' => 'Thời gian',
+//         ],
+//         'forum' => [
+//             'title' => 'Diễn đàn',
+//             'members' => 'Thành viên',
+//             'groups' => 'Nhóm thảo luận',
+//             'threads' => 'Chủ đề thảo luận',
+//             'comments' => 'Bình luận'
+//         ],
         'config' => 'Cài đặt'
     ],
     'banner_type' => $bannerType,
@@ -854,13 +854,12 @@ $auth = [
                     'maxlength' => 200
                 ],
                 'web_logo' => [
-                    'type' => 'file',
+                    'type' => 'file_simple',
                     'text' => 'Web logo'
                 ],
                 'web_ico' => [
-                    'type' => 'file',
+                    'type' => 'file_simple',
                     'text' => 'Web ico',
-                    'file_ext' => \App\Constants\Common::ICO_EXT
                 ],
                 'web_address' => [
                     'type' => 'text',

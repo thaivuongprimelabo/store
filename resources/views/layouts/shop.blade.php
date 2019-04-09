@@ -7,8 +7,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
-	<title>{{ $config['web_name'] }}</title>
-
+	{!! SEO::generate() !!}
 	<!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
@@ -16,13 +15,7 @@
     <link rel="shortcut icon" href="{{ $config['web_ico'] . '?t=' . time() }}">
     @endif
     
-    @if(!Utils::blank($config['web_description']))
-    <meta name="description" content="{{ $config['web_description'] }}" />
-    @endif
-    
-    @if(!Utils::blank($config['web_keywords']))
-    <meta name="keywords" content="{{ $config['web_keywords'] }}" />
-    @endif
+   	
     
 	<link rel="stylesheet" href="{{ url('shop/cdn.linearicons.com/free/1.0.0/icon-font.min.css') }}">
 	<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i&amp;subset=vietnamese" rel="stylesheet">
