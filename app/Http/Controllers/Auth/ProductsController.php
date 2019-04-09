@@ -85,9 +85,11 @@ class productsController extends AppController
                     
                     if($data->save()) {
                         $arrFilenames = [];
-                        $filename = '';
-                        $listSizes = isset($this->config['config']['products_thumbnail_size']) ? $this->config['config']['products_thumbnail_size'] : '';
-                        Utils::doUpload($request, Common::IMAGE_FOLDER, $filename, $listSizes, $data->id, $arrFilenames);
+                        Utils::doUploadMultiple($request, 'upload_image', $data->id, $arrFilenames);
+                        if(count($arrFilenames)) {
+                            $product_images = [];
+                            DB::table(Common::IMAGES_PRODUCT)->insert($arrFilenames);
+                        }
                         
                         $this->addService($data->id, $request);
                         
@@ -143,9 +145,16 @@ class productsController extends AppController
                 if($data->save()) {
                     
                     $arrFilenames = [];
-                    $filename = '';
-                    $listSizes = isset($this->config['config']['products_thumbnail_size']) ? $this->config['config']['products_thumbnail_size'] : '';
-                    Utils::doUpload($request, Common::IMAGE_FOLDER, $filename, $listSizes, $data->id, $arrFilenames);
+                    Utils::doUploadMultiple($request, 'upload_image', $data->id, $arrFilenames);
+                    if(count($arrFilenames)) {
+                        $product_images = [];
+                        DB::table(Common::IMAGES_PRODUCT)->insert($arrFilenames);
+                    }
+                    
+                    $images_del = $request->images_del;
+                    if(count($images_del)) {
+                        DB::table(Common::IMAGES_PRODUCT)->whereIn('id', $images_del)->delete();
+                    }
                     
                     $this->addService($data->id, $request);
                     
@@ -163,7 +172,6 @@ class productsController extends AppController
             $id = $request->id;
             $data = Product::find($id);
             if($data->delete()) {
-                Services::where('product_id', $id)->delete();
                 return redirect(route('auth_products'))->with('success', trans('messages.REMOVE_SUCCESS'));
             }
         }

@@ -13,20 +13,20 @@
 						<div class="col-xs-12 col-sm-12 col-md-5">
 							<div class="large-image">
 								<a href="{{ $images->first()->getImageLink() }}" data-rel="">
-									<img id="zoom_01" src="{{ $images->first()->getImageLink() }}" alt="{{ $data->getName() }}">
+									<img id="zoom_01" src="{{ $images->first()->getImageLink('medium') }}"  data-zoom-image="{{ $images->first()->getImageLink() }}" alt="{{ $data->getName() }}">
 								</a>
-								<div class="hidden">
-									<div class="item">
-										<a href="{{ $images->first()->getImageLink('medium') }}" data-image="{{ $images->first()->getImageLink('medium') }}" data-zoom-image="{{ $images->first()->getImageLink('medium') }}" data-rel="">
-										</a>
-									</div>
-								</div>
+<!-- 								<div class="hidden"> -->
+<!-- 									<div class="item"> -->
+<!-- 										<a href="{{ $images->first()->getImageLink('medium') }}" data-image="{{ $images->first()->getImageLink('medium') }}" data-zoom-image="{{ $images->first()->getImageLink('medium') }}" data-rel=""> -->
+<!-- 										</a> -->
+<!-- 									</div> -->
+<!-- 								</div> -->
 							</div>
 							
 							<div id="gallery_01" class="fixborder  owl-carousel owl-theme thumbnail-product" data-md-items="4" data-sm-items="4" data-xs-items="4" data-xss-items="2" data-margin="10" data-nav="true">
     							@foreach($images as $img)
     							<div class="item">
-									<a class="clearfix" href="#" data-image="{{ $img->getImageLink('small') }}" data-zoom-image="{{ $img->getImageLink('small') }}">
+									<a class="clearfix" href="#" data-image="{{ $img->getImageLink('medium') }}" data-zoom-image="{{ $img->getImageLink() }}">
 										<img  src="{{ $img->getImageLink('small') }}" alt="{{ $data->getName() }}">
 									</a>
 								</div>

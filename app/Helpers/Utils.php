@@ -26,6 +26,7 @@ use App\PostGroups;
 use App\Constants\ProductStatus;
 use App\Times;
 use App\Constants\UploadPath;
+use Illuminate\Http\UploadedFile;
 
 class Utils {
     
@@ -40,7 +41,7 @@ class Utils {
             return $image;
         }
         
-        $uploadFolder = Common::UPLOAD_FOLDER;
+        $uploadFolder = UploadPath::UPLOAD;
         if(!self::blank($image)) {
             if(!self::blank($thumb)) {
                 return url($uploadFolder . $thumb);
@@ -125,65 +126,96 @@ class Utils {
     }
     
     public static function doUploadSimple($request, $key, &$filename) {
-        if($request->hasFile($key)) {
+        
+        $file = null;
+        
+        if($request instanceof Request && $request->hasFile($key)) {
             $file = $request->$key;
-            $filename = time() . '_' . $file->getClientOriginalName();
-            if($key == 'web_ico') {
-                $filename = 'favicon.png';
-            }
-            
-            $uploadPath = UploadPath::getUploadPath($key);
-            $filePath = UploadPath::getFilePath($key, $filename);
-            
-            if($file->move(public_path($uploadPath), $filename)) {
-                $filename = $filePath . $filename;
-            }
-            
-            
-//             $uploadPath = Common::UPLOAD_FOLDER;
-//             $resizePath = $uploadPath . Common::ICO_FOLDER;
-//             $image_resize = Image::make($file->getRealPath());
-            
-//             $image_resize->resize(Common::ICO_WIDTH, null, function ($constraint) {
-//                 $constraint->aspectRatio();
-//             });
-            
-//             if(!file_exists(public_path($uploadPath))) {
-//                 mkdir(public_path($uploadPath));
-//             }
-            
-//             if(!file_exists(public_path($resizePath))) {
-//                 mkdir(public_path($resizePath));
-//             }
-            
-//             $icoFile = Common::ICO_FOLDER . 'favicon.png';
-            
-//             $image_resize->save(public_path($uploadPath . $icoFile));
+        }
+        
+        if($request instanceof UploadedFile) {
+            $file = $request;
+        }
+        
+        if($file == null) {
+            return $filename;
+        }
+        
+        $filename = time() . '_' . $file->getClientOriginalName();
+        if($key == 'web_ico') {
+            $filename = 'favicon.png';
+        }
+        
+        $uploadPath = UploadPath::getUploadPath($key);
+        $filePath = UploadPath::getFilePath($key, $filename);
+        
+        if($file->move(public_path($uploadPath), $filename)) {
+            $filename = $filePath . $filename;
         }
     }
     
-    public static function resizeImage($uploadPath, $file, $filename, $listSizes = null) {
+    public static function doUploadMultiple($request, $key, $id, &$arrFilenames = []) {
+        if($request->hasFile($key)) {
+            $files = $request->$key;
+            if(is_array($files)) {
+                for($i = 0; $i < count($files); $i++) {
+                    $filename = '';
+                    $file = $files[$i];
+                    
+                    $medium = '';
+                    $small = '';
+                    $size = Config::select($key . '_image_size')->first();
+                    if(strpos($size->upload_image_image_size, ',') !== FALSE) {
+                        $products_sizes = explode(',', $size->upload_image_image_size);
+                        $products_medium_size = $products_sizes[0];
+                        $products_small_size = $products_sizes[1];
+                        $medium = self::resizeImage($key, $file, $filename, $products_medium_size);
+                        $small = self::resizeImage($key, $file, $filename, $products_small_size);
+                    }
+                    
+                    self::doUploadSimple($file, $key, $filename);
+                    
+                    $image = [
+                        'product_id' => $id,
+                        'image' => $filename,
+                        'medium' => $medium,
+                        'small' => $small
+                    ];
+                    array_push($arrFilenames, $image);
+                }
+            }
+        }
+    }
+    
+    public static function resizeImage($key, $file, $filename, $demension = null) {
         
-        if($listSizes == null) {
+        if($demension == null) {
             return;
         }
         
-        foreach($listSizes as $size) {
-            $d = explode('x', $size);
-            $image_resize = Image::make($file->getRealPath());
-            $image_resize->resize($d[0], $d[1]);
-            
-            if(!file_exists(public_path($uploadPath))) {
-                mkdir(public_path($uploadPath));
-            }
-            
-            $folderResize = $uploadPath . '/' . $size;
-            if(!file_exists(public_path($folderResize))) {
-                mkdir(public_path($folderResize));
-            }
-            
-            $image_resize->save(public_path($folderResize .  '/' . $filename));
+        $filename = time() . '_' . $file->getClientOriginalName();
+        $uploadPath = UploadPath::getUploadPath($key) . $demension;
+        $filePath = UploadPath::getFilePath($key) . $demension;
+        
+        $d = explode('x', $demension);
+        $image_resize = Image::make($file->getRealPath());
+//         $image_resize->resize($d[0], $d[1]);
+        $image_resize->resize(null, $d[1], function ($constraint) {
+            $constraint->aspectRatio();
+        });
+        
+        if(!file_exists(public_path($uploadPath))) {
+            mkdir(public_path($uploadPath));
         }
+        
+//         $folderResize = $uploadPath . '/' . $size;
+//         if(!file_exists(public_path($folderResize))) {
+//             mkdir(public_path($folderResize));
+//         }
+        
+        $image_resize->save(public_path($uploadPath .  '/' . $filename));
+        
+        return $filePath . '/' . $filename;
     }
     
     public static function removeFile($file) {
@@ -1128,16 +1160,39 @@ class Utils {
                 break;
                 
             case 'file_simple':
-                $image_size = isset($config[$name . '_image_size']) ? $config[$name . '_image_size'] : $config[$key . '_image_size'];
+                $key_data = str_replace('upload_', '', $key);
+                $element_value = !is_null($data) && !Utils::blank($data->$key_data) ? $data->$key_data : '';
+                $image_size = isset($config[$key . '_image_size']) ? $config[$key . '_image_size'] : $config[$key . '_image_size'];
                 $split = explode('x', $image_size);
                 $element_html .= $label;
                 $preview_control_id = 'preview_' . $key;
                 $element_html .= '<input type="file" class="form-control upload-simple" name="' . $key . '" data-preview-control="' . $preview_control_id . '" />';
                 if(!self::blank($element_value)) {
-                    $element_html .= '<img id="' . $preview_control_id . '" src="' . self::getImageLink($element_value) . '" class="img-thumbnail" alt="Cinque Terre" width="' . $split[0] . '" height="' . $split[1] . '" style="margin-top:10px;">';
+                    $element_html .= '<img id="' . $preview_control_id . '" src="' . self::getImageLink($element_value) . '" alt="Cinque Terre" width="' . $split[0] . '" height="' . $split[1] . '" style="margin-top:10px;">';
                 } else {
-                    $element_html .= '<img id="' . $preview_control_id . '" src="' . self::getImageLink($element_value) . '" class="img-thumbnail" alt="Cinque Terre" width="' . $split[0] . '" height="' . $split[1] . '" style="display:none;margin-top:10px;">';
+                    $element_html .= '<img id="' . $preview_control_id . '" src="' . self::getImageLink($element_value) . '" alt="Cinque Terre" width="' . $split[0] . '" height="' . $split[1] . '" style="display:none;margin-top:10px;">';
                 }
+                
+                break;
+                
+            case 'file_multiple':
+                $key_data = str_replace('upload_', '', $key);
+                $element_value = !is_null($data) && !Utils::blank($data->$key_data) ? $data->$key_data : '';
+                $image_size = isset($config[$key . '_image_size']) ? $config[$key . '_image_size'] : $config[$key . '_image_size'];
+                $split = explode('x', $image_size);
+                $element_html .= '<button type="button" id="upload_button" data-name="' . $key . '[]" data-preview-control="preview_list" data-width="' . $split[0] . '" data-height="' . $split[1] . '" class="btn btn-primary"><i class="fa fa-image"></i> Tải hình sản phẩm</button>';
+                $preview_control_id = 'preview_' . $key;
+                $element_html .= '<div id="preview_list">';
+                $image_using = !is_null($data) ? $data->getAllImage($data->id) : [];
+                if(count($image_using)) {
+                    foreach($image_using as $id=>$image) {
+                        $element_html .= '<div style="display:inline-block; position:relative"><a href="javascript:void(0)" class="remove-img" style="position:absolute; top:15px; right:15px" data-id="' . $id . '">';
+                        $element_html .= '<i class="fa fa-trash" style="font-size:30px;"></i></a>';
+                        $element_html .= '<img src="' . $image . '" class="img-thumbnail" width="' . $split[0] . '" height="' . $split[1] . '" style="margin-top:10px; margin-right:5px">';
+                        $element_html .= '</div>';
+                    }
+                }
+                $element_html .= '</div>';
                 
                 break;
                 

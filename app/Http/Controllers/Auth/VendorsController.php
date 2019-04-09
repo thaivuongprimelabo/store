@@ -53,8 +53,7 @@ class VendorsController extends AppController
             if (!$validator->fails()) {
                 
                 $filename = '';
-                
-                Utils::doUpload($request, Common::VENDOR_FOLDER, $filename);
+                Utils::doUploadSimple($request, 'upload_logo', $filename);
                 
                 $data = new Vendor();
                 $data->name           = Utils::cnvNull($request->name, '');
@@ -97,7 +96,7 @@ class VendorsController extends AppController
                 $data = Vendor::find($request->id);
                 
                 $filename = $data->logo;
-                Utils::doUpload($request, Common::VENDOR_FOLDER, $filename);
+                Utils::doUploadSimple($request, 'upload_logo', $filename);
                 
                 $data->name           = Utils::cnvNull($request->name, '');
                 $data->name_url       = Utils::createNameUrl(Utils::cnvNull($request->name, ''));

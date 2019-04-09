@@ -39,41 +39,27 @@ class AppController extends Controller
             $web_logo = Utils::getImageLink($config->web_logo);
             $web_ico = Utils::getImageLink($config->web_ico);
             
-            $products_sizes = Utils::cnvNull($config->products_image_size, '100x100');
-            $products_medium_size = '';
-            if(strpos($products_sizes, ',') !== FALSE) {
-                $products_sizes = explode(',', Utils::cnvNull($config->products_image_size, '100x100'));
-                $products_medium_size = $products_sizes[0];
-                $products_small_size = $products_sizes[1];
-            } else {
-                $products_medium_size = $products_sizes;
-            }
-            
             $this->config = [
                 'config' => [
                     'web_logo' => $web_logo,
                     'web_ico' => $web_ico,
                     'mail_from' => Utils::cnvNull($config->mail_from, 'support@gmail.com'),
                     'mail_name' => Utils::cnvNull($config->mail_name, 'Mail System'),
-                    'banners_maximum_upload' => Utils::cnvNull($config->banners_maximum_upload, 51200),
-                    'vendors_maximum_upload' => Utils::cnvNull($config->vendors_maximum_upload, 51200),
-                    'products_maximum_upload' => Utils::cnvNull($config->products_maximum_upload, 51200),
-                    'posts_maximum_upload'   => Utils::cnvNull($config->post_maximum_upload, 51200),
-                    'web_logo_maximum_upload'   => Utils::cnvNull($config->web_logo_maximum_upload, 51200),
-                    'web_ico_maximum_upload'   => Utils::cnvNull($config->web_ico_maximum_upload, 51200),
-                    'users_maximum_upload'   => Utils::cnvNull($config->users_maximum_upload, 51200),
-                    'avatar_maximum_upload'   => Utils::cnvNull($config->users_maximum_upload, 51200),
-                    'attachment_maximum_upload'   => Utils::cnvNull($config->attachment_maximum_upload, 51200),
+                    'upload_banner_maximum_upload' => Utils::cnvNull($config->upload_banner_maximum_upload, 51200),
+                    'upload_logo_maximum_upload' => Utils::cnvNull($config->upload_logo_maximum_upload, 51200),
+                    'upload_image_maximum_upload' => Utils::cnvNull($config->upload_image_maximum_upload, 51200),
+                    'upload_photo_maximum_upload'   => Utils::cnvNull($config->upload_photo_maximum_upload, 51200),
+                    'upload_web_logo_maximum_upload'   => Utils::cnvNull($config->upload_web_logo_maximum_upload, 51200),
+                    'upload_web_ico_maximum_upload'   => Utils::cnvNull($config->upload_web_ico_maximum_upload, 51200),
+                    'upload_avatar_maximum_upload'   => Utils::cnvNull($config->upload_avatar_maximum_upload, 51200),
                     
-                    'banners_image_size' => Utils::cnvNull($config->banners_image_size, '100x100'),
-                    'vendors_image_size' => Utils::cnvNull($config->vendors_image_size, '100x100'),
-                    'products_image_size' => $products_medium_size,
-                    'products_thumbnail_size' => $products_sizes,
-                    'posts_image_size'   => Utils::cnvNull($config->posts_image_size, '100x100'),
-                    'web_logo_image_size'   => Utils::cnvNull($config->web_logo_image_size, '100x100'),
-                    'web_ico_image_size'   => Utils::cnvNull($config->web_ico_image_size, '100x100'),
-                    'users_image_size'   => Utils::cnvNull($config->users_image_size, '100x100'),
-                    'avatar_image_size' => Utils::cnvNull($config->users_image_size, '100x100'),
+                    'upload_banner_image_size' => Utils::cnvNull($config->upload_banner_image_size, '100x100'),
+                    'upload_logo_image_size' => Utils::cnvNull($config->upload_logo_image_size, '100x100'),
+                    'upload_image_image_size' => Utils::cnvNull($config->upload_image_image_size, '100x100'),
+                    'upload_photo_image_size'   => Utils::cnvNull($config->upload_photo_image_size, '100x100'),
+                    'upload_web_logo_image_size'   => Utils::cnvNull($config->upload_web_logo_image_size, '100x100'),
+                    'upload_web_ico_image_size'   => Utils::cnvNull($config->upload_web_ico_image_size, '100x100'),
+                    'upload_avatar_image_size'   => Utils::cnvNull($config->upload_avatar_image_size, '100x100'),
                     
                     'url_ext' => Utils::cnvNull($config->url_ext, '.html'),
                 ]

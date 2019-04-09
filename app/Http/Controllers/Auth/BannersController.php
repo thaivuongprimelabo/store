@@ -52,12 +52,11 @@ class BannersController extends AppController
             
             if (!$validator->fails()) {
                 
-                $filename = '';
-                Utils::doUpload($request, Common::BANNER_FOLDER, $filename);
                 $select_type = Utils::cnvNull($request->select_type, 'use_image');
-                
                 $data = new Banner();
                 if($select_type == 'use_image') {
+                    $filename = '';
+                    Utils::doUploadSimple($request, 'upload_banner', $filename);
                     $data->link           = Utils::cnvNull($request->link, '');
                     $data->banner         = $filename;
                 } else {
@@ -98,11 +97,11 @@ class BannersController extends AppController
             
             if (!$validator->fails()) {
                 
-                $filename = $data->banner;
-                Utils::doUpload($request, Common::BANNER_FOLDER, $filename);
                 
                 $select_type = Utils::cnvNull($request->select_type, 'use_image');
                 if($select_type == 'use_image') {
+                    $filename = '';
+                    Utils::doUploadSimple($request, 'upload_banner', $filename);
                     $data->link           = Utils::cnvNull($request->link, '');
                     $data->banner         = $filename;
                     $data->youtube_id    = '';

@@ -18,7 +18,7 @@ class Common {
     CONST IMAGE_EXT1 = 'jpeg,png,gif';
     CONST FILE_EXT = 'png|jpe?g|gif|pdf|doc|docx|xlsx|xls';
     CONST FILE_EXT1 = 'jpeg,png,gif,pdf,doc,docx,xlsx,xls';
-    CONST IMAGE_MIMES = 'image/jpg, image/jpeg, image/gif, image/png';
+    CONST IMAGE_MIMES = 'image/jpg,image/jpeg,image/gif,image/png';
     CONST FILE_MIMES = 'image/jpg, image/jpeg, image/gif, image/png, application/pdf, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/msword, 	application/vnd.ms-excel';
     CONST NO_LOGO_FILE = 'upload/no-image-icon-6.png';
     CONST NO_AVATAR = 'admin/dist/img/user2-160x160.jpg';

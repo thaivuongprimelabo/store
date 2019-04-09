@@ -67,7 +67,7 @@ class UsersController extends AppController
             if (!$validator->fails()) {
                 
                 $filename = '';
-                Utils::doUpload($request, Common::AVATAR_FOLDER, $filename);
+                Utils::doUploadSimple($request, 'upload_avatar', $filename);
                 
                 $data = new User();
                 $data->name         = Utils::cnvNull($request->name, '');
@@ -104,13 +104,16 @@ class UsersController extends AppController
         
         if($request->isMethod('post')) {
             
+            $this->rules['password'] = '';
+            $this->rules['conf_password'] = '';
+            
             $validator = Validator::make($request->all(), $this->rules);
             
             if (!$validator->fails()) {
                 $data = User::find($request->id);
                 
                 $filename = $data->avatar;
-                Utils::doUpload($request, Common::AVATAR_FOLDER, $filename);
+                Utils::doUploadSimple($request, 'upload_avatar', $filename);
                 
                 $data->name         = Utils::cnvNull($request->name, '');
                 if(!Utils::blank($request->password)) {

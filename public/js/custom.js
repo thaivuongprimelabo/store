@@ -65,7 +65,6 @@ var checkExist = function(input) {
 }
 
 var checkFileSize = function(element, size) {
-	
 	if (Number(element.size) > Number(size)) {
 		return false;
 	}
@@ -90,36 +89,6 @@ var getFormData = function($form){
     return indexed_array;
 }
 
-var previewImage = function(element, size, demension) {
-	
-	var arr = demension.split('x');
-	var tagA = element.parent().find('.upload_image');
-	var input = element[0].files[0];
-//	if(checkFileSize(input, size)) {
-		var reader = new FileReader();
-	    reader.onload = function (event) {
-	        var img = '<img src="' + event.target.result + '" style="width:' + arr[0] + 'px; height:' + arr[1] + 'px" />';
-	        //if(element.name == 'image_upload[]') {
-	        	var remove = '<a href="javascript:void(0)" class="remove"><i class="fa fa-trash" aria-hidden="true"></i></a>';
-	        //}
-	        tagA.html(img);
-	        tagA.parent().append(remove);
-	    }
-	    reader.readAsDataURL(input);
-//	}
-}
-
-var previewImageProduct = function(element, size, demension, container) {
-	var arr = demension.split('x');
-	var tagA = element.parent().find('.upload_image');
-	var input = element[0].files[0];
-	var reader = new FileReader();
-    reader.onload = function (event) {
-        $(container).attr('src', event.target.result);
-    }
-    reader.readAsDataURL(input);
-}
-
 var customErrorValidate = function(error, element) {
 	if(error[0].innerHTML !== '') {
 		console.log(element);
@@ -130,7 +99,6 @@ var customErrorValidate = function(error, element) {
 			element.parent().parent().addClass('has-error');
 			element.parent().parent().find('span.help-block').html(error[0].innerHTML);
 		}
-		
 	}
 }
 
@@ -257,16 +225,44 @@ var getMax = function(element, data) {
 }
 
 var readURL = function readURL(input) {
-  if (input[0].files && input[0].files[0]) {
-    var reader = new FileReader();
-    reader.onload = function(e) {
-      var preview_id = input.attr('data-preview-control');
-      $('#' + preview_id).attr('src', e.target.result).show();
-      
-    }
-
-    reader.readAsDataURL(input[0].files[0]);
+	
+  if(!input.prop('multiple')) {
+	  if (input[0].files && input[0].files[0]) {
+		  var reader = new FileReader();
+		  reader.onload = function(e) {
+			  var preview_id = input.attr('data-preview-control');
+			  $('#' + preview_id).attr('src', e.target.result).show();
+		  }
+		  reader.readAsDataURL(input[0].files[0]);
+	  }
+  } else {
+	  var preview_id = input.attr('data-preview-control');
+	  var width = input.attr('data-width');
+	  var height = input.attr('data-height');
+	  var length = input[0].files.length;
+	  if(length > 0) {
+		  for(var i = 0; i < length; i++) {
+			  var reader = new FileReader();
+		      reader.onload = function(e) {
+		    	  var img = "<img src='" + e.target.result + "'  class='img-thumbnaili width='" + width + "' height='" + height + "' style='margin-top:10px;'>";
+		    	  $('#' + preview_id).append(img);
+		      }
+		      
+		      reader.readAsDataURL(input[0].files[i]);
+		  }
+	  }
   }
+  
+}
+
+var errorUploadAlert = function(message) {
+	var msg = '<div style="padding: 5px;">';
+		  msg += '<div id="inner-message" class="alert alert-danger">';
+		  msg += '<i class="fa fa-exclamation-triangle fa-2x"></i>' + message;
+		  msg += '</div>';
+		  msg += '</div>';
+		  
+	return msg;
 }
 
 $(document).ready(function() {

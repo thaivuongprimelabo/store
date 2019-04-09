@@ -147,10 +147,8 @@ class ConfigController extends AppController
             }
             $web_ico = $data->web_ico;
             $web_logo = $data->web_logo;
-//             Utils::doUpload($request, Common::WEBLOGO_FOLDER, $filename);
-            Utils::doUploadSimple($request, 'web_logo', $web_logo);
-            Utils::doUploadSimple($request, 'web_ico', $web_ico);
-//             Utils::doUpload($request, Common::ICO_FOLDER, $filename);
+            Utils::doUploadSimple($request, 'upload_web_logo', $web_logo);
+            Utils::doUploadSimple($request, 'upload_web_ico', $web_ico);
             $data->web_title       = Utils::cnvNull($request->web_title, '');
             $data->web_description = Utils::cnvNull($request->web_description, '');
             $data->web_keywords    = Utils::cnvNull($request->web_keywords, '');
@@ -172,21 +170,20 @@ class ConfigController extends AppController
                 $data->mail_encryption = Utils::cnvNull($request->mail_encryption, '');
                 $data->mail_account    = Utils::cnvNull($request->mail_account, '');
                 $data->mail_password   = Utils::cnvNull($request->mail_password, '');
-                $data->banners_maximum_upload = Utils::cnvNull($request->banners_maximum_upload, '');
-                $data->vendors_maximum_upload = Utils::cnvNull($request->vendors_maximum_upload, '');
-                $data->products_maximum_upload = Utils::cnvNull($request->products_maximum_upload, '');
-                $data->posts_maximum_upload    = Utils::cnvNull($request->posts_maximum_upload, '');
-                $data->web_logo_maximum_upload    = Utils::cnvNull($request->web_logo_maximum_upload, '');
-                $data->web_ico_maximum_upload    = Utils::cnvNull($request->web_ico_maximum_upload, '');
-                $data->attachment_maximum_upload = Utils::cnvNull($request->attachment_maximum_upload, '');
-                $data->users_maximum_upload = Utils::cnvNull($request->users_maximum_upload, '');
-                $data->banners_image_size = Utils::cnvNull($request->banners_image_size, '');
-                $data->vendors_image_size = Utils::cnvNull($request->vendors_image_size, '');
-                $data->products_image_size = Utils::cnvNull($request->products_image_size, '');
-                $data->posts_image_size = Utils::cnvNull($request->posts_image_size, '');
-                $data->web_logo_image_size = Utils::cnvNull($request->web_logo_image_size, '');
-                $data->web_ico_image_size = Utils::cnvNull($request->web_ico_image_size, '');
-                $data->users_image_size = Utils::cnvNull($request->users_image_size, '');
+                $data->upload_banner_maximum_upload = Utils::cnvNull($request->upload_banner_maximum_upload, '');
+                $data->upload_logo_maximum_upload = Utils::cnvNull($request->upload_logo_maximum_upload, '');
+                $data->upload_image_maximum_upload = Utils::cnvNull($request->upload_image_maximum_upload, '');
+                $data->upload_photo_maximum_upload    = Utils::cnvNull($request->upload_photo_maximum_upload, '');
+                $data->upload_web_logo_maximum_upload    = Utils::cnvNull($request->upload_web_logo_maximum_upload, '');
+                $data->upload_web_ico_maximum_upload    = Utils::cnvNull($request->upload_web_ico_maximum_upload, '');
+                $data->upload_avatar_maximum_upload = Utils::cnvNull($request->upload_avatar_maximum_upload, '');
+                $data->upload_banner_image_size = Utils::cnvNull($request->upload_banner_image_size, '');
+                $data->upload_logo_image_size = Utils::cnvNull($request->upload_logo_image_size, '');
+                $data->upload_image_image_size = Utils::cnvNull($request->upload_image_image_size, '');
+                $data->upload_photo_image_size = Utils::cnvNull($request->upload_photo_image_size, '');
+                $data->upload_web_logo_image_size = Utils::cnvNull($request->upload_web_logo_image_size, '');
+                $data->upload_web_ico_image_size = Utils::cnvNull($request->upload_web_ico_image_size, '');
+                $data->upload_avatar_image_size = Utils::cnvNull($request->upload_avatar_image_sizes, '');
             }
             $data->off = Utils::cnvNull($request->off, 0);
             $data->bank_info = Utils::cnvNull($request->bank_info, '');

@@ -181,6 +181,42 @@ class ApiController extends Controller
         }
         
         return $html;
-        
+    }
+    
+    public function checkUploadFile(Request $request) {
+        $image_mime_type = Common::IMAGE_MIMES;
+        $fileSizeLimit = $request->limitUpload;
+        if($request->hasFile('fileUpload')) {
+            $file = $request->file('fileUpload');
+            
+            if(!is_array($file)) {
+                $mimeType = $request->file('fileUpload')->getMimeType();
+                $imageMimeType = explode(',', $image_mime_type);
+                
+                if(!in_array($mimeType, $imageMimeType)) {
+                    return response()->json(['error' => trans('validation.image', ['filename' => $file->getClientOriginalName()])], 500);
+                }
+                
+                $size = $request->file('fileUpload')->getSize();
+                if($size > $fileSizeLimit) {
+                    return response()->json(['error' => trans('validation.size.file', ['filename' => $file->getClientOriginalName(), 'limit_upload' => '50KB'])], 500);
+                }
+            } else {
+                for($i = 0; $i < count($file); $i++) {
+                    $f = $file[$i];
+                    $mimeType = $f->getMimeType();
+                    $imageMimeType = explode(',', $image_mime_type);
+                    
+                    if(!in_array($mimeType, $imageMimeType)) {
+                        return response()->json(['error' => trans('validation.image', ['filename' => $f->getClientOriginalName()])], 500);
+                    }
+                    
+                    $size = $f->getSize();
+                    if($size > $fileSizeLimit) {
+                        return response()->json(['error' => trans('validation.size.file', ['filename' => $f->getClientOriginalName(), 'limit_upload' => '50KB'])], 500);
+                    }
+                }
+            }
+        }
     }
 }

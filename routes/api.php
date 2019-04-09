@@ -23,4 +23,5 @@ Route::post('/update_status', 'ApiController@updateStatus')->name('update_status
 Route::get('/load-city', 'ApiController@loadCity')->name('loadCity');
 Route::get('/load-district', 'ApiController@loadDistrict')->name('loadDistrict');
 Route::get('/load-ward', 'ApiController@loadWard')->name('loadWard');
+Route::post('/check-upload-file', 'ApiController@checkUploadFile')->name('checkUploadFile');
 

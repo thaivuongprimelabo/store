@@ -151,7 +151,6 @@
         Copyright &copy; {{ date('Y') }}. All rights
         reserved.
     </footer>
-    @include('auth.products.upload_modal')
     @include('auth.common.alert')
     @include('auth.products.add_service_modal')
 </div>
@@ -185,9 +184,11 @@
 
 <script>
   $(function () {
-	setTimeout(function(){ 
-		$('.alert').fadeOut();
-	}, 3000);
+	if($('.alert').length > 0) {
+    	setTimeout(function(){ 
+    		$('.alert').fadeOut();
+    	}, 3000);
+	}
 	  
     //bootstrap WYSIHTML5 - text editor
     if($(".ckeditor").length > 0){
@@ -243,7 +244,6 @@
 		}
 
 		var res = callAjax('{{ route('update_status') }}', data, 'update_status');
-		console.log(res);
 		$(this).attr('data-status', res.status);
 		if(res.status === '1') {
 			$(this).find('span').attr('class', 'label label-success');
@@ -345,7 +345,61 @@
     });
 
     $(document).on('change', '.upload-simple', function(e) {
-    	readURL($(this));
+        var uploadfile = $(this);
+    	var formData = new FormData();
+    	formData.append('fileUpload', $(this)[0].files[0]);
+    	formData.append('limitUpload', 51200);
+
+    	$.ajax({
+    	    url: '{{ route('checkUploadFile') }}',
+    	    type: 'post',
+    	    data: formData,
+    	    async: true,
+    	    processData: false,
+    	    contentType: false,
+    	    headers: {
+    	    	'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    	    },
+    	    success: function (res, textStatus, xhr) {
+    	    	readURL(uploadfile);
+    	    },
+    	    error: function(jqXHR, textStatus, errorThrown ) {
+    	    	var msg = errorUploadAlert(jqXHR.responseJSON.error);
+    	    	$('#message').html(msg);
+    	    	setTimeout(function(){ 
+					$('.alert').fadeOut();
+			    }, 5000);
+    	    }
+    	});
+    });
+
+    $(document).on('change', '.upload-multiple', function(e) {
+        var uploadfile = $(this);
+    	var formData = new FormData();
+    	formData.append('fileUpload[]', $(this)[0].files[0]);
+    	formData.append('limitUpload', 51200);
+
+    	$.ajax({
+    	    url: '{{ route('checkUploadFile') }}',
+    	    type: 'post',
+    	    data: formData,
+    	    async: true,
+    	    processData: false,
+    	    contentType: false,
+    	    headers: {
+    	    	'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    	    },
+    	    success: function (res, textStatus, xhr) {
+    	    	readURL(uploadfile);
+    	    },
+    	    error: function(jqXHR, textStatus, errorThrown ) {
+    	    	var msg = errorUploadAlert(jqXHR.responseJSON.error);
+    	    	$('#message').html(msg);
+    	    	setTimeout(function(){ 
+					$('.alert').fadeOut();
+			    }, 5000);
+    	    }
+    	});
     });
 
     $('input.select_type').on('ifChecked', function(event){
@@ -365,47 +419,15 @@
 		$('#format_currency strong small i').html(formatCurrency($(this).val(), '.', '.'));
 	});
 
-	$(document).on('click', '.remove', function(e) {
+	$(document).on('click', '.remove-img', function(e) {
 		if(confirmDelete('{{ trans('messages.CONFIRM_DELETE') }}')) {
 			$(this).parent().remove();
+			var id = $(this).attr('data-id');
+			var hidden = '<input type="hidden" name="images_del[]" value="' +  id + '" />';
+			$('#preview_list').append(hidden);
 			return true;
 		}
 		return false;
-	});
-
-	$(document).on('click', '.add_image', function(e) {
-		var html = '';
-		var demension = $(this).attr('data-demension');
-        var upload_limit = $(this).attr('data-upload-limit');
-        var file_ext = $(this).attr('data-file-ext');
-		var key = $(this).attr('data-key');
-		var index = Number($('#upload_index').val()) + 1;
-		var id = key + '_' + index;
-		
-		if(key.indexOf('edit') >= 0) {
-			var key = $(this).attr('data-key');
-			var id = key;
-		} else {
-    		html = '<div id="' + id + '" class="image_product" style="display: none;">';
-    		html += '<a href="javascript:void(0)" class="upload_image" style="width: 150px; height: 150px">';
-    		html += '<i class="fa fa-upload" aria-hidden="true"></i><br/>{{ trans('auth.button.upload_image') }}';
-    		html += '</a>';
-    		html += '<a href="javascript:void(0)" class="remove"><i class="fa fa-trash" aria-hidden="true"></i></a>';
-    		html += '<input type="file" name="image_upload[]" class="upload_image_product" style="display: none" />';
-    		html += '<input type="hidden" name="image_upload_url[]" class="upload_image_product_url" />';
-    		html += '<input type="hidden" name="image_ids[]" class="upload_image_id" value="9999" />';
-    		html += '</div>';
-		}
-
-		$('#select_image').attr('data-id', id);
-		$('#select_image').attr('data-demension', demension);
-        $('#select_image').attr('data-upload-limit', upload_limit);
-        $('#select_image').attr('data-file-ext', file_ext);
-
-		$('#preview_list').prepend(html);
-		$('#uploadModal').modal();
-		$('#upload_index').val(index);
-
 	});
 
 	$('#add_new_service').click(function(e) {
@@ -461,6 +483,24 @@
 		$(this).parent().parent().remove();
     });
 
+    $(document).on('click', '#upload_button', function(e) {
+    	var preview_id = $(this).attr('data-preview-control');
+    	var width = $(this).attr('data-width');
+  	  	var height = $(this).attr('data-height');
+        var control_name = $(this).attr('data-name');
+		var upload = document.createElement('input');
+		upload.type = "file";
+		upload.name = control_name;
+		upload.style = "display:none";
+		upload.multiple = true;
+		upload.className = "upload-multiple";
+		upload = $(upload);
+		upload.attr('data-preview-control', preview_id);
+		upload.attr('data-width', width);
+		upload.attr('data-height', height);
+		upload.click();
+		$('#preview_list').append(upload);
+    });
   });
 </script>
 @yield('script')

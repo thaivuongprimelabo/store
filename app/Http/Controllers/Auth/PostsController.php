@@ -51,7 +51,7 @@ class PostsController extends AppController
             if (!$validator->fails()) {
                 
                 $filename = '';
-                Utils::doUpload($request, Common::PHOTO_FOLDER, $filename);
+                Utils::doUploadSimple($request, 'upload_photo', $filename);
                 
                 $data = new Post();
                 $data->name              = Utils::cnvNull($request->name, '');
@@ -95,10 +95,8 @@ class PostsController extends AppController
             $validator = Validator::make($request->all(), $this->rules);
             
             if (!$validator->fails()) {
-                $data = Post::find($request->id);
-                
                 $filename = $data->photo;
-                Utils::doUpload($request, Common::PHOTO_FOLDER, $filename);
+                Utils::doUploadSimple($request, 'upload_photo', $filename);
                 
                 $published_at = date('Ymd', strtotime($request->input('published_at', date('Ymd'))));
                 $published_time_at = date('Hi', strtotime($request->input('published_time_at', date('H:i'))));

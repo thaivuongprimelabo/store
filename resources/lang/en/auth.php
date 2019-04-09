@@ -157,8 +157,8 @@ $auth = [
                 'text' => 'Mô tả',
                 'maxlength' => \App\Constants\Common::DESC_MAXLENGTH
             ],
-            'logo' => [
-                'type' => 'file',
+            'upload_logo' => [
+                'type' => 'file_simple',
                 'text' => 'Hình ảnh'
             ],
             'status' => [
@@ -397,8 +397,8 @@ $auth = [
                 'type' => 'radio_list',
                 'value' => $bannerType
             ],
-            'banner' => [
-                'type' => 'file',
+            'upload_banner' => [
+                'type' => 'file_simple',
                 'text' => 'Banner',
                 'container_id' => 'use_image'
             ],
@@ -580,8 +580,8 @@ $auth = [
                 'text' => 'Tựa đề',
                 'maxlength' => \App\Constants\Common::NAME_MAXLENGTH
             ],
-            'photo' => [
-                'type' => 'file',
+            'upload_photo' => [
+                'type' => 'file_simple',
                 'text' => 'Hình ảnh'
             ],
             'description' => [
@@ -853,11 +853,11 @@ $auth = [
                     'text' => 'Web name',
                     'maxlength' => 200
                 ],
-                'web_logo' => [
+                'upload_web_logo' => [
                     'type' => 'file_simple',
                     'text' => 'Web logo'
                 ],
-                'web_ico' => [
+                'upload_web_ico' => [
                     'type' => 'file_simple',
                     'text' => 'Web ico',
                 ],
@@ -935,71 +935,66 @@ $auth = [
             ],
             'upload_settings' => [
                 'header' => 'Upload settings',
-                'banners_maximum_upload' => [
+                'upload_banner_maximum_upload' => [
                     'type' => 'select',
                     'text' => 'Maximum upload file (Banner) KB',
                     'table' => 'UPLOAD_SIZE_LIMIT'
                 ],
-                'vendors_maximum_upload' => [
+                'upload_logo_maximum_upload' => [
                     'type' => 'select',
                     'text' => 'Maximum upload file (Nhà cung cấp) KB',
                     'table' => 'UPLOAD_SIZE_LIMIT'
                 ],
-                'products_maximum_upload' => [
+                'upload_image_maximum_upload' => [
                     'type' => 'select',
                     'text' => 'Maximum upload file (Sản phẩm) KB',
                     'table' => 'UPLOAD_SIZE_LIMIT'
                 ],
-                'posts_maximum_upload' => [
+                'upload_photo_maximum_upload' => [
                     'type' => 'select',
                     'text' => 'Maximum upload file (Bài viết) KB',
                     'table' => 'UPLOAD_SIZE_LIMIT'
                 ],
-                'web_logo_maximum_upload' => [
+                'upload_web_logo_maximum_upload' => [
                     'type' => 'select',
                     'text' => 'Maximum upload file (Web logo) KB',
                     'table' => 'UPLOAD_SIZE_LIMIT'
                 ],
-                'web_ico_maximum_upload' => [
+                'upload_web_ico_maximum_upload' => [
                     'type' => 'select',
                     'text' => 'Maximum upload file (Web ico) KB',
                     'table' => 'UPLOAD_SIZE_LIMIT'
                 ],
-                'attachment_maximum_upload' => [
-                    'type' => 'select',
-                    'text' => 'Maximum upload file (Đính kèm) KB',
-                    'table' => 'UPLOAD_SIZE_LIMIT'
-                ],
-                'users_maximum_upload' => [
+                'upload_avatar_maximum_upload' => [
                     'type' => 'select',
                     'text' => 'Maximum upload file (Ảnh đại diện) KB',
                     'table' => 'UPLOAD_SIZE_LIMIT'
                 ],
-                'banners_image_size' => [
+                'upload_banner_image_size' => [
                     'type' => 'text',
                     'text' => 'Kích thước banner (dài x rộng)'
                 ],
-                'vendors_image_size' => [
+                'upload_logo_image_size' => [
                     'type' => 'text',
                     'text' => 'Kích thước logo nhà cung cấp (dài x rộng)'
                 ],
-                'products_image_size' => [
+                'upload_image_image_size' => [
                     'type' => 'text',
                     'text' => 'Kích thước hình sản phẩm (dài x rộng)'
                 ],
-                'posts_image_size' => [
+                'upload_photo_image_size' => [
                     'type' => 'text',
                     'text' => 'Kích thước hình bài viết (dài x rộng)'
                 ],
-                'web_logo_image_size' => [
+                'upload_web_logo_image_size' => [
                     'type' => 'text',
                     'text' => 'Kích thước web logo (dài x rộng)'
                 ],
-                'web_ico_image_size' => [
+                'upload_web_ico_image_size' => [
                     'type' => 'text',
                     'text' => 'Kích thước web icon (dài x rộng)'
                 ],
-                'users_image_size' => [
+                'upload_avatar_image_size' => [
                     'type' => 'text',
                     'text' => 'Kích thước ảnh đại diện (dài x rộng)'
                 ]
@@ -1134,13 +1129,9 @@ $auth = [
                 'empty_text' => 'Chọn nhà cung cấp',
                 'table' => \App\Constants\Common::VENDORS
             ],
-            'image' => [
-                'type' => 'file',
+            'upload_image' => [
+                'type' => 'file_multiple',
                 'text' => 'Hình sản phẩm',
-                'size' => \App\Constants\Common::IMAGE_MAX_SIZE,
-                'width' => \App\Constants\Common::IMAGE_WIDTH,
-                'height' => \App\Constants\Common::IMAGE_HEIGHT,
-                'count' => 5
             ],
             'summary' => [
                 'type' => 'textarea',
@@ -1252,12 +1243,9 @@ $auth = [
                 'type' => 'text',
                 'text' => 'Tên tài khoản'
             ],
-            'avatar' => [
-                'type' => 'file',
+            'upload_avatar' => [
+                'type' => 'file_simple',
                 'text' => 'Ảnh đại diện',
-                'size' => \App\Constants\Common::AVATAR_MAX_SIZE,
-                'width' => \App\Constants\Common::AVATAR_WIDTH,
-                'height' => \App\Constants\Common::AVATAR_HEIGHT
             ],
             'email' => [
                 'type' => 'email',
@@ -1295,8 +1283,8 @@ $auth = [
                 'type' => 'text',
                 'text' => 'Tên tài khoản'
             ],
-            'avatar' => [
-                'type' => 'file',
+            'upload_avatar' => [
+                'type' => 'file_simple',
                 'text' => 'Ảnh đại diện',
                 'size' => \App\Constants\Common::AVATAR_MAX_SIZE,
                 'width' => \App\Constants\Common::AVATAR_WIDTH,
@@ -1502,8 +1490,8 @@ $auth = [
                 'type' => 'password',
                 'text' => 'Xác nhận mật khẩu'
             ],
-            'avatar' => [
-                'type' => 'file',
+            'upload_avatar' => [
+                'upload_type' => 'file_simple',
                 'text' => 'Ảnh đại diện',
                 'size' => \App\Constants\Common::AVATAR_MAX_SIZE,
                 'width' => \App\Constants\Common::AVATAR_WIDTH,
