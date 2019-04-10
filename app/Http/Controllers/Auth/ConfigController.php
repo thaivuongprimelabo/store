@@ -160,6 +160,8 @@ class ConfigController extends AppController
             $data->web_email = Utils::cnvNull($request->web_email, '');
             $data->web_hotline = Utils::cnvNull($request->web_hotline, '');
             $data->web_working_time = Utils::cnvNull($request->web_working_time, '');
+            $data->footer_text = Utils::cnvNull($request->footer_text, '');
+            $data->facebook_fanpage = Utils::cnvNull($request->facebook_fanpage, '');
             
             if(Auth::user()->role_id == Common::SUPER_ADMIN) {
                 $data->mail_driver     = Utils::cnvNull($request->mail_driver, '');

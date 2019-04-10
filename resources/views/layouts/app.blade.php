@@ -179,9 +179,9 @@
 <script src="{{ url('admin/dist/js/demo.js') }}"></script>
 <!-- CK Editor -->
 <script src="{{ url('admin/bower_components/ckeditor/ckeditor.js') }}"></script>
+<script src="{{ url('admin/js/editor.small.js') }}"></script>
 <script src="{{ url('admin/js/jquery.validate.js') }}" type="text/javascript"></script>
 <script src="{{ url('js/custom.js?t=' . time()) }}"></script>
-
 <script>
   $(function () {
 	if($('.alert').length > 0) {
@@ -189,12 +189,13 @@
     		$('.alert').fadeOut();
     	}, 3000);
 	}
-	  
-    //bootstrap WYSIHTML5 - text editor
-    if($(".ckeditor").length > 0){
-    	CKEDITOR.replaceClass = 'ckeditor';
-        CKEDITOR.config.height = 400;
-    }
+
+	@if(isset($editor))
+		$('.fckeditor').each(function(e){
+	        CKEDITOR.replace( this.id, {height:400, customConfig: '{{ url('admin/js/' . $editor) }}' });
+	    });
+	@endif
+    
     $('input').iCheck({
       checkboxClass: 'icheckbox_square-blue',
       radioClass: 'iradio_square-blue',
@@ -203,21 +204,12 @@
     $('.sidebar-menu').tree();
 
 	$(document).on('click', '.page_number', function(e) {
-		var url = $('#search').attr('data-url');
 		var page = $(this).attr('data-page');
-		var data = getFormData($('#search_form'));
-		data['type'] = 'post';
-		data['async'] = false;
-		url = url + '?page=' + page;
-		search(url, data, 'ajax_list');
+		search(page);
 	});
 
 	$(document).on('click', '#search', function(e) {
-		var url = $(this).attr('data-url');
-		var data = getFormData($('#search_form'));
-		data['type'] = 'post';
-		data['async'] = false;
-		search(url, data, 'ajax_list');
+		search(1);
 	});
 
 	$(document).on('click', '.edit', function(e) {
@@ -344,64 +336,6 @@
     	}
     });
 
-    $(document).on('change', '.upload-simple', function(e) {
-        var uploadfile = $(this);
-    	var formData = new FormData();
-    	formData.append('fileUpload', $(this)[0].files[0]);
-    	formData.append('limitUpload', 51200);
-
-    	$.ajax({
-    	    url: '{{ route('checkUploadFile') }}',
-    	    type: 'post',
-    	    data: formData,
-    	    async: true,
-    	    processData: false,
-    	    contentType: false,
-    	    headers: {
-    	    	'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    	    },
-    	    success: function (res, textStatus, xhr) {
-    	    	readURL(uploadfile);
-    	    },
-    	    error: function(jqXHR, textStatus, errorThrown ) {
-    	    	var msg = errorUploadAlert(jqXHR.responseJSON.error);
-    	    	$('#message').html(msg);
-    	    	setTimeout(function(){ 
-					$('.alert').fadeOut();
-			    }, 5000);
-    	    }
-    	});
-    });
-
-    $(document).on('change', '.upload-multiple', function(e) {
-        var uploadfile = $(this);
-    	var formData = new FormData();
-    	formData.append('fileUpload[]', $(this)[0].files[0]);
-    	formData.append('limitUpload', 51200);
-
-    	$.ajax({
-    	    url: '{{ route('checkUploadFile') }}',
-    	    type: 'post',
-    	    data: formData,
-    	    async: true,
-    	    processData: false,
-    	    contentType: false,
-    	    headers: {
-    	    	'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    	    },
-    	    success: function (res, textStatus, xhr) {
-    	    	readURL(uploadfile);
-    	    },
-    	    error: function(jqXHR, textStatus, errorThrown ) {
-    	    	var msg = errorUploadAlert(jqXHR.responseJSON.error);
-    	    	$('#message').html(msg);
-    	    	setTimeout(function(){ 
-					$('.alert').fadeOut();
-			    }, 5000);
-    	    }
-    	});
-    });
-
     $('input.select_type').on('ifChecked', function(event){
     	var className = $(this).val();
     	$('.select_type').addClass('hide_element');
@@ -483,8 +417,17 @@
 		$(this).parent().parent().remove();
     });
 
+    $(document).on('change', '.upload-simple', function(e) {
+    	checkUploadFile('{{ route('checkUploadFile') }}', $(this));
+    });
+
+    $(document).on('change', '.upload-multiple', function(e) {
+    	checkUploadFile('{{ route('checkUploadFile') }}', $(this), '{{ trans('validation.image_selected') }}');
+    });
+
     $(document).on('click', '#upload_button', function(e) {
     	var preview_id = $(this).attr('data-preview-control');
+    	var limit_upload = $(this).attr('data-limit-upload');
     	var width = $(this).attr('data-width');
   	  	var height = $(this).attr('data-height');
         var control_name = $(this).attr('data-name');
@@ -498,8 +441,40 @@
 		upload.attr('data-preview-control', preview_id);
 		upload.attr('data-width', width);
 		upload.attr('data-height', height);
+		upload.attr('data-limit-upload', limit_upload);
 		upload.click();
 		$('#preview_list').append(upload);
+    });
+
+    $(document).on('ifChecked', '#select_all', function(e) {
+		$('.row-delete').iCheck('check');
+		$('.row-delete').parent().parent().parent().attr('style', 'background:#f0f0f0');
+    });
+
+    $(document).on('ifChecked', '.row-delete', function(e) {
+		$(this).parent().parent().parent().attr('style', 'background:#f0f0f0');
+    });
+
+    $(document).on('ifUnchecked', '#select_all', function(e) {
+		$('.row-delete').iCheck('uncheck');
+		$('.row-delete').parent().parent().parent().attr('style', '');
+    });
+
+    $(document).on('ifUnchecked', '.row-delete', function(e) {
+		$(this).parent().parent().parent().attr('style', '');
+    });
+
+    $(document).on('click', '#remove_many', function(e) {
+    	if(confirmDelete('{{ trans('messages.CONFIRM_DELETE') }}')) {
+    		$('.row-delete').each(function(index, item) {
+    			if(item.checked) {
+        			
+    			}
+    		});
+			return true;
+		}
+		return false;
+		
     });
   });
 </script>

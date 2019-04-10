@@ -38,6 +38,8 @@
 	<link href="{{ url('shop/css/custom.shop.css') }}" rel="stylesheet" type="text/css" />
 	<!-- Header JS -->	
 	<script src="{{ url('shop/bizweb.dktcdn.net/100/308/325/themes/665783/assets/jquery-2.2.3.min4d7c.js') }}" type="text/javascript"></script> 
+	
+	<script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v3.2&appId=135671569954053&autoLogAppEvents=1"></script>
 
 </head>
 

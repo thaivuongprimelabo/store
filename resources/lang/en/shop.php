@@ -34,6 +34,8 @@ return [
     'active_account_success' => 'Kích hoạt tài khoản thành công.Vui lòng đăng nhập để sử dụng dịch vụ',
     'unactive_account' => 'Tài khoản chưa được kích hoạt',
     'unactive_account_failed' => 'Tài khoản của bạn chưa được kích hoạt.<br/>Một thư kích hoạt đã được gửi vào hộp thư của bạn.',
+    'price_contact' => '(Liên hệ)',
+    'facebook_fanpage' => 'Kết nối facebook',
     'main_nav' => [
         'home' => ['text' => 'Trang chủ'],
         'products' => ['text' => 'Sản phẩm'],

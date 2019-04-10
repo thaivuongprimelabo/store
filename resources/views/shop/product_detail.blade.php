@@ -40,11 +40,20 @@
 								<span class="inventory"><i class="fa fa-check"></i> {{ $data->getStatusName() }}</span>
 							</div>
 							<div class="price-box clearfix">
+							@if($data->discount)
+							<div class="special-price">
+								<span id="product_price_format" class="price product-price">{{ $data->getPriceDiscount() }}</span>
+								<input type="hidden" id="product_price" value="{{ $data->getPriceDiscount(false) }}" /> 
+							</div> <!-- Giá -->
+							<div class="old-price">															 
+								<span class="price product-price-old">Giá gốc: <del class="price product-price-old">{{ $data->getPrice() }}</del> <span class="discount">(-{{ $data->discount }}%)</span></span>
+							</div>
+							@else
 							<div class="special-price">
 								<span id="product_price_format" class="price product-price">{{ $data->getPrice() }}</span>
 								<input type="hidden" id="product_price" value="{{ $data->price }}" /> 
 							</div> <!-- Giá -->
-							
+							@endif
 							@php
 								$productDetails = $data->getProductDetails();
 							@endphp

@@ -11,7 +11,7 @@ class UploadPath {
     CONST BANNER = 'banner/';
     CONST PHOTO = 'photo/';
     CONST AVATAR = 'avatar/';
-    CONST PRODUCT = 'product/';
+    CONST PRODUCT = 'image/';
     
     CONST PATH_LIST = [
         'upload_web_ico'    => self::ICO,

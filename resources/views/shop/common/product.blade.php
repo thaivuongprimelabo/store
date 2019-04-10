@@ -64,7 +64,12 @@
 												<div class="price-box clearfix">
 													<div class="special-price">
 														<span class="price product-price">{{ $product->getPrice() }}</span>
-													</div>											
+													</div>
+													@if($product->discount > 0)
+													<div class="old-price">
+														<span class="price product-price-old">{{ $product->getPriceDiscount() }}</span>
+													</div>
+													@endif											
 												</div>
 											</div>
 										</div>

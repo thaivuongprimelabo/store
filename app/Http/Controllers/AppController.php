@@ -50,6 +50,8 @@ class AppController extends Controller
                     'web_hotline' => Utils::cnvNull($config->web_hotline, ''),
                     'web_working_time' => Utils::cnvNull($config->web_working_time, ''),
                     'web_address' => Utils::cnvNull($config->web_address, ''),
+                    'footer_text' => Utils::cnvNull($config->footer_text, ''),
+                    'facebook_fanpage' => Utils::cnvNull($config->facebook_fanpage, ''),
 //                     'banners_maximum_upload' => Utils::cnvNull($config->banners_maximum_upload, 51200),
 //                     'vendors_maximum_upload' => Utils::cnvNull($config->vendors_maximum_upload, 51200),
 //                     'products_maximum_upload' => Utils::cnvNull($config->products_maximum_upload, 51200),

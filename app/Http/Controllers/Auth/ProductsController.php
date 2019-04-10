@@ -152,7 +152,7 @@ class productsController extends AppController
                     }
                     
                     $images_del = $request->images_del;
-                    if(count($images_del)) {
+                    if(!is_null($images_del) && count($images_del)) {
                         DB::table(Common::IMAGES_PRODUCT)->whereIn('id', $images_del)->delete();
                     }
                     

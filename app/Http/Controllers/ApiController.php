@@ -199,7 +199,7 @@ class ApiController extends Controller
                 
                 $size = $request->file('fileUpload')->getSize();
                 if($size > $fileSizeLimit) {
-                    return response()->json(['error' => trans('validation.size.file', ['filename' => $file->getClientOriginalName(), 'limit_upload' => '50KB'])], 500);
+                    return response()->json(['error' => trans('validation.size.file', ['filename' => $file->getClientOriginalName(), 'limit_upload' => Utils::formatMemory($fileSizeLimit)])], 500);
                 }
             } else {
                 for($i = 0; $i < count($file); $i++) {
@@ -213,10 +213,40 @@ class ApiController extends Controller
                     
                     $size = $f->getSize();
                     if($size > $fileSizeLimit) {
-                        return response()->json(['error' => trans('validation.size.file', ['filename' => $f->getClientOriginalName(), 'limit_upload' => '50KB'])], 500);
+                        return response()->json(['error' => trans('validation.size.file', ['filename' => $f->getClientOriginalName(), 'limit_upload' => Utils::formatMemory($fileSizeLimit)])], 500);
                     }
                 }
             }
         }
+    }
+    
+    public function deleteManyRow(Request $request) {
+        
+        $table = $request->table;
+        $ids = $request->ids;
+        switch($table) {
+            case 0; // Vendors table
+                $data = Vendor::destroy($ids);
+                break;
+            case 1; // Categories table
+                $data = Category::destroy($ids);
+                break;
+            case 2; // Products table
+                $data = Product::destroy($ids);
+                break;
+            case 3; // Posts table
+                $data = Post::destroy($ids);
+                break;
+            case 4; // Users table
+                $data = User::destroy($ids);
+                break;
+            case 5: // Post Groups table
+                $data = PostGroups::destroy($ids);
+                break;
+            default:
+                break;
+        }
+        
+        return response()->json(['success' => true]);
     }
 }

@@ -338,7 +338,7 @@ $auth = [
             'phone' => 'required|max:' . \App\Constants\Common::PHONE_MAXLENGTH,
             'booking_date' => 'required|max:' . \App\Constants\Common::BOOKING_DATE_MAXLENGTH,
             'booking_time' => 'required|max:' . \App\Constants\Common::BOOKING_TIME_MAXLENGTH,
-            'status' => 'required_select'
+            'status' => 'required'
         ]
     ],
     /*------------ Banner page ------------------- */
@@ -888,6 +888,10 @@ $auth = [
                 'web_keywords' => [
                     'type' => 'textarea',
                     'text' => 'SEO Keywords'
+                ],
+                'footer_text' => [
+                    'type' => 'editor',
+                    'text' => 'Footer text'
                 ]
             ],
             'mail_settings' => [
@@ -1016,6 +1020,13 @@ $auth = [
                     'type' => 'text',
                     'text' => 'URL Extension',
                     'maxlength' => 15
+                ]
+            ],
+            'facebook_fanpage' => [
+                'header' => 'Facebook fanpage',
+                'facebook_fanpage' => [
+                    'type' => 'text',
+                    'text' => 'URL'
                 ]
             ],
             'off' => [
@@ -1261,6 +1272,12 @@ $auth = [
                 'type' => 'password',
                 'text' => 'Xác nhận mật khẩu'
             ],
+            'role_id' => [
+                'type' => 'select',
+                'text' => 'Quyền hạn',
+                'empty_text' => '--- Chọn quyền hạn ---',
+                'table' => 'ROLE_USERS'
+            ],
             'status' => [
                 'type' => 'checkbox',
                 'text' => 'Đang hoạt động',
@@ -1271,7 +1288,8 @@ $auth = [
             'name' => 'required|max:' . \App\Constants\Common::NAME_MAXLENGTH,
             'email' => 'required|email|max:' . \App\Constants\Common::EMAIL_MAXLENGTH,
             'password' => 'required|max:' . \App\Constants\Common::PASSWORD_MAXLENGTH . '|min:' . \App\Constants\Common::PASSWORD_MINLENGTH,
-            'conf_password' => 'required|max:' . \App\Constants\Common::PASSWORD_MAXLENGTH . '|min:' . \App\Constants\Common::PASSWORD_MINLENGTH . '|same:password'
+            'conf_password' => 'required|max:' . \App\Constants\Common::PASSWORD_MAXLENGTH . '|min:' . \App\Constants\Common::PASSWORD_MINLENGTH . '|same:password',
+            'role_id' => 'required'
         ]
     ],
     /*------------ Profile page ------------------- */

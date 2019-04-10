@@ -12,6 +12,7 @@ var callAjax = function(url, data, page) {
 	    	if(res.code === 200) {
 	    		switch(page) {
 	    			case 'ajax_list':
+	    			case 'delete-many':
 	    				$('#ajax_list').html(res.data);
 	    				break;
 	    				
@@ -40,8 +41,13 @@ var loadProducts = function(url) {
 	$('#product_list').html(data);
 }
 
-var search = function(url, data, page) {
-	callAjax(url, data, page);
+var search = function(page_number) {
+	var url = $('#search').attr('data-url');
+	url = url + '?page=' + page_number;
+	var data = getFormData($('#search_form'));
+	data['type'] = 'post';
+	data['async'] = true;
+	callAjax(url, data, 'ajax_list');
 }
 
 var checkExist = function(input) {
@@ -224,7 +230,41 @@ var getMax = function(element, data) {
 	return (max + 1);
 }
 
-var readURL = function readURL(input) {
+var checkUploadFile = function(url, input, selected_msg) {
+	var uploadfile = input;
+	var formData = new FormData();
+	if(selected_msg !== undefined) {
+		formData.append('fileUpload[]', input[0].files[0]);
+	} else {
+		formData.append('fileUpload', input[0].files[0]);
+	}
+	
+	formData.append('limitUpload', input.attr('data-limit-upload'));
+
+	$.ajax({
+	    url: url,
+	    type: 'post',
+	    data: formData,
+	    async: true,
+	    processData: false,
+	    contentType: false,
+	    headers: {
+	    	'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+	    },
+	    success: function (res, textStatus, xhr) {
+	    	readURL(uploadfile, selected_msg);
+	    },
+	    error: function(jqXHR, textStatus, errorThrown ) {
+	    	var msg = errorUploadAlert(jqXHR.responseJSON.error);
+	    	$('#message').html(msg);
+	    	setTimeout(function(){ 
+				$('.alert').fadeOut();
+		    }, 5000);
+	    }
+	});
+}
+
+var readURL = function readURL(input, selected_msg) {
 	
   if(!input.prop('multiple')) {
 	  if (input[0].files && input[0].files[0]) {
@@ -241,18 +281,44 @@ var readURL = function readURL(input) {
 	  var height = input.attr('data-height');
 	  var length = input[0].files.length;
 	  if(length > 0) {
+		  var file_selected = $('#file_selected').val();
 		  for(var i = 0; i < length; i++) {
-			  var reader = new FileReader();
-		      reader.onload = function(e) {
-		    	  var img = "<img src='" + e.target.result + "'  class='img-thumbnaili width='" + width + "' height='" + height + "' style='margin-top:10px;'>";
-		    	  $('#' + preview_id).append(img);
-		      }
-		      
-		      reader.readAsDataURL(input[0].files[i]);
+			  var filename = (input[0].files[i].name);
+			  if(file_selected.indexOf(filename) < 0) {
+				  var reader = new FileReader();
+			      reader.onload  = function(e) {
+			    	  var img = '<div style="display:inline-block; position:relative"><a href="javascript:void(0)" class="remove-img" style="position:absolute; top:15px; right:15px">';
+			    	  img += '<i class="fa fa-trash" style="font-size:30px;"></i></a>';
+			    	  img += "<img src='" + e.target.result + "'  class='img-thumbnail' width='" + width + "' height='" + height + "' style='margin-top:10px;margin-right:4px;'>";
+			    	  img += "<input type='hidden' name='upload_images[]' value='" + e.target.filename + "' />";
+			    	  img += '</div>';
+			    	  $('#' + preview_id).append(img);
+			      }
+			      reader.filename = filename;
+			      reader.readAsDataURL(input[0].files[i]);
+			      file_selected += filename + ',';
+			      $('#file_selected').val(file_selected);
+			  } else {
+				  var msg = errorUploadAlert(selected_msg.replace(':filename', filename));
+			    	$('#message').html(msg);
+			    	setTimeout(function(){ 
+						$('.alert').fadeOut();
+				    }, 5000);
+			    	break;
+			  }
+			  
 		  }
 	  }
   }
-  
+}
+
+function createListItem(e, filename) {
+  var img = '<div style="display:inline-block; position:relative"><a href="javascript:void(0)" class="remove-img" style="position:absolute; top:15px; right:15px">';
+  img += '<i class="fa fa-trash" style="font-size:30px;"></i></a>';
+  img += "<img src='" + e.target.result + "'  class='img-thumbnail' width='" + width + "' height='" + height + "' style='margin-top:10px;margin-right:4px;'>";
+  img += "<input type='hidden' name='upload_images[]' value='" + filename + "' />";
+  img += '</div>';
+  $('#' + preview_id).append(img);
 }
 
 var errorUploadAlert = function(message) {
@@ -265,10 +331,28 @@ var errorUploadAlert = function(message) {
 	return msg;
 }
 
+var deleteManyRow = function(url, ids) {
+	var data = {
+		url : url,
+		type: 'post',
+		async: true,
+		data : ids,
+	}
+	
+	callAjax(url, data, 'delete-many');
+}
+
 $(document).ready(function() {
 	
 	$.validator.addMethod('required_ckeditor', function(value, element, params) {
 		if (CKEDITOR.instances[element.id].getData() == '') {
+	        return false;
+	    }
+		return true;
+	});
+	
+	$.validator.addMethod('required_select', function(value, element, params) {
+		if (value.length === 0) {
 	        return false;
 	    }
 		return true;

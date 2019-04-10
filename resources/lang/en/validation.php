@@ -92,6 +92,7 @@ return [
     'url'                  => ':attribute không hợp lệ.',
     'password_match' => 'Xác nhận mật khẩu không khớp với mật khẩu',
     'captcha' => 'Mã bảo vệ không chính xác',
+    'image_selected' => 'Tập tin :filename đã được lựa chọn',
 
     /*
     |--------------------------------------------------------------------------

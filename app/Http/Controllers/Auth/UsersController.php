@@ -27,14 +27,6 @@ class UsersController extends AppController
         
         $this->middleware('auth');
         
-        $this->middleware(function ($request, $next) {
-            $roleId = Auth::user()->role_id;
-            if($roleId == UserRole::MOD) {
-                return redirect(route('auth_products'));
-            }
-            
-            return $next($request);
-        });
     }
     
     public function index(Request $request) {

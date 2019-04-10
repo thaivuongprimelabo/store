@@ -48,7 +48,7 @@
 					</div>
 				</div>
 				<section class="products-view products-view-{{ $view_type }}">
-					<div id="ajax_list" class="row row-noGutter">
+					<div id="ajax_list" class="row">
 					</div>
 				</section>
 				<div id="ajax_paging">

@@ -89,8 +89,6 @@ class Cart {
     public function addDetailItem($id, CartItem $detailItem) {
         foreach($this->cart as $cartItem) {
             if($cartItem->getId() == $id) {
-//                 $detailList = [];
-//                 array_push($detailList, $detailItem);
                 $cartItem->addDetailItem($detailItem);
                 break;
             }

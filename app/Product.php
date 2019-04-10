@@ -80,10 +80,6 @@ class Product extends Model
         return $html;
     }
     
-    public function getDiscountPrice() {
-        return number_format($this->price - ($this->price * ($this->discount / 100)));
-    }
-    
     public function getDiscount() {
         if($this->discount) {
             return '<div class="sale-flash"><div class="before"></div>-' . $this->discount . '%</div>';
@@ -95,12 +91,24 @@ class Product extends Model
         return $this->name;
     }
     
-    public function getPrice() {
+    public function getPrice($format = true) {
         if($this->price > 0) {
-            return Utils::formatCurrency($this->price);
+            if($format) {
+                return Utils::formatCurrency($this->price);
+            }
+            return $this->price;
         }
         
         return '(Liên hệ)';
+    }
+    
+    public function getPriceDiscount($format = true) {
+        if($this->discount) {
+            if($format) {
+                return Utils::formatCurrency(($this->price - ($this->price * ($this->discount / 100))));
+            }
+            return $this->price - ($this->price * ($this->discount / 100));
+        }
     }
     
     public function getSummary() {

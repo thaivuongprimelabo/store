@@ -21,7 +21,7 @@ class AppController extends Controller
     public $result = ['code' => 200, 'data' => ''];
     public $name = '';
     public $rules = [];
-    public $output = ['data' => null, 'name' => '', 'rules' => []];
+    public $output = ['data' => null, 'name' => '', 'rules' => [], 'editor' => 'editor.small.js'];
     
     /**
      * Create a new controller instance.
@@ -62,6 +62,7 @@ class AppController extends Controller
                     'upload_avatar_image_size'   => Utils::cnvNull($config->upload_avatar_image_size, '100x100'),
                     
                     'url_ext' => Utils::cnvNull($config->url_ext, '.html'),
+                    
                 ]
             ];
             View::share($this->config);
@@ -73,6 +74,9 @@ class AppController extends Controller
         
         $exp = explode('_', Route::currentRouteName());
         $this->name = isset($exp[1]) ? $exp[1] : '';
+        if($this->name == 'posts' || $this->name == 'products') {
+            $this->output['editor'] = 'editor.full.js';
+        }
         $this->rules = trans('auth.' . $this->name . '.rules');
         $this->rules = is_array($this->rules) ? $this->rules : [];
         $this->output['name'] =  $this->name;

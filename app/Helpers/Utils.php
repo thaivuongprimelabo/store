@@ -157,10 +157,15 @@ class Utils {
     public static function doUploadMultiple($request, $key, $id, &$arrFilenames = []) {
         if($request->hasFile($key)) {
             $files = $request->$key;
+            $upload_images = $request->upload_images;
             if(is_array($files)) {
                 for($i = 0; $i < count($files); $i++) {
+                    
                     $filename = '';
                     $file = $files[$i];
+                    if(!in_array($file->getClientOriginalName(), $upload_images)) {
+                        continue;
+                    }
                     
                     $medium = '';
                     $small = '';
@@ -194,7 +199,8 @@ class Utils {
         }
         
         $filename = time() . '_' . $file->getClientOriginalName();
-        $uploadPath = UploadPath::getUploadPath($key) . $demension;
+        $uploadPath = UploadPath::getUploadPath($key);
+        $resizePath = $uploadPath . $demension;
         $filePath = UploadPath::getFilePath($key) . $demension;
         
         $d = explode('x', $demension);
@@ -208,12 +214,11 @@ class Utils {
             mkdir(public_path($uploadPath));
         }
         
-//         $folderResize = $uploadPath . '/' . $size;
-//         if(!file_exists(public_path($folderResize))) {
-//             mkdir(public_path($folderResize));
-//         }
+        if(!file_exists(public_path($resizePath))) {
+            mkdir(public_path($resizePath));
+        }
         
-        $image_resize->save(public_path($uploadPath .  '/' . $filename));
+        $image_resize->save(public_path($resizePath .  '/' . $filename));
         
         return $filePath . '/' . $filename;
     }
@@ -326,8 +331,6 @@ class Utils {
         $data = [];
         switch($table) {
             case Common::CATEGORIES:
-                $data = Category::select('name', 'id')->where('parent_id', 0)->where('status', Status::ACTIVE)->get();
-                break;
             case 'CATEGORY_PRODUCT':
                 $categories = Category::select('name', 'id')->where('parent_id', 0)->where('status', Status::ACTIVE)->get();
                 foreach($categories as $c) {
@@ -369,6 +372,9 @@ class Utils {
                 break;
             case Common::TIMES:
                 $data = Times::select('id', 'name')->get();
+                break;
+            case 'ROLE_USERS':
+                return UserRole::createSelectList();
                 break;
             default:
                 $data = [];
@@ -686,6 +692,9 @@ class Utils {
     }
     
     public static function formatCurrency($input) {
+        if(self::blank($input) || $input == 0) {
+            return trans('shop.price_contact');
+        }
         return number_format($input, 0, ',', '.') . Common::CURRENCY;
     }
     
@@ -702,8 +711,8 @@ class Utils {
         $data_count = $data->count();
         $footers = [];
         if(count($table_info)) {
-            $colWidth = '';
-            $thead = '<thead><tr>';
+            $colWidth = '<col width="2%">';
+            $thead = '<thead><tr><th><input type="checkbox" id="select_all" /></th>';
             $number_col = 0;
             foreach($table_info as $key=>$info) {
                 if(isset($info['tfoot'])) {
@@ -725,11 +734,11 @@ class Utils {
                 $tbody = '<tbody>';
                 foreach($data as $item) {
                     $tbody .= '<tr>';
+                    $tbody .= '<td><input type="checkbox" class="row-delete" value="' . $item->id .'" /></td>';
                     foreach($table_info as $key=>$info) {
                         if(isset($info['tfoot']) == 'tfoot') {
                             continue;
                         }
-                        
                         switch($key) {
                             case 'parent_cate':
                                 $tbody .= '<td>' . $item->getParentName() . '</td>';
@@ -1162,15 +1171,16 @@ class Utils {
             case 'file_simple':
                 $key_data = str_replace('upload_', '', $key);
                 $element_value = !is_null($data) && !Utils::blank($data->$key_data) ? $data->$key_data : '';
-                $image_size = isset($config[$key . '_image_size']) ? $config[$key . '_image_size'] : $config[$key . '_image_size'];
+                $image_size = isset($config[$key . '_image_size']) ? $config[$key . '_image_size'] : '100x100';
+                $limit_upload = isset($config[$key . '_maximum_upload']) ? $config[$key . '_maximum_upload'] : '51200';
                 $split = explode('x', $image_size);
                 $element_html .= $label;
                 $preview_control_id = 'preview_' . $key;
-                $element_html .= '<input type="file" class="form-control upload-simple" name="' . $key . '" data-preview-control="' . $preview_control_id . '" />';
+                $element_html .= '<input type="file" class="form-control upload-simple" name="' . $key . '" data-preview-control="' . $preview_control_id . '" data-limit-upload="' . $limit_upload . '" />';
                 if(!self::blank($element_value)) {
-                    $element_html .= '<img id="' . $preview_control_id . '" src="' . self::getImageLink($element_value) . '" alt="Cinque Terre" width="' . $split[0] . '" height="' . $split[1] . '" style="margin-top:10px;">';
+                    $element_html .= '<img id="' . $preview_control_id . '" src="' . self::getImageLink($element_value) . '" class="img-thumbnail" width="' . $split[0] . '" height="' . $split[1] . '" style="margin-top:10px;">';
                 } else {
-                    $element_html .= '<img id="' . $preview_control_id . '" src="' . self::getImageLink($element_value) . '" alt="Cinque Terre" width="' . $split[0] . '" height="' . $split[1] . '" style="display:none;margin-top:10px;">';
+                    $element_html .= '<img id="' . $preview_control_id . '" src="' . self::getImageLink($element_value) . '" class="img-thumbnail" width="' . $split[0] . '" height="' . $split[1] . '" style="display:none;margin-top:10px;">';
                 }
                 
                 break;
@@ -1178,9 +1188,15 @@ class Utils {
             case 'file_multiple':
                 $key_data = str_replace('upload_', '', $key);
                 $element_value = !is_null($data) && !Utils::blank($data->$key_data) ? $data->$key_data : '';
-                $image_size = isset($config[$key . '_image_size']) ? $config[$key . '_image_size'] : $config[$key . '_image_size'];
-                $split = explode('x', $image_size);
-                $element_html .= '<button type="button" id="upload_button" data-name="' . $key . '[]" data-preview-control="preview_list" data-width="' . $split[0] . '" data-height="' . $split[1] . '" class="btn btn-primary"><i class="fa fa-image"></i> Tải hình sản phẩm</button>';
+                $image_size = isset($config[$key . '_image_size']) ? $config[$key . '_image_size'] : '100x100';
+                $limit_upload = isset($config[$key . '_maximum_upload']) ? $config[$key . '_maximum_upload'] : '51200';
+                if(strpos($image_size, ',') !== FALSE) {
+                    $split = explode(',', $image_size);
+                    $split = explode('x', $split[0]);
+                } else {
+                    $split = explode('x', $image_size);
+                }
+                $element_html .= '<button type="button" id="upload_button" data-name="' . $key . '[]" data-preview-control="preview_list" data-width="' . $split[0] . '" data-height="' . $split[1] . '"  data-limit-upload="' . $limit_upload . '" class="btn btn-primary"><i class="fa fa-image"></i> Tải hình sản phẩm</button>';
                 $preview_control_id = 'preview_' . $key;
                 $element_html .= '<div id="preview_list">';
                 $image_using = !is_null($data) ? $data->getAllImage($data->id) : [];
@@ -1193,7 +1209,7 @@ class Utils {
                     }
                 }
                 $element_html .= '</div>';
-                
+                $element_html .= '<input type="hidden" id="file_selected" />';
                 break;
                 
             case 'file':
@@ -1277,6 +1293,7 @@ class Utils {
                 break;
                 
             case 'select':
+                $element_html .= '<div>';
                 $element_html .= '<label>' .$text . '</label>';
                 $element_html .= '<select class="form-control" name="' . $key . '" id="' . $key . '">';
                 if(!self::blank($emptyText)) {
@@ -1284,11 +1301,12 @@ class Utils {
                 }
                 $element_html .= self::createSelectList($table, $element_value);
                 $element_html .= '</select>';
+                $element_html .= '</div>';
                 break;
                 
             case 'editor':
                 $element_html .= '<label>' .$text . '</label>';
-                $element_html .= '<textarea name="' . $key . '" id="' . $key . '" class="ckeditor" placeholder="' . $placeholder . '">' . $element_value . '</textarea>';
+                $element_html .= '<textarea name="' . $key . '" id="' . $key . '" class="fckeditor" placeholder="' . $placeholder . '">' . $element_value . '</textarea>';
                 break;
                 
         }
@@ -1345,10 +1363,9 @@ class Utils {
                         if($k == 'content') {
                             $rule_name = 'required_ckeditor';
                         }
-                        break;
-                    case 'required_select':
-                        $msg_item = 'validation.required_select';
-                        $rule_name = 'required';
+                        if($k == 'role_id') {
+                            $rule_name = 'required_select';
+                        }
                         break;
                     case 'email':
                         $msg_item = 'validation.email';

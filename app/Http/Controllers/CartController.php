@@ -57,7 +57,10 @@ class CartController extends AppController
                 $cartItem->setId($product->id);
                 $cartItem->setName($product->getName());
                 $cartItem->setImage($product->getFirstImage('small'));
-                $cartItem->setPrice($product->price);
+                $cartItem->setPrice($product->getPrice(false));
+                if($product->discount) {
+                    $cartItem->setPrice($product->getPriceDiscount(false));
+                }
                 $cartItem->setQty($qty);
                 $cartItem->setLink($product->getLink());
                 

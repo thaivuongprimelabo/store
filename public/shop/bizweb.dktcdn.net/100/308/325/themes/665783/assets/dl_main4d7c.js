@@ -247,10 +247,11 @@ function dl_owl() {
 			nav = false;
 		}
 		$(this).owlCarousel({
-			loop:false,
+			loop:true,
 			margin:Number(margin),
 			responsiveClass:true,
 			dots:dot,
+			autoplay:true,
 			autoHeight: false,
 			nav:nav,
 			navText: ["<i class='fa fa-angle-left'></i>","<i class='fa fa-angle-right'></i>"],
