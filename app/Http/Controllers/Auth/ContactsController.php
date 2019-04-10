@@ -92,13 +92,11 @@ class ContactsController extends AppController
     }
     
     public function remove(Request $request) {
-        if($request->isMethod('get')) {
-            $id = $request->id;
-            $data = Contact::find($id);
-            if($data->delete()) {
-                Utils::removeFile($data->attachment);
-                return redirect(route('auth_contacts'))->with('success', trans('messages.REMOVE_SUCCESS'));
-            }
+        $result = ['code' => 404];
+        $ids = $request->ids;
+        if(Contact::destroy($ids)) {
+            $result['code'] = 200;
+            return response()->json($result);
         }
     }
 }

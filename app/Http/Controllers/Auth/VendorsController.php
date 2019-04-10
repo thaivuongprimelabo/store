@@ -119,13 +119,15 @@ class VendorsController extends AppController
     }
     
     public function remove(Request $request) {
-        if($request->isMethod('get')) {
-            $id = $request->id;
-            $data = Vendor::find($id);
-            if($data->delete()) {
-                Utils::removeFile($data->logo);
-                return redirect(route('auth_vendors'))->with('success', trans('messages.REMOVE_SUCCESS'));
-            }
+        $result = ['code' => 404];
+        $ids = $request->ids;
+        $data = Vendor::whereIn('id', $ids)->get();
+        foreach($data as $dt) {
+            Utils::removeFile($dt->logo);
+        }
+        if(Vendor::destroy($ids)) {
+            $result['code'] = 200;
+            return response()->json($result);
         }
     }
     

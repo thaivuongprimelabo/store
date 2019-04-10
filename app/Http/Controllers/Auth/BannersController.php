@@ -128,13 +128,15 @@ class BannersController extends AppController
     }
     
     public function remove(Request $request) {
-        if($request->isMethod('get')) {
-            $id = $request->id;
-            $data = Banner::find($id);
-            if($data->delete()) {
-                Utils::removeFile($data->banner);
-                return redirect(route('auth_banners'))->with('success', trans('messages.REMOVE_SUCCESS'));
-            }
+        $result = ['code' => 404];
+        $ids = $request->ids;
+        $data = Banner::whereIn('id', $ids)->get();
+        foreach($data as $dt) {
+            Utils::removeFile($dt->banner);
+        }
+        if(Banner::destroy($ids)) {
+            $result['code'] = 200;
+            return response()->json($result);
         }
     }
 }

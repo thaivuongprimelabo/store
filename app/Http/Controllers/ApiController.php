@@ -220,33 +220,4 @@ class ApiController extends Controller
         }
     }
     
-    public function deleteManyRow(Request $request) {
-        
-        $table = $request->table;
-        $ids = $request->ids;
-        switch($table) {
-            case 0; // Vendors table
-                $data = Vendor::destroy($ids);
-                break;
-            case 1; // Categories table
-                $data = Category::destroy($ids);
-                break;
-            case 2; // Products table
-                $data = Product::destroy($ids);
-                break;
-            case 3; // Posts table
-                $data = Post::destroy($ids);
-                break;
-            case 4; // Users table
-                $data = User::destroy($ids);
-                break;
-            case 5: // Post Groups table
-                $data = PostGroups::destroy($ids);
-                break;
-            default:
-                break;
-        }
-        
-        return response()->json(['success' => true]);
-    }
 }

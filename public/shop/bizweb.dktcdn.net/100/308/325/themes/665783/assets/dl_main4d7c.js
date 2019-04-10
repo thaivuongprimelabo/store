@@ -247,7 +247,7 @@ function dl_owl() {
 			nav = false;
 		}
 		$(this).owlCarousel({
-			loop:true,
+			loop:false,
 			margin:Number(margin),
 			responsiveClass:true,
 			dots:dot,

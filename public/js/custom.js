@@ -5,6 +5,11 @@ var callAjax = function(url, data, page) {
 	    type: data.type,
 	    data: data,
 	    async: data.async,
+	    beforeSend: function() {
+	    	if(page === 'ajax_list') {
+	    		$('#ajax_list').html(spinner());
+	    	}
+	    },
 	    headers: {
 	    	'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 	    },
@@ -12,10 +17,17 @@ var callAjax = function(url, data, page) {
 	    	if(res.code === 200) {
 	    		switch(page) {
 	    			case 'ajax_list':
-	    			case 'delete-many':
 	    				$('#ajax_list').html(res.data);
+	    				$('#ajax_list').iCheck({
+    				      checkboxClass: 'icheckbox_square-blue',
+    				      radioClass: 'iradio_square-blue',
+    				      increaseArea: '20%' /* optional */
+    				    });
 	    				break;
-	    				
+	    			case 'delete-many':
+	    				successAlert('Đã xóa thành công');
+	    				search(1);
+	    				break;
 	    			case 'update_status':
 	    			case 'add-size':
 	    			case 'add-color':
@@ -29,6 +41,10 @@ var callAjax = function(url, data, page) {
 	    }
 	});
 	return output;
+}
+
+var spinner = function() {
+	return "<div class='box-header text-center'><i class='fa fa-circle-o-notch fa-spin'></i> Đang tải dữ liệu</div>";
 }
 
 var loadProducts = function(url) {
@@ -255,11 +271,7 @@ var checkUploadFile = function(url, input, selected_msg) {
 	    	readURL(uploadfile, selected_msg);
 	    },
 	    error: function(jqXHR, textStatus, errorThrown ) {
-	    	var msg = errorUploadAlert(jqXHR.responseJSON.error);
-	    	$('#message').html(msg);
-	    	setTimeout(function(){ 
-				$('.alert').fadeOut();
-		    }, 5000);
+	    	errorAlert(jqXHR.responseJSON.error);
 	    }
 	});
 }
@@ -299,12 +311,8 @@ var readURL = function readURL(input, selected_msg) {
 			      file_selected += filename + ',';
 			      $('#file_selected').val(file_selected);
 			  } else {
-				  var msg = errorUploadAlert(selected_msg.replace(':filename', filename));
-			    	$('#message').html(msg);
-			    	setTimeout(function(){ 
-						$('.alert').fadeOut();
-				    }, 5000);
-			    	break;
+				  errorAlert(selected_msg.replace(':filename', filename));
+			      break;
 			  }
 			  
 		  }
@@ -321,14 +329,30 @@ function createListItem(e, filename) {
   $('#' + preview_id).append(img);
 }
 
-var errorUploadAlert = function(message) {
+var successAlert = function(message) {
+	var msg = '<div style="padding: 5px;">';
+		  msg += '<div id="inner-message" class="alert alert-success">';
+		  msg += '<i class="fa fa-check fa-2x"></i>' + message;
+		  msg += '</div>';
+		  msg += '</div>';
+		  
+    $('#message').html(msg);
+	setTimeout(function(){ 
+		$('.alert').fadeOut();
+    }, 4000);
+}
+
+var errorAlert = function(message) {
 	var msg = '<div style="padding: 5px;">';
 		  msg += '<div id="inner-message" class="alert alert-danger">';
 		  msg += '<i class="fa fa-exclamation-triangle fa-2x"></i>' + message;
 		  msg += '</div>';
 		  msg += '</div>';
 		  
-	return msg;
+    $('#message').html(msg);
+	setTimeout(function(){ 
+		$('.alert').fadeOut();
+    }, 4000);
 }
 
 var deleteManyRow = function(url, ids) {
@@ -336,7 +360,7 @@ var deleteManyRow = function(url, ids) {
 		url : url,
 		type: 'post',
 		async: true,
-		data : ids,
+		ids : ids,
 	}
 	
 	callAjax(url, data, 'delete-many');

@@ -114,7 +114,7 @@ class HomeController extends AppController
             'keywords' => [$product->name, $product->getCategoryName(), $this->output['config']['web_name']],
             'link' => $product->getLink(),
             'type' => 'product',
-            'image' => $product->getFirstImage('medium')
+            'image' => $product->getFirstImage()
         ]);
         
         if(!$product) {

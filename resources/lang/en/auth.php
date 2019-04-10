@@ -894,49 +894,6 @@ $auth = [
                     'text' => 'Footer text'
                 ]
             ],
-            'mail_settings' => [
-                'header' => 'Mail settings',
-                'mail_driver' => [
-                    'type' => 'text',
-                    'text' => 'Mail driver',
-                    'maxlength' => 20
-                ],
-                'mail_host' => [
-                    'type' => 'text',
-                    'text' => 'Mail host',
-                    'maxlength' => 20
-                ],
-                'mail_port' => [
-                    'type' => 'text',
-                    'text' => 'Mail port',
-                    'maxlength' => 20
-                ],
-                'mail_from' => [
-                    'type' => 'text',
-                    'text' => 'Mail from',
-                    'maxlength' => 100
-                ],
-                'mail_name' => [
-                    'type' => 'text',
-                    'text' => 'Mail name',
-                    'maxlength' => 100
-                ],
-                'mail_encryption' => [
-                    'type' => 'text',
-                    'text' => 'Mail encryption',
-                    'maxlength' => 20
-                ],
-                'mail_account' => [
-                    'type' => 'text',
-                    'text' => 'Mail account',
-                    'maxlength' => 200
-                ],
-                'mail_password' => [
-                    'type' => 'text',
-                    'text' => 'Mail password',
-                    'maxlength' => 60
-                ]
-            ],
             'upload_settings' => [
                 'header' => 'Upload settings',
                 'upload_banner_maximum_upload' => [

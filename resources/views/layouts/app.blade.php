@@ -219,7 +219,10 @@
 
 	$(document).on('click', '.remove-row', function(e) {
 		if(confirmDelete('{{ trans('messages.CONFIRM_DELETE') }}')) {
-			window.location = $(this).attr('data-url');
+			var url = $(this).attr('data-url');
+			var id = $(this).attr('data-id');
+			var ids = [id];
+			deleteManyRow(url, ids);
 			return true;
 		}
 		return false;
@@ -466,11 +469,18 @@
 
     $(document).on('click', '#remove_many', function(e) {
     	if(confirmDelete('{{ trans('messages.CONFIRM_DELETE') }}')) {
+        	var url = $(this).attr('data-url');
+        	var ids = [];
     		$('.row-delete').each(function(index, item) {
     			if(item.checked) {
-        			
+    				ids.push(item.value);
     			}
     		});
+    		if(ids.length === 0) {
+    			errorUploadAlert('Vui lòng chọn ít nhất 1 dòng');
+    			return false;
+    		}
+    		deleteManyRow(url, ids);
 			return true;
 		}
 		return false;

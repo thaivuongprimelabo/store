@@ -9,7 +9,6 @@
     <!-- Box Body -->
     <div class="box-body">
         <form id="search_form">
-             <div class="col-md-12">
                 <div class="form-group">
                   @foreach($form as $key=>$value)
                   @php
@@ -78,7 +77,6 @@
                      @endif
                  	 
                 </div>
-             </div>
          </form>
      </div>
  </div>

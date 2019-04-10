@@ -168,12 +168,19 @@ class productsController extends AppController
     }
     
     public function remove(Request $request) {
-        if($request->isMethod('get')) {
-            $id = $request->id;
-            $data = Product::find($id);
-            if($data->delete()) {
-                return redirect(route('auth_products'))->with('success', trans('messages.REMOVE_SUCCESS'));
+        $result = ['code' => 404];
+        $ids = $request->ids;
+        if(Product::destroy($ids)) {
+            ProductDetails::whereIn('product_id', $ids)->delete();
+            $image_products = ImageProduct::whereIn('product_id', $ids)->get();
+            foreach($image_products as $image) {
+                Utils::removeFile($image->image);
+                Utils::removeFile($image->medium);
+                Utils::removeFile($image->small);
             }
+            ImageProduct::whereIn('product_id', $ids)->delete();
+            $result['code'] = 200;
+            return response()->json($result);
         }
     }
     

@@ -110,12 +110,11 @@ class CategoriesController extends AppController
     }
     
     public function remove(Request $request) {
-        if($request->isMethod('get')) {
-            $id = $request->id;
-            $data = Category::find($id);
-            if($data->delete()) {
-                return redirect(route('auth_categories'))->with('success', trans('messages.REMOVE_SUCCESS'));
-            }
+        $result = ['code' => 404];
+        $ids = $request->ids;
+        if(Category::destroy($ids)) {
+            $result['code'] = 200;
+            return response()->json($result);
         }
     }
 }

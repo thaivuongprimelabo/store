@@ -37,4 +37,5 @@ class Order extends Model
     public function getTotal() {
         return Utils::formatCurrency($this->total);
     }
+    
 }

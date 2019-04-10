@@ -225,7 +225,7 @@ class Utils {
     
     public static function removeFile($file) {
         if(!self::blank($file)) {
-            $filepath = Common::UPLOAD_FOLDER . $file;
+            $filepath = public_path(UploadPath::UPLOAD . $file);
             if(file_exists($filepath)) {
                 unlink($filepath);
             }
@@ -711,7 +711,7 @@ class Utils {
         $data_count = $data->count();
         $footers = [];
         if(count($table_info)) {
-            $colWidth = '<col width="2%">';
+            $colWidth = '<col width="3%">';
             $thead = '<thead><tr><th><input type="checkbox" id="select_all" /></th>';
             $number_col = 0;
             foreach($table_info as $key=>$info) {
@@ -854,8 +854,8 @@ class Utils {
                                 
                                 $route = 'auth_' . $name . '_remove';
                                 if($routes->hasNamedRoute($route)) {
-                                    $url = route('auth_' . $name . '_remove',['id' => $item->id]);
-                                    $tbody .= '<td align="center"><a href="javascript:void(0)" data-url="' . $url . '" class="remove-row" title="Remove"><i class="fa fa-trash" aria-hidden="true" style="font-size: 24px"></i></a></td>';
+                                    $url = route('auth_' . $name . '_remove');
+                                    $tbody .= '<td align="center"><a href="javascript:void(0)" data-id="' . $item->id . '" data-url="' . $url . '" class="remove-row" title="Remove"><i class="fa fa-trash" aria-hidden="true" style="font-size: 24px"></i></a></td>';
                                 } else {
                                     $tbody .= '<td></td>';
                                 }

@@ -181,8 +181,7 @@ class UsersController extends AppController
             if (!$validator->fails()) {
                 
                 $filename = $data->avatar;
-                
-                Utils::doUpload($request, Common::AVATAR_FOLDER, $filename);
+                Utils::doUploadSimple($request, 'upload_avatar', $filename);
                 
                 $data->name         = Utils::cnvNull($request->name, '');
                 if(!Utils::blank($request->password)) {
@@ -205,12 +204,15 @@ class UsersController extends AppController
     }
     
     public function remove(Request $request) {
-        if($request->isMethod('get')) {
-            $id = $request->id;
-            $data = User::find($id);
-            if($data->delete()) {
-                return redirect(route('auth_users'))->with('success', trans('messages.REMOVE_SUCCESS'));
-            }
+        $result = ['code' => 404];
+        $ids = $request->ids;
+        $data = User::whereIn('id', $ids)->get();
+        foreach($data as $dt) {
+            Utils::removeFile($dt->avatar);
+        }
+        if(User::destroy($ids)) {
+            $result['code'] = 200;
+            return response()->json($result);
         }
     }
 }

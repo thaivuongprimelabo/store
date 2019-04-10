@@ -77,4 +77,14 @@ class OrdersController extends AppController
         $this->output['data'] = $data;
         return view('auth.orders.form', $this->output);
     }
+    
+    public function remove(Request $request) {
+        $result = ['code' => 404];
+        $ids = $request->ids;
+        if(Order::destroy($ids)) {
+            OrderDetails::whereIn('order_id', $ids)->delete();
+            $result['code'] = 200;
+            return response()->json($result);
+        }
+    }
 }

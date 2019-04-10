@@ -87,13 +87,12 @@ class ConfigController extends AppController
                     DB::table('images_product')->truncate();
                     DB::table('product_details')->truncate();
                     DB::table('product_detail_groups')->truncate();
-                    DB::table('services')->truncate();
-                    DB::table('service_groups')->truncate();
                     DB::table('posts')->truncate();
                     DB::table('banners')->truncate();
                     DB::table('orders')->truncate();
                     DB::table('order_details')->truncate();
                     DB::table('contacts')->truncate();
+                    DB::table('users')->truncate();
                     
                     DB::query('ALTER TABLE categories AUTO_INCREMENT = 1');
                     DB::query('ALTER TABLE vendors AUTO_INCREMENT = 1');
@@ -106,8 +105,7 @@ class ConfigController extends AppController
                     DB::query('ALTER TABLE images_product AUTO_INCREMENT = 1');
                     DB::query('ALTER TABLE product_details AUTO_INCREMENT = 1');
                     DB::query('ALTER TABLE product_detail_groups AUTO_INCREMENT = 1');
-                    DB::query('ALTER TABLE services AUTO_INCREMENT = 1');
-                    DB::query('ALTER TABLE service_groups AUTO_INCREMENT = 1');
+                    DB::query('ALTER TABLE users AUTO_INCREMENT = 1');
                     
                     $users = [
                         ['id' => 1, 'name' => 'Super Administrator',
@@ -164,14 +162,6 @@ class ConfigController extends AppController
             $data->facebook_fanpage = Utils::cnvNull($request->facebook_fanpage, '');
             
             if(Auth::user()->role_id == Common::SUPER_ADMIN) {
-                $data->mail_driver     = Utils::cnvNull($request->mail_driver, '');
-                $data->mail_host       = Utils::cnvNull($request->mail_host, '');
-                $data->mail_port       = Utils::cnvNull($request->mail_port, '');
-                $data->mail_from       = Utils::cnvNull($request->mail_from, '');
-                $data->mail_name       = Utils::cnvNull($request->mail_name, '');
-                $data->mail_encryption = Utils::cnvNull($request->mail_encryption, '');
-                $data->mail_account    = Utils::cnvNull($request->mail_account, '');
-                $data->mail_password   = Utils::cnvNull($request->mail_password, '');
                 $data->upload_banner_maximum_upload = Utils::cnvNull($request->upload_banner_maximum_upload, '');
                 $data->upload_logo_maximum_upload = Utils::cnvNull($request->upload_logo_maximum_upload, '');
                 $data->upload_image_maximum_upload = Utils::cnvNull($request->upload_image_maximum_upload, '');
@@ -185,7 +175,7 @@ class ConfigController extends AppController
                 $data->upload_photo_image_size = Utils::cnvNull($request->upload_photo_image_size, '');
                 $data->upload_web_logo_image_size = Utils::cnvNull($request->upload_web_logo_image_size, '');
                 $data->upload_web_ico_image_size = Utils::cnvNull($request->upload_web_ico_image_size, '');
-                $data->upload_avatar_image_size = Utils::cnvNull($request->upload_avatar_image_sizes, '');
+                $data->upload_avatar_image_size = Utils::cnvNull($request->upload_avatar_image_size, '');
             }
             $data->off = Utils::cnvNull($request->off, 0);
             $data->bank_info = Utils::cnvNull($request->bank_info, '');

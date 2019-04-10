@@ -127,12 +127,15 @@ class PostsController extends AppController
     }
     
     public function remove(Request $request) {
-        if($request->isMethod('get')) {
-            $id = $request->id;
-            $data = Post::find($id);
-            if($data->delete()) {
-                return redirect(route('auth_posts'))->with('success', trans('messages.REMOVE_SUCCESS'));
-            }
+        $result = ['code' => 404];
+        $ids = $request->ids;
+        $data = Post::whereIn('id', $ids)->get();
+        foreach($data as $dt) {
+            Utils::removeFile($dt->photo);
+        }
+        if(Post::destroy($ids)) {
+            $result['code'] = 200;
+            return response()->json($result);
         }
     }
 }
