@@ -33,40 +33,18 @@ class ApiController extends Controller
         $idCheck = $request->id_check;
         $itemName = trans($request->itemName);
         $check = false;
-        switch($table) {
-            case 0; // Vendors table
-                $data = Vendor::select('id')->where($col, $value)->first();
-                break;
-            case 1; // Categories table
-                $data = Category::select('id')->where($col, $value)->first();
-                break;
-            case 2; // Products table
-                $data = Product::select('id')->where($col, $value)->first();
-                break;
-            case 3; // Posts table
-                $data = Post::select('id')->where($col, $value)->first();
-                break;
-            case 4; // Users table
-                $data = User::select('id')->where($col, $value)->first();
-                break;
-            case 5: // Post Groups table
-                $data = PostGroups::select('id')->where($col, $value)->first();
-                break;
-            default:
-                break;
-        }
-        
+        $data = DB::table($table)->where($col, $value)->first();
         $check = true;
         
-        if($data && $idCheck != $data['id']) {
+        if($data && $idCheck != $data->id) {
             $check = false;
         }
         
-        $this->output['code'] = 200;
         if(!$check) {
-            $this->output['data'] = Utils::getValidateMessage('validation.unique', $itemName);
+            $this->output['error'] = trans('validation.unique', ['attribute' => $itemName]);
+            return response()->json($this->output, 500);
         }
-        
+        $this->output['code'] = 200;
         return response()->json($this->output);
     }
     

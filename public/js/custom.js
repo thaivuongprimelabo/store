@@ -28,6 +28,9 @@ var callAjax = function(url, data, page) {
 	    				successAlert('Đã xóa thành công');
 	    				search(1);
 	    				break;
+	    			case 'check-exists':
+	    				$('#submit_form').submit();
+	    				break;
 	    			case 'update_status':
 	    			case 'add-size':
 	    			case 'add-color':
@@ -38,6 +41,9 @@ var callAjax = function(url, data, page) {
 	    				break;
 	    		}
 	    	}
+	    },
+	    error: function(jqXHR, textStatus, errorThrown ) {
+	    	errorAlert(jqXHR.responseJSON.error);
 	    }
 	});
 	return output;
@@ -69,7 +75,7 @@ var search = function(page_number) {
 var checkExist = function(input) {
 	var data = {
 	   	type: 'post',
-		async : false,
+		async : true,
 		value : input.value,
 		col : input.col,
 		table: input.table,
@@ -77,13 +83,7 @@ var checkExist = function(input) {
 		id_check: input.id_check
 	};
 
-	var output = callAjax(input.url, data, 'check-exists');
-	if(output.code === 200 && output.data.length > 0) {
-		alert(output.data);
-		return false;
-	}
-	
-	return true;
+	callAjax(input.url, data, 'check-exists');
 }
 
 var checkFileSize = function(element, size) {

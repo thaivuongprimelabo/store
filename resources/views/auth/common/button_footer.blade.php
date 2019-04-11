@@ -1,5 +1,5 @@
 @php
-	$id = isset($id) ? $id : 'save';
+	$id = isset($name) && $name == 'users' ? 'save_user' : 'save';
 @endphp
 <div class="box-footer">
 	@if($name != 'config')

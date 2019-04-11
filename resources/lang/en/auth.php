@@ -493,7 +493,7 @@ $auth = [
                 'disabled' => true
             ],
             'email' => [
-                'type' => 'link',
+                'type' => 'text',
                 'text' => 'E-mail',
                 'disabled' => true
             ],

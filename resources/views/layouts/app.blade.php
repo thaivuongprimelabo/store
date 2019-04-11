@@ -196,7 +196,15 @@
 			if(editor === 'small') {
 	        	CKEDITOR.replace( this.id, {height: height, customConfig: '{{ url('admin/js/editor.small.js') }}' });
 			} else {
-				CKEDITOR.replace( this.id, {height: height, customConfig: '{{ url('admin/js/editor.full.js') }}' });
+				CKEDITOR.replace( this.id, {
+			        filebrowserBrowseUrl : '{{ asset('/kcfinder/browse.php?opener:ckeditor&type:files') }}',
+			        filebrowserImageBrowseUrl : '{{ asset('/kcfinder/browse.php?opener:ckeditor&type:images') }}',
+			        filebrowserFlashBrowseUrl : '{{ asset('/kcfinder/browse.php?opener:ckeditor&type:flash') }}',
+			        filebrowserUploadUrl : '{{ asset('/kcfinder/upload.php?opener:ckeditor&type:files') }}',
+			        filebrowserImageUploadUrl : '{{ asset('/kcfinder/upload.php?opener:ckeditor&type:images') }}',
+			        filebrowserFlashUploadUrl : '{{ asset('/kcfinder/upload.php?opener:ckeditor&type:flash') }}',
+					height: height, 
+					customConfig: '{{ url('admin/js/editor.full.js') }}' });
 			}
 	    });
 	@endif
@@ -268,20 +276,22 @@
 		$('form').submit();
     });
 
-    $('#save').click(function(e) {
+    $('#save, #save_user').click(function(e) {
     	if($("#submit_form").valid()) {
-//         	var input = {
-//         	   	value: $('#name').val(),
-//     			col : 'name',
-//     			itemName : $('#name').attr('placeholder'),
-//     			url: '{{ route('check_exists') }}',
-//     			id_check: $('#id_check').val()
-//     		};
-    
-//         	if(checkExist(input)) {
-//     			$('#submit_form').submit();
-//         	}
-    		$('#submit_form').submit();
+
+        	var col = 'name';
+        	if($(this).attr('id') === 'save_user') {
+				col = 'email';
+        	}
+        	var input = {
+        	   	value: $('#' + col).val().trim(),
+    			col : col,
+    			itemName : $('#' + col).attr('placeholder'),
+    			url: '{{ route('check_exists') }}',
+    			id_check: $('#id_check').val(),
+    			table: '{{ $name }}',
+    		};
+        	checkExist(input);
     	}
     });
 
