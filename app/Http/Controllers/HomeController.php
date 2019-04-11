@@ -103,15 +103,17 @@ class HomeController extends AppController
                         'products.is_best_selling',
                         'products.is_popular',
                         'products.discount',
-                        'products.status'
+                        'products.status',
+                        'products.seo_keywords',
+                        'products.seo_description'
                     )
                     ->where(['products.status' => Status::ACTIVE, 'products.name_url' => $slug])->first();
         
         $this->setSEO([
             'title' => $product->name,
-            'summary' => $product->summary,
+            'summary' => $product->getSEODescription(),
             'section' => $product->getCategoryName(),
-            'keywords' => [$product->name, $product->getCategoryName(), $this->output['config']['web_name']],
+            'keywords' => [$product->getSEOKeywords(), $product->getCategoryName(), $this->output['config']['web_name']],
             'link' => $product->getLink(),
             'type' => 'product',
             'image' => $product->getFirstImage()
@@ -290,9 +292,9 @@ class HomeController extends AppController
         
         $this->setSEO([
             'title' => $post->name,
-            'summary' => $post->description,
+            'summary' => $post->getSEODescription(),
             'section' => $postGroup->getName(),
-            'keywords' => [$post->name, $postGroup->getName(), $this->output['config']['web_name']],
+            'keywords' => [$post->getSEOKeywords(), $postGroup->getName(), $this->output['config']['web_name']],
             'link' => $post->getLink(),
             'type' => 'post',
             'image' => $post->getImage()
@@ -339,7 +341,7 @@ class HomeController extends AppController
             $page = $request->page_name;
             $sort_by = $request->sort_by;
             $price_search = $request->price_search;
-            $orderBy = 'products.id ASC';
+            $orderBy = 'products.created_at DESC';
             $keyword = $request->keyword;
             
             if(!Utils::blank($sort_by)) {
@@ -357,7 +359,12 @@ class HomeController extends AppController
             switch($page) {
                     
                 case 'category-page':
-                    $whereIn = 'category_id IN (SELECT id FROM categories WHERE parent_id = ' . $id . ' OR id = ' . $id . ')';
+                    $category = Category::select('parent_id')->where('id', $id)->first();
+                    if($category['parent_id'] == 0) {
+                        $whereIn = 'category_id IN (SELECT id FROM categories WHERE parent_parent_id = ' . $id . ')';
+                    } else {
+                        $whereIn = 'category_id = ' . $id;
+                    }
                     $data = Product::active()->whereRaw($whereIn)->whereRaw($wherePriceSearch)->orderByRaw($orderBy)->paginate(Common::LIMIT_PRODUCT_SHOW);
                     break;
                     

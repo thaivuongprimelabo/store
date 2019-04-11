@@ -35,47 +35,50 @@
 								$products = $category->getProductInCategory($type);
 							@endphp
 							<div class="products products-view-grid">
-								<div class="row">
-									@foreach($products as $k=>$product)
-									<div class="col-xs-6 col-xss-6 col-sm-4 col-md-3 col-lg-3">
-										<div class="product-box">															
-											<div class="product-thumbnail flexbox-grid">	
-												<a href="{{ $product->getLink() }}" title="{{ $product->getName() }}">
-													<img src="{{ $product->getFirstImage() }}"  data-lazyload="{{ $product->getFirstImage() }}" alt="{{ $product->getName() }}">
-												</a>
-												{!! $product->getDisCount() !!} 	
-												<div class="product-action hidden-md hidden-sm hidden-xs clearfix">
-													<form action="?" method="post" class="variants form-nut-grid margin-bottom-0" enctype="multipart/form-data">
-    													<div>
-    														<input type="hidden" name="variantId" value="17898181" />
-    														<a class="btn-buy btn-cart btn btn-primary left-to add_to_cart" data-qty="1" data-id="{{ $product->id }}" title="{{ trans('shop.cart.order') }}">
-    															<i class="fa fa-shopping-bag"></i>						
-    														</a>
-    														
-    														<a href="{{ $product->getLink() }}" class="btn-gray btn_view btn right-to">
-    															<i class="fa fa-eye"></i>
-    														</a>
-    													</div>
-													</form>
-												</div>
+								@foreach($products as $k=>$product)
+								<div class="col-xs-6 col-xss-6 col-sm-4 col-md-3 col-lg-3">
+									<div class="product-box">															
+										<div class="product-thumbnail flexbox-grid">	
+											<a href="{{ $product->getLink() }}" title="{{ $product->getName() }}">
+												<img src="{{ $product->getFirstImage() }}"  data-lazyload="{{ $product->getFirstImage() }}" alt="{{ $product->getName() }}">
+											</a>
+											{!! $product->getDisCount() !!} 	
+											<div class="product-action hidden-md hidden-sm hidden-xs clearfix">
+												<form action="?" method="post" class="variants form-nut-grid margin-bottom-0" enctype="multipart/form-data">
+													<div>
+														<input type="hidden" name="variantId" value="17898181" />
+														@if($product->price > 0)
+														<a class="btn-buy btn-cart btn btn-primary left-to add_to_cart" data-qty="1" data-id="{{ $product->id }}" title="{{ trans('shop.cart.order') }}">
+															<i class="fa fa-shopping-bag"></i>						
+														</a>
+														@endif
+														<a href="{{ $product->getLink() }}" class="btn-gray btn_view btn right-to">
+															<i class="fa fa-eye"></i>
+														</a>
+													</div>
+												</form>
 											</div>
-											<div class="product-info a-center">
-												<h3 class="product-name"><a href="{{ $product->getLink() }}" title="{{ $product->getName() }}">{{ $product->getName() }}</a></h3>
-												<div class="price-box clearfix">
-													<div class="special-price">
-														<span class="price product-price">{{ $product->getPrice() }}</span>
-													</div>
-													@if($product->discount > 0)
-													<div class="old-price">
-														<span class="price product-price-old">{{ $product->getPriceDiscount() }}</span>
-													</div>
-													@endif											
+										</div>
+										<div class="product-info a-center">
+											<h3 class="product-name"><a href="{{ $product->getLink() }}" title="{{ $product->getName() }}">{{ $product->getName() }}</a></h3>
+											<div class="price-box clearfix">
+												@if($product->discount > 0)
+												<div class="special-price">
+													<span class="price product-price">{{ $product->getPriceDiscount() }}</span>
 												</div>
+												<div class="old-price">
+													<span class="price product-price-old">{{ $product->getPrice() }}</span>
+												</div>
+												@else
+												<div class="special-price">
+													<span class="price product-price">{{ $product->getPrice() }}</span>
+												</div>
+												@endif											
 											</div>
 										</div>
 									</div>
-									@endforeach
 								</div>
+								@endforeach
 							</div>
 						</div>
 					</div>

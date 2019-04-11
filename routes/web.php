@@ -132,6 +132,7 @@ Route::group(['prefix' => ''], function () {
     Route::get('/cart' . $config['url_ext'], 'CartController@index')->name('cart');
     Route::post('/cart/add-to-cart', 'CartController@addToCart')->name('addToCart');
     Route::post('/cart/update-cart', 'CartController@updateCart')->name('updateCart');
+    Route::post('/cart/update-cart-detail', 'CartController@updateCartDetail')->name('updateCartDetail');
     Route::post('/cart/remove-item', 'CartController@removeItem')->name('removeItem');
     Route::post('/cart/remove-detail-item', 'CartController@removeDetailItem')->name('removeDetailItem');
     Route::match(['get', 'post'], '/cart/checkout' . $config['url_ext'], 'CartController@checkout')->name('checkout');

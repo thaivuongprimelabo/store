@@ -36,9 +36,9 @@
 					</div>
 					<div style="width: 18%" class="a-center">
 						<div class="input_qty_pr relative ">
-							<button class="reduced_pop items-count btn-minus" data-id="{{ $cartItem->getId() }}" type="button">–</button>
+							<button class="reduced_pop items-count btn-minus btn-minus-item" data-id="{{ $cartItem->getId() }}" type="button">–</button>
 							<input type="text" maxlength="12" min="0" class="input-text number-sidebar input_pop input_pop" data-id="{{ $cartItem->getId() }}" size="4" value="{{ $cartItem->getQty() }}">
-							<button class="increase_pop items-count btn-plus" data-id="{{ $cartItem->getId() }}" type="button">+</button>
+							<button class="increase_pop items-count btn-plus btn-plus-item" data-id="{{ $cartItem->getId() }}" type="button">+</button>
 						</div>
 					</div>
 					<div style="width: 13%;" class="a-center">
@@ -53,7 +53,7 @@
     					$detailList = $cartItem->getDetailList();
     				@endphp
     				@foreach($detailList as $detail)
-    				<div class="item-cart detail-item-cart">
+    				<div class="item-cart main-item-cart">
     					<div style="width: 19%" class="image">
     					</div>
     					<div style="width: 28%; align-items: flex-start;"
@@ -69,7 +69,11 @@
     					</div>
     					<div style="width: 18%" class="a-center">
     						<div class="input_qty_pr relative ">
-    							{{ $detail->getQty() }}
+    							<div class="input_qty_pr relative ">
+        							<button class="reduced_pop items-count btn-minus-detail btn-minus" data-product-id="{{ $cartItem->getId() }}" data-qty="{{ $cartItem->getQty() }}" data-id="{{ $detail->getId() }}" type="button">–</button>
+        							<input type="text" maxlength="12" min="0" class="input-text number-sidebar input_pop input_pop qty-detail" data-id="{{ $detail->getId() }}" size="4" value="{{ $detail->getQty() }}">
+        							<button class="increase_pop items-count btn-plus-detail btn-plus" data-product-id="{{ $cartItem->getId() }}" data-qty="{{ $cartItem->getQty() }}" data-id="{{ $detail->getId() }}" type="button">+</button>
+        						</div>
     						</div>
     					</div>
     					<div style="width: 13%;" class="a-center">

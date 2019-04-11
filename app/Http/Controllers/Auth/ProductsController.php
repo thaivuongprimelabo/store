@@ -67,10 +67,10 @@ class productsController extends AppController
                 DB::beginTransaction();
                 
                 try {
-                    
+                    $dt = date('YmdHis');
                     $data = new Product();
                     $data->name          = Utils::cnvNull($request->name, '');
-                    $data->name_url      = Utils::createNameUrl(Utils::cnvNull($request->name, ''));
+                    $data->name_url      = Utils::createNameUrl(Utils::cnvNull($request->name, '')) . '-' . $dt;
                     $data->price         = Utils::cnvNull($request->price, '0');
                     $data->category_id   = Utils::cnvNull($request->category_id, '0');
                     $data->vendor_id     = Utils::cnvNull($request->vendor_id, '0');
@@ -81,6 +81,8 @@ class productsController extends AppController
                     $data->is_new        = Utils::cnvNull($request->is_new, 0);
                     $data->is_popular        = Utils::cnvNull($request->is_popular, 0);
                     $data->is_best_selling   = Utils::cnvNull($request->is_best_selling, 0);
+                    $data->seo_keywords      = Utils::cnvNull($request->seo_keywords, '');
+                    $data->seo_description   = Utils::cnvNull($request->seo_description, '');
                     $data->created_at    = date('Y-m-d H:i:s');
                     
                     if($data->save()) {
@@ -124,6 +126,7 @@ class productsController extends AppController
         
         if($request->isMethod('post')) {
             
+            $request->description = str_replace('\r\n', '', $request->description);
             $validator = Validator::make($request->all(), $this->rules);
             
             if (!$validator->fails()) {
@@ -140,6 +143,8 @@ class productsController extends AppController
                 $data->is_new        = Utils::cnvNull($request->is_new, 0);
                 $data->is_popular        = Utils::cnvNull($request->is_popular, 0);
                 $data->is_best_selling   = Utils::cnvNull($request->is_best_selling, 0);
+                $data->seo_keywords      = Utils::cnvNull($request->seo_keywords, '');
+                $data->seo_description   = Utils::cnvNull($request->seo_description, '');
                 $data->updated_at    = date('Y-m-d H:i:s');
                 
                 if($data->save()) {
@@ -160,6 +165,8 @@ class productsController extends AppController
                     
                     return redirect(route('auth_products_edit', ['id' => $request->id]))->with('success', trans('messages.UPDATE_SUCCESS'));
                 }
+            } else {
+                return redirect(route('auth_products_edit', ['id' => $request->id]))->with('error', trans('messages.ERROR'));
             }
         }
         

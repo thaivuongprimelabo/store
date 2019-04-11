@@ -125,6 +125,21 @@ class Cart {
         $this->session->put('cart', $this);
     }
     
+    public function updateCartDetail($pid, $did, $qty) {
+        foreach($this->cart as $cartItem) {
+            if($cartItem->getId() == $pid) {
+                $detailList = $cartItem->getDetailList();
+                foreach($detailList as $detail) {
+                    if($detail->getId() == $did) {
+                        $detail->setQty($qty);
+                    }
+                }
+            }
+        }
+        
+        $this->session->put('cart', $this);
+    }
+    
     public function removeItem($id) {
         $cart = [];
         foreach($this->cart as $cartItem) {

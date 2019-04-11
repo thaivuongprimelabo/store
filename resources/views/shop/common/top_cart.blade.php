@@ -24,7 +24,7 @@
     									@foreach($detailList as $detail)
     									<li style="position: relative;">
     										<small style="display: block;height:15px;">{{ $detail->getGroupName() }}:</small>
-    										<span class="label label-success" style="color:#ffffff; font-weight: bold; margin-left: 10px;">{{ $detail->getName() }} - {{ $detail->getPriceFormat() }}</span>
+    										<span class="label label-success" style="color:#ffffff; font-weight: bold; margin-left: 10px;">{{ $detail->getName() }} - {{ $detail->getPriceFormat() }}</span> x {{ $detail->getQty() }}
     										<a href="javascript:void(0)" class="remove-detail-item" title="Xóa {{ $detail->getGroupName() }}" data-product-id="{{ $cartItem->getId() }}" data-id="{{ $detail->getId() }}"><i class="fa fa-remove" style="top:16px;"></i></a>
     									</li>
     									@endforeach

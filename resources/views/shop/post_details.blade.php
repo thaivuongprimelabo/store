@@ -11,7 +11,8 @@
     						<div class="article-details">
     							<h1 class="article-title"><a href="{{ $data->getLink() }}">{{ $data->getTitle() }}</a></h1>
     							<div class="post-time">
-    								{{ $data->getCreatedAt() }}
+    								<label>Ngày đăng: {{ $data->getCreatedAt() }}</label> 
+    								@include('shop.common.share_social')
     							</div>
     							<div class="article-image">
     								<a href="{{ $data->getLink() }}">

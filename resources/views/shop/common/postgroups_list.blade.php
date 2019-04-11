@@ -8,7 +8,7 @@
 			<ul class="nav navbar-pills">
 				@foreach($postGroups as $group)
 				<li class="nav-item">
-					<i class="fa fa-caret-right"></i>
+					<i class="fa fa-arrow-circle-right"></i>
 					<a class="nav-link" href="{{ $group->getLink() }}">{{ $group->getName() }}</a>
 				</li>
 				@endforeach

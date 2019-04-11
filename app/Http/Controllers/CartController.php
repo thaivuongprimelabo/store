@@ -36,9 +36,11 @@ class CartController extends AppController
     public function index(Request $request) {
 
         $this->output['breadcrumbs'] = [
-            ['link' => '#', 'text' => 'Giỏ hàng']
+            ['link' => '#', 'text' => trans('shop.cart_txt')]
         ];
-
+        
+        $this->setSEO(['title' => trans('shop.cart_txt')]);
+        
         return view('shop.cart', $this->output);
     }
     
@@ -64,21 +66,20 @@ class CartController extends AppController
                 $cartItem->setQty($qty);
                 $cartItem->setLink($product->getLink());
                 
-                $cart->addItem($cartItem);
-                
                 if($items != null && count($items)) {
                     foreach($items as $item) {
                         $detailItem = new CartItem();
                         $detailItem->setId($item['id']);
                         $detailItem->setName($item['name']);
                         $detailItem->setPrice($item['price']);
-                        $detailItem->setQty(1);
+                        $detailItem->setQty($qty);
                         $detailItem->setGroupId($item['group_id']);
                         $detailItem->setGroupName($item['group_name']);
-                        $cart->addDetailItem($pid, $detailItem);
+                        $cartItem->addDetailItem($detailItem);
                     }
-                    
                 }
+                
+                $cart->addItem($cartItem);
             }
             
             $result['#cart_1'] = view('shop.common.cart_item', ['cart' => $cart])->render();
@@ -98,6 +99,23 @@ class CartController extends AppController
             
             $cart = Cart::getInstance($request->getSession());
             $cart->updateCart($pid, $qty);
+            
+            $result['.cartCount2'] = $cart->getCount();
+            $result['#top_cart'] = $cart->getTopCart();
+            $result['#main_cart'] = $cart->getMainCart();
+            return response()->json($result);
+        }
+    }
+    
+    public function updateCartDetail(Request $request) {
+        $result = [];
+        if($request->ajax()) {
+            $pid = $request->pid;
+            $did = $request->did;
+            $qty = $request->qty;
+            
+            $cart = Cart::getInstance($request->getSession());
+            $cart->updateCartDetail($pid, $did, $qty);
             
             $result['.cartCount2'] = $cart->getCount();
             $result['#top_cart'] = $cart->getTopCart();

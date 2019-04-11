@@ -235,7 +235,7 @@ $auth = [
                 'type' => 'select',
                 'text' => 'Chọn loại cha',
                 'empty_text' => '(Không chọn mặc định đây là loại cha)',
-                'table' => \App\Constants\Common::CATEGORIES
+                'table' => 'CATEGORY_PARENT'
             ],
             'status' => [
                 'type' => 'checkbox',
@@ -574,34 +574,43 @@ $auth = [
                 'empty_text' => 'Lọc theo trạng thái'
             ]
         ],
-        'form' => [
-            'name' => [
-                'type' => 'text',
-                'text' => 'Tựa đề',
-                'maxlength' => \App\Constants\Common::NAME_MAXLENGTH
+        'tab_form' => [
+            'tab_form_1' => [
+                'title' => 'Thông tin bài viết',
+                'name' => [
+                    'type' => 'text',
+                    'text' => 'Tựa đề',
+                    'maxlength' => \App\Constants\Common::NAME_MAXLENGTH
+                ],
+                'upload_photo' => [
+                    'type' => 'file_simple',
+                    'text' => 'Hình ảnh'
+                ],
+                'description' => [
+                    'type' => 'editor',
+                    'text' => 'Mô tả ngắn',
+                    'maxlength' => \App\Constants\Common::DESC_MAXLENGTH
+                ],
+                'content' => [
+                    'type' => 'editor',
+                    'text' => 'Nội dung',
+                    'editor' => 'full',
+                    'height' => 400
+                ],
+                'post_group_id' => [
+                    'type' => 'select',
+                    'text' => 'Nhóm',
+                    'table' => 'POST_GROUPS'
+                ],
+                'status' => [
+                    'type' => 'checkbox',
+                    'text' => 'Xuất bản',
+                    'checked' => true
+                ]
             ],
-            'upload_photo' => [
-                'type' => 'file_simple',
-                'text' => 'Hình ảnh'
-            ],
-            'description' => [
-                'type' => 'textarea',
-                'text' => 'Mô tả ngắn',
-                'maxlength' => \App\Constants\Common::DESC_MAXLENGTH
-            ],
-            'content' => [
-                'type' => 'editor',
-                'text' => 'Nội dung'
-            ],
-            'post_group_id' => [
-                'type' => 'select',
-                'text' => 'Nhóm',
-                'table' => 'POST_GROUPS'
-            ],
-            'status' => [
-                'type' => 'checkbox',
-                'text' => 'Xuất bản',
-                'checked' => true
+            'tab_form_2' => [
+                'title' => 'SEO',
+                'view' => 'auth.common.seo'
             ]
         ],
         'rules' => [
@@ -1058,7 +1067,7 @@ $auth = [
             ],
             'category_id' => [
                 'type' => 'data_select',
-                'table' => \App\Constants\Common::CATEGORIES,
+                'table' => 'CATEGORY_PRODUCT',
                 'empty_text' => 'Lọc theo loại'
             ],
             'vendor_id' => [
@@ -1067,78 +1076,89 @@ $auth = [
                 'empty_text' => 'Lọc theo nhà cung cấp'
             ]
         ],
-        'tab_form' => true,
-        'form' => [
-            'name' => [
-                'type' => 'text',
-                'text' => 'Tên sản phẩm',
-                'maxlength' => \App\Constants\Common::NAME_MAXLENGTH
+        'tab_form' => [
+            'tab_form_1' => [
+                'title' => 'Thông tin sản phẩm',
+                'name' => [
+                    'type' => 'text',
+                    'text' => 'Tên sản phẩm',
+                    'maxlength' => \App\Constants\Common::NAME_MAXLENGTH
+                ],
+                'price' => [
+                    'type' => 'text',
+                    'text' => 'Giá bán',
+                    'maxlength' => \App\Constants\Common::PRICE_PRODUCT_MAXLENGTH
+                ],
+                'discount' => [
+                    'type' => 'number',
+                    'text' => 'Tỷ lệ giảm giá (%)',
+                    'value' => 0,
+                    'maxlength' => \App\Constants\Common::DISCOUNT_MAXLENGTH
+                ],
+                'category_id' => [
+                    'type' => 'select',
+                    'text' => 'Loại sản phẩm',
+                    'empty_text' => 'Chọn loại sản phẩm',
+                    'table' => 'CATEGORY_PRODUCT'
+                ],
+                'vendor_id' => [
+                    'type' => 'select',
+                    'text' => 'Nhà cung cấp',
+                    'empty_text' => 'Chọn nhà cung cấp',
+                    'table' => \App\Constants\Common::VENDORS
+                ],
+                'upload_image' => [
+                    'type' => 'file_multiple',
+                    'text' => 'Hình sản phẩm',
+                ],
+                'summary' => [
+                    'type' => 'editor',
+                    'text' => 'Mô tả',
+                    'maxlength' => \App\Constants\Common::DESC_MAXLENGTH,
+                ],
+                'description' => [
+                    'type' => 'editor',
+                    'text' => 'Thông tin chi tiết',
+                    'editor' => 'full',
+                    'height' => '400'
+                ],
+                'status' => [
+                    'type' => 'checkbox',
+                    'text' => $product_status['available'],
+                    'checked' => true,
+                ],
+                'is_new' => [
+                    'type' => 'checkbox',
+                    'text' => 'Sản phẩm mới',
+                    'checked' => true,
+                    'value' => \App\Constants\ProductType::IS_NEW
+                ],
+                'is_popular' => [
+                    'type' => 'checkbox',
+                    'text' => 'Sản phẩm được quan tâm',
+                    'checked' => true,
+                    'value' => \App\Constants\ProductType::IS_POPULAR
+                ],
+                'is_best_selling' => [
+                    'type' => 'checkbox',
+                    'text' => 'Sản phẩm bán chạy',
+                    'checked' => true,
+                    'value' => \App\Constants\ProductType::IS_BEST_SELLING
+                ]
             ],
-            'price' => [
-                'type' => 'currency',
-                'text' => 'Giá bán',
-                'maxlength' => \App\Constants\Common::PRICE_MAXLENGTH
+            'tab_form_2' => [
+                'title' => 'Đăng ký các gói bảo hành, phụ kiện, combo, khuyến mãi...',
+                'view' => 'auth.products.tab_form_2'
             ],
-            'discount' => [
-                'type' => 'number',
-                'text' => 'Tỷ lệ giảm giá (%)',
-                'value' => 0,
-                'maxlength' => \App\Constants\Common::DISCOUNT_MAXLENGTH
+            'tab_form_3' => [
+                'title' => 'SEO',
+                'view' => 'auth.common.seo'
             ],
-            'category_id' => [
-                'type' => 'select',
-                'text' => 'Loại sản phẩm',
-                'empty_text' => 'Chọn loại sản phẩm',
-                'table' => 'CATEGORY_PRODUCT'
-            ],
-            'vendor_id' => [
-                'type' => 'select',
-                'text' => 'Nhà cung cấp',
-                'empty_text' => 'Chọn nhà cung cấp',
-                'table' => \App\Constants\Common::VENDORS
-            ],
-            'upload_image' => [
-                'type' => 'file_multiple',
-                'text' => 'Hình sản phẩm',
-            ],
-            'summary' => [
-                'type' => 'textarea',
-                'text' => 'Mô tả',
-                'maxlength' => \App\Constants\Common::DESC_MAXLENGTH
-            ],
-            'description' => [
-                'type' => 'editor',
-                'text' => 'Chi tiết',
-            ],
-            'status' => [
-                'type' => 'checkbox',
-                'text' => $product_status['available'],
-                'checked' => true,
-            ],
-            'is_new' => [
-                'type' => 'checkbox',
-                'text' => 'Sản phẩm mới',
-                'checked' => true,
-                'value' => \App\Constants\ProductType::IS_NEW
-            ],
-            'is_popular' => [
-                'type' => 'checkbox',
-                'text' => 'Sản phẩm được quan tâm',
-                'checked' => true,
-                'value' => \App\Constants\ProductType::IS_POPULAR
-            ],
-            'is_best_selling' => [
-                'type' => 'checkbox',
-                'text' => 'Sản phẩm bán chạy',
-                'checked' => true,
-                'value' => \App\Constants\ProductType::IS_BEST_SELLING
-            ]
         ],
         'rules' => [
             'name' => 'required|max:' . \App\Constants\Common::NAME_MAXLENGTH,
-            'price' => 'max:' . \App\Constants\Common::PRICE_MAXLENGTH,
+            'price' => 'max:' . \App\Constants\Common::PRICE_PRODUCT_MAXLENGTH,
             'discount' => 'max:' . \App\Constants\Common::DISCOUNT_MAXLENGTH,
-            'summary' => 'max:' . \App\Constants\Common::DESC_MAXLENGTH,
         ]
     ],
     /*------------ Users page ------------------- */
@@ -1495,7 +1515,6 @@ $auth = [
     'edit_box_title' => 'Thông tin cập nhật',
     'length_text' => ' (Tối đã {0} ký tự)',
     'product_info' => 'Thông tin sản phẩm',
-    'services' => 'Đăng ký các gói bảo hành, phụ kiện, combo, khuyến mãi...',
     'status' => [
         'unactive' => 'Tạm dừng',
         'active' => 'Đang hoạt động',

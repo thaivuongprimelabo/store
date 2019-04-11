@@ -179,7 +179,6 @@
 <script src="{{ url('admin/dist/js/demo.js') }}"></script>
 <!-- CK Editor -->
 <script src="{{ url('admin/bower_components/ckeditor/ckeditor.js') }}"></script>
-<script src="{{ url('admin/js/editor.small.js') }}"></script>
 <script src="{{ url('admin/js/jquery.validate.js') }}" type="text/javascript"></script>
 <script src="{{ url('js/custom.js?t=' . time()) }}"></script>
 <script>
@@ -192,7 +191,13 @@
 
 	@if(isset($editor))
 		$('.fckeditor').each(function(e){
-	        CKEDITOR.replace( this.id, {height:400, customConfig: '{{ url('admin/js/' . $editor) }}' });
+			var editor = $(this).attr('data-editor');
+			var height = $(this).attr('data-height');
+			if(editor === 'small') {
+	        	CKEDITOR.replace( this.id, {height: height, customConfig: '{{ url('admin/js/editor.small.js') }}' });
+			} else {
+				CKEDITOR.replace( this.id, {height: height, customConfig: '{{ url('admin/js/editor.full.js') }}' });
+			}
 	    });
 	@endif
     
@@ -265,18 +270,18 @@
 
     $('#save').click(function(e) {
     	if($("#submit_form").valid()) {
-        	var input = {
-        	   	value: $('#name').val(),
-    			col : 'name',
-    			table: $('#table').val(),
-    			itemName : $('#name').attr('placeholder'),
-    			url: '{{ route('check_exists') }}',
-    			id_check: $('#id_check').val()
-    		};
+//         	var input = {
+//         	   	value: $('#name').val(),
+//     			col : 'name',
+//     			itemName : $('#name').attr('placeholder'),
+//     			url: '{{ route('check_exists') }}',
+//     			id_check: $('#id_check').val()
+//     		};
     
-        	if(checkExist(input)) {
-    			$('#submit_form').submit();
-        	}
+//         	if(checkExist(input)) {
+//     			$('#submit_form').submit();
+//         	}
+    		$('#submit_form').submit();
     	}
     });
 

@@ -21,6 +21,20 @@
 							<li class="dropdown-submenu nav-item">
 								<i class="fa fa-caret-right"></i>
 								<a class="nav-link" href="{{ $child->getLink() }}">{{ $child->getName() }} </a>
+								@php
+									$childCategories1 = $child->getChildCategory();
+								@endphp
+								@if($childCategories1->count())
+								<i class="fa fa-angle-down"></i>
+								<ul class="dropdown-menu">
+								@foreach($childCategories1 as $child1)
+								<li class="dropdown-submenu nav-item">
+									<i class="fa fa-caret-right"></i>
+									<a class="nav-link" href="{{ $child1->getLink() }}">{{ $child1->getName() }} </a>
+								</li>
+								@endforeach
+								</ul>
+								@endif
 							</li>
 						@endforeach
 					</ul>

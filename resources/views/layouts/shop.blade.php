@@ -113,13 +113,58 @@
  				 callAjax('{{ route('addToCart') }}', data);
      		 });
 
-    		 $(document).on('click', '.btn-minus', function(e) {
+    		 $(document).on('click', '.btn-minus-detail', function(e) {
+        		 e.stopPropagation();
         		 var qty = Number($(this).next('.number-sidebar').val()) - 1;
         		 if(qty === 0) {
 					return false;
         		 }
 
         		 $(this).next('.number-sidebar').val(qty);
+
+        		 var data = {
+ 					type : 'post',
+ 		    		async : true,
+ 		    		pid: $(this).attr('data-product-id'),
+ 		    		did: $(this).attr('data-id'),
+ 		    		qty: qty,
+ 		    		container: ['#top_cart', '.cartCount2', '#main_cart'],
+  				 }
+
+  				 callAjax('{{ route('updateCartDetail') }}', data);
+        		 
+     		 });
+
+    		 $(document).on('click', '.btn-plus-detail', function(e) {
+        		 var qty = Number($(this).prev('.number-sidebar').val()) + 1;
+        		 var qty_item = Number($(this).attr('data-qty'));
+        		 if(qty > qty_item) {
+					return false;
+        		 }
+
+        		 $(this).next('.number-sidebar').val(qty);
+
+        		 var data = {
+ 					type : 'post',
+ 		    		async : true,
+ 		    		pid: $(this).attr('data-product-id'),
+ 		    		did: $(this).attr('data-id'),
+ 		    		qty: qty,
+ 		    		container: ['#top_cart', '.cartCount2', '#main_cart'],
+  				 }
+
+  				 callAjax('{{ route('updateCartDetail') }}', data);
+        		 
+     		 });
+
+    		 $(document).on('click', '.btn-minus-item', function(e) {
+        		 var qty = Number($(this).next('.number-sidebar').val()) - 1;
+        		 if(qty === 0) {
+					return false;
+        		 }
+
+        		 $(this).next('.number-sidebar').val(qty);
+        		 $('.qty-detail').attr('data-qty');
 
         		 var data = {
  					type : 'post',
@@ -134,13 +179,14 @@
         		 
      		 });
     		 
-    		 $(document).on('click', '.btn-plus', function(e) {
+    		 $(document).on('click', '.btn-plus-item', function(e) {
         		 var qty = Number($(this).prev('.number-sidebar').val()) + 1;
         		 if(qty > 20) {
 					return false;
         		 }
         		 
         		 $(this).prev('.number-sidebar').val(qty);
+        		 $('.qty-detail').attr('data-qty');
 
         		 var data = {
   					type : 'post',

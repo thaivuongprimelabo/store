@@ -58,7 +58,7 @@ class Category extends Model
                 break;
         }
         
-        $whereIn = 'category_id IN (SELECT id FROM categories WHERE parent_id = ' . $this->id . ' OR id = ' . $this->id . ')';
+        $whereIn = 'category_id IN (SELECT id FROM categories c1 WHERE c1.parent_parent_id = ' . $this->id . ')';
         
         $products = Product::where($wheres)->whereRaw($whereIn)->orderBy('created_at', 'DESC')->limit(Common::LIMIT_PRODUCT_SHOW_TAB)->get();
         return $products;

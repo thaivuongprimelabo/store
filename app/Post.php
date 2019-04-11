@@ -31,6 +31,14 @@ class Post extends Model
         return $this->description;
     }
     
+    public function getSEOKeywords() {
+        return $this->seo_keywords;
+    }
+    
+    public function getSEODescription() {
+        return $this->seo_description;
+    }
+    
     public function getCreatedAt() {
         return Utils::formatDate($this->created_at);
     }

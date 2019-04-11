@@ -330,7 +330,7 @@ class Utils {
         $html = '';
         $data = [];
         switch($table) {
-            case Common::CATEGORIES:
+            case 'CATEGORY_PARENT':
             case 'CATEGORY_PRODUCT':
                 $categories = Category::select('name', 'id')->where('parent_id', 0)->where('status', Status::ACTIVE)->get();
                 foreach($categories as $c) {
@@ -338,8 +338,14 @@ class Utils {
                     
                     $child = Category::select('name', 'id')->where('parent_id', $c->id)->where('status', Status::ACTIVE)->get();
                     foreach($child as $c1) {
-                        $c1->name = '-- ' . $c1->name;
+                        $c1->name = '|---- ' . $c1->name;
                         array_push($data, $c1);
+                        $child1 = Category::select('name', 'id')->where('parent_id', $c1->id)->where('status', Status::ACTIVE)->get();
+                        foreach($child1 as $c2) {
+                            $c2->name = '&nbsp;&nbsp;&nbsp;&nbsp;|---- ' . $c2->name;
+                            $c2->disabled = true;
+                            array_push($data, $c2);
+                        }
                     }
                 }
                 break;
@@ -384,10 +390,12 @@ class Utils {
         foreach($data as $item) {
             $id = is_object($item) ? $item->id : $item['id'];
             $name = is_object($item) ? $item->name : $item['name'];
+            $disabled = $table == 'CATEGORY_PARENT' && is_object($item) && isset($item->disabled) ? "disabled=disabled" : '';
+            if($item)
             if($selected == $id) {
                 $html .= '<option value="'. $id .'" selected>'. $name .'</option>';
             } else {
-                $html .= '<option value="'. $id .'">'. $name .'</option>';
+                $html .= '<option value="'. $id .'" ' . $disabled . '>'. $name .'</option>';
             }
         }
         
@@ -692,10 +700,10 @@ class Utils {
     }
     
     public static function formatCurrency($input) {
-        if(self::blank($input) || $input == 0) {
-            return trans('shop.price_contact');
+        if(is_numeric($input)) {
+            return number_format($input, 0, ',', '.') . Common::CURRENCY;
         }
-        return number_format($input, 0, ',', '.') . Common::CURRENCY;
+        return $input;
     }
     
     public static function generateList($config, $name, $data = null, $otherData = null, $key = '') {
@@ -899,26 +907,28 @@ class Utils {
         $auth_name = trans('auth.' . $name);
         if($forms == null) {
             
-            $auth_form = $auth_name['form'];
-            if(isset($auth_form['many_form'])) {
-                $multi_form_html = '';
-                foreach($auth_form as $key=>$forms) {
-                    if(Auth::user()->role_id == UserRole::ADMIN && ($key == 'mail_settings' || $key == 'upload_settings')) {
-                        continue;
+            if(isset($auth_name['form'])) {
+                $auth_form = $auth_name['form'];
+                if(isset($auth_form['many_form'])) {
+                    $multi_form_html = '';
+                    foreach($auth_form as $key=>$forms) {
+                        if(Auth::user()->role_id == UserRole::ADMIN && ($key == 'mail_settings' || $key == 'upload_settings')) {
+                            continue;
+                        }
+                        if($key == 'many_form') {
+                            continue;
+                        }
+                        $multi_form_html .= self::generateForm($config, $name, $data, $forms);
                     }
-                    if($key == 'many_form') {
-                        continue;
-                    }
-                    $multi_form_html .= self::generateForm($config, $name, $data, $forms);
+                    $multi_form_html .= view('auth.common.button_footer',['name' => $name, 'back_url' => route('auth_' . $name)])->render();
+                    return $multi_form_html;
+                } else {
+                    $forms = $auth_form;
                 }
-                $multi_form_html .= view('auth.common.button_footer',['name' => $name, 'back_url' => route('auth_' . $name)])->render();
-                return $multi_form_html;
-            } else {
-                $forms = $auth_form;
             }
         }
         
-        $tabForm = isset($auth_name['tab_form']) ? true : false;
+        $tabForm = isset($auth_name['tab_form']) ? $auth_name['tab_form'] : false;
         $id = isset($data->id) ? $data->id : 0;
         $form_html = '';
         
@@ -934,45 +944,46 @@ class Utils {
         }
         $header .= '</div>';
         
-        $body = '<div class="box-body">';
-        foreach($forms as $key=>$value) {
-            $body .= self::createElement($key, $value, $config, $name, $data);
-        }
-        $body .= '</div>';
         
         if($tabForm) {
             $form_html .= '<input type="hidden" name="id" id="id_check" value="' . $id . '" />';
             $form_html = '';
             $form_html .= '<div class="nav-tabs-custom">';
             $form_html .= '<ul class="nav nav-tabs">';
-            $form_html .= '<li class="active">';
-            $form_html .= '<a href="#tab-form-1" data-toggle="tab" aria-expanded="true"> '. trans('auth.product_info');
-            $form_html .= '</a>';
-            $form_html .= '</li>';
-            $form_html .= '<li>';
-            $form_html .= '<a href="#tab-form-2" data-toggle="tab"> ' . trans('auth.services');
-            $form_html .= '</a>';
-            $form_html .= '</li>';
-            $form_html .= '</ul>';
-            $form_html .= '<div class="tab-content fields-group">';
-            $form_html .= '<div class="tab-pane active" id="tab-form-1">';
-            $form_html .= $body;
-            $form_html .= '</div>';
-            $form_html .= '<div class="tab-pane" id="tab-form-2">';
-            $form_html .= '<div class="btn-group mb-1">';
-            $form_html .= '<button id="add_new_service" type="button" class="btn btn-sm btn-success" title="Add new services"><i class="fa fa-plus"></i> ' . trans('auth.button.add_service') . '</button>';
-            $form_html .= '</div>';
-            $form_html .= '<div id="services" class="form-group">';
-            if($data != null) {
-                $form_html .= $data->getServices();
+            
+            foreach($tabForm as $id=>$form) {
+                $form_html .= '<li class="' . ($id == 'tab_form_1' ? 'active' : '') . '">';
+                $form_html .= '<a href="#' . $id . '" data-toggle="tab" aria-expanded="true"> '. $form['title'];
+                $form_html .= '</a>';
+                $form_html .= '</li>';
             }
-            $form_html .= '</div>';
-            $form_html .= '</div>';
-            $form_html .= '</div>';
-            $form_html .= '</div>';
+            
+            $form_html .= '</ul>';
+            $form_html .= '<div class="tab-content">';
+            foreach($tabForm as $id=>$form) {
+                if(isset($form['view'])) {
+                    $body = view($form['view'],['data' => $data])->render();
+                } else {
+                    $body = '';
+                    foreach($form as $key=>$value) {
+                        $body .= self::createElement($key, $value, $config, $name, $data);
+                    }
+                }
+                
+                $form_html .= '<div class="tab-pane ' . ($id == 'tab_form_1' ? 'active' : '') . '" id="' . $id . '">';
+                $form_html .= $body;
+                $form_html .= '</div>';
+            }
+            
             $form_html .= view('auth.common.button_footer',['name' => $name, 'back_url' => route('auth_' . $name)])->render();
             
         } else {
+            $body = '<div class="box-body">';
+            foreach($forms as $key=>$value) {
+                $body .= self::createElement($key, $value, $config, $name, $data);
+            }
+            $body .= '</div>';
+            
             $form_html = '<div class="box box-primary">';
             $form_html .= $header;
             $form_html .= '<input type="hidden" name="id" id="id_check" value="' . $id . '" />';
@@ -1130,7 +1141,7 @@ class Utils {
                 
                 $valueCheckbox = isset($value['value']) ? $value['value'] : 1;
                 
-                $element_html .= '<label><input type="checkbox" name="' . $key . '" value="' . $valueCheckbox . '" ' . $checked . ' />' . $text . '</label>';
+                $element_html .= '<label><input type="checkbox" name="' . $key . '" value="' . $valueCheckbox . '" ' . $checked . ' />&nbsp;&nbsp;&nbsp;' . $text . '</label>';
                 
                 $element_html .= '</div>';
                 break;
@@ -1305,8 +1316,10 @@ class Utils {
                 break;
                 
             case 'editor':
+                $editor_type = isset($value['editor']) ? $value['editor'] : 'small';
+                $editor_height = isset($value['height']) ? $value['height'] : '200';
                 $element_html .= '<label>' .$text . '</label>';
-                $element_html .= '<textarea name="' . $key . '" id="' . $key . '" class="fckeditor" placeholder="' . $placeholder . '">' . $element_value . '</textarea>';
+                $element_html .= '<textarea name="' . $key . '" id="' . $key . '" class="fckeditor" data-height="' . $editor_height . '" data-editor="' . $editor_type . '" placeholder="' . $placeholder . '">' . $element_value . '</textarea>';
                 break;
                 
         }
@@ -1355,7 +1368,19 @@ class Utils {
                 }
                 
                 $msg_item = '';
-                $item_name = 'auth.' . $name . '.form.' . $k;
+                $auth_name = trans('auth.' . $name);
+                if(isset($auth_name['tab_form'])) {
+                    foreach($auth_name['tab_form'] as $tab) {
+                        foreach($tab as $kk=>$vv) {
+                            if($kk == $k) {
+                                $item_name = $vv['text'];
+                                break;
+                            }
+                        }
+                    }
+                } else {
+                    $item_name = $auth_name['form'][$k]['text'];
+                }
                 $value_compare = '';
                 switch($rule_name) {
                     case 'required':
@@ -1447,8 +1472,8 @@ class Utils {
     
     public static function createSidebarShop($position = 'category_list') {
         $html = '';
-        $categories = Category::select('id', 'name', 'name_url')->where('status', Status::ACTIVE)->where('parent_id', 0)->get();
         if($position == 'category_list') {
+            $categories = Category::select('id', 'name', 'name_url')->where('status', Status::ACTIVE)->where('parent_id', 0)->get();
             $html .= view('shop.common.category_list',compact('categories'))->render();
         }
         

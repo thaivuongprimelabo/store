@@ -15,12 +15,6 @@
 								<a href="{{ $images->first()->getImageLink() }}" data-rel="">
 									<img id="zoom_01" src="{{ $images->first()->getImageLink('medium') }}"  data-zoom-image="{{ $images->first()->getImageLink() }}" alt="{{ $data->getName() }}">
 								</a>
-<!-- 								<div class="hidden"> -->
-<!-- 									<div class="item"> -->
-<!-- 										<a href="{{ $images->first()->getImageLink('medium') }}" data-image="{{ $images->first()->getImageLink('medium') }}" data-zoom-image="{{ $images->first()->getImageLink('medium') }}" data-rel=""> -->
-<!-- 										</a> -->
-<!-- 									</div> -->
-<!-- 								</div> -->
 							</div>
 							
 							<div id="gallery_01" class="fixborder  owl-carousel owl-theme thumbnail-product" data-md-items="4" data-sm-items="4" data-xs-items="4" data-xss-items="2" data-margin="10" data-nav="true">
@@ -54,6 +48,7 @@
 								<input type="hidden" id="product_price" value="{{ $data->price }}" /> 
 							</div> <!-- Giá -->
 							@endif
+							@if($data->price > 0)
 							@php
 								$productDetails = $data->getProductDetails();
 							@endphp
@@ -70,13 +65,15 @@
 								@endforeach
 							</div>
 							@endforeach
+							@endif
 						</div>
 						<div class="product-summary product_description margin-bottom-15">
 							<div class="rte description">
-								{{ $data->getSummary() }}
+								{!! $data->getSummary() !!}</p>
 							</div>
 						</div>
 						<div class="form-product ">
+							@if($data->price > 0)
 							<form enctype="multipart/form-data" id="add-to-cart-form" action="?" method="post" class="form-inline margin-bottom-10 dqdt-form">
 								<div class="box-variant clearfix ">
 									<input type="hidden" name="variantId" value="17898174">
@@ -93,26 +90,9 @@
 									</button>
 								</div>
 							</form>
-							<div class="social-sharing">
-                                <div class="social-media" data-permalink="https://dualeo-x.bizwebvietnam.net/cherry-do-canada-loai-to-10">
-                                	<label>{{ trans('shop.share_url') }}: </label>
-                                	
-                                	<a target="_blank" href="//www.facebook.com/sharer.php?u={{ $data->getLink() }}" class="share-facebook" title="Chia sẻ lên Facebook">
-                                		<i class="fa fa-facebook-official"></i>
-                                	</a>
-                                	<a target="_blank" href="//twitter.com/intent/tweet?url={{ $data->getLink() }}" class="share-twitter" title="Chia sẻ lên Twitter">
-                                		<i class="fa fa-twitter"></i>
-                                	</a>
-                                	<a target="_blank" href="//pinterest.com/pin/create/button/?url={{ $data->getLink() }}" class="share-pinterest" title="Chia sẻ lên pinterest">
-                                		<i class="fa fa-pinterest"></i>
-                                	</a>
-                                	<a target="_blank" href="//plus.google.com/share?url={{ $data->getLink() }}" class="share-google" title="+1">
-                                		<i class="fa fa-google-plus"></i>
-                                	</a>
-                                </div>
-							</div>
+							@endif
+							@include('shop.common.share_social')
 						</div>
-
 					</div>
 				</div>
 				<div class="row">
@@ -129,7 +109,7 @@
 							</ul>
 							<div class="tab-1 tab-content">
 								<div class="rte">
-									{{ $data->getSummary() }}
+									<p>{!! $data->getSummary() !!}</p>
 								</div>
 							</div>
 							<div class="tab-2 tab-content">
@@ -148,6 +128,58 @@
 	</div>
 		
 </div>
+<section class="section featured-product wow fadeInUp mb-4">
+	<div class="container">
+		<div class="section-title a-center">
+			<h2><a href="/san-pham-noi-bat">Sản phẩm liên quan</a></h2>			
+			<p>Có phải bạn đang tìm những sản phẩm dưới đây</p>
+		</div>
+		<div class="owl-carousel home-owl-carousel upsell-product custom-carousel owl-theme outer-top-xs" data-lgg-items="4" data-lg-items='4' data-md-items='4' data-sm-items='3' data-xs-items="2" data-xss-items="2" data-nav="true">
+    		@php
+    			$products = $data->getRelatedProducts();
+    		@endphp
+    		@foreach($products as $k=>$product)
+    		<div class="item item-carousel">
+    			<div class="product-box">															
+    				<div class="product-thumbnail flexbox-grid">	
+    					<a href="{{ $product->getLink() }}" title="{{ $product->getName() }}">
+    						<img src="{{ $product->getFirstImage() }}"  data-lazyload="{{ $product->getFirstImage() }}" alt="{{ $product->getName() }}">
+    					</a>
+    					{!! $product->getDisCount() !!} 	
+    					<div class="product-action hidden-md hidden-sm hidden-xs clearfix">
+    						<form action="?" method="post" class="variants form-nut-grid margin-bottom-0" enctype="multipart/form-data">
+    							<div>
+    								@if($product->price > 0)
+    								<a class="btn-buy btn-cart btn btn-primary left-to add_to_cart" data-qty="1" data-id="{{ $product->id }}" title="{{ trans('shop.cart.order') }}">
+    									<i class="fa fa-shopping-bag"></i>						
+    								</a>
+    								@endif
+    								<a href="{{ $product->getLink() }}" class="btn-gray btn_view btn right-to">
+    									<i class="fa fa-eye"></i>
+    								</a>
+    							</div>
+    						</form>
+    					</div>
+    				</div>
+    				<div class="product-info a-center">
+    					<h3 class="product-name"><a href="{{ $product->getLink() }}" title="{{ $product->getName() }}">{{ $product->getName() }}</a></h3>
+    					<div class="price-box clearfix">
+    						<div class="special-price">
+    							<span class="price product-price">{{ $product->getPriceDiscount() }}</span>
+    						</div>
+    						@if($product->discount > 0)
+    						<div class="old-price">
+    							<span class="price product-price-old">{{ $product->getPrice() }}</span>
+    						</div>
+    						@endif											
+    					</div>
+    				</div>
+    			</div>
+    		</div>
+    		@endforeach
+		</div>
+	</div>
+</section>
 @endsection
 @section('script')
 <script type="text/javascript">

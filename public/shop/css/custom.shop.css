@@ -24,3 +24,7 @@ h2.title-head a {
 .main-container .col-main .cart .cart-tbody .detail-item-cart div {
 	height:50px;
 }
+
+.product_description p, .tab-content p, .details-pro .title-head {
+	word-wrap: break-word;
+}

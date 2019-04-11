@@ -14,6 +14,7 @@ return [
     'new_product_txt' => 'Sản phẩm mới',
     'best_selling_txt' => 'Bán chạy nhất',
     'popular_txt' => 'Sản phẩm nổi bật',
+    'discount_txt' => 'Đang giảm giá',
     'news_txt' => 'Tin cập nhật',
     'news_short_txt' => 'Tin tức vệ sinh an toàn thực phẩm cập nhật mới nhất<br> mỗi ngày cho bạn',
     'contact_txt' => 'Liên hệ',

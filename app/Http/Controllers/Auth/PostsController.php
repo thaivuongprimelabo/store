@@ -63,6 +63,8 @@ class PostsController extends AppController
                 $data->published_time_at = Utils::cnvNull($request->published_time_at, '');
                 $data->post_group_id      = Utils::cnvNull($request->post_group_id, 0);
                 $data->status            = Utils::cnvNull($request->status, 0);
+                $data->seo_keywords      = Utils::cnvNull($request->seo_keywords, '');
+                $data->seo_description   = Utils::cnvNull($request->seo_description, '');
                 $data->created_at        = date('Y-m-d H:i:s');
                 $data->updated_at        = date('Y-m-d H:i:s');
                 
@@ -110,6 +112,8 @@ class PostsController extends AppController
                 $data->published_time_at    = $published_time_at;
                 $data->status               = Utils::cnvNull($request->status, 0);
                 $data->post_group_id      = Utils::cnvNull($request->post_group_id, 0);
+                $data->seo_keywords      = Utils::cnvNull($request->seo_keywords, '');
+                $data->seo_description   = Utils::cnvNull($request->seo_description, '');
                 $data->created_at           = date('Y-m-d H:i:s');
                 $data->updated_at           = date('Y-m-d H:i:s');
                 

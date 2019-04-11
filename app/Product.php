@@ -61,6 +61,7 @@ class Product extends Model
         return $vendor ? $vendor->name : '';
     }
     
+    
     public function getServices() {
         $details = ProductDetails::select(
                             'product_detail_groups.id AS group_id', 
@@ -92,14 +93,17 @@ class Product extends Model
     }
     
     public function getPrice($format = true) {
+        if($this->price === 0) {
+            return trans('shop.price_contact');
+        }
+        
         if($this->price > 0) {
             if($format) {
                 return Utils::formatCurrency($this->price);
             }
-            return $this->price;
         }
         
-        return '(Liên hệ)';
+        return $this->price;
     }
     
     public function getPriceDiscount($format = true) {
@@ -109,6 +113,14 @@ class Product extends Model
             }
             return $this->price - ($this->price * ($this->discount / 100));
         }
+    }
+    
+    public function getSEOKeywords() {
+        return $this->seo_keywords;
+    }
+    
+    public function getSEODescription() {
+        return $this->seo_description;
     }
     
     public function getSummary() {
@@ -177,5 +189,10 @@ class Product extends Model
         
         return $productDetails;
         
+    }
+    
+    public function getRelatedProducts() {
+        $products = Product::where('id', '!=', $this->id)->active()->get();
+        return $products;
     }
 }
