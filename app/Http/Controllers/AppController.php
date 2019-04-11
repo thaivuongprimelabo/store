@@ -8,6 +8,7 @@ use Artesaos\SEOTools\Facades\OpenGraph;
 use Artesaos\SEOTools\Facades\SEOMeta;
 use Illuminate\Http\Request;
 use View;
+use Artesaos\SEOTools\Facades\TwitterCard;
 class AppController extends Controller
 {
     public $output = [];
@@ -105,8 +106,7 @@ class AppController extends Controller
         OpenGraph::setTitle($title);
         OpenGraph::setUrl($link);
         OpenGraph::addProperty('type', $type);
-        OpenGraph::addImage(['url' => $image, 'size' => 300]);
-        OpenGraph::addImage($image, ['height' => 300, 'width' => 300]);
+        OpenGraph::addImage($image, ['height' => 720, 'width' => 480]);
         
     }
     

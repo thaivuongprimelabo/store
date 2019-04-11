@@ -132,7 +132,8 @@ class Product extends Model
     }
     
     public function getLink() {
-        return route('product_details',['slug' => $this->name_url]);
+        $category = Category::select('name_url')->where('id', $this->category_id)->first();
+        return route('product_details',['cate' => $category->name_url, 'slug' => $this->name_url]);
     }
     
     public function getStatus() {

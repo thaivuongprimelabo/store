@@ -283,15 +283,18 @@
         	if($(this).attr('id') === 'save_user') {
 				col = 'email';
         	}
-        	var input = {
-        	   	value: $('#' + col).val().trim(),
-    			col : col,
-    			itemName : $('#' + col).attr('placeholder'),
-    			url: '{{ route('check_exists') }}',
-    			id_check: $('#id_check').val(),
-    			table: '{{ $name }}',
-    		};
-        	checkExist(input);
+
+        	if($('#' + col).length > 0) {
+            	var input = {
+            	   	value: $('#' + col).val().trim(),
+        			col : col,
+        			itemName : $('#' + col).attr('placeholder'),
+        			url: '{{ route('check_exists') }}',
+        			id_check: $(this).attr('data-id'),
+        			table: '{{ $name }}',
+        		};
+            	checkExist(input);
+        	}
     	}
     });
 

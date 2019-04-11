@@ -12,14 +12,12 @@
 				@endphp
 				@if($childCategories->count())
 				<li class="nav-item okactive">
-<!-- 					<i class="fa fa-caret-right"></i> -->
 					<i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
 					<a href="{{ $category->getLink() }}" class="nav-link">{{ $category->getName() }}</a>
 					<i class="fa fa-angle-down"></i>
 					<ul class="dropdown-menu">
 						@foreach($childCategories as $child)
 							<li class="dropdown-submenu nav-item">
-								<i class="fa fa-caret-right"></i>
 								<a class="nav-link" href="{{ $child->getLink() }}">{{ $child->getName() }} </a>
 								@php
 									$childCategories1 = $child->getChildCategory();
@@ -29,7 +27,6 @@
 								<ul class="dropdown-menu">
 								@foreach($childCategories1 as $child1)
 								<li class="dropdown-submenu nav-item">
-									<i class="fa fa-caret-right"></i>
 									<a class="nav-link" href="{{ $child1->getLink() }}">{{ $child1->getName() }} </a>
 								</li>
 								@endforeach
@@ -41,7 +38,7 @@
 				</li>
 				@else
 				<li class="nav-item">
-					<i class="fa fa-caret-right"></i>
+					<i class="fa fa-arrow-circle-right"></i>
 					<a class="nav-link" href="{{ $category->getLink() }}">{{ $category->getName() }}</a>
 				</li>
 				@endif

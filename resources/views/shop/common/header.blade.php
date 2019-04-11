@@ -1,6 +1,6 @@
 <div class="topbar-mobile hidden-lg hidden-md text-center text-md-left">
 	<div class="container">
-		<i class="fa fa-mobile" style=" font-size: 20px; display: inline-block; position: relative; transform: translateY(2px); "></i> Hotline: 
+		<i class="fa fa-mobile" style=" font-size: 20px; display: inline-block; position: relative; transform: translateY(2px); "></i> {{ trans('shop.hotline_txt') }}: 
 		<span>
 													
 			<a href="callto:01676435063"> {{ $config['web_hotline'] }}</a>
@@ -23,7 +23,7 @@
 							</span>
 						</li>
 						<li class="margin-left-20">
-							<i class="fa fa-map-marker"></i> <b>Địa chỉ</b>: 
+							<i class="fa fa-map-marker"></i> <b>{{ trans('shop.address_txt') }}</b>: 
 							<span>
 								{{ $config['web_address'] }}
 							</span>
@@ -37,7 +37,7 @@
 					<ul class="list-inline f-right">
 						@if(Auth::check())
 						<li>
-							<a href="javascript:void(0)"><i class="fa fa-user"></i> {{ Auth::user()->name }}</a> | <a href="{{ route('account_logout') }}">{{ trans('shop.button.logout') }}</a>
+							<a href="{{ route('account_profile') }}"><i class="fa fa-user"></i> {{ Auth::user()->name }}</a> | <a href="{{ route('account_logout') }}">{{ trans('shop.button.logout') }}</a>
 						</li>
 						@else
 						<li>

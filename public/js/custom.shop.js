@@ -37,6 +37,10 @@ var callAjax = function(url, data, button) {
 	    				}
 	    				
 	    				$(div).html(res[data.container[id]]).show();
+	    				if(div === '#ajax_list') {
+	    					$('html, body').animate({scrollTop: ($(div).offset().top - 200)}, '2000');
+	    				}
+	    				
 	    			}
 	    			
 	    			if(res.hasOwnProperty('checkout_result') && res.checkout_result === true) {

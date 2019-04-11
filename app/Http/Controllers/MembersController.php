@@ -63,6 +63,8 @@ class MembersController extends AppController
             ['link' => '#', 'text' => trans('shop.login')]
         ];
         
+        $this->setSEO(['title' => trans('shop.login')]);
+        
         return view('shop.login', $this->output);
     }
     
@@ -143,7 +145,19 @@ class MembersController extends AppController
             ['link' => '#', 'text' => trans('shop.register')]
         ];
         
+        $this->setSEO(['title' => trans('shop.register')]);
+        
         return view('shop.register', $this->output);
+    }
+    
+    public function profile(Request $request) {
+        $this->output['breadcrumbs'] = [
+            ['link' => '#', 'text' => trans('shop.profile_txt')]
+        ];
+        
+        $this->setSEO(['title' => trans('shop.profile_txt')]);
+        
+        return view('shop.profile', $this->output);
     }
     
     public function active(Request $request) {

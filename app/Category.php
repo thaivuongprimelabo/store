@@ -27,7 +27,7 @@ class Category extends Model
     }
     
     public function getChildCategory() {
-        $categories = Category::select('id', 'name', 'name_url')->where('parent_id', $this->id)->get();
+        $categories = Category::select('id', 'name', 'name_url', 'parent_id')->where('parent_id', $this->id)->get();
         return $categories;
     }
     
@@ -65,6 +65,10 @@ class Category extends Model
     }
     
     public function getLink() {
+        $parent = Category::select('name_url')->where('id', $this->parent_id)->first();
+        if($parent) {
+            return route('category_slug1',['slug' => $parent->name_url, 'slug1' => $this->name_url]);
+        }
         return route('category',['slug' => $this->name_url]);
     }
     

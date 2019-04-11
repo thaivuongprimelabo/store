@@ -126,6 +126,7 @@ Route::group(['prefix' => ''], function () {
     Route::post('/account/recover' . $config['url_ext'], 'MembersController@recover')->name('account_recover');
     Route::get('/account/active/{token}', 'MembersController@active')->name('account_active');
     Route::get('/account/unactive', 'MembersController@unactive')->name('account_unactive');
+    Route::match(['get', 'post'], '/account/profile' . $config['url_ext'], 'MembersController@profile')->name('account_profile');
     
     Route::post('/load-data', 'HomeController@loadData')->name('loadData');
     
@@ -143,10 +144,11 @@ Route::group(['prefix' => ''], function () {
     Route::get('/san-pham-moi' . $config['url_ext'], 'HomeController@newProducts')->name('newProducts');
     Route::get('/san-pham-ban-chay' . $config['url_ext'], 'HomeController@bestSellProducts')->name('bestSellProducts');
     Route::get('/danh-muc/{slug}' . $config['url_ext'], 'HomeController@category')->name('category');
+    Route::get('/danh-muc/{slug}/{slug1}' . $config['url_ext'], 'HomeController@category')->name('category_slug1');
     Route::get('/tin-tuc' . $config['url_ext'], 'HomeController@posts')->name('posts');
     Route::get('/tin-tuc/{slug}' . $config['url_ext'], 'HomeController@postGroup')->name('postgroups');
     Route::get('/tin-tuc/{slug}/{slug1}' . $config['url_ext'], 'HomeController@postDetails')->name('postDetails');
-    Route::get('/{slug}' . $config['url_ext'], 'HomeController@productDetails')->name('product_details');
+    Route::get('/{cate}/{slug}' . $config['url_ext'], 'HomeController@productDetails')->name('product_details');
     Route::post('refreshcaptcha', 'MembersController@refreshCaptcha')->name('refreshcaptcha');
     Route::post('checkcaptcha', 'MembersController@checkCaptcha')->name('checkCaptcha');
     

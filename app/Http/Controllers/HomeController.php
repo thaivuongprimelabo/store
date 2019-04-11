@@ -46,7 +46,7 @@ class HomeController extends AppController
     {
         $banners = Banner::where('status', Status::ACTIVE)->get();
         
-        $categories = Category::select('id', 'name', 'name_url')->where('status', Status::ACTIVE)->where('parent_id', 0)->get();
+        $categories = Category::select('id', 'name', 'name_url', 'parent_id')->where('status', Status::ACTIVE)->where('parent_id', 0)->get();
         
         $posts = Post::where('status', PostStatus::PUBLISHED)->get();
         
@@ -125,7 +125,7 @@ class HomeController extends AppController
         
         $this->output['breadcrumbs'] = [
             ['link' => $product->getCategoryLink(), 'text' => $product->getCategoryName()],
-            ['link' => '#', 'text' => trans('shop.main_nav.about.text')]
+            ['link' => '#', 'text' => $product->getName()]
         ];
         $this->output['data'] = $product;
         return view('shop.product_detail', $this->output);
@@ -139,6 +139,7 @@ class HomeController extends AppController
         
         $this->output['view_type'] = 'grid';
         $this->output['page_name'] = 'new-products-page';
+        $this->setSEO(['title' => trans('shop.new_product_txt')]);
         return view('shop.product_list', $this->output);
     }
     
@@ -149,6 +150,7 @@ class HomeController extends AppController
         
         $this->output['view_type'] = 'grid';
         $this->output['page_name'] = 'popular-products-page';
+        $this->setSEO(['title' => trans('shop.popular_txt')]);
         return view('shop.product_list', $this->output);
     }
     
@@ -159,6 +161,7 @@ class HomeController extends AppController
         
         $this->output['view_type'] = 'grid';
         $this->output['page_name'] = 'best-selling-products-page';
+        $this->setSEO(['title' => trans('shop.best_selling_txt')]);
         return view('shop.product_list', $this->output);
         
     }
@@ -257,6 +260,8 @@ class HomeController extends AppController
         $this->output['breadcrumbs'] = [
             ['link' => '#', 'text' => trans('shop.search_results', compact('keyword'))]
         ];
+        
+        $this->setSEO(['title' => trans('shop.search_results')]);
         
         return view('shop.search', $this->output);
     }

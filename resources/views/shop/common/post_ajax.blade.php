@@ -17,7 +17,7 @@
 						<div class="inline-block">{{ $post->getCreatedAt() }}
 						</div>
 					</div>
-					<p class="blog-item-summary"> {{ $post->getSummary() }}</p>
+					<p class="blog-item-summary"> {!! $post->getSummary() !!}</p>
 				</div>
 			</div>
 		</div>

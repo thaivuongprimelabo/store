@@ -975,7 +975,7 @@ class Utils {
                 $form_html .= '</div>';
             }
             
-            $form_html .= view('auth.common.button_footer',['name' => $name, 'back_url' => route('auth_' . $name)])->render();
+            $form_html .= view('auth.common.button_footer',['name' => $name, 'back_url' => route('auth_' . $name), 'data' => $data])->render();
             
         } else {
             $body = '<div class="box-body">';
@@ -989,7 +989,7 @@ class Utils {
             $form_html .= '<input type="hidden" name="id" id="id_check" value="' . $id . '" />';
             $form_html .= $body;
             if(!isset($auth_name['form']['many_form'])) {
-                $form_html .= view('auth.common.button_footer',['name' => $name, 'back_url' => route('auth_' . $name)])->render();
+                $form_html .= view('auth.common.button_footer',['name' => $name, 'back_url' => route('auth_' . $name), 'data' => $data])->render();
             }
             $form_html .= '</div>';
         }
@@ -1473,7 +1473,7 @@ class Utils {
     public static function createSidebarShop($position = 'category_list') {
         $html = '';
         if($position == 'category_list') {
-            $categories = Category::select('id', 'name', 'name_url')->where('status', Status::ACTIVE)->where('parent_id', 0)->get();
+            $categories = Category::select('id', 'name', 'name_url', 'parent_id')->where('status', Status::ACTIVE)->where('parent_id', 0)->get();
             $html .= view('shop.common.category_list',compact('categories'))->render();
         }
         
