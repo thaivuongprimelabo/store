@@ -24,11 +24,15 @@ class UserRole {
         return $array;
     }
     
-    public static function createSelectList() {
+    public static function createSelectList($selected = '') {
         $data = self::getData();
         $html = '';
         foreach($data as $key=>$value) {
-            $html .= '<option value="'. $key.'">'. $value .'</option>';
+            if($key == $selected) {
+                $html .= '<option value="'. $key.'" selected>'. $value .'</option>';
+            } else {
+                $html .= '<option value="'. $key.'">'. $value .'</option>';
+            }
         }
         return $html;
     }

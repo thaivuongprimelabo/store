@@ -144,7 +144,6 @@ Route::group(['prefix' => ''], function () {
     Route::get('/san-pham-moi' . $config['url_ext'], 'HomeController@newProducts')->name('newProducts');
     Route::get('/san-pham-ban-chay' . $config['url_ext'], 'HomeController@bestSellProducts')->name('bestSellProducts');
     Route::get('/danh-muc/{slug}' . $config['url_ext'], 'HomeController@category')->name('category');
-    Route::get('/danh-muc/{slug}/{slug1}' . $config['url_ext'], 'HomeController@category')->name('category_slug1');
     Route::get('/tin-tuc' . $config['url_ext'], 'HomeController@posts')->name('posts');
     Route::get('/tin-tuc/{slug}' . $config['url_ext'], 'HomeController@postGroup')->name('postgroups');
     Route::get('/tin-tuc/{slug}/{slug1}' . $config['url_ext'], 'HomeController@postDetails')->name('postDetails');
@@ -153,7 +152,6 @@ Route::group(['prefix' => ''], function () {
     Route::post('checkcaptcha', 'MembersController@checkCaptcha')->name('checkCaptcha');
     
     Route::get('/offline' . $config['url_ext'], function() {
-        echo 'System is offline. Please wait...';
         exit;
     })->name('offline');
 });

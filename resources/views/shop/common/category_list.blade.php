@@ -43,6 +43,12 @@
 				</li>
 				@endif
 				@endforeach
+				<li class="xemthem  nav-item">
+					<i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
+					<a class="nav-link" href="javascript:;">
+						<span> Xem thêm</span>			
+					</a> 
+				</li>
 			</ul>
 		</div>
 	</div>

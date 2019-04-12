@@ -615,7 +615,8 @@ $auth = [
         ],
         'rules' => [
             'name' => 'required|max:' . \App\Constants\Common::NAME_MAXLENGTH,
-            'description' => 'max:' . \App\Constants\Common::DESC_MAXLENGTH
+            'description' => 'max:' . \App\Constants\Common::DESC_MAXLENGTH,
+            'post_group_id' => 'required'
         ]
     ],
     'about' => [
@@ -870,6 +871,10 @@ $auth = [
                     'type' => 'file_simple',
                     'text' => 'Web ico',
                 ],
+                'upload_web_banner' => [
+                    'type' => 'file_simple',
+                    'text' => 'Web banner'
+                ],
                 'web_address' => [
                     'type' => 'text',
                     'text' => 'Địa chỉ',
@@ -940,6 +945,12 @@ $auth = [
                     'text' => 'Maximum upload file (Ảnh đại diện) KB',
                     'table' => 'UPLOAD_SIZE_LIMIT'
                 ],
+                'upload_web_banner_maximum_upload' => [
+                    'type' => 'select',
+                    'text' => 'Maximum upload file (Web banner) KB',
+                    'table' => 'UPLOAD_SIZE_LIMIT'
+                ],
+                
                 'upload_banner_image_size' => [
                     'type' => 'text',
                     'text' => 'Kích thước banner (dài x rộng)'
@@ -967,6 +978,10 @@ $auth = [
                 'upload_avatar_image_size' => [
                     'type' => 'text',
                     'text' => 'Kích thước ảnh đại diện (dài x rộng)'
+                ],
+                'upload_web_banner_image_size' => [
+                    'type' => 'text',
+                    'text' => 'Kích thước web banner (dài x rộng)'
                 ]
             ],
             'payment_method' => [
@@ -1147,7 +1162,7 @@ $auth = [
                 ]
             ],
             'tab_form_2' => [
-                'title' => 'Đăng ký các gói bảo hành, phụ kiện, combo, khuyến mãi...',
+                'title' => 'Các phụ kiện đi kèm',
                 'view' => 'auth.products.tab_form_2'
             ],
             'tab_form_3' => [
@@ -1159,6 +1174,7 @@ $auth = [
             'name' => 'required|max:' . \App\Constants\Common::NAME_MAXLENGTH,
             'price' => 'max:' . \App\Constants\Common::PRICE_PRODUCT_MAXLENGTH,
             'discount' => 'max:' . \App\Constants\Common::DISCOUNT_MAXLENGTH,
+            'category_id' => 'required'
         ]
     ],
     /*------------ Users page ------------------- */
@@ -1506,7 +1522,7 @@ $auth = [
         ]
     ],
     'product_type' => $productType,
-    'text_image_small' => 'Tập tin *.jpg, *.jpeg, *.gif, *.png.Tối đa {0}',
+    'text_image_small' => ' (Tập tin *.jpg, *.jpeg, *.gif, *.png.Tối đa :limit_upload)',
     'select_empty_text' => 'Vui lòng chọn',
     'price_empty_text' => 'Liên hệ',
     'preview_image' => 'Hình đang sử dụng:',

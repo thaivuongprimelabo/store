@@ -62,7 +62,7 @@
 										<div class="product-info a-center">
 											<h3 class="product-name"><a href="{{ $product->getLink() }}" title="{{ $product->getName() }}">{{ $product->getName() }}</a></h3>
 											<div class="price-box clearfix">
-												@if($product->discount > 0)
+												@if($product->price > 0 && $product->discount > 0)
 												<div class="special-price">
 													<span class="price product-price">{{ $product->getPriceDiscount() }}</span>
 												</div>

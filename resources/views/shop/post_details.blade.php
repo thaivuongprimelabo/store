@@ -25,6 +25,8 @@
     								</div>
     							</div>
     						</div>
+    						<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.2&appId=135671569954053&autoLogAppEvents=1"></script>
+    						<div class="fb-comments" data-href="{{ $data->getLink() }}" data-width="auto" data-numposts="5"></div>
     					</div>
     			</div>
 			</article>	

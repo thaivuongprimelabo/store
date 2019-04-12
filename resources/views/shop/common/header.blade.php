@@ -101,7 +101,7 @@
 				<div class="top-cart-contain f-right ">
 					<div class="mini-cart text-xs-center">
 						<div class="heading-cart">
-							<a href="https://dualeo-x.bizwebvietnam.net/cart">
+							<a href="{{ route('cart') }}">
 								<div class="icon f-left relative">
 									<i class="fa fa-shopping-bag"></i>
 									<span class="cartCount count_item_pr hidden-lg" id="cart-total">0</span>

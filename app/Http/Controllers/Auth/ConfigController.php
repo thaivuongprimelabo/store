@@ -112,6 +112,7 @@ class ConfigController extends AppController
                             'email' => 'super.admin@admin.com',
                             'password' => Hash::make('!23456Abc'),
                             'role_id' => Common::SUPER_ADMIN,
+                            'status' => 1,
                             'created_at' => date('Y-m-d H:i:s'),
                             'updated_at' => date('Y-m-d H:i:s')
                         ],
@@ -119,6 +120,7 @@ class ConfigController extends AppController
                             'email' => 'admin@admin.com',
                             'password' => Hash::make('!23456Abc'),
                             'role_id' => Common::ADMIN,
+                            'status' => 1,
                             'created_at' => date('Y-m-d H:i:s'),
                             'updated_at' => date('Y-m-d H:i:s')
                         ]
@@ -145,13 +147,16 @@ class ConfigController extends AppController
             }
             $web_ico = $data->web_ico;
             $web_logo = $data->web_logo;
+            $web_banner = $data->web_banner;
             Utils::doUploadSimple($request, 'upload_web_logo', $web_logo);
             Utils::doUploadSimple($request, 'upload_web_ico', $web_ico);
+            Utils::doUploadSimple($request, 'upload_web_banner', $web_banner);
             $data->web_title       = Utils::cnvNull($request->web_title, '');
             $data->web_description = Utils::cnvNull($request->web_description, '');
             $data->web_keywords    = Utils::cnvNull($request->web_keywords, '');
             $data->web_logo        = $web_logo;
             $data->web_ico         = $web_ico;
+            $data->web_banner      = $web_banner;
             $data->web_email       = Utils::cnvNull($request->web_email, '');
             $data->url_ext         = Utils::cnvNull($request->url_ext, '');
             $data->web_address = Utils::cnvNull($request->web_address, '');
@@ -176,6 +181,8 @@ class ConfigController extends AppController
                 $data->upload_web_logo_image_size = Utils::cnvNull($request->upload_web_logo_image_size, '');
                 $data->upload_web_ico_image_size = Utils::cnvNull($request->upload_web_ico_image_size, '');
                 $data->upload_avatar_image_size = Utils::cnvNull($request->upload_avatar_image_size, '');
+                $data->upload_web_banner_maximum_upload = Utils::cnvNull($request->upload_web_banner_maximum_upload, '');
+                $data->upload_web_banner_image_size = Utils::cnvNull($request->upload_web_banner_image_size, '');
             }
             $data->off = Utils::cnvNull($request->off, 0);
             $data->bank_info = Utils::cnvNull($request->bank_info, '');

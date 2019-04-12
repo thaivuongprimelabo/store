@@ -2,7 +2,6 @@
 	<div class="section_category_slider">
 		<div class="container">
 			<div class="row">
-				
 				<div class="col-md-9 col-md-push-3 px-md-4 px-0 mt-md-5 mb-5">
 					@if($banners->count())
     				<div class="home-slider owl-carousel" data-lg-items='1' data-md-items='1' data-sm-items='1' data-xs-items="1" data-margin='0'  data-nav="true">

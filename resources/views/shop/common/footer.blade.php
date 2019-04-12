@@ -50,6 +50,7 @@
 								<div class="list-menu">
 									<div id="fb-root"></div>
 									@if(!Utils::blank($config['facebook_fanpage']))
+									<div id="fb-root"></div>
 									<script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v3.2&appId=135671569954053&autoLogAppEvents=1"></script>
 									<div class="fb-page" data-href="{{ $config['facebook_fanpage'] }}" data-tabs="timeline" data-width="270" data-height="200" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="{{ $config['facebook_fanpage'] }}" class="fb-xfbml-parse-ignore"><a href="{{ $config['facebook_fanpage'] }}"></a></blockquote></div>
 									@endif

@@ -12,6 +12,7 @@ class UploadPath {
     CONST PHOTO = 'photo/';
     CONST AVATAR = 'avatar/';
     CONST PRODUCT = 'image/';
+    CONST WEB_BANNER = 'web_banner/';
     
     CONST PATH_LIST = [
         'upload_web_ico'    => self::ICO,
@@ -20,7 +21,8 @@ class UploadPath {
         'upload_banner'     => self::BANNER,
         'upload_photo'      => self::PHOTO,
         'upload_avatar'     => self::AVATAR,
-        'upload_image'      => self::PRODUCT
+        'upload_image'      => self::PRODUCT,
+        'upload_web_banner' => self::WEB_BANNER
     ];
     
     public static function getUploadPath($key = '') {

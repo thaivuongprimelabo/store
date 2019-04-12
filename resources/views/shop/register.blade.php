@@ -48,22 +48,35 @@
     						<div class="row">
     							<div class="col-md-6">
     								<fieldset class="form-group">
-    									<label><span id="captcha_img">{!! captcha_img('flat') !!}</span> <button type="button" id="reset_captcha" class="btn btn-primary"><i class="fa fa-refresh"></i></button></label>
-    									<input type="text" class="form-control form-control-lg" value="" name="captcha" id="register_captcha" placeholder="{{ trans('shop.user.captcha') }}" maxlength="3" required="">
+    									<label>{{ trans('shop.user.address') }}: </label>
+    									<input type="tel" class="form-control form-control-lg"  value="" name="register_address" id="register_address" placeholder="{{ trans('shop.user.address') }}" maxlength="150" required="">
     								</fieldset>
     							</div>
     							<div class="col-md-6">
     
     								<fieldset class="form-group">
     									<label>{{ trans('shop.user.phone') }}: </label>
-    									<input type="tel" class="form-control form-control-lg" value="" name="phone" id="register_phone" placeholder="{{ trans('shop.user.phone') }}" maxlength="15" required="">
+    									<input type="tel" class="form-control form-control-lg" value="" name="register_phone" id="register_phone" placeholder="{{ trans('shop.user.phone') }}" maxlength="15" required="">
     								</fieldset>
+    							</div>
+    						</div>
+    						
+    						<div class="row">
+    							<div class="col-md-6">
+    								<fieldset class="form-group">
+    									<label><span id="captcha_img">{!! captcha_img('flat') !!}</span> <button type="button" id="reset_captcha" class="btn btn-primary"><i class="fa fa-refresh"></i></button></label>
+    									<input type="text" class="form-control form-control-lg" value="" name="captcha" id="register_captcha" placeholder="{{ trans('shop.user.captcha') }}" maxlength="3" required="">
+    								</fieldset>
+    							</div>
+    							<div class="col-md-6">
+    
     							</div>
     						</div>
     
     
     						<div class="col-xs-12 text-xs-left margin-bottom-30" style="margin-top:6px; padding: 0">
     							<button type="button" id="register_btn" class="btn btn-primary" data-loading-text="<i class='fa fa-spinner fa-spin '></i> {{ trans('shop.button.register') }}">{{ trans('shop.button.register') }}</button>
+    							<button type="button" id="clear_btn" class="btn btn-warning" data-loading-text="<i class='fa fa-spinner fa-spin '></i> {{ trans('shop.button.clear') }}">{{ trans('shop.button.clear') }}</button>
     							<a href="{{ route('account_login') }}" class="btn-link-style btn-register" style="margin-left: 20px;text-decoration: underline; ">{{ trans('shop.button.login') }}</a>
     						</div>
     					</div>
@@ -82,11 +95,12 @@ $(document).ready(function() {
     	var data = {
     		type : 'post',
     		async : true,
-    		container: ['#register_success', '#register_error'],
+    		container: ['#register_success', '#register_error', '#captcha_img'],
     		name: $('#register_name').val(),
     		email: $('#register_email').val(),
     		password: $('#register_password').val(),
     		conf_password: $('#register_conf_password').val(),
+    		address: $('#register_address').val(),
     		phone: $('#register_phone').val(),
     		captcha: $('#register_captcha').val(),
     	}
@@ -94,6 +108,11 @@ $(document).ready(function() {
     	$('#register_error').hide();
     
     	callAjax('{{ route('account_register') }}', data, $(this));
+	});
+
+	$('#clear_btn').click(function(e) {
+		$('#submit_form').find('input').val('');
+		refreshCaptcha('{{ route('refreshcaptcha') }}');
 	});
 
 	$('#reset_captcha').click(function() {

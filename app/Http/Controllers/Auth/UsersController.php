@@ -109,7 +109,7 @@ class UsersController extends AppController
                 
                 $data->name         = Utils::cnvNull($request->name, '');
                 if(!Utils::blank($request->password)) {
-                    $data->password = Utils::cnvNull($request->password, '');
+                    $data->password = bcrypt($request->password);
                 }
                 $data->avatar       = $filename;
                 $data->role_id      = Utils::cnvNull($request->role_id, 1);
@@ -185,7 +185,7 @@ class UsersController extends AppController
                 
                 $data->name         = Utils::cnvNull($request->name, '');
                 if(!Utils::blank($request->password)) {
-                    $data->password = Hash::make(Utils::cnvNull($request->password, ''));
+                    $data->password = Hash::make($request->password, '');
                 }
                 $data->avatar       = $filename;
                 $data->updated_at   = date('Y-m-d H:i:s');

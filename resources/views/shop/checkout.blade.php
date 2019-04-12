@@ -123,28 +123,29 @@
                                  </a>
                               </div>
                            </div>
+                           @if(Auth::user())
                            <div class="section__content">
                               	<div class="form-group">
                                      <div class="field__input-wrapper">
-                                        <input type="text" class="field__input form-control" name="checkout_email" placeholder="{{ trans('shop.user.email') }}*" id="checkout_email" value="" />
+                                        <input type="text" class="field__input form-control" name="checkout_email" placeholder="{{ trans('shop.user.email') }}*" id="checkout_email" value="{{ Auth::user()->email }}" />
                                      </div>
                                      <div class="help-block"></div>
                               	</div>
                                 <div class="form-group">
                                    <div class="field__input-wrapper">
-                                      <input type="text" name="checkout_name" id="checkout_name" type="text" placeholder="{{ trans('shop.user.name') }}*" class="field__input form-control" />
+                                      <input type="text" name="checkout_name" id="checkout_name" type="text" placeholder="{{ trans('shop.user.name') }}*" class="field__input form-control" value="{{ Auth::user()->name }}" />
                                    </div>
                                    <div class="help-block"></div>
                                 </div>
                                 <div class="form-group">
                                    <div class="field__input-wrapper">
-                                      <input type="tel" name="checkout_phone" class="field__input form-control" id="checkout_phone" placeholder="{{ trans('shop.user.phone') }}*" />
+                                      <input type="tel" name="checkout_phone" class="field__input form-control" id="checkout_phone" placeholder="{{ trans('shop.user.phone') }}*" value="{{ Auth::user()->phone }}" />
                                    </div>
                                    <div class="help-block"></div>
                                 </div>
                                 <div class="form-group">
                                    <div class="field__input-wrapper">
-                                      <input type="text" name="checkout_address" class="field__input form-control" id="checkout_address"  placeholder="{{ trans('shop.user.address') }}*" />
+                                      <input type="text" name="checkout_address" class="field__input form-control" id="checkout_address"  placeholder="{{ trans('shop.user.address') }}*" value="{{ Auth::user()->address }}"/>
                                    </div>
                                    <div class="help-block"></div>
                                 </div>
@@ -169,6 +170,54 @@
                                    <div class="help-block"></div>
                                 </div>
                            </div>
+                           @else
+                           <div class="section__content">
+                              	<div class="form-group">
+                                     <div class="field__input-wrapper">
+                                        <input type="text" class="field__input form-control" name="checkout_email" placeholder="{{ trans('shop.user.email') }}*" id="checkout_email" value="" />
+                                     </div>
+                                     <div class="help-block"></div>
+                              	</div>
+                                <div class="form-group">
+                                   <div class="field__input-wrapper">
+                                      <input type="text" name="checkout_name" id="checkout_name" type="text" placeholder="{{ trans('shop.user.name') }}*" class="field__input form-control" value="" />
+                                   </div>
+                                   <div class="help-block"></div>
+                                </div>
+                                <div class="form-group">
+                                   <div class="field__input-wrapper">
+                                      <input type="tel" name="checkout_phone" class="field__input form-control" id="checkout_phone" placeholder="{{ trans('shop.user.phone') }}*" value="" />
+                                   </div>
+                                   <div class="help-block"></div>
+                                </div>
+                                <div class="form-group">
+                                   <div class="field__input-wrapper">
+                                      <input type="text" name="checkout_address" class="field__input form-control" id="checkout_address"  placeholder="{{ trans('shop.user.address') }}*" value=""/>
+                                   </div>
+                                   <div class="help-block"></div>
+                                </div>
+                                <div class="form-group">
+                                   <div>
+                                       <select name="checkout_province" id="checkout_province" class="form-control">
+                                       </select>
+                                   </div>
+                                   <div class="help-block"></div>
+                                </div>
+                                <div class="form-group">
+                                 	<div>
+                                       <select name="checkout_district" id="checkout_district" class="form-control">
+                                       </select>
+                                   </div>
+                                   <div class="help-block"></div>
+                                </div>
+                                <div class="form-group">
+                                   <div class="field__input-wrapper">
+                                      <textarea name="checkout_note" id="checkout_note" class="field__input form-control m0" placeholder="{{ trans('shop.checkout.note') }}"></textarea>
+                                   </div>
+                                   <div class="help-block"></div>
+                                </div>
+                           </div>
+                           @endif
                         </div>
                      </div>
                      <div class="col-md-6 col-lg-6">

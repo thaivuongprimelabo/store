@@ -98,7 +98,7 @@ class MembersController extends AppController
             
             if(!$validator->fails()) {
                 
-                $token = bcrypt(str_random(8));
+                $token = str_random(8);
                 
                 $member = new User();
                 $member->name = Utils::cnvNull($request->name, '');
@@ -128,6 +128,7 @@ class MembersController extends AppController
                 if(Utils::blank($message)) {
                     if($member->save()) {
                         $result['#register_success'] = trans('messages.REG_SUCCESS', ['email' => $request->email]);
+                        $result['#captcha_img'] = captcha_img('flat')->toHtml();
                     }
                 } else {
                     \Log::error($message);
@@ -151,6 +152,56 @@ class MembersController extends AppController
     }
     
     public function profile(Request $request) {
+        
+        $result = [];
+        if($request->ajax()) {
+            $validator = [];
+            $rules = [
+                'name' => 'required',
+            ];
+            
+            if($request->getSession()->has('captcha')) {
+                $rules['captcha'] = 'required|captcha';
+            }
+            
+            $messages = [
+                'name.required' => trans('validation.required', ['attribute' => 'Họ tên']),
+            ];
+            
+            if(!Utils::blank($request->password)) {
+                $rules['conf_password'] = 'required|same:password';
+                $messages['conf_password.required'] = trans('validation.required', ['attribute' => 'Xác nhận mật khẩu']);
+                $messages['conf_password.same'] = trans('validation.same', ['attribute' => 'Mật khẩu', 'other' => 'Xác nhận mật khẩu']);
+            }
+            
+            $validator = Validator::make($request->all(), $rules, $messages);
+            $errors = [];
+            
+            if(!$validator->fails()) {
+                
+                $token = bcrypt(str_random(8));
+                
+                $member = User::find(Auth::id());
+                $member->name = Utils::cnvNull($request->name, '');
+                if(!Utils::blank($request->password)) {
+                    $member->password = bcrypt($request->password);
+                }
+                $member->address = Utils::cnvNull($request->address, '');
+                $member->phone = Utils::cnvNull($request->phone, '');
+                $member->updated_at = date('Y-m-d H:i:s');
+                
+                if($member->save()) {
+                    $result['#update_profile_success'] = trans('messages.UPDATE_SUCCESS');
+                    $result['#captcha_img'] = captcha_img('flat')->toHtml();
+                }
+            }
+            else {
+                $errors = $validator->errors();
+                $result['#update_profile_error'] = $this->createErrorList($errors->toArray());
+            }
+            return response()->json($result);
+        }
+        
         $this->output['breadcrumbs'] = [
             ['link' => '#', 'text' => trans('shop.profile_txt')]
         ];
@@ -239,8 +290,6 @@ class MembersController extends AppController
     public function logout(Request $request) {
         Auth::guard()->logout();
         
-        $request->session()->invalidate();
-        
         return redirect('/');
     }
     
@@ -266,6 +315,7 @@ class MembersController extends AppController
     
     
     public function refreshCaptcha() {
-        return response()->json(['#captcha_img'=> captcha_img('flat')]);
+        $captcha = captcha_img('flat')->toHtml();
+        return response()->json(['#captcha_img' => $captcha]);
     }
 }

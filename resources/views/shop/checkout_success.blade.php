@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Shop name - Thanh toán đơn hàng" />
     
-    <title>DuaLeo-X - Cảm ơn</title>
+    <title>{{ $config['web_name'] }} - Cảm ơn</title>
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
 	<link href="//bizweb.dktcdn.net/assets/themes_support/bootstrap.min.css?20171025" rel="stylesheet" type="text/css" />
 	<link href="//bizweb.dktcdn.net/assets/themes_support/font-awesome.min.css?20171025" rel="stylesheet" type="text/css" />

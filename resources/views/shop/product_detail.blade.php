@@ -34,7 +34,7 @@
 								<span class="inventory"><i class="fa fa-check"></i> {{ $data->getStatusName() }}</span>
 							</div>
 							<div class="price-box clearfix">
-							@if($data->discount)
+							@if($data->price > 0 && $data->discount > 0)
 							<div class="special-price">
 								<span id="product_price_format" class="price product-price">{{ $data->getPriceDiscount() }}</span>
 								<input type="hidden" id="product_price" value="{{ $data->getPriceDiscount(false) }}" /> 
@@ -124,7 +124,6 @@
 			{!! Utils::createSidebarShop('category_list') !!}
             {!! Utils::createSidebarShop('popular_products') !!}
 		</aside>
-		
 	</div>
 		
 </div>
@@ -164,12 +163,17 @@
     				<div class="product-info a-center">
     					<h3 class="product-name"><a href="{{ $product->getLink() }}" title="{{ $product->getName() }}">{{ $product->getName() }}</a></h3>
     					<div class="price-box clearfix">
+    						@if($product->price > 0 && $product->discount > 0)
     						<div class="special-price">
     							<span class="price product-price">{{ $product->getPriceDiscount() }}</span>
     						</div>
-    						@if($product->discount > 0)
+    						
     						<div class="old-price">
     							<span class="price product-price-old">{{ $product->getPrice() }}</span>
+    						</div>
+    						@else
+    						<div class="old-price">
+    							<span class="price product-price">{{ $product->getPrice() }}</span>
     						</div>
     						@endif											
     					</div>

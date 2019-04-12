@@ -54,7 +54,24 @@ class HomeController extends AppController
         $this->output['categories'] = $categories;
         $this->output['posts'] = $posts;
         
-        $this->setSEO(['title' => trans('shop.main_nav.home.text')]);
+        $this->setSEO([
+            'title' => trans('shop.main_nav.home.text'),
+            'summary' => $this->output['config']['web_description'],
+            'keywords' => [$this->output['config']['web_name']],
+            'link' => route('home'),
+            'type' => 'website',
+            'image' => url($this->output['config']['web_banner'])
+        ]);
+        
+//         $this->setSEO([
+//             'title' => $product->name,
+//             'summary' => $product->getSEODescription(),
+//             'section' => $product->getCategoryName(),
+//             'keywords' => [$product->getSEOKeywords(), $product->getCategoryName(), $this->output['config']['web_name']],
+//             'link' => $product->getLink(),
+//             'type' => 'product',
+//             'image' => $product->getFirstImage()
+//         ]);
         
         return view('shop.home', $this->output);
     }
@@ -301,7 +318,7 @@ class HomeController extends AppController
             'section' => $postGroup->getName(),
             'keywords' => [$post->getSEOKeywords(), $postGroup->getName(), $this->output['config']['web_name']],
             'link' => $post->getLink(),
-            'type' => 'post',
+            'type' => 'article',
             'image' => $post->getImage()
         ]);
             
@@ -364,12 +381,7 @@ class HomeController extends AppController
             switch($page) {
                     
                 case 'category-page':
-                    $category = Category::select('parent_id')->where('id', $id)->first();
-                    if($category['parent_id'] == 0) {
-                        $whereIn = 'category_id IN (SELECT id FROM categories WHERE parent_parent_id = ' . $id . ')';
-                    } else {
-                        $whereIn = 'category_id = ' . $id;
-                    }
+                    $whereIn = 'category_id = ' . $id;
                     $data = Product::active()->whereRaw($whereIn)->whereRaw($wherePriceSearch)->orderByRaw($orderBy)->paginate(Common::LIMIT_PRODUCT_SHOW);
                     break;
                     

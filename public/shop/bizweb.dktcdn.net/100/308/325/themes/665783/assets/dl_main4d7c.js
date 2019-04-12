@@ -252,7 +252,7 @@ function dl_owl() {
 			responsiveClass:true,
 			dots:dot,
 			autoplay:true,
-			autoHeight: false,
+			autoHeight: true,
 			nav:nav,
 			navText: ["<i class='fa fa-angle-left'></i>","<i class='fa fa-angle-right'></i>"],
 			responsive:{
@@ -277,6 +277,12 @@ function dl_owl() {
 					items:Number(lgg_item)				
 				}
 			}
+			
+//			items:1,
+//		    margin:10,
+//		    autoHeight:true,
+//		    nav:nav,
+//			navText: ["<i class='fa fa-angle-left'></i>","<i class='fa fa-angle-right'></i>"]
 		})
 	})
 } window.dl_owl=dl_owl;

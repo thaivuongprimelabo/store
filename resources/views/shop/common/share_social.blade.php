@@ -1,5 +1,5 @@
 <div class="social-sharing">
-    <div class="social-media" data-permalink="https://dualeo-x.bizwebvietnam.net/cherry-do-canada-loai-to-10">
+    <div class="social-media" data-permalink="{{ $data->getLink() }}">
     	<label>{{ trans('shop.share_url') }}: </label>
     	
     	<a target="_blank" href="//www.facebook.com/sharer.php?u={{ $data->getLink() }}" class="share-facebook" title="Chia sẻ lên Facebook">

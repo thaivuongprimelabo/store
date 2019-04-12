@@ -58,17 +58,13 @@ class Category extends Model
                 break;
         }
         
-        $whereIn = 'category_id IN (SELECT id FROM categories c1 WHERE c1.parent_parent_id = ' . $this->id . ')';
+        $whereIn = 'category_id IN (SELECT id FROM categories c1 WHERE c1.parent_parent_id = ' . $this->id . ') OR category_id = ' . $this->id;
         
         $products = Product::where($wheres)->whereRaw($whereIn)->orderBy('created_at', 'DESC')->limit(Common::LIMIT_PRODUCT_SHOW_TAB)->get();
         return $products;
     }
     
     public function getLink() {
-        $parent = Category::select('name_url')->where('id', $this->parent_id)->first();
-        if($parent) {
-            return route('category_slug1',['slug' => $parent->name_url, 'slug1' => $this->name_url]);
-        }
         return route('category',['slug' => $this->name_url]);
     }
     

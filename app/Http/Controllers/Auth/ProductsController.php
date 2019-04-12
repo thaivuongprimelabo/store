@@ -67,10 +67,9 @@ class productsController extends AppController
                 DB::beginTransaction();
                 
                 try {
-                    $dt = date('YmdHis');
                     $data = new Product();
                     $data->name          = Utils::cnvNull($request->name, '');
-                    $data->name_url      = Utils::createNameUrl(Utils::cnvNull($request->name, '')) . '-' . $dt;
+                    $data->name_url      = Utils::createNameUrl(Utils::cnvNull($request->name, ''));
                     $data->price         = Utils::cnvNull($request->price, '0');
                     $data->category_id   = Utils::cnvNull($request->category_id, '0');
                     $data->vendor_id     = Utils::cnvNull($request->vendor_id, '0');

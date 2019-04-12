@@ -6,6 +6,7 @@ use App\Constants\Common;
 use App\Helpers\Utils;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Category;
 
@@ -53,10 +54,14 @@ class CategoriesController extends AppController
             $validator = Validator::make($request->all(), $this->rules);
             
             if (!$validator->fails()) {
+                $parentCate = Category::select(DB::raw('(CASE WHEN parent_id = 0 THEN id ELSE parent_id END) AS id'))->where('id', $request->parent_id)->first();
+                
                 $data = new Category();
                 $data->name         = Utils::cnvNull($request->name, '');
                 $data->name_url     = Utils::createNameUrl(Utils::cnvNull($request->name, ''));
                 $data->parent_id    = Utils::cnvNull($request->parent_id, 0);
+                $data->parent_id    = Utils::cnvNull($request->parent_id, 0);
+                $data->parent_parent_id = $parentCate ? $parentCate->id : 0;
                 $data->status       = Utils::cnvNull($request->status, 0);
                 $data->created_at   = date('Y-m-d H:i:s');
                 $data->updated_at   = date('Y-m-d H:i:s');
@@ -89,10 +94,13 @@ class CategoriesController extends AppController
             $validator = Validator::make($request->all(), $this->rules);
             
             if (!$validator->fails()) {
+                $parentCate = Category::select(DB::raw('(CASE WHEN parent_id = 0 THEN id ELSE parent_id END) AS id'))->where('id', $request->parent_id)->first();
+                
                 $data = Category::find($request->id);
                 $data->name         = Utils::cnvNull($request->name, '');
                 $data->name_url     = Utils::createNameUrl(Utils::cnvNull($request->name, ''));
                 $data->parent_id    = Utils::cnvNull($request->parent_id, 0);
+                $data->parent_parent_id = $parentCate ? $parentCate->id : 0;
                 $data->status       = Utils::cnvNull($request->status, 0);
                 $data->updated_at   = date('Y-m-d H:i:s');
                 

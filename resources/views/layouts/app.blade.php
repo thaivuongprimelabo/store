@@ -291,9 +291,11 @@
         			itemName : $('#' + col).attr('placeholder'),
         			url: '{{ route('check_exists') }}',
         			id_check: $(this).attr('data-id'),
-        			table: '{{ $name }}',
+        			table: '{{ isset($name) ? $name : '' }}',
         		};
             	checkExist(input);
+        	} else {
+        		$("#submit_form").submit();
         	}
     	}
     });

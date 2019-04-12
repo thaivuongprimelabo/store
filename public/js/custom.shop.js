@@ -25,9 +25,6 @@ var callAjax = function(url, data, button) {
 	    		for(var id in data.container) {
 	    			var div = data.container[id];
 	    			if(res.hasOwnProperty(div)) {
-	    				if(div.indexOf('success') >= 0) {
-	    					$('#submit_form').find('input, textarea').val('');
-	    				}
 	    				if(data.hasOwnProperty('dialog')) {
 	    					$(data.dialog).modal();
 	    				}

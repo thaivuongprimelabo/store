@@ -1,5 +1,5 @@
 @php
-	$button_id = isset($name) && $name == 'users' ? 'save_user' : 'save';
+	$button_id = isset($name) && ($name == 'users' || $name == 'profile') ? 'save_user' : 'save';
 	$id = isset($data) ? $data->id : '';
 @endphp
 <div class="box-footer">

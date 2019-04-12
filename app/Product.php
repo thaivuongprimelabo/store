@@ -82,7 +82,7 @@ class Product extends Model
     }
     
     public function getDiscount() {
-        if($this->discount) {
+        if($this->price > 0 && $this->discount > 0) {
             return '<div class="sale-flash"><div class="before"></div>-' . $this->discount . '%</div>';
         }
         return '';
@@ -133,7 +133,10 @@ class Product extends Model
     
     public function getLink() {
         $category = Category::select('name_url')->where('id', $this->category_id)->first();
-        return route('product_details',['cate' => $category->name_url, 'slug' => $this->name_url]);
+        if($category) {
+            return route('product_details',['cate' => $category->name_url, 'slug' => $this->name_url]);
+        }
+        return 'javascript:void(0)';
     }
     
     public function getStatus() {

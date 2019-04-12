@@ -52,6 +52,7 @@ class AppController extends Controller
                     'upload_web_logo_maximum_upload'   => Utils::cnvNull($config->upload_web_logo_maximum_upload, 51200),
                     'upload_web_ico_maximum_upload'   => Utils::cnvNull($config->upload_web_ico_maximum_upload, 51200),
                     'upload_avatar_maximum_upload'   => Utils::cnvNull($config->upload_avatar_maximum_upload, 51200),
+                    'upload_web_banner_maximum_upload'   => Utils::cnvNull($config->upload_web_banner_maximum_upload, 51200),
                     
                     'upload_banner_image_size' => Utils::cnvNull($config->upload_banner_image_size, '100x100'),
                     'upload_logo_image_size' => Utils::cnvNull($config->upload_logo_image_size, '100x100'),
@@ -60,6 +61,7 @@ class AppController extends Controller
                     'upload_web_logo_image_size'   => Utils::cnvNull($config->upload_web_logo_image_size, '100x100'),
                     'upload_web_ico_image_size'   => Utils::cnvNull($config->upload_web_ico_image_size, '100x100'),
                     'upload_avatar_image_size'   => Utils::cnvNull($config->upload_avatar_image_size, '100x100'),
+                    'upload_web_banner_image_size'   => Utils::cnvNull($config->upload_web_banner_image_size, '100x100'),
                     
                     'url_ext' => Utils::cnvNull($config->url_ext, '.html'),
                     

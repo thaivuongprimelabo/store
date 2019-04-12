@@ -1,3 +1,4 @@
+@if($products->count())
 <div class="aside-item aside-mini-list-product mb-5">
 	<div>
 		<div class="aside-title">
@@ -32,3 +33,4 @@
 		</div>
 	</div>
 </div>
+@endif

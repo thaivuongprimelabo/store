@@ -25,6 +25,6 @@ h2.title-head a {
 	height:50px;
 }
 
-.product_description p, .tab-content p, .details-pro .title-head {
+.product_description p, .tab-content p, .details-pro .title-head, .product-info h3 {
 	word-wrap: break-word;
 }

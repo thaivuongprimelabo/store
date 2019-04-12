@@ -380,7 +380,7 @@ class Utils {
                 $data = Times::select('id', 'name')->get();
                 break;
             case 'ROLE_USERS':
-                return UserRole::createSelectList();
+                return UserRole::createSelectList($selected);
                 break;
             default:
                 $data = [];
@@ -1081,10 +1081,23 @@ class Utils {
                     $element_value = !Utils::blank($element_value) ? 'https://www.youtube.com/watch?v=' . $element_value : '';
                 }
                 
-                $element_html .= $label;
-                $element_html .= '<div class="input-group"><span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>';
-                $element_html .= '<input type="text" class="form-control" name="' . $key . '" id="' . $key . '" value="' . $element_value . '" placeholder="' . $placeholder . '" ' . $maxlength . ' '. $disable . ' />';
-                $element_html .= '</div>';
+                if($key == 'price') {
+                    $element_html .= $label;
+                    $element_html .= '<div class="input-group"><span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>';
+                    $element_html .= '<input type="text" class="form-control" name="' . $key . '" id="' . $key . '" value="' . $element_value . '" placeholder="' . $placeholder . '" ' . $maxlength . ' '. $disable . ' />';
+                    
+                    if(!self::blank($element_value)) {
+                        $element_value = self::formatCurrency($element_value);
+                    }
+                    $element_html .= '</div>';
+                    $element_html .= '<span id="format_currency"><strong><small>Định dạng tiền tệ: <i>' . $element_value . '</i></small></strong></span>';
+                } else {
+                    $element_html .= $label;
+                    $element_html .= '<div class="input-group"><span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>';
+                    $element_html .= '<input type="text" class="form-control" name="' . $key . '" id="' . $key . '" value="' . $element_value . '" placeholder="' . $placeholder . '" ' . $maxlength . ' '. $disable . ' />';
+                    $element_html .= '</div>';
+                }
+                
                 break;
                 
             case 'currency':
@@ -1185,7 +1198,7 @@ class Utils {
                 $image_size = isset($config[$key . '_image_size']) ? $config[$key . '_image_size'] : '100x100';
                 $limit_upload = isset($config[$key . '_maximum_upload']) ? $config[$key . '_maximum_upload'] : '51200';
                 $split = explode('x', $image_size);
-                $element_html .= $label;
+                $element_html .= $label . trans('auth.text_image_small',['limit_upload' => self::formatMemory($limit_upload)]);
                 $preview_control_id = 'preview_' . $key;
                 $element_html .= '<input type="file" class="form-control upload-simple" name="' . $key . '" data-preview-control="' . $preview_control_id . '" data-limit-upload="' . $limit_upload . '" />';
                 if(!self::blank($element_value)) {
@@ -1208,6 +1221,7 @@ class Utils {
                     $split = explode('x', $image_size);
                 }
                 $element_html .= '<button type="button" id="upload_button" data-name="' . $key . '[]" data-preview-control="preview_list" data-width="' . $split[0] . '" data-height="' . $split[1] . '"  data-limit-upload="' . $limit_upload . '" class="btn btn-primary"><i class="fa fa-image"></i> Tải hình sản phẩm</button>';
+                $element_html .= trans('auth.text_image_small',['limit_upload' => self::formatMemory($limit_upload)]);
                 $preview_control_id = 'preview_' . $key;
                 $element_html .= '<div id="preview_list">';
                 $image_using = !is_null($data) ? $data->getAllImage($data->id) : [];
@@ -1388,8 +1402,8 @@ class Utils {
                         if($k == 'content') {
                             $rule_name = 'required_ckeditor';
                         }
-                        if($k == 'role_id') {
-                            $rule_name = 'required_select';
+                        if($k == 'role_id' || $k == 'category_id' || $k == 'post_group_id') {
+                            $msg_item = 'validation.required_select';
                         }
                         break;
                     case 'email':

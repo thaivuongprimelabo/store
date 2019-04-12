@@ -126,7 +126,9 @@ return [
         'back_to_shopping' => 'Tiếp tục mua hàng',
         'order' => 'Tiến hành đặt hàng',
         'checkout_order' => 'ĐẶT HÀNG',
-        'back_to_cart' => 'Quay về giỏ hàng'
+        'back_to_cart' => 'Quay về giỏ hàng',
+        'update' => 'Cập nhật',
+        'clear' => 'Hủy'
     ],
     'mail_subject' => [
         'register' => 'Kích hoạt tài khoản',

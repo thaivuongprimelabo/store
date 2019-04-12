@@ -19,7 +19,7 @@
 	<div class="section section_blog">
 		<div class="container">
     		<div class="section-title a-center">
-    			<h2><a href="https://dualeo-x.bizwebvietnam.net/tin-tuc">{{ trans('shop.news_txt') }}</a></h2>			
+    			<h2><a href="{{ route('posts') }}">{{ trans('shop.news_txt') }}</a></h2>			
     			<p>{!! trans('shop.news_short_txt') !!}</p>
     		</div>
     		<div class="section-content">

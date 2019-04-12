@@ -53,6 +53,7 @@ class AppController extends Controller
                     'web_address' => Utils::cnvNull($config->web_address, ''),
                     'footer_text' => Utils::cnvNull($config->footer_text, ''),
                     'facebook_fanpage' => Utils::cnvNull($config->facebook_fanpage, ''),
+                    'web_banner' => Utils::cnvNull($config->web_banner, ''),
 //                     'banners_maximum_upload' => Utils::cnvNull($config->banners_maximum_upload, 51200),
 //                     'vendors_maximum_upload' => Utils::cnvNull($config->vendors_maximum_upload, 51200),
 //                     'products_maximum_upload' => Utils::cnvNull($config->products_maximum_upload, 51200),
@@ -106,6 +107,7 @@ class AppController extends Controller
         OpenGraph::setTitle($title);
         OpenGraph::setUrl($link);
         OpenGraph::addProperty('type', $type);
+        OpenGraph::addImage(['url' => $image, 'size' => 720]);
         OpenGraph::addImage($image, ['height' => 720, 'width' => 480]);
         
     }
