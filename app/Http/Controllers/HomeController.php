@@ -224,6 +224,18 @@ class HomeController extends AppController
         return view('shop.page', $this->output);
     }
     
+    public function orderChecking(Request $request) {
+        
+        $page = Page::find(2);
+        $this->output['breadcrumbs'] = [
+            ['link' => '#', 'text' => trans('shop.main_nav.order_checking.text')]
+        ];
+        
+        $this->setSEO(['title' => trans('shop.main_nav.order_checking.text'), 'link' => route('order_checking')]);
+        
+        return view('shop.order_checking', $this->output);
+    }
+    
     public function contact(Request $request) {
         
         

@@ -9,12 +9,14 @@
 				<div class="container">
 					<div class="row">
 
-						<div class="col-xs-12 col-sm-6 col-lg-3">
+						<div class="col-xs-12 col-sm-6 col-lg-4">
 							<div class="footer-widget">
 								<h3 class="hastog"><span>{{ trans('shop.main_nav.contact.text') }}</span></h3>
 									
 								<ul class="list-menu list-showroom">		 						
-									
+									<li class="clearfix"><i class="block_icon fa fa-home"></i>
+										<p><b>{{ $config['web_name'] }}</b></p>
+									</li>
 									<li class="clearfix"><i class="block_icon fa fa-map-marker"></i>
 										@php
 											$branch = explode('|', $config['web_address'])
@@ -22,38 +24,58 @@
 										@if(count($branch))
 										@foreach($branch as $key=>$address)
 										<p>
-											@if($key == 0)
-											<b>Trụ sở chính:</b> {{ $address }}
-											@else
-											<b>Chi nhánh {{ $key++ }}:</b> {{ $address }}
-											@endif
+											<b>{{ trans('shop.branch_txt',['stt' => ++$key]) }}:</b> {{ $address }}
 										</p>
 										@endforeach
 										@endif
 									</li>
 									@php
                                     	$hotline = explode('|', $config['web_hotline']);
+                                    	$hotline_cskh = explode('|', $config['web_hotline_cskh']);
                                     @endphp
 									<li class="clearfix"><i class="block_icon fa fa-phone"></i>
+										<p><b>{{ trans('shop.hotline_tech_txt') }}</b></p>
 										@if(count($hotline))
 										@foreach($hotline as $tel)
-										<a href="tel:{{ $tel }}">{{ $tel }}</a>
+										<p><a href="tel:{{ $tel }}">{{ $tel }}</a></p>
 										@endforeach
 										@endif
 									</li>
-									<li class="clearfix"><i class="block_icon fa fa-clock-o"></i>
-										<p>{!! $config['web_working_time'] !!}</p>
+									<li class="clearfix"><i class="block_icon fa fa-phone"></i>
+										<p><b>{{ trans('shop.hotline_cskh_txt') }}</b></p>
+										@if(count($hotline_cskh))
+										@foreach($hotline_cskh as $tel)
+										<p><a href="tel:{{ $tel }}">{{ $tel }}</a></p>
+										@endforeach
+										@endif
 									</li>
 									<li class="clearfix"><i class="block_icon fa fa-envelope"></i>
 										<a href="mailto:{{ $config['web_email'] }}">{{ $config['web_email'] }}</a>
 									</li>
+									<li class="clearfix"><i class="block_icon fa fa-clock-o"></i>
+										<p>{!! $config['web_working_time'] !!}</p>
+									</li>
 								</ul>
 							</div>
 						</div>
-						<div class="col-xs-12 col-sm-6 col-lg-3">
+						<div class="col-xs-12 col-sm-6 col-lg-2">
 							<div class="footer-widget">
 								<h3 class="hastog"><span>{{ trans('shop.category_txt') }}</span></h3>
 								{!! $subFooter !!}
+							</div>
+						</div>
+						
+						<div class="col-xs-12 col-sm-6 col-lg-3">
+							<div class="footer-widget">
+								<h3 class="hastog"><span>{{ trans('shop.policy.title') }}</span></h3>
+								<ul class="list-menu list-blogs">
+									<li>
+										<a href="javascript:void(0)" >{{ trans('shop.policy.guarantee_txt') }}</a>
+									</li>
+									<li>
+										<a href="javascript:void(0)" >{{ trans('shop.policy.shipment_txt') }}</a>
+									</li>
+								</ul>
 							</div>
 						</div>
 
@@ -63,25 +85,13 @@
 								<h3 class="hastog"><span>{{ trans('shop.social_txt') }}</span></h3>
 								<ul class="list-menu">
 									<li>
-										<a href="https://www.facebook.com/sharer.php?u={{ route('home') }}" target="_blank" class="social facebook" title="Share facebook" style="display: inline-block;"><i class="fa fa-facebook"></i></a>
-										<a href="{{ $config['youtube_channel'] }}" target="_blank" class="social youtube" title="Youtube channel"><i class="fa fa-youtube"></i></a>
+										<a href="https://www.facebook.com/sharer.php?u={{ route('home') }}" target="_blank" title="Facebook"><img src="{{ url('shop/facebook_icon.png') }}" style="width:50px; height:50px" /></a>
+										<a href="{{ $config['youtube_channel'] }}" target="_blank" title="Youtube"><img src="{{ url('shop/youtube_icon.png') }}" style="width:50px; height:50px" /></a>
+										<a href="{{ $config['zalo_page'] }}" target="_blank" title="Zalo"><img src="{{ url('shop/zalo_logo.png') }}" style="width:56px; height:56px" /></a>
+										<a href="{{ $config['shopee_page'] }}" target="_blank" title="Shopee"><img src="{{ url('shop/shopee_icon.png') }}" style="width:50px; height:50px" /></a>
 									</li>
 								</ul>
 							</div>
-						</div>
-						<div class="col-xs-12 col-sm-6 col-lg-3">
-							<div class="footer-widget">
-								<h3 class="margin-bottom-20 hastog"><span>{{ trans('shop.facebook_fanpage') }}</span></h3>
-								<div class="list-menu">
-									<div id="fb-root"></div>
-									@if(!Utils::blank($config['facebook_fanpage']))
-									<div id="fb-root"></div>
-									<script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v3.2&appId=135671569954053&autoLogAppEvents=1"></script>
-									<div class="fb-page" data-href="{{ $config['facebook_fanpage'] }}" data-tabs="timeline" data-width="270" data-height="200" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="{{ $config['facebook_fanpage'] }}" class="fb-xfbml-parse-ignore"><a href="{{ $config['facebook_fanpage'] }}"></a></blockquote></div>
-									@endif
-								</div>
-							</div>
-
 						</div>
 					</div>
 				</div>

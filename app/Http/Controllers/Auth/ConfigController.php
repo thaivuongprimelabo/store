@@ -176,11 +176,20 @@ class ConfigController extends AppController
                 $data->web_hotline = $web_hotline;
             }
             
+            $web_hotline_cskh = $request->web_hotline_cskh;
+            if(is_array($web_hotline_cskh) && count($web_hotline_cskh)) {
+                $web_hotline_cskh = array_filter($web_hotline_cskh, 'strlen');
+                $web_hotline_cskh = implode('|', $web_hotline_cskh);
+                $data->web_hotline_cskh = $web_hotline_cskh;
+            }
+            
             $data->web_working_time = Utils::cnvNull($request->web_working_time, '');
             $data->freeship = Utils::cnvNull($request->freeship, '');
             $data->footer_text = Utils::cnvNull($request->footer_text, '');
             $data->facebook_fanpage = Utils::cnvNull($request->facebook_fanpage, '');
             $data->youtube_channel = Utils::cnvNull($request->youtube_channel, '');
+            $data->zalo_page = Utils::cnvNull($request->zalo_page, '');
+            $data->shopee_page = Utils::cnvNull($request->shopee_page, '');
             if(Auth::user()->role_id == Common::SUPER_ADMIN) {
                 $data->upload_banner_maximum_upload = Utils::cnvNull($request->upload_banner_maximum_upload, '');
                 $data->upload_logo_maximum_upload = Utils::cnvNull($request->upload_logo_maximum_upload, '');

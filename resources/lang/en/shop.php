@@ -2,6 +2,9 @@
 
 return [
     'hotline_txt' => 'Hotline',
+    'hotline_tech_txt' => 'Hotline mua hàng và tư vấn kĩ thuật:',
+    'hotline_cskh_txt' => 'Hotline CSKH:',
+    'branch_txt' => 'Chi nhánh :stt',
     'address_txt' => 'Địa chỉ',
     'free_ship_txt' => 'Miễn phí vận chuyển',
     'support_txt' => 'Hỗ trợ gọi ngay',
@@ -51,6 +54,11 @@ return [
         'order_checking' => ['text' => 'Kiểm tra đơn hàng'],
         'posts' => ['text' => 'Tin tức'],
         'contact' => ['text' => 'Liên hệ']
+    ],
+    'policy' => [
+        'title' => 'Chính sách',
+        'guarantee_txt' => 'Chính sách bảo hành',
+        'shipment_txt' => 'Chính sách vận chuyển',
     ],
     'cart' => [
         'txt' => 'Giỏ hàng',
@@ -115,6 +123,9 @@ return [
         'phone' => 'Số điện thoại*',
         'note' => 'Ghi chú*'
     ],
+    'order_checking' => [
+        'email' => 'E-mail hoặc số điện thoại',
+    ],
     'button' => [
         'detail_view' => 'Chi tiết',
         'add_to_cart' => 'Đặt hàng ngay',
@@ -132,7 +143,8 @@ return [
         'checkout_order' => 'ĐẶT HÀNG',
         'back_to_cart' => 'Quay về giỏ hàng',
         'update' => 'Cập nhật',
-        'clear' => 'Hủy'
+        'clear' => 'Hủy',
+        'order_checking' => 'Kiểm tra'
     ],
     'mail_subject' => [
         'register' => 'Kích hoạt tài khoản',

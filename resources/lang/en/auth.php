@@ -896,7 +896,13 @@ $auth = [
                 ],
                 'web_hotline' => [
                     'type' => 'hotline',
-                    'text' => 'Hotline',
+                    'text' => 'Hotline mua hàng và tư vấn kĩ thuật:',
+                    'maxlength' => 40
+                ],
+                'web_hotline_cskh' => [
+                    'type' => 'hotline',
+                    'text' => 'Hotline CSKH:',
+                    'maxlength' => 40
                 ],
                 'freeship' => [
                     'type' => 'textarea',
@@ -1010,20 +1016,30 @@ $auth = [
                     'maxlength' => 15
                 ]
             ],
-            'facebook_fanpage' => [
-                'header' => 'Facebook fanpage',
+            'social' => [
+                'header' => 'Mạng xã hội',
                 'facebook_fanpage' => [
                     'type' => 'text',
-                    'text' => 'URL'
-                ]
-            ],
-            'youtube_channel' => [
-                'header' => 'Youtube Channel',
+                    'text' => 'Facebook page',
+                    'maxlength' => 150
+                ],
                 'youtube_channel' => [
                     'type' => 'text',
-                    'text' => 'URL'
-                ]
+                    'text' => 'Youtube channel',
+                    'maxlength' => 150
+                ],
+                'zalo_page' => [
+                    'type' => 'text',
+                    'text' => 'Zalo page',
+                    'maxlength' => 150
+                ],
+                'shopee_page' => [
+                    'type' => 'text',
+                    'text' => 'Shopee page',
+                    'maxlength' => 150
+                ],
             ],
+            
             'off' => [
                 'header' => 'Tắt hệ thống',
                 'off' => [
