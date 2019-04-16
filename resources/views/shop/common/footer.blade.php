@@ -15,17 +15,37 @@
 									
 								<ul class="list-menu list-showroom">		 						
 									
-									<li class="clearfix"><i class="block_icon fa fa-map-marker"></i> <p>
-										{{ $config['web_address'] }}
-										</p></li>
-
+									<li class="clearfix"><i class="block_icon fa fa-map-marker"></i>
+										@php
+											$branch = explode('|', $config['web_address'])
+										@endphp
+										@if(count($branch))
+										@foreach($branch as $key=>$address)
+										<p>
+											@if($key == 0)
+											<b>Trụ sở chính:</b> {{ $address }}
+											@else
+											<b>Chi nhánh {{ $key++ }}:</b> {{ $address }}
+											@endif
+										</p>
+										@endforeach
+										@endif
+									</li>
+									@php
+                                    	$hotline = explode('|', $config['web_hotline']);
+                                    @endphp
 									<li class="clearfix"><i class="block_icon fa fa-phone"></i>
-										<a href="tel:{{ $config['web_hotline'] }}">{{ $config['web_hotline'] }}</a>
-										<p>{{ $config['web_working_time'] }}</p>
+										@if(count($hotline))
+										@foreach($hotline as $tel)
+										<a href="tel:{{ $tel }}">{{ $tel }}</a>
+										@endforeach
+										@endif
+									</li>
+									<li class="clearfix"><i class="block_icon fa fa-clock-o"></i>
+										<p>{!! $config['web_working_time'] !!}</p>
 									</li>
 									<li class="clearfix"><i class="block_icon fa fa-envelope"></i>
 										<a href="mailto:{{ $config['web_email'] }}">{{ $config['web_email'] }}</a>
-
 									</li>
 								</ul>
 							</div>
@@ -40,8 +60,13 @@
 
 						<div class="col-xs-12 col-sm-6 col-lg-3">
 							<div class="footer-widget">
-								<h3 class="hastog"><span>{{ trans('shop.support_customer_txt') }}</span></h3>
-								{!! $subFooter !!}
+								<h3 class="hastog"><span>{{ trans('shop.social_txt') }}</span></h3>
+								<ul class="list-menu">
+									<li>
+										<a href="https://www.facebook.com/sharer.php?u={{ route('home') }}" target="_blank" class="social facebook" title="Share facebook" style="display: inline-block;"><i class="fa fa-facebook"></i></a>
+										<a href="{{ $config['youtube_channel'] }}" target="_blank" class="social youtube" title="Youtube channel"><i class="fa fa-youtube"></i></a>
+									</li>
+								</ul>
 							</div>
 						</div>
 						<div class="col-xs-12 col-sm-6 col-lg-3">

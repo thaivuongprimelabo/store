@@ -85,8 +85,9 @@ class productsController extends AppController
                     $data->created_at    = date('Y-m-d H:i:s');
                     
                     if($data->save()) {
+                        $is_main = $request->is_main;
                         $arrFilenames = [];
-                        Utils::doUploadMultiple($request, 'upload_image', $data->id, $arrFilenames);
+                        Utils::doUploadMultiple($request, 'upload_image', $data->id, $arrFilenames, $is_main);
                         if(count($arrFilenames)) {
                             $product_images = [];
                             DB::table(Common::IMAGES_PRODUCT)->insert($arrFilenames);
@@ -147,11 +148,18 @@ class productsController extends AppController
                 $data->updated_at    = date('Y-m-d H:i:s');
                 
                 if($data->save()) {
+                    $is_main = $request->is_main;
+                    if(!Utils::blank($is_main)) {
+                        DB::table(Common::IMAGES_PRODUCT)->update(['is_main' => 0]);
+                    }
+                    
+                    if(is_numeric($is_main)) {
+                        DB::table(Common::IMAGES_PRODUCT)->where('id', $is_main)->update(['is_main' => 1]);
+                    }
                     
                     $arrFilenames = [];
-                    Utils::doUploadMultiple($request, 'upload_image', $data->id, $arrFilenames);
+                    Utils::doUploadMultiple($request, 'upload_image', $data->id, $arrFilenames, $is_main);
                     if(count($arrFilenames)) {
-                        $product_images = [];
                         DB::table(Common::IMAGES_PRODUCT)->insert($arrFilenames);
                     }
                     

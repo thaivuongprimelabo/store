@@ -299,9 +299,9 @@ var readURL = function readURL(input, selected_msg) {
 			  if(file_selected.indexOf(filename) < 0) {
 				  var reader = new FileReader();
 			      reader.onload  = function(e) {
-			    	  var img = '<div style="display:inline-block; position:relative"><a href="javascript:void(0)" class="remove-img" style="position:absolute; top:15px; right:15px">';
+			    	  var img = '<div class="img-wrapper" data-filename="' + e.target.filename + '" style="display:inline-block; position:relative"><a href="javascript:void(0)" class="remove-img" style="position:absolute; top:15px; right:15px">';
 			    	  img += '<i class="fa fa-trash" style="font-size:30px;"></i></a>';
-			    	  img += "<img src='" + e.target.result + "'  class='img-thumbnail' width='" + width + "' height='" + height + "' style='margin-top:10px;margin-right:4px;'>";
+			    	  img += "<img src='" + e.target.result + "'  class='img-thumbnail' style='max-width:110px; max-height:150px;margin-top:10px;margin-right:4px;'>";
 			    	  img += "<input type='hidden' name='upload_images[]' value='" + e.target.filename + "' />";
 			    	  img += '</div>';
 			    	  $('#' + preview_id).append(img);

@@ -19,8 +19,21 @@
                   @if($value['type'] == 'text')
                   	<div class="col-md-3">
                         <div class="form-group has-feedback">
+                          <div class="input-group"><span class="input-group-addon"><i class="fa fa-search"></i></span>
                           <input type="text" class="form-control" name="{{ $key }}" id="{{ $key }}" placeholder="{{ $placeholder }}" />
-                          <span class="glyphicon glyphicon-search form-control-feedback"></span>
+                          </div>
+                          
+                        </div>
+                     </div>
+                  @endif
+                  
+                  @if($value['type'] == 'calendar')
+                  	<div class="col-md-3">
+                        <div class="form-group has-feedback">
+                          <div class="input-group"><span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                          <input type="text" id="datepicker" class="form-control" name="{{ $key }}" id="{{ $key }}" placeholder="{{ $placeholder }}" />
+                          </div>
+                          
                         </div>
                      </div>
                   @endif

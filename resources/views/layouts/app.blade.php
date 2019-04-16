@@ -208,6 +208,12 @@
 			}
 	    });
 	@endif
+
+	//Date picker
+    $('#datepicker').datepicker({
+      	autoclose: true,
+      	format: 'dd/mm/yyyy'
+    })
     
     $('input').iCheck({
       checkboxClass: 'icheckbox_square-blue',
@@ -312,53 +318,6 @@
 
     });
 
-    $(document).on('click', '.open_upload_dialog', function(e) {
-        var id = $(this).parent().attr('id');
-        var demension = $(this).attr('data-demension');
-        var upload_limit = $(this).attr('data-upload-limit');
-        var file_ext = $(this).attr('data-file-ext');
-        $('#select_image').attr('data-id', id);
-        $('#select_image').attr('data-demension', demension);
-        $('#select_image').attr('data-upload-limit', upload_limit);
-        $('#select_image').attr('data-file-ext', file_ext);
-		$('#uploadModal').modal();
-	});
-
-    $(document).on('click', '#upload_by_computer', function(e) {
-    	var index = $('#select_image').attr('data-id');
-		uploadByComputer(index);
-    });
-
-    $(document).on('blur', '#upload_by_url', function(e) {
-    	var src = $(this).val();
-    	uploadByUrl(src);
-    	$('.upload_image_product').val('');
-    	$('#error_list').html('');
-    });
-
-    $(document).on('click', '#select_image', function(e) {
-        var id = $(this).attr('data-id');
-        var demension = $(this).attr('data-demension');
-    	selectImage(id, demension);
-	});
-
-    $(document).on('change', '.upload_image_product', function(e) {
-    	var input = $(this);
-    	var upload_limit =$('#select_image').attr('data-upload-limit');
-    	var demension = $('#select_image').attr('data-demension');
-    	var file_ext = $('#select_image').attr('data-file-ext');
-    	var rules = [file_ext, upload_limit];
-    	var messages = [
-    		'{{ trans('validation.image') }}',
-    		'{{ trans('validation.size.file_multi') }}'
-        ];
-    	if(checkFileUpload(input, rules, messages, '#error_list')) {
-    		previewImageProduct(input, upload_limit, demension, '#preview');
-    		$('#upload_by_url').val('');
-    		$('#error_list').html('');
-    	}
-    });
-
     $('input.select_type').on('ifChecked', function(event){
     	var className = $(this).val();
     	$('.select_type').addClass('hide_element');
@@ -374,6 +333,14 @@
 
 	$(document).on('keyup', '#price', function(e) {
 		$('#format_currency strong small i').html(formatCurrency($(this).val(), '.', '.'));
+	});
+
+	$(document).on('click', '.img-wrapper', function(e) {
+		var filename = $(this).attr('data-filename');
+		$('.img-wrapper').find('.fa-check').remove();
+		var html = '<i class="fa fa-check" aria-hidden="true" style="position:absolute; top:15px; left:15px; font-size:30px; color:#31a231"></i>';
+		$(this).prepend(html);
+		$('#is_main').val(filename);
 	});
 
 	$(document).on('click', '.remove-img', function(e) {
@@ -504,6 +471,11 @@
 			return true;
 		}
 		return false;
+		
+    });
+    $(document).on('click', '.add-info', function(e) {
+    	var input = $(this).prev().find('input').first().clone().val('');
+    	$(this).prev().append(input);
 		
     });
   });

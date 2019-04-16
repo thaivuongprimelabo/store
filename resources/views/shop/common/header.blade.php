@@ -3,38 +3,41 @@
 		<i class="fa fa-mobile" style=" font-size: 20px; display: inline-block; position: relative; transform: translateY(2px); "></i> {{ trans('shop.hotline_txt') }}: 
 		<span>
 													
-			<a href="callto:01676435063"> {{ $config['web_hotline'] }}</a>
+			 {!! $config['web_hotline'] !!}
 					
 		</span>
 	</div>
 </div>
+@php
+	$hotline = explode('|', $config['web_hotline']);
+	$web_address = explode('|', $config['web_address']);
+@endphp
 <div class="topbar hidden-sm hidden-xs">
 	<div class="container">
 		<div>
 			<div class="row">
-				<div class="col-sm-6 col-md-9 a-left">
+				<div class="col-sm-12 col-md-12 a-left">
 					<ul class="list-inline f-left">
 						<li>
 							<i class="fa fa-mobile" style=" font-size: 20px; display: inline-block; position: relative; transform: translateY(2px); "></i> {{ trans('shop.hotline_txt') }}: 
 							<span>
-																		
-								<a href="callto:01676435063"> {{ $config['web_hotline'] }}</a>
-										
+								@if(count($hotline))
+								<a href="tel:{{ $hotline[0] }}">{{ $hotline[0] }}</a>
+								@endif
 							</span>
 						</li>
-						<li class="margin-left-20">
-							<i class="fa fa-map-marker"></i> <b>{{ trans('shop.address_txt') }}</b>: 
+						<li>
+							<i class="fa fa-map-marker"></i> {{ trans('shop.address_txt') }}: 
 							<span>
-								{{ $config['web_address'] }}
+								<a href="javascript:void(0)">{{ $web_address[0] }}</a>
 							</span>
 
 						</li>
 					</ul>
-
 				</div>
-				<div class="col-sm-6 col-md-3">
+<!-- 				<div class="col-sm-6 col-md-3"> -->
 
-					<ul class="list-inline f-right">
+					<!-- <ul class="list-inline f-right">
 						@if(Auth::check())
 						<li>
 							<a href="{{ route('account_profile') }}"><i class="fa fa-user"></i> {{ Auth::user()->name }}</a> | <a href="{{ route('account_logout') }}">{{ trans('shop.button.logout') }}</a>
@@ -47,9 +50,9 @@
 						<li><a data-toggle="modal" href="{{ route('account_register') }}">{{ trans('shop.button.register') }}</a>
 						</li>
 						@endif
-					</ul>
+					</ul> -->
 
-				</div>
+<!-- 				</div> -->
 
 			</div>
 		</div>
@@ -68,33 +71,41 @@
 			</div>
 			<div class="col-xs-12 col-md-8 col-lg-7 hidden-xs">
 				<div class="policy d-flex justify-content-around">
-					<div class="item-policy d-flex align-items-center">
-						<a href="#">
+					@if(!Utils::blank($config['freeship']))
+					<div class="item-policy d-flex">
+						<a href="#" class="policy-icon">
 							<img src="{{ url('shop/bizweb.dktcdn.net/thumb/medium/100/308/325/themes/665783/assets/policy14d7c.png') }}"  alt="DuaLeo-X" >
 						</a>
-						<div class="info a-left">
+						<div class="info a-left policy-content">
 							<a href="#">{{ trans('shop.free_ship_txt') }}</a>
-							<p>Bán kính 100 km</p>
+							<p>{{ $config['freeship'] }}</p>
 						</div>
-					</div>	
-					<div class="item-policy d-flex align-items-center">
-						<a href="#">
+					</div>
+					@endif
+					@if(count($hotline))
+					<div class="item-policy d-flex">
+						<a href="#" class="policy-icon">
 							<img src="{{ url('shop/bizweb.dktcdn.net/thumb/medium/100/308/325/themes/665783/assets/policy24d7c.png') }}"  alt="DuaLeo-X" >
 						</a>
-						<div class="info a-left">
+						<div class="info a-left policy-content">
 							<a href="#">{{ trans('shop.support_txt') }}</a>
-							<p>{{ trans('shop.hotline_txt') }}: <a href="callto:{{ $config['web_hotline'] }}"> {{ $config['web_hotline'] }}</a></p>
+							@foreach($hotline as $tel)
+							<p>{{ $tel }}</p>
+							@endforeach
 						</div>
-					</div>	
-					<div class="item-policy d-flex align-items-center">
-						<a href="#">
+					</div>
+					@endif
+					@if(!Utils::blank($config['web_working_time']))	
+					<div class="item-policy d-flex">
+						<a href="#" class="policy-icon">
 							<img src="{{ url('shop/bizweb.dktcdn.net/thumb/medium/100/308/325/themes/665783/assets/policy34d7c.png') }}"  alt="DuaLeo-X" >
 						</a>
-						<div class="info a-left">
+						<div class="info a-left policy-content">
 							<a href="#">{{ trans('shop.working_txt') }}</a>
-							<p>{{ $config['web_working_time'] }}</p>
+							<p>{!! $config['web_working_time'] !!}</p>
 						</div>
-					</div>	
+					</div>
+					@endif	
 				</div>
 			</div>
 			<div class="col-xs-12 col-md-1 col-lg-2 hidden-sm hidden-xs">

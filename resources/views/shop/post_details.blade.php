@@ -21,6 +21,7 @@
     							</div>	
     							<div class="article-content">
     								<div class="rte">
+    									{!! $data->getSummary() !!}
     									{!! $data->getContent() !!}
     								</div>
     							</div>

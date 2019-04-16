@@ -118,6 +118,8 @@ Route::group(['prefix' => ''], function () {
     Route::get('/dat-lich-hen' . $config['url_ext'], 'HomeController@booking')->name('booking');
     Route::get('/nhom-trao-doi' . $config['url_ext'], 'HomeController@forum')->name('forum');
     Route::get('/san-pham' . $config['url_ext'], 'HomeController@products')->name('products');
+    Route::get('/huong-dan-mua-hang' . $config['url_ext'], 'HomeController@orderIntroduction')->name('order_introduction');
+    Route::get('/kiem-tra-don-hang' . $config['url_ext'], 'HomeController@orderChecking')->name('order_checking');
     Route::match(['get', 'post'], '/lien-he' . $config['url_ext'], 'HomeController@contact')->name('contact');
     Route::get('/search' . $config['url_ext'], 'HomeController@search')->name('search');
     Route::match(['get', 'post'], 'account/login' . $config['url_ext'], 'MembersController@login')->name('account_login');
@@ -147,7 +149,7 @@ Route::group(['prefix' => ''], function () {
     Route::get('/tin-tuc' . $config['url_ext'], 'HomeController@posts')->name('posts');
     Route::get('/tin-tuc/{slug}' . $config['url_ext'], 'HomeController@postGroup')->name('postgroups');
     Route::get('/tin-tuc/{slug}/{slug1}' . $config['url_ext'], 'HomeController@postDetails')->name('postDetails');
-    Route::get('/{cate}/{slug}' . $config['url_ext'], 'HomeController@productDetails')->name('product_details');
+    Route::get('/{slug}' . $config['url_ext'], 'HomeController@productDetails')->name('product_details');
     Route::post('refreshcaptcha', 'MembersController@refreshCaptcha')->name('refreshcaptcha');
     Route::post('checkcaptcha', 'MembersController@checkCaptcha')->name('checkCaptcha');
     

@@ -48,7 +48,7 @@ class HomeController extends AppController
         
         $categories = Category::select('id', 'name', 'name_url', 'parent_id')->where('status', Status::ACTIVE)->where('parent_id', 0)->get();
         
-        $posts = Post::where('status', PostStatus::PUBLISHED)->get();
+        $posts = Post::where('status', PostStatus::PUBLISHED)->orderBy('created_at', 'DESC')->get();
         
         $this->output['banners'] = $banners;
         $this->output['categories'] = $categories;
@@ -198,15 +198,30 @@ class HomeController extends AppController
     
     public function about(Request $request) {
         
-        $about = Page::find(1);
+        $page = Page::find(1);
         $this->output['breadcrumbs'] = [
             ['link' => '#', 'text' => trans('shop.main_nav.about.text')]
         ];
-        $this->output['about'] = $about;
+        $this->output['title'] = trans('shop.main_nav.about.text');
+        $this->output['page'] = $page;
         
         $this->setSEO(['title' => trans('shop.main_nav.about.text'), 'link' => route('about')]);
         
-        return view('shop.about', $this->output);
+        return view('shop.page', $this->output);
+    }
+    
+    public function orderIntroduction(Request $request) {
+        
+        $page = Page::find(2);
+        $this->output['breadcrumbs'] = [
+            ['link' => '#', 'text' => trans('shop.main_nav.order_introduction.text')]
+        ];
+        $this->output['title'] = trans('shop.main_nav.order_introduction.text');
+        $this->output['page'] = $page;
+        
+        $this->setSEO(['title' => trans('shop.main_nav.order_introduction.text'), 'link' => route('order_introduction')]);
+        
+        return view('shop.page', $this->output);
     }
     
     public function contact(Request $request) {
@@ -381,7 +396,8 @@ class HomeController extends AppController
             switch($page) {
                     
                 case 'category-page':
-                    $whereIn = 'category_id = ' . $id;
+//                     $whereIn = 'category_id = ' . $id;
+                    $whereIn = 'category_id IN (SELECT id FROM categories c1 WHERE c1.parent_parent_id = ' . $id . ') OR category_id = ' . $id;
                     $data = Product::active()->whereRaw($whereIn)->whereRaw($wherePriceSearch)->orderByRaw($orderBy)->paginate(Common::LIMIT_PRODUCT_SHOW);
                     break;
                     
@@ -398,20 +414,20 @@ class HomeController extends AppController
                     break;
                     
                 case 'all-products-page':
-                    $data = Product::active()->orderByRaw($orderBy)->whereRaw($wherePriceSearch)->paginate(Common::LIMIT_PRODUCT_SHOW);
+                    $data = Product::active()->orderByRaw($orderBy)->whereRaw($wherePriceSearch)->orderByRaw($orderBy)->paginate(Common::LIMIT_PRODUCT_SHOW);
                     break;
                 
                 case 'vendor-page':
-                    $data = Product::active()->where('vendor_id', $id)->whereRaw($wherePriceSearch)->paginate(Common::LIMIT_PRODUCT_SHOW);
+                    $data = Product::active()->where('vendor_id', $id)->whereRaw($wherePriceSearch)->orderByRaw($orderBy)->paginate(Common::LIMIT_PRODUCT_SHOW);
                     break;
                 
                 case 'posts-page':
-                    $data = Post::active()->paginate(Common::LIMIT_POST_SHOW);
+                    $data = Post::active()->orderBy('created_at', 'desc')->paginate(Common::LIMIT_POST_SHOW);
                     $view = 'shop.common.post_ajax';
                     break;
                     
                 case 'posts-group-page':
-                    $data = Post::active()->where('post_group_id', $id)->paginate(Common::LIMIT_POST_SHOW);
+                    $data = Post::active()->where('post_group_id', $id)->orderBy('created_at', 'desc')->paginate(Common::LIMIT_POST_SHOW);
                     $view = 'shop.common.post_ajax';
                     break;
                     

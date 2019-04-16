@@ -23,22 +23,23 @@ class Product extends Model
     protected $table = Common::PRODUCTS;
     
     public function getFirstImage($thumb = 'medium') {
-        $image_url = Utils::getImageLink();
-        $image_product = ImageProduct::select('image','medium','small')->where('product_id', $this->id)->first();
+        $image_product = ImageProduct::select('image','medium','small')->where('product_id', $this->id)->where('is_main', 1)->first();
         if($image_product) {
-            $image_url = Utils::getImageLink($image_product->image, $image_product->$thumb);
+            return Utils::getImageLink($image_product->image, $image_product->$thumb);
         }
-        return $image_url;
+        
+        $image_product = ImageProduct::select('image','medium','small')->where('product_id', $this->id)->first();
+        return Utils::getImageLink($image_product->image, $image_product->$thumb);;
     }
     
     public function getAllImage($id = '') {
         $output = [];
-        $image_product = ImageProduct::select('id', 'image')->where('product_id', $this->id)->get();
-        foreach($image_product as $image) {
-            $image_url = Utils::getImageLink($image->image);
-            $output[$image->id] = $image_url;
-        }
-        return $output;
+        $image_product = ImageProduct::select('id', 'image', 'is_main')->where('product_id', $this->id)->get();
+//         foreach($image_product as $image) {
+//             $image_url = Utils::getImageLink($image->image);
+//             $output[$image->id] = $image_url;
+//         }
+        return $image_product;
     }
     
     public function getImageDetails() {
@@ -132,11 +133,7 @@ class Product extends Model
     }
     
     public function getLink() {
-        $category = Category::select('name_url')->where('id', $this->category_id)->first();
-        if($category) {
-            return route('product_details',['cate' => $category->name_url, 'slug' => $this->name_url]);
-        }
-        return 'javascript:void(0)';
+        return route('product_details',['slug' => $this->name_url]);
     }
     
     public function getStatus() {

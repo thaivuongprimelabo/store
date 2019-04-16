@@ -36,7 +36,7 @@
     						</div>
     						<div class="blog-item-info m-4">
     							<h3 class="blog-item-name"><a href="{{ $post->getLink() }}">{{ $post->getTitle() }}</a></h3>
-    							<p class="blog-item-summary"> {{ $post->getSummary() }}</p>
+    							<p class="blog-item-summary"> {!! $post->getSummary() !!}</p>
     							<a class="btn" href="{{ $post->getLink() }}">Chi tiết</a>
     
     						</div>

@@ -154,7 +154,7 @@ class Utils {
         }
     }
     
-    public static function doUploadMultiple($request, $key, $id, &$arrFilenames = []) {
+    public static function doUploadMultiple($request, $key, $id, &$arrFilenames = [], $is_main_file = '') {
         if($request->hasFile($key)) {
             $files = $request->$key;
             $upload_images = $request->upload_images;
@@ -184,8 +184,13 @@ class Utils {
                         'product_id' => $id,
                         'image' => $filename,
                         'medium' => $medium,
-                        'small' => $small
+                        'small' => $small,
+                        'is_main' => 0
                     ];
+                    
+                    if($is_main_file == $file->getClientOriginalName()) {
+                        $image['is_main'] = 1;
+                    }
                     array_push($arrFilenames, $image);
                 }
             }
@@ -470,7 +475,11 @@ class Utils {
             }
             
             if(!is_array($v)) {
-                $html .= '<li><a href="' . route('auth_' . $k) . '"><i class="fa fa-files-o"></i><span>' . $v . '</span></a></li>';
+                if($currentRoute == 'auth_' . $k) {
+                    $html .= '<li class="active"><a href="' . route('auth_' . $k) . '"><i class="fa fa-files-o"></i><span>' . $v . '</span></a></li>';
+                } else {
+                    $html .= '<li><a href="' . route('auth_' . $k) . '"><i class="fa fa-files-o"></i><span>' . $v . '</span></a></li>';
+                }
             } else {
                 
                 $key = explode('_', $currentRoute);
@@ -483,7 +492,11 @@ class Utils {
                 $html .= '<ul class="treeview-menu" ' . $display . '>';
                 foreach($v as $kk=>$vv) {
                     if($routes->hasNamedRoute('auth_' . $kk)) {
-                        $html .= '<li><a href="' . route('auth_' . $kk) . '"><i class="fa fa-circle-o"></i> ' . $vv . '</a></li>';
+                        if($currentRoute == 'auth_' . $kk) {
+                            $html .= '<li><a href="' . route('auth_' . $kk) . '" style="color:#ffffff"><i class="fa fa-circle-o"></i> ' . $vv . '</a></li>';
+                        } else {
+                            $html .= '<li><a href="' . route('auth_' . $kk) . '"><i class="fa fa-circle-o"></i> ' . $vv . '</a></li>';
+                        }
                     }
                 }
                 $html .= '</ul>';
@@ -759,21 +772,21 @@ class Utils {
                                 break;
                             case 'banner':
                                 if($item->select_type == 'use_image') {
-                                    $tbody .= '<td><img src="' . self::getImageLink($item->$key) . '" width="200" /></td>';
+                                    $tbody .= '<td><img src="' . self::getImageLink($item->$key) . '" style="max-width:150px;max-height:200px" class="img img-thumbnail" /></td>';
                                 } else {
-                                    $tbody .= '<td><img src="http://img.youtube.com/vi/' . $item->youtube_id . '/0.jpg" width="200" /></td>';
+                                    $tbody .= '<td><img src="http://img.youtube.com/vi/' . $item->youtube_id . '/0.jpg"  style="max-width:150px;max-height:200px" class="img img-thumbnail" /></td>';
                                 }
                                 break;
                                 
                             case 'logo':
                             case 'avatar':
                             case 'photo':
-                                $tbody .= '<td><img src="' . self::getImageLink($item->$key) . '" width="80" /></td>';
+                                $tbody .= '<td><img src="' . self::getImageLink($item->$key) . '" style="max-width:50px;max-height:200px" class="img img-thumbnail" /></td>';
                                 break;
                                 
                             case 'images':
                             case 'image':
-                                $tbody .= '<td><img src="' . $item->getFirstImage('small') . '" width="80" /></td>';
+                                $tbody .= '<td><img src="' . $item->getFirstImage('small') . '" style="max-width:50px;max-height:200px" class="img img-thumbnail" /></td>';
                                 break;
                                 
                             case 'status':
@@ -849,7 +862,7 @@ class Utils {
                                 $route = 'auth_' . $name . '_edit';
                                 if($routes->hasNamedRoute($route)) {
                                     $url = route('auth_' . $name . '_edit',['id' => $item->id]);
-                                    $tbody .= '<td align="center"><a href="javascript:void(0)" data-url="' . $url . '" class="edit" title="Edit"><i class="fa fa-pencil" aria-hidden="true" style="font-size: 24px"></i></a></td>';
+                                    $tbody .= '<td align="center"><a href="javascript:void(0)" data-url="' . $url . '" class="edit" title="Edit"><i class="fa fa-edit" aria-hidden="true" style="font-size: 24px"></i></a></td>';
                                 } else {
                                     $tbody .= '<td></td>';
                                 }
@@ -1100,6 +1113,23 @@ class Utils {
                 
                 break;
                 
+            case 'address':
+            case 'hotline':
+                $element_html .= $label;
+                $element_html .= '<div class="input-group"><span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>';
+                $element = explode('|', $element_value);
+                if(count($element)) {
+                    foreach($element as $el) {
+                        $element_html .= '<input type="text" class="form-control" name="' . $key . '[]" value="' . $el . '" placeholder="' . $placeholder . '" ' . $maxlength . ' '. $disable . ' />';
+                    }
+                } else {
+                    $element_html .= '<input type="text" class="form-control" name="' . $key . '[]" value="" placeholder="' . $placeholder . '" ' . $maxlength . ' '. $disable . ' />';
+                }
+                
+                $element_html .= '</div>';
+                $element_html .= '<button type="button" class="btn btn-danger add-info mt-1"><i class="fa fa-plus"></i> Thêm</button>';
+                break;
+                
             case 'currency':
                 
                 $element_html .= $label;
@@ -1220,20 +1250,24 @@ class Utils {
                 } else {
                     $split = explode('x', $image_size);
                 }
-                $element_html .= '<button type="button" id="upload_button" data-name="' . $key . '[]" data-preview-control="preview_list" data-width="' . $split[0] . '" data-height="' . $split[1] . '"  data-limit-upload="' . $limit_upload . '" class="btn btn-primary"><i class="fa fa-image"></i> Tải hình sản phẩm</button>';
+                $element_html .= '<button type="button" id="upload_button" data-name="' . $key . '[]" data-preview-control="preview_list" data-limit-upload="' . $limit_upload . '" class="btn btn-primary"><i class="fa fa-image"></i> Tải hình sản phẩm</button>';
                 $element_html .= trans('auth.text_image_small',['limit_upload' => self::formatMemory($limit_upload)]);
                 $preview_control_id = 'preview_' . $key;
                 $element_html .= '<div id="preview_list">';
                 $image_using = !is_null($data) ? $data->getAllImage($data->id) : [];
                 if(count($image_using)) {
-                    foreach($image_using as $id=>$image) {
-                        $element_html .= '<div style="display:inline-block; position:relative"><a href="javascript:void(0)" class="remove-img" style="position:absolute; top:15px; right:15px" data-id="' . $id . '">';
-                        $element_html .= '<i class="fa fa-trash" style="font-size:30px;"></i></a>';
-                        $element_html .= '<img src="' . $image . '" class="img-thumbnail" width="' . $split[0] . '" height="' . $split[1] . '" style="margin-top:10px; margin-right:5px">';
+                    foreach($image_using as $image) {
+                        $element_html .= '<div class="img-wrapper" data-filename=' . $image->id . ' style="display:inline-block; position:relative">';
+                        if($image->is_main) {
+                            $element_html .= '<i class="fa fa-check" aria-hidden="true" style="position:absolute; top:15px; left:15px; font-size:24px; color:#31a231"></i>';
+                        }
+                        $element_html .= '<a href="javascript:void(0)" class="remove-img" style="position:absolute; top:15px; right:15px" data-id="' . $image->id . '"><i class="fa fa-trash" style="font-size:24px;"></i></a>';
+                        $element_html .= '<img src="' . Utils::getImageLink($image->image) . '" class="img-thumbnail" style="max-width:110px; max-height:150px;margin-top:10px; margin-right:5px">';
                         $element_html .= '</div>';
                     }
                 }
                 $element_html .= '</div>';
+                $element_html .= '<input type="hidden" id="is_main" name="is_main" value="" />';
                 $element_html .= '<input type="hidden" id="file_selected" />';
                 break;
                 
@@ -1332,8 +1366,10 @@ class Utils {
             case 'editor':
                 $editor_type = isset($value['editor']) ? $value['editor'] : 'small';
                 $editor_height = isset($value['height']) ? $value['height'] : '200';
+                $element_html .= '<div>';
                 $element_html .= '<label>' .$text . '</label>';
                 $element_html .= '<textarea name="' . $key . '" id="' . $key . '" class="fckeditor" data-height="' . $editor_height . '" data-editor="' . $editor_type . '" placeholder="' . $placeholder . '">' . $element_value . '</textarea>';
+                $element_html .= '</div>';
                 break;
                 
         }
@@ -1399,7 +1435,7 @@ class Utils {
                 switch($rule_name) {
                     case 'required':
                         $msg_item = 'validation.required';
-                        if($k == 'content') {
+                        if($k == 'content' || $k == 'description') {
                             $rule_name = 'required_ckeditor';
                         }
                         if($k == 'role_id' || $k == 'category_id' || $k == 'post_group_id') {

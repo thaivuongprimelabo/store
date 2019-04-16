@@ -12,7 +12,7 @@
 						<li class="prev"><i class="fa fa-angle-left"></i></li>
 						<li class="tab-link tab-title hidden-sm hidden-md hidden-lg current tab-titlexs" data-tab="tab-1">
 							
-							<span>Rau củ</span>
+							<span>{{ $categories->first()->name }}</span>
 							
 						</li>
 						<li class="next"><i class="fa fa-angle-right"></i></li>
@@ -20,7 +20,7 @@
 					<ul class="tabs tabs-title ajax clearfix hidden-xs">
 						@if($categories->count())
 						@foreach($categories as $key=>$category)
-						<li class="tab-link has-content" data-tab="tab-{{ $key }}" data-url="">
+						<li class="tab-link has-content" data-tab="tab-{{ ++$key }}" data-url="">
 							<span>{{ $category->name }}</span>
 						</li>
 						@endforeach
@@ -29,7 +29,7 @@
 					</ul>
 					@if($categories->count())
 					@foreach($categories as $key=>$category)
-					<div class="tab-{{ $key }} tab-content">
+					<div class="tab-{{ ++$key }} tab-content">
 						<div class="products products-view-grid">
 							@php
 								$products = $category->getProductInCategory($type);

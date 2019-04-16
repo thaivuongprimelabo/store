@@ -45,7 +45,7 @@ $auth = [
      /*------------ Dashboard page ------------------- */
     'dashboard_page_title' => '<b>C</b>Panel',
     'back_to_home' => 'Xem trang chính',
-    
+    'count' => '&nbsp;&nbsp;(Tìm thấy tất cả :count dòng dữ liệu)',
     /*------------ Sidebar ------------------- */
     'sidebar' => [
         'products' => [
@@ -108,7 +108,7 @@ $auth = [
                 'width' => '10%'
             ],
             'updated_at' => [
-                'text' => 'Ngày chỉnh sửa',
+                'text' => 'Ngày cập nhật',
                 'width' => '10%'
             ],
             'remove_action' => [
@@ -201,7 +201,7 @@ $auth = [
                 'width' => '10%'
             ],
             'updated_at' => [
-                'text' => 'Ngày chỉnh sửa',
+                'text' => 'Ngày cập nhật',
                 'width' => '10%'
             ],
             'remove_action' => [
@@ -274,7 +274,7 @@ $auth = [
                 'width' => '10%'
             ],
             'updated_at' => [
-                'text' => 'Ngày chỉnh sửa',
+                'text' => 'Ngày cập nhật',
                 'width' => '10%'
             ],
             'remove_action' => [
@@ -353,11 +353,11 @@ $auth = [
             ],
             'banner' => [
                 'text' => 'Banner',
-                'width' => '20%'
+                'width' => '15%'
             ],
             'link' => [
                 'text' => 'Đường dẫn',
-                'width' => '10%'
+                'width' => '20%'
             ],
             'status' => [
                 'text' => 'Trạng thái',
@@ -368,7 +368,7 @@ $auth = [
                 'width' => '10%'
             ],
             'updated_at' => [
-                'text' => 'Ngày chỉnh sửa',
+                'text' => 'Ngày cập nhật',
                 'width' => '10%'
             ],
             'remove_action' => [
@@ -615,7 +615,8 @@ $auth = [
         ],
         'rules' => [
             'name' => 'required|max:' . \App\Constants\Common::NAME_MAXLENGTH,
-            'description' => 'max:' . \App\Constants\Common::DESC_MAXLENGTH,
+            'description' => 'required',
+            'content' => 'required',
             'post_group_id' => 'required'
         ]
     ],
@@ -660,7 +661,7 @@ $auth = [
                 'width' => '20%'
             ],
             'updated_at' => [
-                'text' => 'Ngày chỉnh sửa',
+                'text' => 'Ngày cập nhật',
                 'width' => '20%'
             ],
             'remove_action' => [
@@ -751,11 +752,11 @@ $auth = [
                 'width' => '10%'
             ],
             'created_at' => [
-                'text' => 'Ngày đăng ký',
+                'text' => 'Ngày đặt hàng',
                 'width' => '10%'
             ],
             'updated_at' => [
-                'text' => 'Ngày chỉnh sửa',
+                'text' => 'Ngày cập nhật',
                 'width' => '10%'
             ],
             'remove_action' => [
@@ -770,8 +771,8 @@ $auth = [
         ],
         'table_product_header' => [
             'product_id' => [
-                'text' => 'Mã sản phẩm',
-                'width' => '15%'
+                'text' => 'ID',
+                'width' => '5%'
             ],
             'product_image' => [
                 'text' => 'Hình ảnh',
@@ -787,11 +788,11 @@ $auth = [
             ],
             'price' => [
                 'text' => 'Đơn giá',
-                'width' => '10%'
+                'width' => '15%'
             ],
             'cost' => [
                 'text' => 'Thành tiền',
-                'width' => '10%'
+                'width' => '15%'
             ],
         ],
         'search_form' => [
@@ -807,15 +808,15 @@ $auth = [
                 'type' => 'text',
                 'placeholder' => 'Lọc theo số điện thoại'
             ],
-            'date' => [
-                'type' => 'text',
-                'placeholder' => 'Lọc theo ngày giao hàng'
-            ],
             'status' => [
                 'type' => 'data_select',
                 'table' => 'STATUS_ORDERS',
                 'empty_text' => 'Lọc theo trạng thái'
-            ]
+            ],
+            'created_at' => [
+                'type' => 'calendar',
+                'placeholder' => 'Lọc theo ngày đặt hàng'
+            ],
         ],
         'form' => [
             'many_form' => true,
@@ -840,6 +841,10 @@ $auth = [
                 'payment_method' => [
                     'type' => 'label',
                     'text' => 'Phương thức chi trả: '
+                ],
+                'customer_note' => [
+                    'type' => 'label',
+                    'text' => 'Ghi chú: '
                 ],
                 'status' => [
                     'type' => 'select',
@@ -875,25 +880,27 @@ $auth = [
                     'type' => 'file_simple',
                     'text' => 'Web banner'
                 ],
-                'web_address' => [
-                    'type' => 'text',
-                    'text' => 'Địa chỉ',
-                    'maxlength' => 200
-                ],
                 'web_email' => [
                     'type' => 'text',
                     'text' => 'Web mail',
                     'maxlength' => 200
                 ],
-                'web_hotline' => [
-                    'type' => 'text',
-                    'text' => 'Hotline',
-                    'maxlength' => 12
+                'web_address' => [
+                    'type' => 'address',
+                    'text' => 'Địa chỉ',
                 ],
                 'web_working_time' => [
                     'type' => 'text',
                     'text' => 'Giờ làm việc',
-                    'maxlength' => 40
+                    'height' => 100
+                ],
+                'web_hotline' => [
+                    'type' => 'hotline',
+                    'text' => 'Hotline',
+                ],
+                'freeship' => [
+                    'type' => 'textarea',
+                    'text' => 'Miễn phí vận chuyển',
                 ],
                 'web_description' => [
                     'type' => 'textarea',
@@ -1010,6 +1017,13 @@ $auth = [
                     'text' => 'URL'
                 ]
             ],
+            'youtube_channel' => [
+                'header' => 'Youtube Channel',
+                'youtube_channel' => [
+                    'type' => 'text',
+                    'text' => 'URL'
+                ]
+            ],
             'off' => [
                 'header' => 'Tắt hệ thống',
                 'off' => [
@@ -1076,7 +1090,7 @@ $auth = [
                 'type' => 'text',
                 'placeholder' => 'Lọc theo tên sản phẩm'
             ],
-            'product_status' => [
+            'status' => [
                 'type' => 'status_select',
                 'empty_text' => 'Lọc theo trạng thái'
             ],
@@ -1345,7 +1359,7 @@ $auth = [
                 'width' => '10%'
             ],
             'updated_at' => [
-                'text' => 'Ngày chỉnh sửa',
+                'text' => 'Ngày cập nhật',
                 'width' => '10%'
             ],
             'remove_action' => [
@@ -1423,7 +1437,9 @@ $auth = [
             ],
             'content' => [
                 'type' => 'editor',
-                'text' => 'Nội dung'
+                'text' => 'Nội dung',
+                'editor' => 'full',
+                'height' => 400
             ]
         ],
         'rules' => [

@@ -15,6 +15,7 @@ use View;
 use App\User;
 use App\Category;
 use App\Product;
+use Carbon\Carbon;
 class AppController extends Controller
 {
     public $config = [];
@@ -39,34 +40,32 @@ class AppController extends Controller
             $web_logo = Utils::getImageLink($config->web_logo);
             $web_ico = Utils::getImageLink($config->web_ico);
             
-            $this->config = [
-                'config' => [
-                    'web_logo' => $web_logo,
-                    'web_ico' => $web_ico,
-                    'mail_from' => Utils::cnvNull($config->mail_from, 'support@gmail.com'),
-                    'mail_name' => Utils::cnvNull($config->mail_name, 'Mail System'),
-                    'upload_banner_maximum_upload' => Utils::cnvNull($config->upload_banner_maximum_upload, 51200),
-                    'upload_logo_maximum_upload' => Utils::cnvNull($config->upload_logo_maximum_upload, 51200),
-                    'upload_image_maximum_upload' => Utils::cnvNull($config->upload_image_maximum_upload, 51200),
-                    'upload_photo_maximum_upload'   => Utils::cnvNull($config->upload_photo_maximum_upload, 51200),
-                    'upload_web_logo_maximum_upload'   => Utils::cnvNull($config->upload_web_logo_maximum_upload, 51200),
-                    'upload_web_ico_maximum_upload'   => Utils::cnvNull($config->upload_web_ico_maximum_upload, 51200),
-                    'upload_avatar_maximum_upload'   => Utils::cnvNull($config->upload_avatar_maximum_upload, 51200),
-                    'upload_web_banner_maximum_upload'   => Utils::cnvNull($config->upload_web_banner_maximum_upload, 51200),
-                    
-                    'upload_banner_image_size' => Utils::cnvNull($config->upload_banner_image_size, '100x100'),
-                    'upload_logo_image_size' => Utils::cnvNull($config->upload_logo_image_size, '100x100'),
-                    'upload_image_image_size' => Utils::cnvNull($config->upload_image_image_size, '100x100'),
-                    'upload_photo_image_size'   => Utils::cnvNull($config->upload_photo_image_size, '100x100'),
-                    'upload_web_logo_image_size'   => Utils::cnvNull($config->upload_web_logo_image_size, '100x100'),
-                    'upload_web_ico_image_size'   => Utils::cnvNull($config->upload_web_ico_image_size, '100x100'),
-                    'upload_avatar_image_size'   => Utils::cnvNull($config->upload_avatar_image_size, '100x100'),
-                    'upload_web_banner_image_size'   => Utils::cnvNull($config->upload_web_banner_image_size, '100x100'),
-                    
-                    'url_ext' => Utils::cnvNull($config->url_ext, '.html'),
-                    
-                ]
+            $this->config['config'] = [
+                'web_logo' => $web_logo,
+                'web_ico' => $web_ico,
+                'mail_from' => Utils::cnvNull($config->mail_from, 'support@gmail.com'),
+                'mail_name' => Utils::cnvNull($config->mail_name, 'Mail System'),
+                'upload_banner_maximum_upload' => Utils::cnvNull($config->upload_banner_maximum_upload, 51200),
+                'upload_logo_maximum_upload' => Utils::cnvNull($config->upload_logo_maximum_upload, 51200),
+                'upload_image_maximum_upload' => Utils::cnvNull($config->upload_image_maximum_upload, 51200),
+                'upload_photo_maximum_upload'   => Utils::cnvNull($config->upload_photo_maximum_upload, 51200),
+                'upload_web_logo_maximum_upload'   => Utils::cnvNull($config->upload_web_logo_maximum_upload, 51200),
+                'upload_web_ico_maximum_upload'   => Utils::cnvNull($config->upload_web_ico_maximum_upload, 51200),
+                'upload_avatar_maximum_upload'   => Utils::cnvNull($config->upload_avatar_maximum_upload, 51200),
+                'upload_web_banner_maximum_upload'   => Utils::cnvNull($config->upload_web_banner_maximum_upload, 51200),
+                
+                'upload_banner_image_size' => Utils::cnvNull($config->upload_banner_image_size, '100x100'),
+                'upload_logo_image_size' => Utils::cnvNull($config->upload_logo_image_size, '100x100'),
+                'upload_image_image_size' => Utils::cnvNull($config->upload_image_image_size, '100x100'),
+                'upload_photo_image_size'   => Utils::cnvNull($config->upload_photo_image_size, '100x100'),
+                'upload_web_logo_image_size'   => Utils::cnvNull($config->upload_web_logo_image_size, '100x100'),
+                'upload_web_ico_image_size'   => Utils::cnvNull($config->upload_web_ico_image_size, '100x100'),
+                'upload_avatar_image_size'   => Utils::cnvNull($config->upload_avatar_image_size, '100x100'),
+                'upload_web_banner_image_size'   => Utils::cnvNull($config->upload_web_banner_image_size, '100x100'),
+                
+                'url_ext' => Utils::cnvNull($config->url_ext, '.html'),
             ];
+            
             View::share($this->config);
         }
         
@@ -101,7 +100,10 @@ class AppController extends Controller
                 if(!Utils::blank($value)) {
                     if($key == 'name') {
                         $wheres[] = [$key, 'LIKE', '%' . $value . '%'];
-                    } else {
+                    }elseif($key == 'created_at') { 
+                        $value = Carbon::createFromFormat('d/m/Y', $value)->format('Y-m-d');
+                        $wheres[] = [DB::raw('DATE(' . $key . ')'), '=', $value];
+                    }else {
                         $wheres[] = [$key, '=', $value];
                     }
                 }
@@ -127,16 +129,17 @@ class AppController extends Controller
         if($model instanceof Product) {
         }
         
-        
-        $data_list = $model::where($wheres)->orderBy('created_at', 'DESC')->paginate(Common::ROW_PER_PAGE);
+        $data_obj = $model::where($wheres)->orderBy('created_at', 'DESC');
+        $data_count = $data_obj->get()->count();
+        $data_list = $data_obj->paginate(Common::ROW_PER_PAGE);
         
         $paging = $data_list->toArray();
         
         if($request->ajax()) {
-            $this->result['data'] = view($view, compact('data_list', 'paging', 'name'))->render();
+            $this->result['data'] = view($view, compact('data_list', 'data_count', 'paging', 'name'))->render();
             return response()->json($this->result);
         } else {
-            return compact('data_list', 'paging', 'name');
+            return compact('data_list', 'data_count', 'paging', 'name');
         }
     }
     

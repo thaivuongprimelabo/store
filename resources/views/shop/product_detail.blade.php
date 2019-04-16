@@ -101,10 +101,13 @@
 						<div class="product-tab e-tabs">
 							<ul class="tabs tabs-title clearfix">
 								<li class="tab-link" data-tab="tab-1">
-									<h3><span>Mô tả</span></h3>
+									<h3><span>{{ trans('shop.description_txt') }}</span></h3>
 								</li>
 								<li class="tab-link" data-tab="tab-2">
-									<h3><span>Thông tin</span></h3>
+									<h3><span>{{ trans('shop.info_txt') }}</span></h3>
+								</li>
+								<li class="tab-link" data-tab="tab-3">
+									<h3><span>{{ trans('shop.comment_txt') }}</span></h3>
 								</li>
 							</ul>
 							<div class="tab-1 tab-content">
@@ -114,6 +117,10 @@
 							</div>
 							<div class="tab-2 tab-content">
 								{!! $data->getDescription() !!}
+							</div>
+							<div class="tab-3 tab-content">
+								<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.2&appId=135671569954053&autoLogAppEvents=1"></script>
+    							<div class="fb-comments" data-href="{{ $data->getLink() }}" data-width="800" data-numposts="5"></div>
 							</div>
 						</div>
 					</div>
@@ -189,11 +196,19 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 		$('.detail-item').click(function(e) {
-			var groupId = $(this).attr('data-group-id');
-			$('.group-' + groupId).removeClass('label-success').addClass('label-default');
-			$('.group-' + groupId).find('i').remove();
-			$(this).prepend('<i class="fa fa-check"></i>');
-			$(this).removeClass('label-default').addClass('label-success');
+			if($(this).hasClass('label-success')) {
+				$(this).removeClass('label-success');
+				$(this).find('i').remove();
+				$(this).addClass('label-default');
+				
+			} else {
+				var groupId = $(this).attr('data-group-id');
+				$('.group-' + groupId).removeClass('label-success').addClass('label-default');
+				$('.group-' + groupId).find('i').remove();
+				$(this).prepend('<i class="fa fa-check"></i>');
+				$(this).removeClass('label-default').addClass('label-success');
+			}
+			
 			var id = $(this).data('id');
 			var pid = $(this).attr('data-product-id');
 			var product_price = Number($('#product_price').val());
@@ -211,38 +226,39 @@
 			$('#product_price_format').html(formatCurrency(new_price, '.', '.'));
 
 		});
+
+		$(document).on('click', '.btn-buy', function(e) {
+			 var qty = $('.qty').val();
+			 var items = [];
+			 var data = {
+				type : 'post',
+	       		async : true,
+	       		pid: $(this).attr('data-id'),
+	       		qty: qty,
+	       		items: [],
+	       		container: ['#cart_1', '.cartCount2', '#top_cart'],
+	       		dialog: '#popupCartModal'
+			 }
+
+			 $('.detail-item').each(function(index, item) {
+				var item = $(item);
+				if(item.hasClass('label-success')) {
+					var item = {
+						id: item.attr('data-id'),
+						name: item.attr('data-name'),
+						price: item.attr('data-price'),
+						group_id: item.attr('data-group-id'),
+						group_name: item.attr('data-group-name')
+					}
+
+					items.push(item);
+				}
+			 });
+
+			 data.items = items;
+			 callAjax('{{ route('addToCart') }}', data);
+		 });
 	});
 
-	$(document).on('click', '.btn-buy', function(e) {
-		 var qty = $('.qty').val();
-		 var items = [];
-		 var data = {
-			type : 'post',
-       		async : true,
-       		pid: $(this).attr('data-id'),
-       		qty: qty,
-       		items: [],
-       		container: ['#cart_1', '.cartCount2', '#top_cart'],
-       		dialog: '#popupCartModal'
-		 }
-
-		 $('.detail-item').each(function(index, item) {
-			var item = $(item);
-			if(item.hasClass('label-success')) {
-				var item = {
-					id: item.attr('data-id'),
-					name: item.attr('data-name'),
-					price: item.attr('data-price'),
-					group_id: item.attr('data-group-id'),
-					group_name: item.attr('data-group-name')
-				}
-
-				items.push(item);
-			}
-		 });
-
-		 data.items = items;
-		 callAjax('{{ route('addToCart') }}', data);
-	 });
 </script>
 @endsection

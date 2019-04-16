@@ -12,6 +12,34 @@
       <link href="{{ url('shop/css/checkout.css') }}" rel="stylesheet" type="text/css" />
    </head>
    <body class="body--custom-background-color ">
+   	  <div class="banner" data-header="">
+         <div class="wrap">
+           	<div class="shop logo logo--left ">
+                    <h1 class="shop__name">
+                        <a href="/">
+                            {{ $config['web_name'] }}
+                        </a>
+                    </h1>
+           		</div>
+            </div>
+        </div>
+    	<button class="order-summary-toggle">
+            <div class="wrap">
+                <h2>
+                    <label class="control-label">Đơn hàng</label>
+                    <label class="control-label hidden-small-device">
+                        ({{ $cart->getCount() }} sản phẩm)
+                    </label>
+                    <label class="control-label visible-small-device inline">
+                        (1)
+                    </label>
+                </h2>
+                <a id="show-order-summary" class="underline-none expandable pull-right" href="javascript:void(0)">
+                    Xem chi tiết
+                </a>
+            </div>
+    	</button>
+           	  
       <form id="submit_form" method="post" action="" class="content stateful-form formCheckout">
          <div class="wrap">
             <div class="sidebar ">
@@ -117,60 +145,8 @@
                                        class="fa fa-id-card-o fa-lg section__title--icon hidden-md hidden-lg"
                                        aria-hidden="true"></i> <label class="control-label">{{ trans('shop.checkout.customer_info') }}</label>
                                  </h2>
-                                 <a class="layout-flex__item section__title--link" href="{{ route('account_login') }}"> 
-                                 	<i class="fa fa-user-circle-o fa-lg" aria-hidden="true"></i>
-                                 	{{ trans('shop.login') }}
-                                 </a>
                               </div>
                            </div>
-                           @if(Auth::user())
-                           <div class="section__content">
-                              	<div class="form-group">
-                                     <div class="field__input-wrapper">
-                                        <input type="text" class="field__input form-control" name="checkout_email" placeholder="{{ trans('shop.user.email') }}*" id="checkout_email" value="{{ Auth::user()->email }}" />
-                                     </div>
-                                     <div class="help-block"></div>
-                              	</div>
-                                <div class="form-group">
-                                   <div class="field__input-wrapper">
-                                      <input type="text" name="checkout_name" id="checkout_name" type="text" placeholder="{{ trans('shop.user.name') }}*" class="field__input form-control" value="{{ Auth::user()->name }}" />
-                                   </div>
-                                   <div class="help-block"></div>
-                                </div>
-                                <div class="form-group">
-                                   <div class="field__input-wrapper">
-                                      <input type="tel" name="checkout_phone" class="field__input form-control" id="checkout_phone" placeholder="{{ trans('shop.user.phone') }}*" value="{{ Auth::user()->phone }}" />
-                                   </div>
-                                   <div class="help-block"></div>
-                                </div>
-                                <div class="form-group">
-                                   <div class="field__input-wrapper">
-                                      <input type="text" name="checkout_address" class="field__input form-control" id="checkout_address"  placeholder="{{ trans('shop.user.address') }}*" value="{{ Auth::user()->address }}"/>
-                                   </div>
-                                   <div class="help-block"></div>
-                                </div>
-                                <div class="form-group">
-                                   <div>
-                                       <select name="checkout_province" id="checkout_province" class="form-control">
-                                       </select>
-                                   </div>
-                                   <div class="help-block"></div>
-                                </div>
-                                <div class="form-group">
-                                 	<div>
-                                       <select name="checkout_district" id="checkout_district" class="form-control">
-                                       </select>
-                                   </div>
-                                   <div class="help-block"></div>
-                                </div>
-                                <div class="form-group">
-                                   <div class="field__input-wrapper">
-                                      <textarea name="checkout_note" id="checkout_note" class="field__input form-control m0" placeholder="{{ trans('shop.checkout.note') }}"></textarea>
-                                   </div>
-                                   <div class="help-block"></div>
-                                </div>
-                           </div>
-                           @else
                            <div class="section__content">
                               	<div class="form-group">
                                      <div class="field__input-wrapper">
@@ -217,7 +193,6 @@
                                    <div class="help-block"></div>
                                 </div>
                            </div>
-                           @endif
                         </div>
                      </div>
                      <div class="col-md-6 col-lg-6">
@@ -390,6 +365,30 @@
 			$.get('{{ route('loadDistrict') }}?city_id=' + cityId, function( data ) {
 				   $('#checkout_district').html(data);
 			});
+	    });
+
+	    $('#show-order-summary').click(function(e) {
+	    	var $toggle = $(this).parent().parent();
+            var $container = $(".order-summary--product-list");
+
+            $container.wrapInner("<div />");
+
+            var i = $container.height();
+            var r = $container.find("> div").height();
+            var n = 0 === i ? r : 0;
+
+            $container.css("height", i);
+            $container.find("> div").contents().unwrap();
+
+            setTimeout(function (i) {
+                return function () {
+                    $toggle.toggleClass("order-summary-toggle--hide");
+                    $container.toggleClass("order-summary--is-collapsed");
+                    $container.addClass("order-summary--transition");
+                    $container.css("height", n);
+                }
+            }(this), 0);
+
 	    });
 		    
 	});

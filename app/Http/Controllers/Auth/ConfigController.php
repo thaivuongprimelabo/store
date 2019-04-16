@@ -159,13 +159,28 @@ class ConfigController extends AppController
             $data->web_banner      = $web_banner;
             $data->web_email       = Utils::cnvNull($request->web_email, '');
             $data->url_ext         = Utils::cnvNull($request->url_ext, '');
-            $data->web_address = Utils::cnvNull($request->web_address, '');
+            
+            $web_address = $request->web_address;
+            if(is_array($web_address) && count($web_address)) {
+                $web_address = array_filter($web_address, 'strlen');
+                $web_address = implode('|', $web_address);
+                $data->web_address = $web_address;
+            }
+            
             $data->web_email = Utils::cnvNull($request->web_email, '');
-            $data->web_hotline = Utils::cnvNull($request->web_hotline, '');
+            
+            $web_hotline = $request->web_hotline;
+            if(is_array($web_hotline) && count($web_hotline)) {
+                $web_hotline = array_filter($web_hotline, 'strlen');
+                $web_hotline = implode('|', $web_hotline);
+                $data->web_hotline = $web_hotline;
+            }
+            
             $data->web_working_time = Utils::cnvNull($request->web_working_time, '');
+            $data->freeship = Utils::cnvNull($request->freeship, '');
             $data->footer_text = Utils::cnvNull($request->footer_text, '');
             $data->facebook_fanpage = Utils::cnvNull($request->facebook_fanpage, '');
-            
+            $data->youtube_channel = Utils::cnvNull($request->youtube_channel, '');
             if(Auth::user()->role_id == Common::SUPER_ADMIN) {
                 $data->upload_banner_maximum_upload = Utils::cnvNull($request->upload_banner_maximum_upload, '');
                 $data->upload_logo_maximum_upload = Utils::cnvNull($request->upload_logo_maximum_upload, '');
