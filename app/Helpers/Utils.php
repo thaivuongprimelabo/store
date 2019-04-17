@@ -959,12 +959,19 @@ class Utils {
         
         
         if($tabForm) {
+            $acceptAdmin = [
+                'tab_form_2'
+            ];
+            
             $form_html .= '<input type="hidden" name="id" id="id_check" value="' . $id . '" />';
             $form_html = '';
             $form_html .= '<div class="nav-tabs-custom">';
             $form_html .= '<ul class="nav nav-tabs">';
             
             foreach($tabForm as $id=>$form) {
+                if(Auth::user()->role_id == UserRole::ADMIN && in_array($id, $acceptAdmin)) {
+                    continue;
+                }
                 $form_html .= '<li class="' . ($id == 'tab_form_1' ? 'active' : '') . '">';
                 $form_html .= '<a href="#' . $id . '" data-toggle="tab" aria-expanded="true"> '. $form['title'];
                 $form_html .= '</a>';
@@ -1111,6 +1118,15 @@ class Utils {
                     $element_html .= '</div>';
                 }
                 
+                break;
+            case 'link_to_post':
+                $element_html .= $label;
+                $element_html .= '<div class="input-group"><span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>';
+                $element_html .= '<input type="text" class="form-control" name="' . $key . '" id="' . $key . '" value="' . $element_value . '" placeholder="' . $placeholder . '" ' . $maxlength . ' '. $disable . ' />';
+                $element_html .= '<div class="input-group-btn">';
+                $element_html .= '<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#selectPostModal"><i class="fa fa-link fa-fw"></i> URL bài viết</button>';
+                $element_html .= '</div>'; 
+                $element_html .= '</div>';
                 break;
                 
             case 'address':

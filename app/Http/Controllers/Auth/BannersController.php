@@ -97,10 +97,9 @@ class BannersController extends AppController
             
             if (!$validator->fails()) {
                 
-                
                 $select_type = Utils::cnvNull($request->select_type, 'use_image');
                 if($select_type == 'use_image') {
-                    $filename = '';
+                    $filename = $data->banner;
                     Utils::doUploadSimple($request, 'upload_banner', $filename);
                     $data->link           = Utils::cnvNull($request->link, '');
                     $data->banner         = $filename;

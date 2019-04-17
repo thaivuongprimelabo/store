@@ -346,6 +346,7 @@ $auth = [
         'list_title' => 'Danh mục banner',
         'create_title' => 'Đăng ký banner',
         'edit_title' => 'Chỉnh sửa banner',
+        'select_post_title' => 'Danh sách bài viết',
         'table_header' => [
             'id' => [
                 'text' => 'ID',
@@ -403,7 +404,7 @@ $auth = [
                 'container_id' => 'use_image'
             ],
             'link' => [
-                'type' => 'text',
+                'type' => 'link_to_post',
                 'text' => 'Đường dẫn',
                 'container_id' => 'use_image'
             ],
@@ -859,10 +860,9 @@ $auth = [
     'config' => [
         'list_title' => 'Cài đặt hệ thống',
         'edit_title' => 'Cài đặt',
-        'form' => [
-            'many_form' => true,
-            'web_info' => [
-                'header' => 'Website informations',
+        'tab_form' => [
+            'tab_form_1' => [
+                'title' => 'Thông tin cơ bản',
                 'web_title' => [
                     'type' => 'text',
                     'text' => 'Web name',
@@ -919,10 +919,19 @@ $auth = [
                 'footer_text' => [
                     'type' => 'editor',
                     'text' => 'Footer text'
+                ],
+                'url_ext' => [
+                    'type' => 'text',
+                    'text' => 'URL Extension',
+                    'maxlength' => 15
+                ],
+                'off' => [
+                    'type' => 'checkbox',
+                    'text' => 'Tắt hệ thống'
                 ]
             ],
-            'upload_settings' => [
-                'header' => 'Upload settings',
+            'tab_form_2' => [
+                'title' => 'Upload settings',
                 'upload_banner_maximum_upload' => [
                     'type' => 'select',
                     'text' => 'Maximum upload file (Banner) KB',
@@ -997,8 +1006,8 @@ $auth = [
                     'text' => 'Kích thước web banner (dài x rộng)'
                 ]
             ],
-            'payment_method' => [
-                'header' => 'Phương thức thanh toán',
+            'tab_form_3' => [
+                'title' => 'Phương thức thanh toán',
                 'cash_info' => [
                     'type' => 'editor',
                     'text' => 'Thanh toán khi giao hàng (COD)'
@@ -1008,16 +1017,8 @@ $auth = [
                     'text' => 'Chuyển khoản ngân hàng'
                 ],
             ],
-            'url_ext' => [
-                'header' => 'URL Extension',
-                'url_ext' => [
-                    'type' => 'text',
-                    'text' => 'URL Extension',
-                    'maxlength' => 15
-                ]
-            ],
-            'social' => [
-                'header' => 'Mạng xã hội',
+            'tab_form_4' => [
+                'title' => 'Các mạng xã hội',
                 'facebook_fanpage' => [
                     'type' => 'text',
                     'text' => 'Facebook page',
@@ -1038,17 +1039,9 @@ $auth = [
                     'text' => 'Shopee page',
                     'maxlength' => 150
                 ],
-            ],
-            
-            'off' => [
-                'header' => 'Tắt hệ thống',
-                'off' => [
-                    'type' => 'checkbox',
-                    'text' => 'Tắt hệ thống'
-                ]
             ]
+        ],
         
-        ]
     ],
     /*------------ Products page ------------------- */
     'products' => [

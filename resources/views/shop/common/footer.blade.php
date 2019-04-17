@@ -70,10 +70,10 @@
 								<h3 class="hastog"><span>{{ trans('shop.policy.title') }}</span></h3>
 								<ul class="list-menu list-blogs">
 									<li>
-										<a href="javascript:void(0)" >{{ trans('shop.policy.guarantee_txt') }}</a>
+										<a href="{{ route('guarantee_policy') }}" >{{ trans('shop.policy.guarantee_txt') }}</a>
 									</li>
 									<li>
-										<a href="javascript:void(0)" >{{ trans('shop.policy.shipment_txt') }}</a>
+										<a href="{{ route('shipment_policy') }}" >{{ trans('shop.policy.shipment_txt') }}</a>
 									</li>
 								</ul>
 							</div>
@@ -115,12 +115,12 @@
 						<i class="fa  fa-angle-up"></i>
 					</div>
 					
-
-					<a href="tel:01676435063" class="suntory-alo-phone bottom-left  suntory-alo-green " id="suntory-alo-phoneIcon">
+					@if(count($hotline))
+					<a href="tel:{{ $hotline[0] }}" class="suntory-alo-phone bottom-left  suntory-alo-green " id="suntory-alo-phoneIcon">
 
 						<div class="suntory-alo-ph-img-circle"><i class="fa fa-phone"></i></div>
 					</a>
-
+					@endif
 				</div>
 			</div>
 		</div>

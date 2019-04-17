@@ -108,7 +108,7 @@ class Common {
     CONST TEMPLATE = 'auth.emails.template';
     
     /** Size */
-    CONST UPLOAD_SIZE_LIMIT = ['51200', '102400', '512000', '1024000'];
+    CONST UPLOAD_SIZE_LIMIT = ['51200', '102400', '204800', '512000'];
     
     CONST CURRENCY = '₫';
     

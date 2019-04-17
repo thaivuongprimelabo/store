@@ -224,6 +224,34 @@ class HomeController extends AppController
         return view('shop.page', $this->output);
     }
     
+    public function guaranteePolicy(Request $request) {
+        
+        $page = Page::find(3);
+        $this->output['breadcrumbs'] = [
+            ['link' => '#', 'text' => trans('shop.policy.guarantee_txt')]
+        ];
+        $this->output['title'] = trans('shop.policy.guarantee_txt');
+        $this->output['page'] = $page;
+        
+        $this->setSEO(['title' => trans('shop.policy.guarantee_txt'), 'link' => route('guarantee_policy')]);
+        
+        return view('shop.page', $this->output);
+    }
+    
+    public function shipmentPolicy(Request $request) {
+        
+        $page = Page::find(4);
+        $this->output['breadcrumbs'] = [
+            ['link' => '#', 'text' => trans('shop.policy.shipment_txt')]
+        ];
+        $this->output['title'] = trans('shop.policy.shipment_txt');
+        $this->output['page'] = $page;
+        
+        $this->setSEO(['title' => trans('shop.policy.shipment_txt'), 'link' => route('shipment_policy')]);
+        
+        return view('shop.page', $this->output);
+    }
+    
     public function orderChecking(Request $request) {
         
         $page = Page::find(2);

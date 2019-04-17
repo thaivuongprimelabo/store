@@ -198,4 +198,24 @@ class ApiController extends Controller
         }
     }
     
+    public function getSelectPost(Request $request) {
+        $posts = Post::select('id', 'name', 'name_url', 'post_group_id')->active()->get();
+        $output = [];
+        if($posts->count()) {
+            foreach($posts as $post) {
+                $item = [
+                    'id' => $post->id,
+                    'name' => $post->name,
+                    'name_url' => $post->name_url,
+                    'link' => $post->getLink()
+                ];
+                
+                array_push($output, $item);
+            }
+            return response()->json($output);
+        }
+        
+        return response()->json($output);
+    }
+    
 }

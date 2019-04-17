@@ -15,14 +15,7 @@
 		<div class="col-md-12">
 			<form role="form" id="submit_form" action="?" method="post" enctype="multipart/form-data">
 				{{ csrf_field() }}
-    			@php
-                  	$forms = trans('auth.config.form');
-                  	$acceptAdmin = [
-                  		'web_info', 'payment_method', 'off'
-                  	];
-                @endphp
                 {!! Utils::generateForm($form, $config, $name, false, $data) !!}
-                @include('auth.common.button_footer', ['name' => $name, 'back_url' => route('auth_' . $name)])
             </form>
 		</div>
 	</div>

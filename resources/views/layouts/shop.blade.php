@@ -40,7 +40,9 @@
 	<script src="{{ url('shop/bizweb.dktcdn.net/100/308/325/themes/665783/assets/jquery-2.2.3.min4d7c.js') }}" type="text/javascript"></script> 
 	
 	<script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v3.2&appId=135671569954053&autoLogAppEvents=1"></script>
-
+	
+<!-- 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css"> -->
+  	
 </head>
 
 <body>
@@ -61,9 +63,12 @@
 	
 	<script src="https://bizweb.dktcdn.net/100/308/325/themes/665783/assets/jquery.elevatezoom308.min.js" type="text/javascript"></script>	
 	<script type="text/javascript" src="{{ url('js/custom.shop.js') }}" ></script>
+<!--  	<script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script> -->
 	<script>
 		$(document).ready(function() {
-			
+			 $('.slider').bxSlider({
+				 responsive: true
+			 });
     		 $('.zoomContainer').remove();
     		 $('#zoom_01').elevateZoom({
     			 gallery:'gallery_01', 

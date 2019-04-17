@@ -252,7 +252,7 @@ function dl_owl() {
 			responsiveClass:true,
 			dots:dot,
 			autoplay:true,
-			autoHeight: true,
+			autoHeight: false,
 			nav:nav,
 			navText: ["<i class='fa fa-angle-left'></i>","<i class='fa fa-angle-right'></i>"],
 			responsive:{

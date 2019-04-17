@@ -120,6 +120,9 @@ Route::group(['prefix' => ''], function () {
     Route::get('/san-pham' . $config['url_ext'], 'HomeController@products')->name('products');
     Route::get('/huong-dan-mua-hang' . $config['url_ext'], 'HomeController@orderIntroduction')->name('order_introduction');
     Route::get('/kiem-tra-don-hang' . $config['url_ext'], 'HomeController@orderChecking')->name('order_checking');
+    Route::get('/chinh-sach-bao-hanh' . $config['url_ext'], 'HomeController@guaranteePolicy')->name('guarantee_policy');
+    Route::get('/chinh-sach-van-chuyen' . $config['url_ext'], 'HomeController@shipmentPolicy')->name('shipment_policy');
+    
     Route::match(['get', 'post'], '/lien-he' . $config['url_ext'], 'HomeController@contact')->name('contact');
     Route::get('/search' . $config['url_ext'], 'HomeController@search')->name('search');
     Route::match(['get', 'post'], 'account/login' . $config['url_ext'], 'MembersController@login')->name('account_login');

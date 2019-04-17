@@ -153,6 +153,7 @@
     </footer>
     @include('auth.common.alert')
     @include('auth.products.add_service_modal')
+    @include('auth.common.select_post')
 </div>
 @endif
 <!-- jQuery 3 -->
@@ -306,16 +307,50 @@
     	}
     });
 
-    $('#uploadModal').on('show.bs.modal', function (event) {
-		$('#preview').attr('src','https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTk3tIoN8xFb5O6v9T9SgFWpp3ps6mfSbLblzh6zh24fUR4cjPDBg');
-		$('#upload_by_url').val('');
-		$('#error_list').html('');
+    $('#selectPostModal').on('show.bs.modal', function (event) {
+		$.get('{{ route('getSelectPost') }}', function(res) {
+			var tbody = '';
+			for(var i in res) {
+				tbody += '<tr>';
+				tbody += '<td><input type="radio" name="select_post" value="' + res[i].link + '" /></td>';
+				tbody += '<td>' + res[i].id + '</td>';
+				tbody += '<td>' + res[i].name + '</td>';
+				tbody += '<td>' + res[i].link + '</td>';
+				tbody += '</tr>';
+			}
 
-		var demension = $('#select_image').attr('data-demension');
-		var arr = demension.split('x');
-		$('#preview').parent().css({'width': arr[0], 'height': arr[1]});
-		$('#preview').css({'width': arr[0], 'height': arr[1]});
+			$('#table_select_post').find('tbody').html(tbody);
+			$('#data_select_post').val(JSON.stringify(res));
+		});
+    });
 
+    $('#selectPostModal #search_name').keyup(function(e) {
+		var res = JSON.parse($('#data_select_post').val());
+		res = res.filter((record) => {
+			var value = $(this).val().toLowerCase();
+            return record.name.indexOf(value) !== -1 || record.name_url.indexOf(value) !== -1;
+        });
+
+		var tbody = '';
+		for(var i in res) {
+			tbody += '<tr>';
+			tbody += '<td><input type="radio" name="select_post" value="' + res[i].link + '" /></td>';
+			tbody += '<td>' + res[i].id + '</td>';
+			tbody += '<td>' + res[i].name + '</td>';
+			tbody += '<td>' + res[i].link + '</td>';
+			tbody += '</tr>';
+		}
+
+		$('#table_select_post').find('tbody').html(tbody);
+    });
+
+    $('#select_post').click(function(e) {
+		$('input[name="select_post"]').each(function(index, item) {
+			if(item.checked) {
+				$('#link').val(item.value);
+			}
+		});
+		$('#selectPostModal').modal('hide');
     });
 
     $('input.select_type').on('ifChecked', function(event){
