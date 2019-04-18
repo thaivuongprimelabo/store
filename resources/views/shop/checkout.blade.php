@@ -98,14 +98,14 @@
                      <div class="summary-section border-top-none--mobile">
                         <div class="total-line total-line-subtotal clearfix">
                            <span class="total-line-name pull-left"> {{ trans('shop.checkout.subtotal') }} </span> 
-                           <span class="total-line-subprice pull-right">{{ $cart->getTotalFormat() }}</span>
+                           <span class="total-line-subprice pull-right"  id="sub_total" data-total="{{ $cart->getSubTotal() }}" >{{ $cart->getSubTotalFormat() }}</span>
                         </div>
                         <div class="total-line total-line-shipping clearfix">
                            <span class="total-line-name pull-left"> {{ trans('shop.checkout.ship') }} </span>
-                           <span class="total-line-shipping pull-right">Miễn phí</span>
+                           <span class="total-line-shipping pull-right" id="ship_fee">0₫</span>
                         </div>
                         <div class="total-line total-line-total clearfix">
-                           <span class="total-line-name pull-left"> {{ trans('shop.checkout.total') }} </span> <span class="total-line-price pull-right">{{ $cart->getTotalFormat() }}</span>
+                           <span class="total-line-name pull-left"> {{ trans('shop.checkout.total') }} </span> <span class="total-line-price pull-right" id="total">{{ $cart->getTotalFormat() }}</span>
                         </div>
                      </div>
                   </div>
@@ -204,7 +204,7 @@
                            </div>
                            <div class="section__content">
                            	  @php
-                           	  	$payment_methods = trans('auth.config.form.payment_method');
+                           	  	$payment_methods = trans('auth.payment_methods');
                            	  	unset($payment_methods['header']);
                            	  @endphp
                            	  @foreach($payment_methods as $key=>$method)
@@ -215,7 +215,7 @@
                                           <input class="input-radio" type="radio" name="payment_method" id="payment_method_{{ $key }}" value="{{ $key }}" @if($key == 'cash_info'){{'checked=checked'}}@endif>
                                        </div>
                                        <label class="radio__label" for="payment_method_{{ $key }}">
-                                          <span class="radio__label__primary">{{ $method['text'] }}</span> 
+                                          <span class="radio__label__primary">{{ $method }}</span> 
                                           <span class="radio__label__accessory">
                                              <ul>
                                                 <li class="payment-icon-v2 payment-icon--4"><i
@@ -348,6 +348,7 @@
 	        		customer_note: $('#checkout_note').val(),
 	        		payment_method: $('input[name="payment_method"]:checked').val(),
 	        		checkout_success_url: '{{ route('checkoutSuccess') }}',
+	        		ship_fee: $('#ship_fee').attr('data-ship-fee')
 	        	}
 
 	        	callAjax('{{ route('checkout') }}', data, $(this));
@@ -361,10 +362,27 @@
 		});
 
 	    $('#checkout_province').change(function(e) {
+		    var shipFee = Number($('#checkout_province option:selected').attr('data-ship-fee'));
 			var cityId = $(this).val();
 			$.get('{{ route('loadDistrict') }}?city_id=' + cityId, function( data ) {
 				   $('#checkout_district').html(data);
 			});
+			$('#ship_fee').attr('data-ship-fee', shipFee);
+			$('#ship_fee').html(formatCurrency(shipFee, '.' , '.'));
+
+			var sub_total = Number($('#sub_total').attr('data-total'));
+			var total = sub_total + shipFee;
+			$('#total').html(formatCurrency(total, '.' , '.'));
+	    });
+
+	    $('#checkout_district').change(function(e) {
+		    var shipFee = Number($('#checkout_district option:selected').attr('data-ship-fee'));
+			$('#ship_fee').attr('data-ship-fee', shipFee);
+			$('#ship_fee').html(formatCurrency(shipFee, '.' , '.'));
+
+			var sub_total = Number($('#sub_total').attr('data-total'));
+			var total = sub_total + shipFee;
+			$('#total').html(formatCurrency(total, '.' , '.'));
 	    });
 
 	    $('#show-order-summary').click(function(e) {

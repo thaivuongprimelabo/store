@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Constants\Common;
 use App\Helpers\Utils;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Order;
 use App\OrderDetails;
@@ -86,5 +87,11 @@ class OrdersController extends AppController
             $result['code'] = 200;
             return response()->json($result);
         }
+    }
+    
+    public function shipFee(Request $request) {
+        $cities = DB::table('devvn_tinhthanhpho')->orderBy('type')->get();
+        $this->output['cities'] = $cities;
+        return view('auth.ship_fee.index', $this->output);
     }
 }

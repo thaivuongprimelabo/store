@@ -1,17 +1,21 @@
-<div class="topbar-mobile hidden-lg hidden-md text-center text-md-left">
-	<div class="container">
-		<i class="fa fa-mobile" style=" font-size: 20px; display: inline-block; position: relative; transform: translateY(2px); "></i> {{ trans('shop.hotline_txt') }}: 
-		<span>
-													
-			 {!! $config['web_hotline'] !!}
-					
-		</span>
-	</div>
-</div>
 @php
 	$hotline = explode('|', $config['web_hotline']);
 	$web_address = explode('|', $config['web_address']);
 @endphp
+<div class="topbar-mobile hidden-lg hidden-md text-center text-md-left">
+	<div class="container">
+		<i class="fa fa-mobile" style=" font-size: 20px; display: inline-block; position: relative; transform: translateY(2px); "></i> {{ trans('shop.hotline_txt') }}: 
+		<span>
+			 {{ $hotline[0] }}
+		</span>
+	</div>
+	<div class="container">
+		<i class="fa fa-map-marker" style=" font-size: 20px; display: inline-block; position: relative; transform: translateY(2px); "></i> {{ trans('shop.address_txt') }}: 
+		<span>
+			 {{ $web_address[0] }}
+		</span>
+	</div>
+</div>
 <div class="topbar hidden-sm hidden-xs">
 	<div class="container">
 		<div>

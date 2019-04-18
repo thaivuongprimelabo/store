@@ -110,11 +110,18 @@
                                         {{ trans('shop.checkout.subtotal') }}
                                     </span>
                                     <span class="total-line-subprice pull-right">
-                                        {{ $cart->getTotalFormat() }}
+                                        {{ $cart->getSubTotalFormat() }}
                                     </span>
                                 </div>
                                 
-                                
+                                <div class="total-line total-line-subtotal clearfix">
+                                    <span class="total-line-name pull-left">
+                                        {{ trans('shop.checkout.ship') }}
+                                    </span>
+                                    <span class="total-line-subprice pull-right">
+                                        {{ $cart->getShipFeeFormat() }}
+                                    </span>
+                                </div>
                                 
                             </div>
                             <div class="summary-section">
@@ -175,9 +182,9 @@
                                         </div>
                                         <div class="summary-section no-border no-padding-top">
                                         	@php
-                                        		$payment_methods = trans('auth.config.form.payment_method');
+                                        		$payment_methods = trans('auth.payment_methods');
                                         	@endphp
-                                            <span>{{ $payment_methods[$checkout_info['payment_method']]['text'] }}</span>
+                                            <span>{{ $payment_methods[$checkout_info['payment_method']] }}</span>
                                         </div>
                                     </div>
                                 </div>

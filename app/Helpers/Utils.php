@@ -1224,8 +1224,8 @@ class Utils {
             case 'label':
                 
                 if($key == 'payment_method') {
-                    $payment_methods = trans('auth.config.form.payment_method');
-                    $element_value = $payment_methods[$element_value]['text'];
+                    $payment_methods = trans('auth.payment_methods');
+                    $element_value = $payment_methods[$element_value];
                 }
                 
                 $element_html .= '<label>' .$text . '</label>&nbsp;&nbsp;&nbsp;';

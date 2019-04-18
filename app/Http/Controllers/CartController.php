@@ -166,6 +166,7 @@ class CartController extends AppController
             $result = [];
             
             $cart = Cart::getInstance($request->getSession());
+            $cart->setShipFee(Utils::cnvnull($request->ship_fee, 0));
             
             DB::beginTransaction();
             
@@ -240,7 +241,7 @@ class CartController extends AppController
                         'web_name' => $this->output['config']['web_name'],
                         'web_email' => $this->output['config']['web_email']
                     ],
-                    'to'       => $order['customer_email'],
+                    'to'       => [$order['customer_email'], $this->output['config']['web_email']],
                     'template' => 'shop.emails.order_success'
                 ];
                 
@@ -251,7 +252,7 @@ class CartController extends AppController
                 } else {
                     \Log::error($message);
                 }
-                
+
                 
             } catch(\Exception $e) {
                 $result['checkout_result'] = false;

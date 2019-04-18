@@ -80,6 +80,8 @@ Route::group(['prefix' => 'auth', 'namespace' => 'Auth'], function () {
     Route::match(['get', 'post'], '/orders/search', 'OrdersController@search')->name('auth_orders_search');
     Route::post('/orders/remove', 'OrdersController@remove')->name('auth_orders_remove');
     
+    $this->get('/shipfee', 'OrdersController@shipFee')->name('auth_shipfee');
+    
     // Users
     $this->get('/users', 'UsersController@index')->name('auth_users');
     Route::match(['get', 'post'], '/users/create', 'UsersController@create')->name('auth_users_create');

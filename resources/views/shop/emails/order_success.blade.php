@@ -15,9 +15,9 @@ Cảm ơn Anh/chị đã đặt hàng tại <b>{{ $web_name }}</b><br/>
 <br/>
 <b>Hình thức thanh toán</b><br/>
 @php
-	$payment_methods = trans('auth.config.form.payment_method');
+	$payment_methods = trans('auth.payment_methods');
 @endphp
-{{ $payment_methods[$checkout_info['payment_method']]['text'] }}<br/>
+{{ $payment_methods[$checkout_info['payment_method']] }}<br/>
 <br/>
 <b>Thông tin đơn hàng</b><br/>
 Mã đơn hàng: #{{ $checkout_info['id'] }}<br/>
@@ -42,7 +42,15 @@ Ngày đặt hàng: {{ Utils::formatDate($checkout_info['created_at']) }}<br/>
     </tbody>
     <tfoot>
     	<tr>
-    		<td colspan="2" align="right"><b>Thành tiền</b></td>
+    		<td colspan="2" align="right"><b>{{ trans('shop.checkout.subtotal') }}</b></td>
+    		<td>{{ $cart->getSubTotalFormat() }}</td>
+    	</tr>
+    	<tr>
+    		<td colspan="2" align="right"><b>{{ trans('shop.checkout.ship') }}</b></td>
+    		<td>{{ $cart->getShipFeeFormat() }}</td>
+    	</tr>
+    	<tr>
+    		<td colspan="2" align="right"><b>{{ trans('shop.checkout.total') }}</b></td>
     		<td>{{ $cart->getTotalFormat() }}</td>
     	</tr>
     </tfoot>

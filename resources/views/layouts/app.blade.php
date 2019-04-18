@@ -513,6 +513,65 @@
     	$(this).prev().append(input);
 		
     });
+
+	$(document).on('click', '.btn-city', function(e) {
+		var self = $(this);
+		var id = self.attr('data-id');
+		if(self.find('i').hasClass('fa-minus')) {
+			$('.item' + id).hide();
+			self.find('i').removeClass('fa-minus').addClass('fa-plus');
+			return false;
+		}
+		if($('.item' + id).length === 0) {
+    		$.get('{{ route('loadDistrict') }}?city_id=' + id + '&json=true', function(res) {
+    			if(res.data.length > 0) {
+    				var html = '';
+        			for(var i in res.data) {
+        				html += '<tr class="item' + id + '">';
+        				html += '<td>&nbsp;&nbsp;' + res.data[i].maqh + '</td>';
+        				html += '<td>|--- ' + res.data[i].name + '</td>';
+        				html += '<td>';	
+        				html += '<div class="input-group">';
+        				html += '	<span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>';
+        				html += '	<input type="number" class="form-control" value="' + res.data[i].ship_fee + '" />';
+        				html += '	<div class="input-group-btn">';
+        				html += '		<button type="button" class="btn btn-primary btn-save"  data-id="' + res.data[i].maqh + '"><i class="fa fa-save fa-fw"></i> Lưu</button>';
+        				html += '		<button type="button" class="btn btn-danger  btn-cancel" data-value="' + res.data[i].ship_fee + '"><i class="fa fa-refresh fa-fw"></i> Hủy</button>';
+        				html += '	</div>';
+        				html += '</div>';
+						html += '</td>';
+        				html += '</tr>';
+        			}
+        			$(html).insertAfter(self.parent().parent());
+    			}
+    		});
+    		
+		} else {
+			$('.item' + id).show();
+		}
+		self.find('i').removeClass('fa-plus').addClass('fa-minus');
+    });
+
+	$(document).on('click', '.btn-save', function(e) {
+		var tp = $(this).attr('data-tp');
+		var value = $(this).parent().parent().find('input').val();
+		var data = {
+			type : 'post',
+			async : true,
+			id : $(this).attr('data-id'),
+			ship_fee: value,
+		}
+		callAjax('{{ route('updateShipFee') }}', data, 'update-ship-fee');
+
+		if(tp) {
+			$('.item' + $(this).attr('data-id')).find('input').val(value);
+		}
+	});
+
+	$(document).on('click', '.btn-cancel', function(e) {
+		var value = $(this).attr('data-value');
+		$(this).parent().parent().find('input').val(value);
+	});
   });
 </script>
 @yield('script')

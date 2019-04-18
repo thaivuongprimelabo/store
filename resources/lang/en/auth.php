@@ -20,6 +20,11 @@ $product_status = [
     'available' => 'Còn hàng'
 ];
 
+$paymentMethods = [
+    'cash_info' => 'Thanh toán bằng tiền mặt',
+    'bank_info' => 'Chuyển khoản ngân hàng'
+];
+
 $auth = [
     
     /*
@@ -54,7 +59,11 @@ $auth = [
             'categories' => 'Danh mục loại sản phẩm',
             'vendors' => 'Danh mục nhà cung cấp'
         ],
-        'orders' => 'Quản lý đơn hàng',
+        'orders' => [
+            'title' => 'Quản lý đơn hàng',
+            'orders' => 'Danh sách đơn hàng',
+            'shipfee' => 'Phí ship'
+        ],
         'banners' => 'Quản lý banner',
         'posts' => [
             'title' => 'Quản lý bài viết',
@@ -856,6 +865,9 @@ $auth = [
             ],
         ]
     ],
+    'shipfee' => [
+        'list_title' => 'Cập nhật phí ship theo tỉnh/thành hoặc quận/huyện'
+    ],
     /*------------ Config page ------------------- */
     'config' => [
         'list_title' => 'Cài đặt hệ thống',
@@ -1039,7 +1051,7 @@ $auth = [
                     'text' => 'Shopee page',
                     'maxlength' => 150
                 ],
-            ]
+            ],
         ],
         
     ],
@@ -1579,6 +1591,7 @@ $auth = [
         'admin' => 'Quản trị viên',
         'member' => 'Thành viên'
     ],
+    'payment_methods' => $paymentMethods,
     'button' => [
         'login' => 'Đăng nhập',
         'profile' => 'Thông tin tài khoản',

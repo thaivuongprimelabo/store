@@ -25,4 +25,5 @@ Route::get('/load-district', 'ApiController@loadDistrict')->name('loadDistrict')
 Route::get('/load-ward', 'ApiController@loadWard')->name('loadWard');
 Route::post('/check-upload-file', 'ApiController@checkUploadFile')->name('checkUploadFile');
 Route::get('/get-select-post', 'ApiController@getSelectPost')->name('getSelectPost');
+Route::post('/update-ship-fee', 'ApiController@updateShipFee')->name('updateShipFee');
 

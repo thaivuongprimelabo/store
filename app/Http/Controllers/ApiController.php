@@ -113,13 +113,13 @@ class ApiController extends Controller
         return response()->json($this->output);
     }
     
-    public function loadCity(Request $request) {
+    public function loadCity(Request $request, $html = true) {
         $html = '<option value="" selected>' . trans('shop.checkout.choose_province') . '</option>';
         $city = DB::table('devvn_tinhthanhpho')->orderBy('type')->get();
         
         if($city->count()) {
             foreach($city as $ct) {
-                $html .= '<option value="' . $ct->matp . '">' . $ct->name . '</option>';
+                $html .= '<option value="' . $ct->matp . '" data-ship-fee="' . $ct->ship_fee . '">' . $ct->name . '</option>';
             }
         }
         
@@ -131,12 +131,17 @@ class ApiController extends Controller
         $html = '<option value="">' . trans('shop.checkout.choose_district') . '</option>';
         
         $cityId = $request->city_id;
+        $json = $request->json;
         
         $district = DB::table('devvn_quanhuyen')->where('matp', $cityId)->orderBy('type')->get();
         
+        if($json) {
+            return response()->json(['data' => $district]);
+        }
+        
         if($district->count()) {
             foreach($district as $ct) {
-                $html .= '<option value="' . $ct->maqh . '">' . $ct->name . '</option>';
+                $html .= '<option value="' . $ct->maqh . '" data-ship-fee="' . $ct->ship_fee . '">' . $ct->name . '</option>';
             }
         }
         
@@ -216,6 +221,15 @@ class ApiController extends Controller
         }
         
         return response()->json($output);
+    }
+    
+    public function updateShipFee(Request $request) {
+        $id = $request->id;
+        $ship_fee = $request->ship_fee;
+        DB::table('devvn_tinhthanhpho')->where('matp', $id)->update(['ship_fee' => $ship_fee]);
+        DB::table('devvn_quanhuyen')->where('maqh', $id)->orWhere('matp', $id)->update(['ship_fee' => $ship_fee]);
+        
+        return response()->json(['code' => 200]);
     }
     
 }

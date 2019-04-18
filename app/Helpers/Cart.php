@@ -13,6 +13,8 @@ class Cart {
     private $cartItem = null;
     private $session = null;
     private $checkoutInfo = null;
+    private $subTotal = 0;
+    private $shipFee = 0;
     public static $instance;
     
     public function __construct() {
@@ -53,11 +55,21 @@ class Cart {
         $this->count = $_count;
     }
     
+    public function setShipFee($_shipFee) {
+        $this->shipFee = $_shipFee;
+    }
+    
+    public function getSubTotal() {
+        $this->subTotal = 0;
+        foreach($this->cart as $cartItem) {
+            $this->subTotal += $cartItem->getCostIncludeDetail();
+        }
+        return $this->subTotal;
+    }
+    
     public function getTotal() {
         $this->total = 0;
-        foreach($this->cart as $cartItem) {
-            $this->total += $cartItem->getCostIncludeDetail();
-        }
+        $this->total = $this->subTotal + $this->shipFee;
         return $this->total;
     }
     
@@ -67,6 +79,18 @@ class Cart {
     
     public function getTotalFormat() {
         return Utils::formatCurrency($this->getTotal());
+    }
+    
+    public function getSubTotalFormat() {
+        return Utils::formatCurrency($this->getSubTotal());
+    }
+    
+    public function getShipFee() {
+        return $this->shipFee;
+    }
+    
+    public function getShipFeeFormat() {
+        return Utils::formatCurrency($this->getShipFee());
     }
     
     public function addItem(CartItem $cartItem) {

@@ -28,6 +28,9 @@ var callAjax = function(url, data, page) {
 	    				successAlert('Đã xóa thành công');
 	    				search(1);
 	    				break;
+	    			case 'update-ship-fee':
+	    				successAlert('Cập nhật phí ship thành công');
+	    				break;
 	    			case 'check-exists':
 	    				$('#submit_form').submit();
 	    				break;
