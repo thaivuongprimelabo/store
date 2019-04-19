@@ -19,7 +19,7 @@ class StatusOrders {
             self::ORDER_CANCEL => trans('auth.status.order_cancel'),
         ];
         
-        if($key != '') {
+        if(!Utils::blank($key)) {
             return $array[$key];
         }
 

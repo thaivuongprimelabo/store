@@ -274,6 +274,17 @@
    				 callAjax('{{ route('removeDetailItem') }}', data);
      		 });
 
+     		 $(document).on('click', '#order_checking', function(e) {
+     			var data = {
+  					type : 'post',
+  		    		async : true,
+  		    		value: $('#checking').val(),
+  		    		container: ['#order_checking_list'],
+   				}
+
+   				callAjax('{{ route('orderChecking') }}', data);
+     		 });
+
 		});
 
 		$(document).mouseup(function(e) {
@@ -282,6 +293,7 @@
 		        container.hide();
 		    }
 		});
+
 	</script>
 	@yield('script')
 </body>

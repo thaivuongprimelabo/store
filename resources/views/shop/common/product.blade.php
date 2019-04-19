@@ -1,4 +1,4 @@
-<div class="e-tabs not-dqtab ajax-tab-1"  data-section="ajax-tab-1">
+<div class="e-tabs not-dqtab ajax-tab-{{ $type }}"  data-section="ajax-tab-{{ $type }}">
 	<div class="row row-noGutter">
 		<div class="col-sm-12">
 			<div class="content">
@@ -10,7 +10,7 @@
 				<div>
 					<ul class="tabs tabs-title tab-mobile clearfix hidden-sm hidden-md hidden-lg">
 						<li class="prev"><i class="fa fa-angle-left"></i></li>
-						<li class="tab-link tab-title hidden-sm hidden-md hidden-lg current tab-titlexs" data-tab="tab-1">
+						<li class="tab-link tab-title hidden-sm hidden-md hidden-lg current tab-titlexs" data-tab="tab-{{ $type }}">
 							
 							<span>{{ $categories->first()->name }}</span>
 							

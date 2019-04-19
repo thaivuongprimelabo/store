@@ -7,7 +7,27 @@
 			<div class="collection-border">
 				<div class="collection-main">
 						{!! Utils::createProductTab(trans('shop.new_product_txt'), ProductType::IS_NEW, 1) !!}
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<section class="awe-section-4" id="awe-section-4">
+	<div class="section section-collection section-collection-1">
+		<div class="container">
+			<div class="collection-border">
+				<div class="collection-main">
 						{!! Utils::createProductTab(trans('shop.best_selling_txt'), ProductType::IS_BEST_SELLING, 2) !!}
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<section class="awe-section-5" id="awe-section-5">
+	<div class="section section-collection section-collection-1">
+		<div class="container">
+			<div class="collection-border">
+				<div class="collection-main">
 						{!! Utils::createProductTab(trans('shop.popular_txt'), ProductType::IS_POPULAR, 3) !!}
 				</div>
 			</div>

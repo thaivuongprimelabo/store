@@ -21,6 +21,7 @@ use App\Constants\ContactStatus;
 use App\Constants\PostStatus;
 use App\PostGroups;
 use App\Constants\ProductStatus;
+use App\Order;
 
 class ApiController extends Controller
 {
@@ -230,6 +231,12 @@ class ApiController extends Controller
         DB::table('devvn_quanhuyen')->where('maqh', $id)->orWhere('matp', $id)->update(['ship_fee' => $ship_fee]);
         
         return response()->json(['code' => 200]);
+    }
+    
+    public function orderChecking(Request $request) {
+        $value = $request->value;
+        $orders = Order::where('customer_email', $value)->orWhere('customer_phone', $value)->orderBy('created_at')->get();
+        return response()->json(['#order_checking_list' => view('shop.order_checking_list', compact('orders'))->render()]);
     }
     
 }

@@ -125,7 +125,14 @@ return [
         'note' => 'Ghi chú*'
     ],
     'order_checking' => [
-        'email' => 'E-mail hoặc số điện thoại',
+        'email_input' => 'E-mail hoặc số điện thoại',
+        'customer' => 'Khách hàng',
+        'phone' => 'Số điện thoại',
+        'email' => 'E-mail',
+        'address' => 'Địa chỉ',
+        'total' => 'Giá trị đơn hàng',
+        'status' => 'Trạng thái đơn hàng',
+        'no_data' => 'Không tìm thấy đơn hàng'
     ],
     'button' => [
         'detail_view' => 'Chi tiết',

@@ -5,6 +5,7 @@ namespace App;
 use App\Constants\Common;
 use App\Helpers\Utils;
 use Illuminate\Database\Eloquent\Model;
+use App\Constants\StatusOrders;
 
 class Order extends Model
 {
@@ -36,6 +37,15 @@ class Order extends Model
     
     public function getTotal() {
         return Utils::formatCurrency($this->total);
+    }
+    
+    public function getAddress() {
+        return $this->customer_address . ' ' . $this->customer_district . ' ' . $this->customer_province;
+    }
+    
+    public function getStatus() {
+        $status = StatusOrders::getData($this->status);
+        return $status;
     }
     
 }
