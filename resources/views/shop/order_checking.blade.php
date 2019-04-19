@@ -18,7 +18,7 @@
     					</div>
     				</div>
     				<div class="action_bottom">
-    					<button type="button" id="order_checking" class="btn btn-primary">{{ trans('shop.button.order_checking') }}</button>
+    					<button type="button" id="order_checking" class="btn btn-primary"  data-loading-text="<i class='fa fa-spinner fa-spin '></i> {{ trans('shop.button.order_checking') }}">{{ trans('shop.button.order_checking') }}</button>
     				</div>
     			</div>
     		</div>

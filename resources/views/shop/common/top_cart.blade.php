@@ -47,7 +47,7 @@
 		</li>
 		<li class="pd">
 			<div class="top-subtotal">
-				{{ trans('shop.cart.subtotal') }}: <span class="price top_cart_total">{{ $cart->getTotalFormat() }}</span>
+				{{ trans('shop.cart.subtotal') }}: <span class="price top_cart_total">{{ $cart->getSubTotalFormat() }}</span>
 			</div>
 		</li>
 		<li class="pd right_ct">

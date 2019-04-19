@@ -106,7 +106,7 @@
 					</table>
 					<ul class="checkout">
 						<li class="clearfix"><div class="inline-block">
-								<span>{{ trans('shop.cart.subtotal') }}:</span> <strong><span class="totals_price price top_cart_total">{{ $cart->getTotalFormat() }}</span></strong>
+								<span>{{ trans('shop.cart.subtotal') }}:</span> <strong><span class="totals_price price top_cart_total">{{ $cart->getSubTotalFormat() }}</span></strong>
 							</div>
 							@if($cart->getCount())
 							<button id="checkout_btn" class="btn btn-primary button btn-proceed-checkout f-right" title="{{ trans('shop.button.order') }}" type="button"

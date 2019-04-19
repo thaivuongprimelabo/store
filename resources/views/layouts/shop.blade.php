@@ -275,6 +275,11 @@
      		 });
 
      		 $(document).on('click', '#order_checking', function(e) {
+         		var value = $('#checking').val();
+         		if(value.length === 0) {
+             		return false;
+         		}
+         		
      			var data = {
   					type : 'post',
   		    		async : true,
@@ -282,7 +287,7 @@
   		    		container: ['#order_checking_list'],
    				}
 
-   				callAjax('{{ route('orderChecking') }}', data);
+   				callAjax('{{ route('orderChecking') }}', data, $(this));
      		 });
 
 		});

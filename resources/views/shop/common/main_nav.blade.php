@@ -33,12 +33,12 @@
 			<div class="head-menu clearfix">
 				<ul class="list-inline">
 					
-					<li>
+					<li style="visibility: hidden;">
 						<a href="#"><i class="fa fa-user"></i> {{ trans('shop.button.login') }}</a>
 
 					</li>
-					<li><span>hoặc</span></li>
-					<li><a href="#">{{ trans('shop.button.register') }}</a>						
+					<li style="visibility: hidden;"><span>hoặc</span></li>
+					<li style="visibility: hidden;"><a href="#">{{ trans('shop.button.register') }}</a>						
 					</li>
 					
 
@@ -54,7 +54,7 @@
                         	</form>
 						</div>						
 					</li>
-				</ul>
+				</ul> 
 				<div class="menuclose"><i class="fa fa-close"></i></div>
 			</div>
 			{!! Utils::createNavigation('mobile') !!}
