@@ -937,6 +937,16 @@ $auth = [
                     'text' => 'URL Extension',
                     'maxlength' => 15
                 ],
+                'mail_from' => [
+                    'type' => 'text',
+                    'text' => 'From email',
+                    'maxlength' => 150
+                ],
+                'mail_name' => [
+                    'type' => 'text',
+                    'text' => 'From name',
+                    'maxlength' => 150
+                ],
                 'off' => [
                     'type' => 'checkbox',
                     'text' => 'Tắt hệ thống'

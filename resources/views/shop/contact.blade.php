@@ -60,29 +60,68 @@
 				<div class="col-md-6">
 					<div class="contact-box-info clearfix margin-bottom-30">
 						<div>
-							<div class="item">		
+							<div class="item">	
+							
+								<div><i class="block_icon fa fa-home"></i>
+									<div class="info">
+										<label>{{ $config['web_name'] }}</label>
+										<small>{{ $config['web_name'] }}</small>
+									</div>
+								</div>	
 
 								<div><i class="fa fa-map-marker"></i> 
+									@php
+										$branch = explode('|', $config['web_address'])
+									@endphp
+									@if(count($branch))
+									@foreach($branch as $key=>$address)
 									<div class="info">
-										<label>{{ trans('shop.address_txt') }}</label>
-										{{ $config['web_address'] }}
+										<label>{{ trans('shop.branch_txt',['stt' => ++$key]) }}: <span style="font-weight: normal;">{{ $address }}</span></label>
+									</div>
+									@endforeach
+									@endif
+									
+								</div>
+								@php
+                                	$hotline = explode('|', $config['web_hotline']);
+                                	$hotline_cskh = explode('|', $config['web_hotline_cskh']);
+                                @endphp
+								<div>
+									<i class="fa fa-phone"></i> 
+									<div class="info">
+										<label>{{ trans('shop.hotline_tech_txt') }}</label>
+										@if(count($hotline))
+										@foreach($hotline as $tel)
+										<p>{{ $tel }}</p>
+										@endforeach
+										@endif
 									</div>
 								</div>
 								<div>
 									<i class="fa fa-phone"></i> 
 									<div class="info">
-										<label>{{ trans('shop.hotline_txt') }}</label>
-										<a href="tel:{{ $config['web_hotline'] }}">{{ $config['web_hotline'] }}</a>
-										<p>{{ $config['web_working_time'] }}</p>
+										<label>{{ trans('shop.hotline_cskh_txt') }}</label>
+										@if(count($hotline_cskh))
+										@foreach($hotline_cskh as $tel)
+										<p>{{ $tel }}</p>
+										@endforeach
+										@endif
 									</div>
 								</div>
 								<div><i class="fa fa-envelope"></i> 
 									<div class="info">
-										<label>Email</label>
+										<label>{{ trans('shop.email_txt') }}</label>
 										<a href="mailto:{{ $config['web_email'] }}">{{ $config['web_email'] }}
 										</a>
 									</div>
-								</div>																			
+								</div>		
+								
+								<div><i class="fa fa-clock-o"></i> 
+									<div class="info">
+										<label>{{ trans('shop.working_txt') }}</label>
+										<p>{{ $config['web_working_time'] }}</p>
+									</div>
+								</div>																	
 								
 							</div>
 							
@@ -132,7 +171,7 @@
         	var data = {
         		type : 'post',
         		async : true,
-        		container: ['#contact_success', '#contact_error'],
+        		container: ['#contact_success', '#contact_error', '#captcha_img'],
         		name: $('#contact_name').val(),
         		email: $('#contact_email').val(),
         		phone: $('#contact_phone').val(),

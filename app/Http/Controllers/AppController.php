@@ -45,7 +45,7 @@ class AppController extends Controller
                     'web_keywords' => Utils::cnvNull($config->web_keywords, $config->web_name),
                     'web_logo' => $web_logo,
                     'web_ico' => $web_ico,
-                    'mail_from' => Utils::cnvNull($config->mail_from, 'support@gmail.com'),
+                    'mail_from' => Utils::cnvNull($config->mail_from, $config->web_email),
                     'mail_name' => Utils::cnvNull($config->mail_name, 'Mail System'),
                     'web_email' => Utils::cnvNull($config->web_email, ''),
                     'web_hotline' => Utils::cnvNull($config->web_hotline, ''),

@@ -9,6 +9,7 @@ return [
     'free_ship_txt' => 'Miễn phí vận chuyển',
     'support_txt' => 'Hỗ trợ gọi ngay',
     'working_txt' => 'Giờ làm việc',
+    'email_txt' => 'E-mail',
     'cart_txt' => 'Giỏ hàng',
     'search_txt' => 'Tìm sản phẩm',
     'category_txt' => 'Danh mục',
@@ -146,9 +147,13 @@ return [
         'clear' => 'Hủy',
         'order_checking' => 'Kiểm tra'
     ],
+    'mail' => [
+        'from_name' => 'Hệ thống'
+    ],
     'mail_subject' => [
         'register' => 'Kích hoạt tài khoản',
         'reset_password' => 'Mật khẩu mới',
-        'order_success' => 'Xác nhận đơn hàng #:order_id'
+        'order_success' => 'Xác nhận đơn hàng #:order_id',
+        'contact' => 'Có liên hệ mới từ :email'
     ]
 ];

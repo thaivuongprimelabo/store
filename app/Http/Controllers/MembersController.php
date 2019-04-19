@@ -128,7 +128,7 @@ class MembersController extends AppController
                 if(Utils::blank($message)) {
                     if($member->save()) {
                         $result['#register_success'] = trans('messages.REG_SUCCESS', ['email' => $request->email]);
-                        $result['#captcha_img'] = captcha_img('flat')->toHtml();
+                        $result['#captcha_img'] = captcha_img('flat');
                     }
                 } else {
                     \Log::error($message);
@@ -192,7 +192,7 @@ class MembersController extends AppController
                 
                 if($member->save()) {
                     $result['#update_profile_success'] = trans('messages.UPDATE_SUCCESS');
-                    $result['#captcha_img'] = captcha_img('flat')->toHtml();
+                    $result['#captcha_img'] = captcha_img('flat');
                 }
             }
             else {
@@ -315,7 +315,7 @@ class MembersController extends AppController
     
     
     public function refreshCaptcha() {
-        $captcha = captcha_img('flat')->toHtml();
+        $captcha = captcha_img('flat');
         return response()->json(['#captcha_img' => $captcha]);
     }
 }

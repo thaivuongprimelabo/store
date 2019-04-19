@@ -298,22 +298,58 @@ class HomeController extends AppController
                 return response()->json($result);
             }
             
-            $contact = new Contact();
+            DB::beginTransaction();
             
-            $contact->name = Utils::cnvNull($request->name, '');
-            $contact->email = Utils::cnvNull($request->email, '');
-            $contact->phone = Utils::cnvNull($request->phone, '');
-            $contact->content = Utils::cnvNull($request->content, '');
-            $contact->subject = Utils::cnvNull($request->subject, '');
-            $contact->status = ContactStatus::NEW_CONTACT;
-            $contact->created_at    = date('Y-m-d H:i:s');
-            $contact->updated_at    = date('Y-m-d H:i:s');
-            
-            if($contact->save()) {
-                $result['#contact_success'] = trans('messages.SEND_CONTACT_SUCCESS');
-            } else {
+            try {
+                
+                $contact = new Contact();
+                
+                $contact->name = Utils::cnvNull($request->name, '');
+                $contact->email = Utils::cnvNull($request->email, '');
+                $contact->phone = Utils::cnvNull($request->phone, '');
+                $contact->content = Utils::cnvNull($request->content, '');
+                $contact->subject = Utils::cnvNull($request->subject, '');
+                $contact->status = ContactStatus::NEW_CONTACT;
+                $contact->created_at    = date('Y-m-d H:i:s');
+                $contact->updated_at    = date('Y-m-d H:i:s');
+                
+                // Config mail
+                $config = [
+                    'from' => $this->output['config']['mail_from'],
+                    'from_name' => $this->output['config']['mail_name'],
+                    'subject' => '[' . $this->output['config']['web_name'] . '] '  . trans('shop.mail_subject.contact', ['email' => $request->email]),
+                    'msg' => [
+                        'contact_name' => $contact->name,
+                        'contact_email' => $contact->email,
+                        'contact_phone' => $contact->phone,
+                        'contact_subject' => $contact->subject,
+                        'contact_content' => $contact->content,
+                        'contact_created_at' => Utils::formatDate($contact->created_at)
+                    ],
+                    'to'       => $this->output['config']['web_email'],
+                    'template' => 'shop.emails.contact_alert'
+                ];
+                
+                $message = Utils::sendMail($config);
+                if(Utils::blank($message)) {
+                    if($contact->save()) {
+                        $result['#contact_success'] = trans('messages.SEND_CONTACT_SUCCESS');
+                        $result['#captcha_img'] = captcha_img('flat');
+                    } else {
+                        $result['#contact_error'] = trans('messages.ERROR');
+                    }
+                    
+                    DB::commit();
+                    
+                } else {
+                    \Log::error($message);
+                }
+                
+            }  catch(\Exception $e) {
                 $result['#contact_error'] = trans('messages.ERROR');
+                DB::rollBack();
             }
+            
             return response()->json($result);
         }
         

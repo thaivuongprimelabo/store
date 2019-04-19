@@ -190,6 +190,8 @@ class ConfigController extends AppController
             $data->youtube_channel = Utils::cnvNull($request->youtube_channel, '');
             $data->zalo_page = Utils::cnvNull($request->zalo_page, '');
             $data->shopee_page = Utils::cnvNull($request->shopee_page, '');
+            $data->mail_from = Utils::cnvNull($request->mail_from, '');
+            $data->mail_name = Utils::cnvNull($request->mail_name, '');
             if(Auth::user()->role_id == Common::SUPER_ADMIN) {
                 $data->upload_banner_maximum_upload = Utils::cnvNull($request->upload_banner_maximum_upload, '');
                 $data->upload_logo_maximum_upload = Utils::cnvNull($request->upload_logo_maximum_upload, '');

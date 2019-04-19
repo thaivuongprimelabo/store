@@ -233,8 +233,8 @@ class CartController extends AppController
                 
                 // Config mail
                 $config = [
-                    'from' => $this->output['config']['mail_from'],
-                    'from_name' => $this->output['config']['mail_name'],
+                    'from' => $this->output['config']['web_email'],
+                    'from_name' => trans('shop.mail.from_name'),
                     'subject' => '[' . $this->output['config']['web_name'] . '] '  . trans('shop.mail_subject.order_success', ['order_id' => $id]),
                     'msg' => [
                         'cart' => $cart,
