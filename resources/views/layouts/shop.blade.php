@@ -59,7 +59,7 @@
 	<!-- Main JS -->	
 	<script src="{{ url('shop/bizweb.dktcdn.net/100/308/325/themes/665783/assets/dl_main4d7c.js') }}" type="text/javascript"></script>
 	
-	<script src="https://bizweb.dktcdn.net/100/308/325/themes/665783/assets/jquery.elevatezoom308.min.js" type="text/javascript"></script>	
+	<script src="{{ url('shop/bizweb.dktcdn.net/100/308/325/themes/665783/assets/jquery.elevatezoom308.min.js') }}" type="text/javascript"></script>	
 	<script type="text/javascript" src="{{ url('js/custom.shop.js') }}" ></script>
 	<script>
 		$(document).ready(function() {

@@ -44,11 +44,11 @@ class HomeController extends AppController
      */
     public function index(Request $request)
     {
-        $banners = Banner::where('status', Status::ACTIVE)->orderBy('created_at', 'DESC')->get();
+        $banners = Banner::where('status', Status::ACTIVE)->orderBy('updated_at', 'DESC')->get();
         
-        $categories = Category::select('id', 'name', 'name_url', 'parent_id')->where('status', Status::ACTIVE)->where('parent_id', 0)->get();
+        $categories = Category::select('id', 'name', 'name_url', 'parent_id')->active()->where('parent_id', 0)->orderBy('updated_at', 'DESC')->get();
         
-        $posts = Post::where('status', PostStatus::PUBLISHED)->orderBy('created_at', 'DESC')->get();
+        $posts = Post::where('status', PostStatus::PUBLISHED)->orderBy('updated_at', 'DESC')->get();
         
         $this->output['banners'] = $banners;
         $this->output['categories'] = $categories;
@@ -62,16 +62,6 @@ class HomeController extends AppController
             'type' => 'website',
             'image' => url($this->output['config']['web_banner'])
         ]);
-        
-//         $this->setSEO([
-//             'title' => $product->name,
-//             'summary' => $product->getSEODescription(),
-//             'section' => $product->getCategoryName(),
-//             'keywords' => [$product->getSEOKeywords(), $product->getCategoryName(), $this->output['config']['web_name']],
-//             'link' => $product->getLink(),
-//             'type' => 'product',
-//             'image' => $product->getFirstImage()
-//         ]);
         
         return view('shop.home', $this->output);
     }
@@ -454,7 +444,7 @@ class HomeController extends AppController
             $page = $request->page_name;
             $sort_by = $request->sort_by;
             $price_search = $request->price_search;
-            $orderBy = 'products.created_at DESC';
+            $orderBy = 'products.updated_at DESC';
             $keyword = $request->keyword;
             
             if(!Utils::blank($sort_by)) {

@@ -52,79 +52,6 @@ class Utils {
         }
     }
     
-    public static function getAvatar($image = '') {
-        $uploadFolder = Common::UPLOAD_FOLDER;
-        $noavatar = Common::NO_AVATAR;
-        if(!self::blank($image)) {
-            return url($uploadFolder . $image);
-        } else {
-            return url($noavatar);
-        }
-    }
-    
-    public static function doUpload($request, $destFolder, &$filename = '', $listSizes = null, $product_id = 0, &$arrFilenames = []) {
-        $image_upload_url = $request->image_upload_url;
-        $image_ids = $request->image_ids;
-        $files = $request->image_upload;
-        
-        if(is_array($image_ids) && count($image_ids)) {
-            $ids = [];
-            foreach($image_ids as $k=>$image_id) {
-                $url = isset($image_upload_url[$k]) ? $image_upload_url[$k] : '';
-                if(!Utils::blank($url)) {
-                    $filename = $url;
-                }
-                
-                $thumbnail_medium = '';
-                $thumbnail_small = '';
-                $file = isset($files[$k]) ? $files[$k] : '';
-                if(!Utils::blank($file)) {
-                    $filename = self::uploadFile($file, $destFolder, $listSizes, $thumbnail_medium, $thumbnail_small);
-                }
-                
-                if(!$product_id) {
-                    break;
-                }
-                
-                if(Utils::blank($filename)) { continue; }
-                
-                array_push($arrFilenames, ['product_id' => $product_id, 'image' => $filename, 'medium' => $thumbnail_medium, 'small' => $thumbnail_small]);
-                
-                $filename = '';
-            }
-            
-            if(count($arrFilenames)) {
-                DB::table(Common::IMAGES_PRODUCT)->where(['product_id' => $product_id])->delete();
-                DB::table(Common::IMAGES_PRODUCT)->insert($arrFilenames);
-            }
-        } else {
-            DB::table(Common::IMAGES_PRODUCT)->where(['product_id' => $product_id])->delete();
-        }
-        
-    }
-    
-    public static function uploadFile($file, $destFolder, $listSizes = null, &$thumbnail_medium = '', &$thumbnail_small = '') {
-        
-        $uploadFolder = Common::UPLOAD_FOLDER;
-        $uploadPath = $uploadFolder . $destFolder;
-        
-        $filename = time() . '_' . $file->getClientOriginalName();
-        
-        if($listSizes != null) {
-            
-            $uploadFolder = Common::UPLOAD_FOLDER . $destFolder;
-            $thumbnail_medium =  $destFolder . '/' . $listSizes[0] . '/' . $filename;
-            $thumbnail_small =  $destFolder . '/' . $listSizes[1] . '/' . $filename;
-        }
-        
-        self::resizeImage($uploadPath, $file, $filename, $listSizes);
-        $file->move($uploadPath, $filename);
-        
-        $filename = $destFolder . $filename;
-        
-        return $filename;
-    }
-    
     public static function doUploadSimple($request, $key, &$filename) {
         
         $file = null;
@@ -559,12 +486,12 @@ class Utils {
         $message = '';
         
         try {
-            $from = isset($config_email['from'])?$config_email['from']: config('mail.from.address');
-            $from_name = isset($config_email['from_name'])?$config_email['from_name']: config('mail.from.name');
+            $from = isset($config_email['from'])?$config_email['from']: Common::FROM_MAIL;
+            $from_name = isset($config_email['from_name'])?$config_email['from_name']: Common::FROM_NAME;
             $to = isset($config_email['to'])?$config_email['to']:'';
-            $subject = isset($config_email['subject'])?$config_email['subject']:Common::SUBJECT;
+            $subject = isset($config_email['subject'])?$config_email['subject']: Common::SUBJECT;
             $msg = isset($config_email['msg'])?$config_email['msg']:'';
-            $template = isset($config_email['template'])?$config_email['template']:Common::TEMPLATE;
+            $template = isset($config_email['template'])?$config_email['template']: Common::TEMPLATE;
             $cc = isset($config_email['cc'])?$config_email['cc']:null;
             $bcc = isset($config_email['bcc'])?$config_email['bcc']:null;
             $pathToFile = isset($config_email['pathToFile'])?$config_email['pathToFile']:null;
@@ -1275,7 +1202,7 @@ class Utils {
                 if(!self::blank($element_value)) {
                     $element_html .= '<img id="' . $preview_control_id . '" src="' . self::getImageLink($element_value) . '" class="img-thumbnail" style="margin-top:10px;' . $style . '">';
                 } else {
-                    $element_html .= '<img id="' . $preview_control_id . '" src="' . self::getImageLink($element_value) . '" class="img-thumbnail" style="display:none;margin-top:10px;' . $style . '">';
+                    $element_html .= '<img id="' . $preview_control_id . '" src="' . self::getImageLink(Common::NO_IMAGE_FOUND) . '" class="img-thumbnail" style="margin-top:10px;' . $style . ';">';
                 }
                 
                 break;

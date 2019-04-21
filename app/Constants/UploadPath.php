@@ -2,6 +2,8 @@
 
 namespace App\Constants;
 
+use App\Helpers\Utils;
+
 class UploadPath {
     
     CONST UPLOAD = 'upload/';
@@ -32,5 +34,16 @@ class UploadPath {
     
     public static function getFilePath($key = '') {
         return self::PATH_LIST[$key];
+    }
+    
+    public static function removeListPath() {
+        $output = [];
+        $pathList = self::PATH_LIST;
+        foreach($pathList as $path) {
+            $dirPath = self::UPLOAD . $path;
+            Utils::deleteDir($dirPath);
+        }
+        
+        return $output;
     }
 }

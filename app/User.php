@@ -6,6 +6,8 @@ use App\Constants\Common;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Constants\UserRole;
+use App\Helpers\Utils;
+use App\Constants\UploadPath;
 
 class User extends Authenticatable
 {
@@ -37,5 +39,12 @@ class User extends Authenticatable
         }
         
         return false;
+    }
+    
+    public function getAvatar() {
+        if(!Utils::blank($this->avatar) && file_exists($this->avatar)) {
+            return Utils::getImageLink($this->avatar);
+        }
+        return Utils::getImageLink(Common::NO_AVATAR);
     }
 }

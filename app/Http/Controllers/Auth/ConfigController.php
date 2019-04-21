@@ -11,6 +11,7 @@ use DB;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Constants\UploadPath;
 class ConfigController extends AppController
 {
     //
@@ -36,105 +37,20 @@ class ConfigController extends AppController
             }
             if($request->clear_data) {
                 
-                $uploadFolder = Common::UPLOAD_FOLDER;
-                // Remove avatar
-                $dirPath = $uploadFolder . Common::AVATAR_FOLDER;
-                if(!Utils::deleteDir($dirPath)) {
-                    echo '=============== error=============== ';
-                    exit;
-                }
-                
-                // Remove banner
-                $dirPath = $uploadFolder . Common::BANNER_FOLDER;
-                if(!Utils::deleteDir($dirPath)) {
-                    echo '=============== error=============== ';
-                    exit;
-                }
-                
-                // Remove ico
-                $dirPath = $uploadFolder . Common::ICO_FOLDER;
-                if(!Utils::deleteDir($dirPath)) {
-                    echo '=============== error=============== ';
-                    exit;
-                }
-                
-                // Remove image
-                $dirPath = $uploadFolder . Common::IMAGE_FOLDER;
-                if(!Utils::deleteDir($dirPath)) {
-                    echo '=============== error=============== ';
-                    exit;
-                }
-                
-                // Remove vendor logo
-                $dirPath = $uploadFolder . Common::VENDOR_FOLDER;
-                if(!Utils::deleteDir($dirPath)) {
-                    echo '=============== error=============== ';
-                    exit;
-                }
-                
-                // Remove vendor logo
-                $dirPath = $uploadFolder . Common::WEBLOGO_FOLDER;
-                if(!Utils::deleteDir($dirPath)) {
-                    echo '=============== error=============== ';
-                    exit;
-                }
+                UploadPath::removeListPath();
                 
                 DB::beginTransaction();
                 try {
-                    DB::table('categories')->truncate();
-                    DB::table('vendors')->truncate();
-                    DB::table('products')->truncate();
-                    DB::table('images_product')->truncate();
-                    DB::table('product_details')->truncate();
-                    DB::table('product_detail_groups')->truncate();
-                    DB::table('posts')->truncate();
-                    DB::table('banners')->truncate();
-                    DB::table('orders')->truncate();
-                    DB::table('order_details')->truncate();
-                    DB::table('contacts')->truncate();
-                    DB::table('users')->truncate();
-                    
-                    DB::query('ALTER TABLE categories AUTO_INCREMENT = 1');
-                    DB::query('ALTER TABLE vendors AUTO_INCREMENT = 1');
-                    DB::query('ALTER TABLE products AUTO_INCREMENT = 1');
-                    DB::query('ALTER TABLE posts AUTO_INCREMENT = 1');
-                    DB::query('ALTER TABLE banners AUTO_INCREMENT = 1');
-                    DB::query('ALTER TABLE orders AUTO_INCREMENT = 1');
-                    DB::query('ALTER TABLE order_details AUTO_INCREMENT = 1');
-                    DB::query('ALTER TABLE contacts AUTO_INCREMENT = 1');
-                    DB::query('ALTER TABLE images_product AUTO_INCREMENT = 1');
-                    DB::query('ALTER TABLE product_details AUTO_INCREMENT = 1');
-                    DB::query('ALTER TABLE product_detail_groups AUTO_INCREMENT = 1');
-                    DB::query('ALTER TABLE users AUTO_INCREMENT = 1');
-                    
-                    $users = [
-                        ['id' => 1, 'name' => 'Super Administrator',
-                            'email' => 'super.admin@admin.com',
-                            'password' => Hash::make('!23456Abc'),
-                            'role_id' => Common::SUPER_ADMIN,
-                            'status' => 1,
-                            'created_at' => date('Y-m-d H:i:s'),
-                            'updated_at' => date('Y-m-d H:i:s')
-                        ],
-                        ['id' => 2, 'name' => 'Administrator',
-                            'email' => 'admin@admin.com',
-                            'password' => Hash::make('!23456Abc'),
-                            'role_id' => Common::ADMIN,
-                            'status' => 1,
-                            'created_at' => date('Y-m-d H:i:s'),
-                            'updated_at' => date('Y-m-d H:i:s')
-                        ]
-                    ];
-                    DB::table(Common::USERS)->delete();
-                    DB::table(Common::USERS)->insert($users);
-                    
-                    $config = [
-                        [
-                            'id' => 1
-                        ]
-                    ];
-                    DB::table(Common::CONFIG)->delete();
-                    DB::table(Common::CONFIG)->insert($config);
+                    $tableList = Common::TABLE_LIST;
+                    foreach($tableList as $table) {
+                        if($table == Common::USERS) {
+                            DB::table($table)->where('id', '!=', 1)->delete();
+                            DB::query('ALTER TABLE ' . $table . ' AUTO_INCREMENT = 2');
+                        } else {
+                            DB::table($table)->truncate();
+                            DB::query('ALTER TABLE ' . $table . ' AUTO_INCREMENT = 1');
+                        }
+                    }
                     
                     DB::commit();
                 } catch(\Exception $e) {
@@ -148,9 +64,19 @@ class ConfigController extends AppController
             $web_ico = $data->web_ico;
             $web_logo = $data->web_logo;
             $web_banner = $data->web_banner;
-            Utils::doUploadSimple($request, 'upload_web_logo', $web_logo);
-            Utils::doUploadSimple($request, 'upload_web_ico', $web_ico);
-            Utils::doUploadSimple($request, 'upload_web_banner', $web_banner);
+            
+            $key = 'upload_web_logo';
+            $demension = $data[$key . '_image_size'];
+            Utils::resizeImage($key, $request->$key, $demension, $web_logo);
+            
+            $key = 'upload_web_ico';
+            $demension = $data[$key . '_image_size'];
+            Utils::resizeImage($key, $request->$key, $demension, $web_ico);
+            
+            $key = 'upload_web_banner';
+            $demension = $data[$key . '_image_size'];
+            Utils::resizeImage($key, $request->$key, $demension, $web_banner);
+            
             $data->web_title       = Utils::cnvNull($request->web_title, '');
             $data->web_description = Utils::cnvNull($request->web_description, '');
             $data->web_keywords    = Utils::cnvNull($request->web_keywords, '');

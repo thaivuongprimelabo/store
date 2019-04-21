@@ -58,7 +58,6 @@ $auth = [
             'products' => 'Danh mục sản phẩm',
             'categories' => 'Danh mục loại sản phẩm',
             'vendors' => 'Danh mục nhà cung cấp',
-            'shipfee' => 'Phí ship'
         ],
         'orders' => [
             'title' => 'Quản lý đơn hàng',
@@ -73,19 +72,12 @@ $auth = [
         'pages' => 'Quản lý trang nội dung',
         'contacts' => 'Hộp thư liên hệ',
         'users' => 'Quản lý tài khoản',
-//         'booking' => [
-//             'title' => 'Quản lý lịch hẹn',
-//             'booking' => 'Đặt chỗ',
-//             'times' => 'Thời gian',
-//         ],
-//         'forum' => [
-//             'title' => 'Diễn đàn',
-//             'members' => 'Thành viên',
-//             'groups' => 'Nhóm thảo luận',
-//             'threads' => 'Chủ đề thảo luận',
-//             'comments' => 'Bình luận'
-//         ],
-        'config' => 'Cài đặt'
+        'config' => [
+            
+            'title' => 'Cài đặt',
+            'config' => 'Trang web',
+            'shipfee' => 'Phí ship',
+        ]
     ],
     'banner_type' => $bannerType,
     /*------------ Vendor page ------------------- */
@@ -248,100 +240,6 @@ $auth = [
         ],
         'rules' => [
             'name' => 'required|max:' . \App\Constants\Common::NAME_MAXLENGTH
-        ]
-    ],
-    /*------------ Category page ------------------- */
-    'booking' => [
-        'list_title' => 'Danh mục đặt hẹn',
-        'create_title' => 'Đăng ký hẹn',
-        'edit_title' => 'Chỉnh sửa hẹn',
-        'table_header' => [
-            'id' => [
-                'text' => 'ID',
-                'width' => '3%'
-            ],
-            'name' => [
-                'text' => 'Tên khách',
-                'width' => '20%'
-            ],
-            'booking_date' => [
-                'text' => 'Ngày đặt hẹn',
-                'width' => '10%'
-            ],
-            'booking_time' => [
-                'text' => 'Thời gian',
-                'width' => '10%'
-            ],
-            'status' => [
-                'text' => 'Trạng thái',
-                'width' => '10%'
-            ],
-            'updated_at' => [
-                'text' => 'Ngày cập nhật',
-                'width' => '10%'
-            ],
-            'remove_action' => [
-                'text' => '',
-                'width' => '5%'
-            ],
-            'edit_action' => [
-                'text' => '',
-                'width' => '5%'
-            ]
-        ],
-        'search_form' => [
-            'id' => [
-                'type' => 'text',
-                'placeholder' => 'Lọc theo mã đặt chỗ'
-            ],
-            'name' => [
-                'type' => 'text',
-                'placeholder' => 'Lọc theo tên khách'
-            ],
-            'phone' => [
-                'type' => 'text',
-                'placeholder' => 'Lọc theo số điện thoại'
-            ],
-            'status' => [
-                'type' => 'booking_status_select'
-            ]
-        ],
-        'form' => [
-            'name' => [
-                'type' => 'text',
-                'text' => 'Tên khách'
-            ],
-            'phone' => [
-                'type' => 'text',
-                'text' => 'Số điện thoại'
-            ],
-            'booking_date' => [
-                'type' => 'text',
-                'text' => 'Ngày đặt hẹn'
-            ],
-            'booking_time' => [
-                'type' => 'select',
-                'text' => 'Thời gian',
-                'empty_text' => '--- Chọn thời gian ---',
-                'table' => \App\Constants\Common::TIMES
-            ],
-            'note' => [
-                'type' => 'textarea',
-                'text' => 'Ghi chú'
-            ],
-            'status' => [
-                'type' => 'select',
-                'text' => 'Trạng thái',
-                'empty_text' => '--- Chọn trạng thái ---',
-                'table' => 'BOOKING_STATUS'
-            ]
-        ],
-        'rules' => [
-            'name' => 'required|max:' . \App\Constants\Common::NAME_MAXLENGTH,
-            'phone' => 'required|max:' . \App\Constants\Common::PHONE_MAXLENGTH,
-            'booking_date' => 'required|max:' . \App\Constants\Common::BOOKING_DATE_MAXLENGTH,
-            'booking_time' => 'required|max:' . \App\Constants\Common::BOOKING_TIME_MAXLENGTH,
-            'status' => 'required'
         ]
     ],
     /*------------ Banner page ------------------- */
@@ -1333,9 +1231,6 @@ $auth = [
             'upload_avatar' => [
                 'type' => 'file_simple',
                 'text' => 'Ảnh đại diện',
-                'size' => \App\Constants\Common::AVATAR_MAX_SIZE,
-                'width' => \App\Constants\Common::AVATAR_WIDTH,
-                'height' => \App\Constants\Common::AVATAR_HEIGHT
             ],
             'password' => [
                 'type' => 'password',
@@ -1542,9 +1437,6 @@ $auth = [
             'upload_avatar' => [
                 'upload_type' => 'file_simple',
                 'text' => 'Ảnh đại diện',
-                'size' => \App\Constants\Common::AVATAR_MAX_SIZE,
-                'width' => \App\Constants\Common::AVATAR_WIDTH,
-                'height' => \App\Constants\Common::AVATAR_HEIGHT
             ],
             'status' => [
                 'type' => 'checkbox',

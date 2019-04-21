@@ -34,7 +34,7 @@ var callAjax = function(url, data, button) {
 	    				}
 	    				
 	    				$(div).html(res[data.container[id]]).show();
-	    				if(div === '#ajax_list') {
+	    				if(div === '#ajax_list' || div === '#contact_success' || div === '#contact_error') {
 	    					$('html, body').animate({scrollTop: ($(div).offset().top - 200)}, '2000');
 	    				}
 	    				

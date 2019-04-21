@@ -83,6 +83,7 @@ class productsController extends AppController
                     $data->seo_keywords      = Utils::cnvNull($request->seo_keywords, '');
                     $data->seo_description   = Utils::cnvNull($request->seo_description, '');
                     $data->created_at    = date('Y-m-d H:i:s');
+                    $data->updated_at    = date('Y-m-d H:i:s');
                     
                     if($data->save()) {
                         $is_main = $request->is_main;
