@@ -1,6 +1,5 @@
 <div class="cart page_cart hidden-xs">
-	<form action="/cart" method="post" novalidate=""
-		class="margin-bottom-0">
+	<form action="/cart" method="post" novalidate="" class="margin-bottom-0">
 		<div class="bg-scroll">
 			<div class="cart-thead">
 				<div style="width: 19%;">{{ trans('shop.cart.table_header.image') }}</div>
@@ -37,7 +36,7 @@
 					<div style="width: 18%" class="a-center">
 						<div class="input_qty_pr relative ">
 							<button class="reduced_pop items-count btn-minus btn-minus-item" data-id="{{ $cartItem->getId() }}" type="button">–</button>
-							<input type="text" maxlength="12" min="0" class="input-text number-sidebar input_pop input_pop" data-id="{{ $cartItem->getId() }}" size="4" value="{{ $cartItem->getQty() }}">
+							<input type="text" maxlength="12" min="0" class="input-text number-sidebar input_pop" data-id="{{ $cartItem->getId() }}" size="4" value="{{ $cartItem->getQty() }}">
 							<button class="increase_pop items-count btn-plus btn-plus-item" data-id="{{ $cartItem->getId() }}" type="button">+</button>
 						</div>
 					</div>
@@ -71,7 +70,7 @@
     						<div class="input_qty_pr relative ">
     							<div class="input_qty_pr relative ">
         							<button class="reduced_pop items-count btn-minus-detail btn-minus" data-product-id="{{ $cartItem->getId() }}" data-qty="{{ $cartItem->getQty() }}" data-id="{{ $detail->getId() }}" type="button">–</button>
-        							<input type="text" maxlength="12" min="0" class="input-text number-sidebar input_pop input_pop qty-detail" data-id="{{ $detail->getId() }}" size="4" value="{{ $detail->getQty() }}">
+        							<input type="text" maxlength="12" min="0" class="input-text number-sidebar input_pop qty-detail" data-id="{{ $detail->getId() }}" size="4" value="{{ $detail->getQty() }}">
         							<button class="increase_pop items-count btn-plus-detail btn-plus" data-product-id="{{ $cartItem->getId() }}" data-qty="{{ $cartItem->getQty() }}" data-id="{{ $detail->getId() }}" type="button">+</button>
         						</div>
     						</div>

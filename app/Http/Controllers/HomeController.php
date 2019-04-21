@@ -44,7 +44,7 @@ class HomeController extends AppController
      */
     public function index(Request $request)
     {
-        $banners = Banner::where('status', Status::ACTIVE)->get();
+        $banners = Banner::where('status', Status::ACTIVE)->orderBy('created_at', 'DESC')->get();
         
         $categories = Category::select('id', 'name', 'name_url', 'parent_id')->where('status', Status::ACTIVE)->where('parent_id', 0)->get();
         

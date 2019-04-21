@@ -33,9 +33,9 @@
     							@endif
     							<a href="javascript:void(0)" title="Xóa" class="remove-item-cart fa fa-remove" data-id="{{ $cartItem->getId() }}">&nbsp;</a>
     							<div class="quantity-select qty_drop_cart">
-    								<button class="btn_reduced reduced items-count btn-minus" type="button"  data-id="{{ $cartItem->getId() }}">–</button>
+    								<button class="btn_reduced reduced items-count btn-minus btn-minus-topcart" type="button"  data-id="{{ $cartItem->getId() }}">–</button>
     								<input type="text" maxlength="12" min="0" class="input-text number-sidebar" value="{{ $cartItem->getQty() }}"  data-id="{{ $cartItem->getId() }}">
-    								<button class="btn_increase increase items-count btn-plus" type="button"  data-id="{{ $cartItem->getId() }}">+</button>
+    								<button class="btn_increase increase items-count btn-plus  btn-plus-topcart" type="button"  data-id="{{ $cartItem->getId() }}">+</button>
     							</div>
     						</div>
     					</div>

@@ -251,7 +251,7 @@ function dl_owl() {
 			margin:Number(margin),
 			responsiveClass:true,
 			dots:dot,
-			autoplay:true,
+			autoplay:false,
 			autoHeight: false,
 			nav:nav,
 			navText: ["<i class='fa fa-angle-left'></i>","<i class='fa fa-angle-right'></i>"],

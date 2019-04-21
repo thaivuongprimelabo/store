@@ -100,9 +100,7 @@ class CartController extends AppController
             $cart = Cart::getInstance($request->getSession());
             $cart->updateCart($pid, $qty);
             
-            $result['.cartCount2'] = $cart->getCount();
-            $result['#top_cart'] = $cart->getTopCart();
-            $result['#main_cart'] = $cart->getMainCart();
+            $this->loadCart($cart, $result);
             return response()->json($result);
         }
     }
@@ -117,9 +115,7 @@ class CartController extends AppController
             $cart = Cart::getInstance($request->getSession());
             $cart->updateCartDetail($pid, $did, $qty);
             
-            $result['.cartCount2'] = $cart->getCount();
-            $result['#top_cart'] = $cart->getTopCart();
-            $result['#main_cart'] = $cart->getMainCart();
+            $this->loadCart($cart, $result);
             return response()->json($result);
         }
     }
@@ -132,9 +128,7 @@ class CartController extends AppController
             $cart = Cart::getInstance($request->getSession());
             $cart->removeItem($id);
             
-            $result['.cartCount2'] = $cart->getCount();
-            $result['#top_cart'] = $cart->getTopCart();
-            $result['#main_cart'] = $cart->getMainCart();
+            $this->loadCart($cart, $result);
             return response()->json($result);
         }
     }
@@ -148,9 +142,7 @@ class CartController extends AppController
             $cart = Cart::getInstance($request->getSession());
             $cart->removeDetailItem($pid, $id);
             
-            $result['.cartCount2'] = $cart->getCount();
-            $result['#top_cart'] = $cart->getTopCart();
-            $result['#main_cart'] = $cart->getMainCart();
+            $this->loadCart($cart, $result);
             return response()->json($result);
         }
     }
@@ -274,5 +266,12 @@ class CartController extends AppController
         $cart = Cart::getInstance($request->getSession());
         $cart->destroy();
         return view('shop.checkout_success', $this->output);
+    }
+    
+    private function loadCart($cart, &$result = []) {
+        $result['.cartCount2'] = $cart->getCount();
+        $result['#top_cart'] = $cart->getTopCart();
+        $result['#main_cart'] = $cart->getMainCart();
+        $result['#main_cart_mobile'] = $cart->getMainCartMobile();
     }
 }

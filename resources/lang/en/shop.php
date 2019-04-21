@@ -152,7 +152,8 @@ return [
         'back_to_cart' => 'Quay về giỏ hàng',
         'update' => 'Cập nhật',
         'clear' => 'Hủy',
-        'order_checking' => 'Kiểm tra'
+        'order_checking' => 'Kiểm tra',
+        'remove' => 'Xóa'
     ],
     'mail' => [
         'from_name' => 'Hệ thống'

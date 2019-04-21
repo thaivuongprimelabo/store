@@ -15,7 +15,7 @@
     <td>
     	<div class="input-group">
     		<span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>
-    		<input type="text" name="service[{{ $key }}][item][{{ $k }}][price]" value="{{ $service_price }}" class="form-control service-price" placeholder="Giá tiền">
+    		<input type="number" name="service[{{ $key }}][item][{{ $k }}][price]" value="{{ $service_price }}" class="form-control service-price" placeholder="Giá tiền">
     	</div>
     </td>
     <td>
@@ -33,7 +33,7 @@
     <td>
     	<div class="input-group">
     		<span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>
-    		<input type="text" name="" value="" class="form-control service-price" placeholder="Giá tiền">
+    		<input type="number" name="" value="" class="form-control service-price" placeholder="Giá tiền">
     	</div>
     </td>
     <td>

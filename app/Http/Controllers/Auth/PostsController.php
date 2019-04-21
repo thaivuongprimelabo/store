@@ -51,7 +51,9 @@ class PostsController extends AppController
             if (!$validator->fails()) {
                 
                 $filename = '';
-                Utils::doUploadSimple($request, 'upload_photo', $filename);
+                $key = 'upload_photo';
+                $demension = $this->config['config'][$key . '_image_size'];
+                Utils::resizeImage($key, $request->$key, $demension, $filename);
                 
                 $data = new Post();
                 $data->name              = Utils::cnvNull($request->name, '');
@@ -98,7 +100,9 @@ class PostsController extends AppController
             
             if (!$validator->fails()) {
                 $filename = $data->photo;
-                Utils::doUploadSimple($request, 'upload_photo', $filename);
+                $key = 'upload_photo';
+                $demension = $this->config['config'][$key . '_image_size'];
+                Utils::resizeImage($key, $request->$key, $demension, $filename);
                 
                 $published_at = date('Ymd', strtotime($request->input('published_at', date('Ymd'))));
                 $published_time_at = date('Hi', strtotime($request->input('published_time_at', date('H:i'))));
@@ -114,7 +118,6 @@ class PostsController extends AppController
                 $data->post_group_id      = Utils::cnvNull($request->post_group_id, 0);
                 $data->seo_keywords      = Utils::cnvNull($request->seo_keywords, '');
                 $data->seo_description   = Utils::cnvNull($request->seo_description, $request->description);
-                $data->created_at           = date('Y-m-d H:i:s');
                 $data->updated_at           = date('Y-m-d H:i:s');
                 
                 if($data->save()) {

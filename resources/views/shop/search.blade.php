@@ -46,7 +46,7 @@
     		spinner: '#ajax_list'
     	}
     
-    	callAjax('{{ route('loadData') }}', data, page_name);
+    	callAjax('{{ route('loadData') }}', data);
 
     	$(document).on('click', '.page-link', function(e) {
 			var page_number = $(this).attr('data-page-number');
@@ -56,7 +56,7 @@
     	$(document).on('click', '#search', function(e) {
         	data.keyword = $('#keyword_search').val();
     		callAjax('{{ route('loadData') }}', data);
-    	}
+    	});
     })
 </script>
 @endsection

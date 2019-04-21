@@ -56,7 +56,9 @@ class BannersController extends AppController
                 $data = new Banner();
                 if($select_type == 'use_image') {
                     $filename = '';
-                    Utils::doUploadSimple($request, 'upload_banner', $filename);
+                    $key = 'upload_banner';
+                    $demension = $this->config['config'][$key . '_image_size'];
+                    Utils::resizeImage($key, $request->$key, $demension, $filename);
                     $data->link           = Utils::cnvNull($request->link, '');
                     $data->banner         = $filename;
                 } else {
@@ -100,7 +102,9 @@ class BannersController extends AppController
                 $select_type = Utils::cnvNull($request->select_type, 'use_image');
                 if($select_type == 'use_image') {
                     $filename = $data->banner;
-                    Utils::doUploadSimple($request, 'upload_banner', $filename);
+                    $key = 'upload_banner';
+                    $demension = $this->config['config'][$key . '_image_size'];
+                    Utils::resizeImage($key, $request->$key, $demension, $filename);
                     $data->link           = Utils::cnvNull($request->link, '');
                     $data->banner         = $filename;
                     $data->youtube_id    = '';

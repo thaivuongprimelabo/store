@@ -139,6 +139,10 @@ class Cart {
         return view('shop.common.main_cart', ['cart' => $this])->render();
     }
     
+    public function getMainCartMobile() {
+        return view('shop.common.main_cart_mobile', ['cart' => $this])->render();
+    }
+    
     public function updateCart($id, $qty) {
         foreach($this->cart as $cartItem) {
             if($cartItem->getId() == $id) {

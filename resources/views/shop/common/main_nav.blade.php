@@ -5,8 +5,8 @@
 
 			<div class="menu-search f-right bbbbb">										
 				<div class="header_search search_form">
-					<form class="input-group search-bar search_form" action="?" method="get" role="search">		
-						<input type="search" id="keyword" value="" placeholder="{{ trans('shop.search_product') }}" class="input-group-field st-default-search-input search-text auto-search" autocomplete="off">
+					<form class="input-group search-bar search_form" action="{{ route('search') }}" method="get" role="search">		
+						<input type="search" id="keyword" name="q" value="" placeholder="{{ trans('shop.search_product') }}" class="input-group-field st-default-search-input search-text auto-search" autocomplete="off">
 						<span class="input-group-btn">
 							<button class="btn icon-fallback-text">
 								<i class="fa fa-search"></i>
@@ -44,8 +44,8 @@
 
 					<li class="li-search">
 						<div class="header_search search_form">
-                        	<form class="input-group search-bar search_form" action="#" method="get" role="search">		
-                        		<input type="search" name="query" value="" placeholder="Tìm sản phẩm" class="input-group-field st-default-search-input search-text" autocomplete="off">
+                        	<form class="input-group search-bar search_form" action="{{ route('search') }}" method="get" role="search">		
+                        		<input type="search" name="q" value="" placeholder="Tìm sản phẩm" class="input-group-field st-default-search-input search-text" autocomplete="off">
                         		<span class="input-group-btn">
                         			<button class="btn icon-fallback-text">
                         				<i class="fa fa-search"></i>

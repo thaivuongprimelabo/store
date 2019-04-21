@@ -57,12 +57,12 @@ $auth = [
             'title' => 'Quản lý sản phẩm',
             'products' => 'Danh mục sản phẩm',
             'categories' => 'Danh mục loại sản phẩm',
-            'vendors' => 'Danh mục nhà cung cấp'
+            'vendors' => 'Danh mục nhà cung cấp',
+            'shipfee' => 'Phí ship'
         ],
         'orders' => [
             'title' => 'Quản lý đơn hàng',
             'orders' => 'Danh sách đơn hàng',
-            'shipfee' => 'Phí ship'
         ],
         'banners' => 'Quản lý banner',
         'posts' => [
@@ -161,11 +161,6 @@ $auth = [
                 'text' => 'Tên nhà cung cấp',
                 'maxlength' => \App\Constants\Common::NAME_MAXLENGTH
             ],
-            'description' => [
-                'type' => 'textarea',
-                'text' => 'Mô tả',
-                'maxlength' => \App\Constants\Common::DESC_MAXLENGTH
-            ],
             'upload_logo' => [
                 'type' => 'file_simple',
                 'text' => 'Hình ảnh'
@@ -178,7 +173,6 @@ $auth = [
         ],
         'rules' => [
             'name' => 'required|max:' . \App\Constants\Common::NAME_MAXLENGTH,
-            'description' => 'required|max:' . \App\Constants\Common::DESC_MAXLENGTH
         ]
     ],
     /*------------ Category page ------------------- */
@@ -829,40 +823,37 @@ $auth = [
             ],
         ],
         'form' => [
-            'many_form' => true,
-            'customer_info' => [
-                'header' => 'Thông tin khách hàng',
-                'customer_name' => [
-                    'type' => 'label',
-                    'text' => 'Tên khách hàng: '
-                ],
-                'customer_email' => [
-                    'type' => 'label',
-                    'text' => 'E-mail: '
-                ],
-                'customer_address' => [
-                    'type' => 'label',
-                    'text' => 'Địa chỉ giao hàng: '
-                ],
-                'customer_phone' => [
-                    'type' => 'label',
-                    'text' => 'Số điện thoại: '
-                ],
-                'payment_method' => [
-                    'type' => 'label',
-                    'text' => 'Phương thức chi trả: '
-                ],
-                'customer_note' => [
-                    'type' => 'label',
-                    'text' => 'Ghi chú: '
-                ],
-                'status' => [
-                    'type' => 'select',
-                    'table' => 'STATUS_ORDERS',
-                    'text' => 'Trạng thái đơn hàng',
-                    'empty_text'
-                ]
+            'header' => 'Thông tin khách hàng',
+            'customer_name' => [
+                'type' => 'label',
+                'text' => 'Tên khách hàng: '
             ],
+            'customer_email' => [
+                'type' => 'label',
+                'text' => 'E-mail: '
+            ],
+            'customer_address' => [
+                'type' => 'label',
+                'text' => 'Địa chỉ giao hàng: '
+            ],
+            'customer_phone' => [
+                'type' => 'label',
+                'text' => 'Số điện thoại: '
+            ],
+            'payment_method' => [
+                'type' => 'label',
+                'text' => 'Phương thức chi trả: '
+            ],
+            'customer_note' => [
+                'type' => 'label',
+                'text' => 'Ghi chú: '
+            ],
+            'status' => [
+                'type' => 'select',
+                'table' => 'STATUS_ORDERS',
+                'text' => 'Trạng thái đơn hàng',
+                'empty_text'
+            ]
         ]
     ],
     'shipfee' => [

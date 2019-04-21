@@ -128,7 +128,7 @@
  		    		pid: $(this).attr('data-product-id'),
  		    		did: $(this).attr('data-id'),
  		    		qty: qty,
- 		    		container: ['#top_cart', '.cartCount2', '#main_cart'],
+ 		    		container: ['#top_cart', '.cartCount2', '#main_cart', '#main_cart_mobile'],
   				 }
 
   				 callAjax('{{ route('updateCartDetail') }}', data);
@@ -150,14 +150,14 @@
  		    		pid: $(this).attr('data-product-id'),
  		    		did: $(this).attr('data-id'),
  		    		qty: qty,
- 		    		container: ['#top_cart', '.cartCount2', '#main_cart'],
+ 		    		container: ['#top_cart', '.cartCount2', '#main_cart', '#main_cart_mobile'],
   				 }
 
   				 callAjax('{{ route('updateCartDetail') }}', data);
         		 
      		 });
 
-    		 $(document).on('click', '.btn-minus-item', function(e) {
+    		 $(document).on('click', '.btn-minus-item, .btn-minus-topcart', function(e) {
         		 var qty = Number($(this).next('.number-sidebar').val()) - 1;
         		 if(qty === 0) {
 					return false;
@@ -171,7 +171,7 @@
  		    		async : true,
  		    		pid: $(this).attr('data-id'),
  		    		qty: qty,
- 		    		container: ['#top_cart', '.cartCount2', '#main_cart'],
+ 		    		container: ['#top_cart', '.cartCount2', '#main_cart', '#main_cart_mobile'],
   				 }
 
   				 callAjax('{{ route('updateCart') }}', data);
@@ -179,7 +179,7 @@
         		 
      		 });
     		 
-    		 $(document).on('click', '.btn-plus-item', function(e) {
+    		 $(document).on('click', '.btn-plus-item, .btn-plus-topcart', function(e) {
         		 var qty = Number($(this).prev('.number-sidebar').val()) + 1;
         		 if(qty > 20) {
 					return false;
@@ -193,7 +193,7 @@
   		    		async : true,
   		    		pid: $(this).attr('data-id'),
   		    		qty: qty,
-  		    		container: ['#top_cart', '.cartCount2', '#main_cart'],
+  		    		container: ['#top_cart', '.cartCount2', '#main_cart', '#main_cart_mobile'],
    				 }
 
    				 callAjax('{{ route('updateCart') }}', data);
@@ -241,7 +241,7 @@
   		    		async : true,
   		    		pid: $(this).attr('data-id'),
   		    		qty: qty,
-  		    		container: ['#top_cart', '.cartCount2', '#main_cart'],
+  		    		container: ['#top_cart', '.cartCount2', '#main_cart', '#main_cart_mobile'],
    				 }
 
    				 callAjax('{{ route('updateCart') }}', data);
@@ -253,7 +253,7 @@
   					type : 'post',
   		    		async : true,
   		    		id: $(this).attr('data-id'),
-  		    		container: ['#top_cart', '.cartCount2', '#main_cart'],
+  		    		container: ['#top_cart', '.cartCount2', '#main_cart', '#main_cart_mobile'],
   		    		checkout_btn: '#checkout_btn'
    				 }
 
@@ -268,7 +268,7 @@
   		    		async : true,
   		    		pid: pid,
   		    		id: id,
-  		    		container: ['#top_cart', '.cartCount2', '#main_cart'],
+  		    		container: ['#top_cart', '.cartCount2', '#main_cart', '#main_cart_mobile'],
    				 }
 
    				 callAjax('{{ route('removeDetailItem') }}', data);

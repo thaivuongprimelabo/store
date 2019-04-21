@@ -174,8 +174,8 @@ class Utils {
                         $products_sizes = explode(',', $size->upload_image_image_size);
                         $products_medium_size = $products_sizes[0];
                         $products_small_size = $products_sizes[1];
-                        $medium = self::resizeImage($key, $file, $filename, $products_medium_size);
-                        $small = self::resizeImage($key, $file, $filename, $products_small_size);
+                        self::resizeImage($key, $file, $products_medium_size, $medium);
+                        self::resizeImage($key, $file, $products_small_size, $small);
                     }
                     
                     self::doUploadSimple($file, $key, $filename);
@@ -197,22 +197,45 @@ class Utils {
         }
     }
     
-    public static function resizeImage($key, $file, $filename, $demension = null) {
+    public static function resizeImage($key, $file = null, $demension = null, &$filename = '') {
         
-        if($demension == null) {
+        if(!$file || $demension == null) {
             return;
+        }
+        
+        $image_size = getimagesize($file->getRealPath());
+        $image_width = isset($image_size[0]) ? $image_size[0] : 0;
+        $image_height = isset($image_size[1]) ? $image_size[1] : 0;
+        
+        $d = explode('x', $demension);
+        $image_width_resize = null;
+        $image_height_resize = null;
+        if(isset($d[0]) && !self::blank($d[0])) {
+            $image_width_resize = $d[0];
+        }
+        
+        if(isset($d[1]) && !self::blank($d[1])) {
+            $image_height_resize = $d[1];
+        }
+        
+        if($image_width < $image_width_resize) {
+            $image_width_resize = $image_width;
+        }
+        
+        if($image_height < $image_height_resize) {
+            $image_height_resize = $image_height;
         }
         
         $filename = time() . '_' . $file->getClientOriginalName();
         $uploadPath = UploadPath::getUploadPath($key);
         $resizePath = $uploadPath . $demension;
-        $filePath = UploadPath::getFilePath($key) . $demension;
+        $filePath = UploadPath::getFilePath($key) . $demension . '/' . $filename;
         
-        $d = explode('x', $demension);
         $image_resize = Image::make($file->getRealPath());
-//         $image_resize->resize($d[0], $d[1]);
-        $image_resize->resize(null, $d[1], function ($constraint) {
+//         $image_resize->resize($image_width_resize, $image_height_resize);
+        $image_resize->resize($image_width_resize, $image_height_resize, function ($constraint) {
             $constraint->aspectRatio();
+            $constraint->upsize();
         });
         
         if(!file_exists(public_path($uploadPath))) {
@@ -223,9 +246,10 @@ class Utils {
             mkdir(public_path($resizePath));
         }
         
-        $image_resize->save(public_path($resizePath .  '/' . $filename));
+        if($image_resize->save(public_path($resizePath . '/' . $filename))) {
+            $filename = $filePath;
+        }
         
-        return $filePath . '/' . $filename;
     }
     
     public static function removeFile($file) {
@@ -969,7 +993,7 @@ class Utils {
             $form_html .= '<ul class="nav nav-tabs">';
             
             foreach($tabForm as $id=>$form) {
-                if(Auth::user()->role_id == UserRole::ADMIN && in_array($id, $acceptAdmin)) {
+                if($name == 'config' && Auth::user()->role_id == UserRole::ADMIN && in_array($id, $acceptAdmin)) {
                     continue;
                 }
                 $form_html .= '<li class="' . ($id == 'tab_form_1' ? 'active' : '') . '">';
@@ -1247,10 +1271,11 @@ class Utils {
                 $element_html .= $label . trans('auth.text_image_small',['limit_upload' => self::formatMemory($limit_upload)]);
                 $preview_control_id = 'preview_' . $key;
                 $element_html .= '<input type="file" class="form-control upload-simple" name="' . $key . '" data-preview-control="' . $preview_control_id . '" data-limit-upload="' . $limit_upload . '" />';
+                $style = 'width:' . $split[0] . 'px; height: ' . $split[1] . 'px';
                 if(!self::blank($element_value)) {
-                    $element_html .= '<img id="' . $preview_control_id . '" src="' . self::getImageLink($element_value) . '" class="img-thumbnail" width="' . $split[0] . '" height="' . $split[1] . '" style="margin-top:10px;">';
+                    $element_html .= '<img id="' . $preview_control_id . '" src="' . self::getImageLink($element_value) . '" class="img-thumbnail" style="margin-top:10px;' . $style . '">';
                 } else {
-                    $element_html .= '<img id="' . $preview_control_id . '" src="' . self::getImageLink($element_value) . '" class="img-thumbnail" width="' . $split[0] . '" height="' . $split[1] . '" style="display:none;margin-top:10px;">';
+                    $element_html .= '<img id="' . $preview_control_id . '" src="' . self::getImageLink($element_value) . '" class="img-thumbnail" style="display:none;margin-top:10px;' . $style . '">';
                 }
                 
                 break;
@@ -1285,86 +1310,6 @@ class Utils {
                 $element_html .= '</div>';
                 $element_html .= '<input type="hidden" id="is_main" name="is_main" value="" />';
                 $element_html .= '<input type="hidden" id="file_selected" />';
-                break;
-                
-            case 'file':
-                
-                if($name != 'accessories') {
-                    $image_size = isset($config[$name . '_image_size']) ? $config[$name . '_image_size'] : $config[$key . '_image_size'];
-                    $upload_limit = isset($config[$name . '_maximum_upload']) ? $config[$name . '_maximum_upload'] : $config[$key . '_maximum_upload'];
-                } else {
-                    $image_size = $config['products_image_size'];
-                    $upload_limit = $config['products_maximum_upload'];
-                }
-                
-                
-                $split = explode('x', $image_size);
-                $size = self::formatMemory($upload_limit);
-                
-                $image_using = [];
-                if(!is_null($data)) {
-                    if($key == 'image') {
-                        $image_using = $data->getAllImage($data->id);
-                    } else {
-                        $image_using = self::getImageLink($element_value);
-                    }
-                }
-                
-                $text_small = trans('auth.text_image_small');
-                $file_ext = isset($value['file_ext']) ? $value['file_ext'] : Common::IMAGE_EXT;
-                
-                
-                if($count > 0) {
-                    
-                    $element_html .= '<label>' . $text . '</label>&nbsp;&nbsp;(' . Utils::replaceMessageParam($text_small,[$size]) . ')<br/>';
-                    $element_html .= '<div id="preview_list">';
-                    
-                    if(count($image_using)) {
-                        foreach($image_using as $id=>$image) {
-                            $idEdit = $key . '_edit_' . $id . time();
-                            $element_html .= '<div id="' . $idEdit . '" class="image_product" style="display: inline-block;">';
-                            $element_html .= '<a href="javascript:void(0)" class="add_image" data-key="' . $idEdit . '" data-demension="' . $image_size . '" data-upload-limit="' . $upload_limit . '" data-file-ext="' . $file_ext . '" style="width: ' . $split[0] . 'px; height: ' . $split[1] . 'px">';
-                            $element_html .= '<img src="' . $image . '" style="width: ' . $split[0] . 'px; height: ' . $split[1] . 'px" />';
-                            $element_html .= '</a>';
-                            
-                            $element_html .= '<a href="javascript:void(0)" class="remove" data-id="' . $id . '"><i class="fa fa-trash" aria-hidden="true"></i></a>';
-                            $element_html .= '<input type="file" name="' . $key . '_image_upload[]" class="upload_image_product" style="display: none" />';
-                            $element_html .= '<input type="hidden" name="image_upload_url[]" class="upload_image_product_url" value="' . $image . '" />';
-                            $element_html .= '<input type="hidden" name="image_ids[]" class="upload_image_id" value="' . $id . '" />';
-                            $element_html .= '</div>';
-                        }
-                    }
-                    
-                    $element_html .= '<div class="image_product" style="display: inline-block;">';
-                    $element_html .= '<a href="javascript:void(0)" class="add_image" data-key="' . $key . '" data-demension="' . $image_size . '" data-upload-limit="' . $upload_limit . '" data-file-ext="' . $file_ext . '" style="width: ' . $split[0] . 'px; height: ' . $split[1] . 'px">';
-                    $element_html .= '<i class="fa fa-upload" style="font-size: 20px;" aria-hidden="true"></i><br/>' . trans('auth.button.add_image');
-                    $element_html .= '</a>';
-                    
-                    $element_html .= '<input type="hidden" id="upload_index" value="-1" />';
-                    $element_html .= '</div>';
-                    $element_html .= '</div>';
-                } else {
-                    $element_html .= '<label>' . $text . '</label>&nbsp;&nbsp;(' . Utils::replaceMessageParam($text_small,[$size]) . ')<br/>';
-                    $element_html .= '<div id="preview_list">';
-                    $element_html .= '<div  id="' . $key . '_0" class="image_product" style="display: inline-block;">';
-                    $element_html .= '<a href="javascript:void(0)" class="upload_image open_upload_dialog" data-demension="' . $image_size . '" data-upload-limit="' . $upload_limit . '" data-file-ext="' . $file_ext . '" style="width: ' . $split[0] . 'px; height: ' . $split[1] . 'px">';
-                    
-                    if(is_string($image_using)) {
-                        $element_html .= '<img src="' . $image_using . '" style="width: ' . $split[0] . 'px; height: ' . $split[1] . 'px" />';
-                    } else {
-                        $element_html .= '<i class="fa fa-upload" style="font-size: 20px;" aria-hidden="true"></i><br/>' . trans('auth.button.add_image');
-                    }
-                    
-                    $element_html .= '</a>';
-                    
-                    $element_html .= '<input type="file" name="' . $key . '_image_upload[]" class="upload_image_product" style="display: none" />';
-                    $element_html .= '<input type="hidden" name="image_upload_url[]" class="upload_image_product_url" />';
-                    $element_html .= '<input type="hidden" name="image_ids[]" class="upload_image_id" value="9999" />';
-                    
-                    $element_html .= '</div>';
-                    $element_html .= '</div>';
-                }
-                
                 break;
                 
             case 'select':

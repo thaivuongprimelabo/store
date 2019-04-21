@@ -68,7 +68,7 @@
 			<div class="col-xs-12 col-md-3 text-lg-left">
 				<div class="logo inline-block">
 					
-					<a href="index.html" class="logo-wrapper ">					
+					<a href="/" class="logo-wrapper ">					
 						<img src="{{ Utils::getImageLink($config['web_logo']) }}" alt="logo ">					
 					</a>
 				</div>
@@ -119,7 +119,7 @@
 							<a href="{{ route('cart') }}">
 								<div class="icon f-left relative">
 									<i class="fa fa-shopping-bag"></i>
-									<span class="cartCount count_item_pr hidden-lg" id="cart-total">0</span>
+									<span class="cartCount count_item_pr hidden-lg" id="cart-total">{{ $cart->getCount() }}</span>
 								</div>
 								<div class="right-content hidden-md">
 									<span class="label">{{ trans('shop.cart_txt') }}</span>
@@ -139,10 +139,10 @@
 	<div class="menu-bar hidden-md hidden-lg">
 		<img src="{{ url('shop/bizweb.dktcdn.net/100/308/325/themes/665783/assets/menu-bar4d7c.png') }}" alt="menu bar" />
 	</div>
-	<div class="icon-cart-mobile hidden-md hidden-lg f-left absolute" onclick="window.location.href='https://dualeo-x.bizwebvietnam.net/cart'">
+	<div class="icon-cart-mobile hidden-md hidden-lg f-left absolute" onclick="window.location.href='{{ route('cart') }}'">
 		<div class="icon relative">
 			<i class="fa fa-shopping-bag"></i>
-			<span class="cartCount count_item_pr">0</span>
+			<span class="cartCount count_item_pr">{{ $cart->getCount() }}</span>
 		</div>
 	</div>
 </div>

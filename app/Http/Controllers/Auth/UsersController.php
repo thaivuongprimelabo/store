@@ -59,7 +59,9 @@ class UsersController extends AppController
             if (!$validator->fails()) {
                 
                 $filename = '';
-                Utils::doUploadSimple($request, 'upload_avatar', $filename);
+                $key = 'upload_avatar';
+                $demension = $this->config['config'][$key . '_image_size'];
+                Utils::resizeImage($key, $request->$key, $demension, $filename);
                 
                 $data = new User();
                 $data->name         = Utils::cnvNull($request->name, '');
@@ -105,50 +107,13 @@ class UsersController extends AppController
                 $data = User::find($request->id);
                 
                 $filename = $data->avatar;
-                Utils::doUploadSimple($request, 'upload_avatar', $filename);
+                $key = 'upload_avatar';
+                $demension = $this->config['config'][$key . '_image_size'];
+                Utils::resizeImage($key, $request->$key, $demension, $filename);
                 
                 $data->name         = Utils::cnvNull($request->name, '');
                 if(!Utils::blank($request->password)) {
                     $data->password = bcrypt($request->password);
-                }
-                $data->avatar       = $filename;
-                $data->role_id      = Utils::cnvNull($request->role_id, 1);
-                $data->status       = Utils::cnvNull($request->status, 0);
-                $data->updated_at   = date('Y-m-d H:i:s');
-                
-                if($data->save()) {
-                    return redirect(route('auth_users_edit', ['id' => $request->id]))->with('success', trans('messages.UPDATE_SUCCESS'));
-                }
-                
-            } else {
-                return redirect(route('auth_users_edit', ['id' => $request->id]))->with('error', trans('messages.ERROR'));
-            }
-        }
-        
-        $this->output['data'] = $data;
-        return view('auth.form', $this->output);
-    }
-    
-    public function test(Request $request) {
-        $request->flash();
-        
-        $validator = [];
-        
-        $data = User::find($request->id);
-        
-        if($request->isMethod('post')) {
-            
-            $validator = Validator::make($request->all(), $this->rules);
-            
-            if (!$validator->fails()) {
-                $data = User::find($request->id);
-                
-                $filename = $data->avatar;
-                Utils::doUpload($request, Common::AVATAR_FOLDER, $filename);
-                
-                $data->name         = Utils::cnvNull($request->name, '');
-                if(!Utils::blank($request->password)) {
-                    $data->password = Utils::cnvNull($request->password, '');
                 }
                 $data->avatar       = $filename;
                 $data->role_id      = Utils::cnvNull($request->role_id, 1);
@@ -181,7 +146,9 @@ class UsersController extends AppController
             if (!$validator->fails()) {
                 
                 $filename = $data->avatar;
-                Utils::doUploadSimple($request, 'upload_avatar', $filename);
+                $key = 'upload_avatar';
+                $demension = $this->config['config'][$key . '_image_size'];
+                Utils::resizeImage($key, $request->$key, $demension, $filename);
                 
                 $data->name         = Utils::cnvNull($request->name, '');
                 if(!Utils::blank($request->password)) {
