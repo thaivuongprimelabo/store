@@ -78,7 +78,7 @@
 					@if(!Utils::blank($config['freeship']))
 					<div class="item-policy d-flex">
 						<a href="#" class="policy-icon">
-							<img src="{{ url('shop/bizweb.dktcdn.net/thumb/medium/100/308/325/themes/665783/assets/policy14d7c.png') }}"  alt="DuaLeo-X" >
+							<img src="{{ url('shop/frontend/thumb/medium/100/308/325/themes/665783/assets/policy14d7c.png') }}"  alt="DuaLeo-X" >
 						</a>
 						<div class="info a-left policy-content">
 							<a href="#">{{ trans('shop.free_ship_txt') }}</a>
@@ -89,7 +89,7 @@
 					@if(count($hotline))
 					<div class="item-policy d-flex">
 						<a href="#" class="policy-icon">
-							<img src="{{ url('shop/bizweb.dktcdn.net/thumb/medium/100/308/325/themes/665783/assets/policy24d7c.png') }}"  alt="DuaLeo-X" >
+							<img src="{{ url('shop/frontend/thumb/medium/100/308/325/themes/665783/assets/policy24d7c.png') }}"  alt="DuaLeo-X" >
 						</a>
 						<div class="info a-left policy-content">
 							<a href="#">{{ trans('shop.support_txt') }}</a>
@@ -102,7 +102,7 @@
 					@if(!Utils::blank($config['web_working_time']))	
 					<div class="item-policy d-flex">
 						<a href="#" class="policy-icon">
-							<img src="{{ url('shop/bizweb.dktcdn.net/thumb/medium/100/308/325/themes/665783/assets/policy34d7c.png') }}"  alt="DuaLeo-X" >
+							<img src="{{ url('shop/frontend/thumb/medium/100/308/325/themes/665783/assets/policy34d7c.png') }}"  alt="DuaLeo-X" >
 						</a>
 						<div class="info a-left policy-content">
 							<a href="#">{{ trans('shop.working_txt') }}</a>
@@ -137,7 +137,7 @@
 	</div>
 
 	<div class="menu-bar hidden-md hidden-lg">
-		<img src="{{ url('shop/bizweb.dktcdn.net/100/308/325/themes/665783/assets/menu-bar4d7c.png') }}" alt="menu bar" />
+		<img src="{{ url('shop/frontend/100/308/325/themes/665783/assets/menu-bar4d7c.png') }}" alt="menu bar" />
 	</div>
 	<div class="icon-cart-mobile hidden-md hidden-lg f-left absolute" onclick="window.location.href='{{ route('cart') }}'">
 		<div class="icon relative">

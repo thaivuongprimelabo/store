@@ -21,23 +21,23 @@
 	<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i&amp;subset=vietnamese" rel="stylesheet">
 	<link rel="stylesheet" href="{{ url('shop/maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css') }}">
 	<!-- Plugin CSS -->			
-	<link href="{{ url('shop/bizweb.dktcdn.net/100/308/325/themes/665783/assets/plugin.scss4d7c.css') }}" rel="stylesheet" type="text/css" />
+	<link href="{{ url('shop/frontend/100/308/325/themes/665783/assets/plugin.scss4d7c.css') }}" rel="stylesheet" type="text/css" />
 	
-	<link href="{{ url('shop/bizweb.dktcdn.net/100/308/325/themes/665783/assets/base.scss4d7c.css') }}" rel="stylesheet" type="text/css" />		
-	<link href="{{ url('shop/bizweb.dktcdn.net/100/308/325/themes/665783/assets/style.scss4d7c.css') }}" rel="stylesheet" type="text/css" />				
-	<link href="{{ url('shop/bizweb.dktcdn.net/100/308/325/themes/665783/assets/module.scss4d7c.css') }}" rel="stylesheet" type="text/css" />
-	<link href="{{ url('shop/bizweb.dktcdn.net/100/308/325/themes/665783/assets/responsive.scss4d7c.css') }}" rel="stylesheet" type="text/css" />
+	<link href="{{ url('shop/frontend/100/308/325/themes/665783/assets/base.scss4d7c.css') }}" rel="stylesheet" type="text/css" />		
+	<link href="{{ url('shop/frontend/100/308/325/themes/665783/assets/style.scss4d7c.css') }}" rel="stylesheet" type="text/css" />				
+	<link href="{{ url('shop/frontend/100/308/325/themes/665783/assets/module.scss4d7c.css') }}" rel="stylesheet" type="text/css" />
+	<link href="{{ url('shop/frontend/100/308/325/themes/665783/assets/responsive.scss4d7c.css') }}" rel="stylesheet" type="text/css" />
 
 	<!-- Theme Main CSS -->
-	<link href="{{ url('shop/bizweb.dktcdn.net/100/308/325/themes/665783/assets/bootstrap-theme4d7c.css') }}" rel="stylesheet" type="text/css" />		
-	<link href="{{ url('shop/bizweb.dktcdn.net/100/308/325/themes/665783/assets/style-theme.scss4d7c.css') }}" rel="stylesheet" type="text/css" />
-	<link href="{{ url('shop/bizweb.dktcdn.net/100/308/325/themes/665783/assets/responsive-update.scss4d7c.css') }}" rel="stylesheet" type="text/css" />
+	<link href="{{ url('shop/frontend/100/308/325/themes/665783/assets/bootstrap-theme4d7c.css') }}" rel="stylesheet" type="text/css" />		
+	<link href="{{ url('shop/frontend/100/308/325/themes/665783/assets/style-theme.scss4d7c.css') }}" rel="stylesheet" type="text/css" />
+	<link href="{{ url('shop/frontend/100/308/325/themes/665783/assets/responsive-update.scss4d7c.css') }}" rel="stylesheet" type="text/css" />
 	
-	<link href="{{ url('shop/bizweb.dktcdn.net/100/308/325/themes/665783/assets/iwish4d7c.css') }}" rel="stylesheet" type="text/css" />
+	<link href="{{ url('shop/frontend/100/308/325/themes/665783/assets/iwish4d7c.css') }}" rel="stylesheet" type="text/css" />
 	
 	<link href="{{ url('shop/css/custom.shop.css') }}" rel="stylesheet" type="text/css" />
 	<!-- Header JS -->	
-	<script src="{{ url('shop/bizweb.dktcdn.net/100/308/325/themes/665783/assets/jquery-2.2.3.min4d7c.js') }}" type="text/javascript"></script> 
+	<script src="{{ url('shop/frontend/100/308/325/themes/665783/assets/jquery-2.2.3.min4d7c.js') }}" type="text/javascript"></script> 
 	
 	<script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v3.2&appId=135671569954053&autoLogAppEvents=1"></script>
 
@@ -52,14 +52,14 @@
 	@include('shop.common.footer')
 	@include('shop.modal.add_to_cart')
 	<!-- Plugin JS -->
-	<script src="{{ url('shop/bizweb.dktcdn.net/100/308/325/themes/665783/assets/appear4d7c.js') }}" type="text/javascript"></script>
-	<script src="{{ url('shop/bizweb.dktcdn.net/100/308/325/themes/665783/assets/owl.carousel.min4d7c.js') }}" type="text/javascript"></script>		
+	<script src="{{ url('shop/frontend/100/308/325/themes/665783/assets/appear4d7c.js') }}" type="text/javascript"></script>
+	<script src="{{ url('shop/frontend/100/308/325/themes/665783/assets/owl.carousel.min4d7c.js') }}" type="text/javascript"></script>		
 	<script src="{{ url('shop/maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js') }}"></script>
 
 	<!-- Main JS -->	
-	<script src="{{ url('shop/bizweb.dktcdn.net/100/308/325/themes/665783/assets/dl_main4d7c.js') }}" type="text/javascript"></script>
+	<script src="{{ url('shop/frontend/100/308/325/themes/665783/assets/dl_main4d7c.js') }}" type="text/javascript"></script>
 	
-	<script src="{{ url('shop/bizweb.dktcdn.net/100/308/325/themes/665783/assets/jquery.elevatezoom308.min.js') }}" type="text/javascript"></script>	
+	<script src="{{ url('shop/frontend/100/308/325/themes/665783/assets/jquery.elevatezoom308.min.js') }}" type="text/javascript"></script>	
 	<script type="text/javascript" src="{{ url('js/custom.shop.js') }}" ></script>
 	<script>
 		$(document).ready(function() {

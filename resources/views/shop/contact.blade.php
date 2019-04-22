@@ -153,7 +153,7 @@
 @section('script')
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAOvgMzMavm0loFdwqNrzzVh42X_-lDZ3w&callback=initMap"></script>
 
-<script src="//bizweb.dktcdn.net/100/308/325/themes/665783/assets/jquery.gmap.min.js?1554441903190" type="text/javascript"></script>
+<script src="{{ url('shop/frontend/100/308/325/themes/665783/assets/jquery.gmap.min.js') }}" type="text/javascript"></script>
 <script type="text/javascript">
     $(document).ready(function() {
 
