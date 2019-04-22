@@ -57,6 +57,7 @@ class PagesController extends AppController
             if (!$validator->fails()) {
                 
                 $data->content = Utils::cnvNull($request->content, '');
+                $data->updated_at = date('Y-m-d H:i:s');
                 if($data->save()) {
                     return redirect(route('auth_pages_edit', ['id' => $request->id]))->with('success', trans('messages.UPDATE_SUCCESS'));
                 }

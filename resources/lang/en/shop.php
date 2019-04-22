@@ -47,6 +47,7 @@ return [
     'description_txt' => 'Mô tả',
     'info_txt' => 'Thông tin',
     'comment_txt' => 'Bình luận',
+    'all_txt' => 'Tất cả',
     'main_nav' => [
         'home' => ['text' => 'Trang chủ'],
         'about' => ['text' => 'Giới thiệu'],

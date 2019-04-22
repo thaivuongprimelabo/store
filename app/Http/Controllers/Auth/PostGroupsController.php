@@ -105,12 +105,12 @@ class PostGroupsController extends AppController
     }
     
     public function remove(Request $request) {
-        if($request->isMethod('get')) {
-            $id = $request->id;
-            $data = PostGroups::find($id);
-            if($data->delete()) {
-                return redirect(route('auth_postgroups'))->with('success', trans('messages.REMOVE_SUCCESS'));
-            }
+        
+        $result = ['code' => 404];
+        $ids = $request->ids;
+        if(PostGroups::destroy($ids)) {
+            $result['code'] = 200;
+            return response()->json($result);
         }
     }
 }

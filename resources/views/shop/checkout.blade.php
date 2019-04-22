@@ -82,7 +82,7 @@
                                     <td>
 <!--                                        <span class="product-thumbnail__quantity" aria-hidden="true">{{ $detail->getQty() }}</span> -->
                                     </td>
-                                    <td class="product-info"><span class="product-info-name"> <strong>{{ $detail->getGroupName() }}:</strong> {{ $detail->getName() }} </span>
+                                    <td class="product-info"><span class="product-info-name"> <strong>{{ $detail->getGroupName() }}:</strong> {{ $detail->getName() }} <small>x {{ $detail->getQty() }}</small> </span>
                                     </td>
                                     <td class="product-price text-right">{{ $detail->getCostFormat() }}</td>
                                  </tr>

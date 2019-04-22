@@ -487,7 +487,7 @@ $auth = [
                     'text' => 'Hình ảnh'
                 ],
                 'description' => [
-                    'type' => 'editor',
+                    'type' => 'textarea',
                     'text' => 'Mô tả ngắn',
                     'maxlength' => \App\Constants\Common::DESC_MAXLENGTH
                 ],
@@ -518,7 +518,6 @@ $auth = [
             'name' => 'required|max:' . \App\Constants\Common::NAME_MAXLENGTH,
             'description' => 'required',
             'content' => 'required',
-//             'post_group_id' => 'required'
         ]
     ],
     'about' => [
@@ -552,10 +551,6 @@ $auth = [
             'name' => [
                 'text' => 'Tên nhóm',
                 'width' => '20%'
-            ],
-            'parent_postgroup' => [
-                'text' => 'Thuộc nhóm',
-                'width' => '10%'
             ],
             'status' => [
                 'text' => 'Trạng thái',
@@ -597,12 +592,6 @@ $auth = [
                 'type' => 'text',
                 'text' => 'Tên nhóm',
                 'maxlength' => \App\Constants\Common::NAME_MAXLENGTH
-            ],
-            'parent_id' => [
-                'type' => 'select',
-                'text' => 'Chọn loại cha',
-                'empty_text' => '--- Không thuộc loại nào ---',
-                'table' => 'POSTGROUPS_PARENT'
             ],
             'status' => [
                 'type' => 'checkbox',
@@ -1055,21 +1044,21 @@ $auth = [
                 'category_id' => [
                     'type' => 'select',
                     'text' => 'Loại sản phẩm',
-                    'empty_text' => 'Chọn loại sản phẩm',
+                    'empty_text' => '---',
                     'table' => 'CATEGORY_PRODUCT'
                 ],
                 'vendor_id' => [
                     'type' => 'select',
                     'text' => 'Nhà cung cấp',
-                    'empty_text' => 'Chọn nhà cung cấp',
-                    'table' => \App\Constants\Common::VENDORS
+                    'empty_text' => '---',
+                    'table' => 'VENDOR_PRODUCT'
                 ],
                 'upload_image' => [
                     'type' => 'file_multiple',
                     'text' => 'Hình sản phẩm',
                 ],
                 'summary' => [
-                    'type' => 'editor',
+                    'type' => 'textarea',
                     'text' => 'Mô tả',
                     'maxlength' => \App\Constants\Common::DESC_MAXLENGTH,
                 ],
@@ -1116,7 +1105,6 @@ $auth = [
             'name' => 'required|max:' . \App\Constants\Common::NAME_MAXLENGTH,
             'price' => 'max:' . \App\Constants\Common::PRICE_PRODUCT_MAXLENGTH,
             'discount' => 'max:' . \App\Constants\Common::DISCOUNT_MAXLENGTH,
-            'category_id' => 'required'
         ]
     ],
     /*------------ Users page ------------------- */
@@ -1343,7 +1331,7 @@ $auth = [
                 'width' => '10%'
             ],
             'updated_at' => [
-                'text' => 'Ngày đăng ký',
+                'text' => 'Ngày cập nhật',
                 'width' => '10%'
             ],
             'remove_action' => [

@@ -51,7 +51,6 @@ class ContactsController extends AppController
         
         if($request->isMethod('post')) {
             
-            $maxSize =  Utils::formatMemory(Common::ATTACHMENT_MAX_SIZE, true);
             
             $validator = Validator::make($request->all(), [
                 'reply_content' => 'required',
@@ -69,8 +68,13 @@ class ContactsController extends AppController
                     'from' => $this->config['config']['mail_from'],
                     'from_name' => $this->config['config']['mail_name'],
                     'subject' => '[Reply to: '.$data->email . ']' . $data->subject,
-                    'msg' => ['content' => $data->reply_content],
-                    'to' => $data->email
+                    'msg' => [
+                        'name' => $data->name,
+                        'content' => $data->reply_content,
+                        'config' => $this->config['config']
+                    ],
+                    'to' => $data->email,
+                    'template' => 'auth.emails.reply'
                 ];
                 
                 $message = Utils::sendMail($config);

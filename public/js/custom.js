@@ -310,7 +310,18 @@ var readURL = function readURL(input, selected_msg) {
 		  var file_selected = $('#file_selected').val();
 		  for(var i = 0; i < length; i++) {
 			  var filename = (input[0].files[i].name);
-			  if(file_selected.indexOf(filename) < 0) {
+			  var arr_selected = file_selected.split(',');
+			  var exists = false;
+			  if(arr_selected.length > 0) {
+				  for(var j = 0; j < arr_selected.length; j++) {
+					  if(filename === arr_selected[j]) {
+						  exists = true;
+					      break;
+					  }
+				  }
+			  }
+			  
+			  if(!exists) {
 				  var reader = new FileReader();
 			      reader.onload  = function(e) {
 			    	  var img = '<div class="img-wrapper" data-filename="' + e.target.filename + '" style="display:inline-block; position:relative"><a href="javascript:void(0)" class="remove-img" style="position:absolute; top:15px; right:15px">';
@@ -324,11 +335,7 @@ var readURL = function readURL(input, selected_msg) {
 			      reader.readAsDataURL(input[0].files[i]);
 			      file_selected += filename + ',';
 			      $('#file_selected').val(file_selected);
-			  } else {
-				  errorAlert(selected_msg.replace(':filename', filename));
-			      break;
 			  }
-			  
 		  }
 	  }
   }

@@ -41,13 +41,13 @@ class AppController extends Controller
             $this->output = [
                 'config' => [
                     'web_name' => Utils::cnvNull($config->web_title, 'E-shop'),
-                    'web_description' => Utils::cnvNull($config->web_description, $config->web_name),
-                    'web_keywords' => Utils::cnvNull($config->web_keywords, $config->web_name),
+                    'web_description' => Utils::cnvNull($config->web_description, $config->web_title),
+                    'web_keywords' => Utils::cnvNull($config->web_keywords, $config->web_title),
                     'web_logo' => $web_logo,
                     'web_ico' => $web_ico,
                     'mail_from' => Utils::cnvNull($config->mail_from, $config->web_email),
-                    'mail_name' => Utils::cnvNull($config->mail_name, 'Mail System'),
-                    'web_email' => Utils::cnvNull($config->web_email, ''),
+                    'mail_name' => Utils::cnvNull($config->mail_name, $config->web_title),
+                    'web_email' => Utils::cnvNull($config->web_email, 'shopxeom90@gmail.com'),
                     'web_hotline' => Utils::cnvNull($config->web_hotline, ''),
                     'web_hotline_cskh' => Utils::cnvNull($config->web_hotline_cskh, ''),
                     'web_working_time' => Utils::cnvNull($config->web_working_time, ''),

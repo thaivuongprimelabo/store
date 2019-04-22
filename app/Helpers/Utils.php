@@ -305,7 +305,7 @@ class Utils {
                     }
                 }
                 break;
-            case Common::VENDORS:
+            case 'VENDOR_PRODUCT':
                 $data = Vendor::select('name', 'id')->where('status', Status::ACTIVE)->get();
                 break;
             case 'UPLOAD_SIZE_LIMIT':
@@ -1350,7 +1350,7 @@ class Utils {
                 switch($rule_name) {
                     case 'required':
                         $msg_item = 'validation.required';
-                        if($k == 'content' || $k == 'description') {
+                        if($k == 'content' || $k == 'reply_content') {
                             $rule_name = 'required_ckeditor';
                         }
                         if($k == 'role_id' || $k == 'category_id' || $k == 'post_group_id' || $k == 'upload_banner') {
@@ -1404,8 +1404,8 @@ class Utils {
         $mainNav = trans('shop.main_nav');
         $html = '';
         
-        $categories = Category::select('id', 'name', 'name_url')->where('status', Status::ACTIVE)->where('parent_id', 0)->get();
-        $postGroups = PostGroups::select('id', 'name', 'name_url')->where('status', Status::ACTIVE)->get();
+        $categories = Category::select('id', 'name', 'name_url')->active()->where('parent_id', 0)->get();
+        $postGroups = PostGroups::select('id', 'name', 'name_url')->active()->get();
         
         if($postition == 'web') {
             $html .= view('shop.common.top_nav', compact('categories', 'postGroups'))->render();
@@ -1462,21 +1462,26 @@ class Utils {
     public static function createProductTab($title, $type) {
         $html = '';
         $categories = Category::select('id', 'name', 'name_url')->where('status', Status::ACTIVE)->where('parent_id', 0)->get();
-        if(!$categories->count()) {
-            return $html;
-        }
+        
         
         $route = '';
+        $where = [];
         if($type == ProductType::IS_NEW) {
             $route = route('newProducts');
+            $where['is_new'] = ProductType::IS_NEW;
         }
         if($type == ProductType::IS_BEST_SELLING) {
             $route = route('bestSellProducts');
+            $where['is_best_selling'] = ProductType::IS_BEST_SELLING;
         }
         if($type == ProductType::IS_POPULAR) {
             $route = route('popularProducts');
+            $where['is_popular'] = ProductType::IS_POPULAR;
         }
-        $html .= view('shop.common.product', compact('categories', 'title', 'type', 'route'))->render();
+        
+        $all_products = Product::active()->where($where)->orderBy('updated_at', 'DESC')->get();
+        
+        $html .= view('shop.common.product', compact('categories', 'title', 'type', 'route', 'all_products'))->render();
         return $html;
     }
     

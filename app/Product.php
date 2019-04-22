@@ -120,11 +120,11 @@ class Product extends Model
     }
     
     public function getSEOKeywords() {
-        return $this->seo_keywords;
+        return !Utils::blank($this->seo_keywords) ? $this->seo_keywords : $this->name;
     }
     
     public function getSEODescription() {
-        return $this->seo_description;
+        return !Utils::blank($this->seo_description) ? $this->seo_description : $this->summary;
     }
     
     public function getSummary() {
