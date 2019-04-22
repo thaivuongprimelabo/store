@@ -85,7 +85,7 @@
 										<input type="text" class="input-text qty" title="Só lượng" value="1" maxlength="12" id="qty" name="quantity"  data-id="{{ $data->id }}">
 										<span class="qtyplus" data-id="{{ $data->id }}">+</span>
 									</div>
-									<button type="button" class="btn btn-lg btn-primary btn-cart btn-cart2 btn-buy" title="{{ trans('shop.button.add_to_cart') }}"  data-id="{{ $data->id }}" data-qty="1">
+									<button type="button" class="btn btn-lg btn-primary btn-cart btn-cart2 btn-buy" title="{{ trans('shop.button.add_to_cart') }}"  data-id="{{ $data->id }}" data-qty="1" data-loading-text="<i class='fa fa-spinner fa-spin '></i> {{ trans('shop.button.add_to_cart') }}">
 										<span>{{ trans('shop.button.add_to_cart') }}  <i class="fa .fa-caret-right"></i></span>
 									</button>
 								</div>
@@ -134,6 +134,10 @@
 	</div>
 		
 </div>
+@php
+	$products = $data->getRelatedProducts();
+@endphp
+@if($products->count())
 <section class="section featured-product wow fadeInUp mb-4">
 	<div class="container">
 		<div class="section-title a-center">
@@ -141,9 +145,6 @@
 			<p>Có phải bạn đang tìm những sản phẩm dưới đây</p>
 		</div>
 		<div class="owl-carousel home-owl-carousel upsell-product custom-carousel owl-theme outer-top-xs" data-lgg-items="4" data-lg-items='4' data-md-items='4' data-sm-items='3' data-xs-items="2" data-xss-items="2" data-nav="true">
-    		@php
-    			$products = $data->getRelatedProducts();
-    		@endphp
     		@foreach($products as $k=>$product)
     		<div class="item item-carousel">
     			<div class="product-box">															
@@ -191,6 +192,7 @@
 		</div>
 	</div>
 </section>
+@endif
 @endsection
 @section('script')
 <script type="text/javascript">
@@ -256,7 +258,7 @@
 			 });
 
 			 data.items = items;
-			 callAjax('{{ route('addToCart') }}', data);
+			 callAjax('{{ route('addToCart') }}', data, $(this));
 		 });
 	});
 
