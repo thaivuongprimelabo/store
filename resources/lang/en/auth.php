@@ -1461,6 +1461,7 @@ $auth = [
     'edit_box_title' => 'Thông tin cập nhật',
     'length_text' => ' (Tối đã {0} ký tự)',
     'product_info' => 'Thông tin sản phẩm',
+    'upload_check_txt' => 'Uploading...',
     'status' => [
         'unactive' => 'Tạm dừng',
         'active' => 'Đang hoạt động',

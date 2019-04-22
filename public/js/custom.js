@@ -267,14 +267,22 @@ var checkUploadFile = function(url, input, selected_msg) {
 	    async: true,
 	    processData: false,
 	    contentType: false,
+	    beforeSend: function() {
+	    	input.parent().find('img').hide();
+	    	input.parent().find('.spinner_preview').show();
+	    },
 	    headers: {
 	    	'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 	    },
 	    success: function (res, textStatus, xhr) {
 	    	readURL(uploadfile, selected_msg);
+	    	input.parent().find('.spinner_preview').hide();
+	    	input.parent().find('img').show();
 	    },
 	    error: function(jqXHR, textStatus, errorThrown ) {
 	    	errorAlert(jqXHR.responseJSON.error);
+	    	input.parent().find('.spinner_preview').hide();
+	    	input.parent().find('img').show();
 	    }
 	});
 }

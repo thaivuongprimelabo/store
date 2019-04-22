@@ -1196,11 +1196,14 @@ class Utils {
                 $preview_control_id = 'preview_' . $key;
                 $element_html .= '<input type="file" class="form-control upload-simple" name="' . $key . '" data-preview-control="' . $preview_control_id . '" data-limit-upload="' . $limit_upload . '" />';
                 $style = 'width:' . $split[0] . 'px; height: ' . $split[1] . 'px';
+                $element_html .= '<div class="preview_area">';
+                $element_html .= '<span class="spinner_preview" style="display:none"><i class="fa fa-circle-o-notch fa-spin"></i> ' . trans('auth.upload_check_txt') . '</span>';
                 if(!self::blank($element_value)) {
                     $element_html .= '<img id="' . $preview_control_id . '" src="' . self::getImageLink($element_value) . '" class="img-thumbnail" style="margin-top:10px;' . $style . '">';
                 } else {
                     $element_html .= '<img id="' . $preview_control_id . '" src="' . self::getImageLink(Common::NO_IMAGE_FOUND) . '" class="img-thumbnail" style="margin-top:10px;' . $style . ';">';
                 }
+                $element_html .= '</div>';
                 
                 break;
                 
@@ -1218,7 +1221,8 @@ class Utils {
                 $element_html .= '<button type="button" id="upload_button" data-name="' . $key . '[]" data-preview-control="preview_list" data-limit-upload="' . $limit_upload . '" class="btn btn-primary"><i class="fa fa-image"></i> Tải hình sản phẩm</button>';
                 $element_html .= trans('auth.text_image_small',['limit_upload' => self::formatMemory($limit_upload)]);
                 $preview_control_id = 'preview_' . $key;
-                $element_html .= '<div id="preview_list">';
+                $element_html .= '<div id="preview_list" class="preview_area">';
+                $element_html .= '<span class="spinner_preview" style="display:none"><i class="fa fa-circle-o-notch fa-spin"></i> ' . trans('auth.upload_check_txt') . '</span>';
                 $image_using = !is_null($data) ? $data->getAllImage($data->id) : [];
                 if(count($image_using)) {
                     foreach($image_using as $image) {
