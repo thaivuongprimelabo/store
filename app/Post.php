@@ -20,7 +20,10 @@ class Post extends Model
     protected $table = Common::POSTS;
     
     public function getImage() {
-        return Utils::getImageLink($this->photo);
+        if(!Utils::blank($this->photo)) {
+            return Utils::getImageLink($this->photo);
+        }
+        return Utils::getImageLink(Common::NO_IMAGE_FOUND);
     }
     
     public function getTitle() {
@@ -44,7 +47,10 @@ class Post extends Model
     }
     
     public function getPhoto() {
-        return Utils::getImageLink($this->photo);
+        if(!Utils::blank($this->photo)) {
+            return Utils::getImageLink($this->photo);
+        }
+        return Utils::getImageLink(Common::NO_IMAGE_FOUND);
     }
     
     public function getContent() {
@@ -52,8 +58,7 @@ class Post extends Model
     }
     
     public function getLink() {
-        $postGroups = PostGroups::select('id','name_url')->where('id', $this->post_group_id)->where('status', Status::ACTIVE)->first();
-        return route('postDetails', ['slug' => $postGroups->name_url, 'slug1' => $this->name_url]);
+        return route('postDetails', ['slug1' => $this->name_url]);
     }
     
     public function scopeActive($query) {

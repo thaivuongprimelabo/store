@@ -379,15 +379,13 @@ class HomeController extends AppController
     
     public function postDetails(Request $request) {
         
-        $slug = $request->slug;
         $slug1 = $request->slug1;
         
-        $postGroup = PostGroups::select('id', 'name')->active()->where('name_url', $slug)->first();
         $post = Post::active()->where('name_url', $slug1)->first();
         
         $this->output['breadcrumbs'] = [
             ['link' => route('posts'), 'text' => trans('shop.main_nav.posts.text')],
-            ['link' => '#', 'text' => $postGroup->getName()],
+            ['link' => '#', 'text' => $post->getTitle()],
         ];
         
         $this->output['page_name'] = 'post-details-page';
@@ -396,8 +394,7 @@ class HomeController extends AppController
         $this->setSEO([
             'title' => $post->name,
             'summary' => $post->getSEODescription(),
-            'section' => $postGroup->getName(),
-            'keywords' => [$post->getSEOKeywords(), $postGroup->getName(), $this->output['config']['web_name']],
+            'keywords' => [$post->getSEOKeywords(), $this->output['config']['web_name']],
             'link' => $post->getLink(),
             'type' => 'article',
             'image' => $post->getImage()

@@ -327,7 +327,19 @@ class Utils {
                 return StatusOrders::createSelectList($selected);
                 break;
             case 'POST_GROUPS':
-                $data = PostGroups::select('id', 'name')->active()->get();
+                $postGroups = PostGroups::select('id', 'name')->active()->where('parent_id', 0)->get();
+                foreach($postGroups as $group) {
+                    array_push($data, $group);
+                    
+                    $childGroups = $group->getChildGroup();
+                    foreach($childGroups as $g) {
+                        $g->name = '|---- ' . $g->name;
+                        array_push($data, $g);
+                    }
+                }
+                break;
+            case 'POSTGROUPS_PARENT':
+                $data = PostGroups::select('id', 'name')->active()->where('parent_id', 0)->get();
                 break;
             case 'BOOKING_STATUS':
                 return BookingStatus::createSelectList($selected);
@@ -710,6 +722,7 @@ class Utils {
                         }
                         switch($key) {
                             case 'parent_cate':
+                            case 'parent_postgroup':
                                 $tbody .= '<td>' . $item->getParentName() . '</td>';
                                 break;
                             case 'category':

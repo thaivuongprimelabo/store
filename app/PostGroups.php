@@ -29,4 +29,14 @@ class PostGroups extends Model
     public function scopeActive($query) {
         return $query->where('status', Status::ACTIVE);
     }
+    
+    public function getChildGroup() {
+        $postGroups = PostGroups::select('id', 'name', 'name_url')->active()->where('parent_id', $this->id)->get();
+        return $postGroups;
+    }
+    
+    public function getParentName() {
+        $postGroups = PostGroups::select('name')->active()->where('id', $this->parent_id)->first();
+        return $postGroups ? $postGroups->name : '--';
+    }
 }

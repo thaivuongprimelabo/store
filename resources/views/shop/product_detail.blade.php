@@ -10,6 +10,7 @@
 			<div class="col-lg-9 ">
 				<div class="details-product">
 					<div class="row">
+						@if($images->count())
 						<div class="col-xs-12 col-sm-12 col-md-5">
 							<div class="large-image">
 								<a href="{{ $images->first()->getImageLink() }}" data-rel="">
@@ -27,6 +28,7 @@
 								@endforeach
 							</div>
 						</div>
+						@endif
 						<div class="col-xs-12 col-sm-12 col-md-7 details-pro">
 							<h1 class="title-head">{{ $data->getName() }}</h1>
 							<div class="status clearfix">

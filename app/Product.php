@@ -29,7 +29,10 @@ class Product extends Model
         }
         
         $image_product = ImageProduct::select('image','medium','small')->where('product_id', $this->id)->first();
-        return Utils::getImageLink($image_product->image, $image_product->$thumb);;
+        if($image_product) {
+            return Utils::getImageLink($image_product->image, $image_product->$thumb);
+        }
+        return Utils::getImageLink(Common::NO_IMAGE_FOUND);
     }
     
     public function getAllImage($id = '') {

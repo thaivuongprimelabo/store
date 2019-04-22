@@ -152,8 +152,8 @@ Route::group(['prefix' => ''], function () {
     Route::get('/san-pham-ban-chay' . $config['url_ext'], 'HomeController@bestSellProducts')->name('bestSellProducts');
     Route::get('/danh-muc/{slug}' . $config['url_ext'], 'HomeController@category')->name('category');
     Route::get('/tin-tuc' . $config['url_ext'], 'HomeController@posts')->name('posts');
-    Route::get('/tin-tuc/{slug}' . $config['url_ext'], 'HomeController@postGroup')->name('postgroups');
-    Route::get('/tin-tuc/{slug}/{slug1}' . $config['url_ext'], 'HomeController@postDetails')->name('postDetails');
+    Route::get('/tin-tuc/the-loai/{slug}' . $config['url_ext'], 'HomeController@postGroup')->name('postgroups');
+    Route::get('/tin-tuc/{slug1}' . $config['url_ext'], 'HomeController@postDetails')->name('postDetails');
     Route::get('/{slug}' . $config['url_ext'], 'HomeController@productDetails')->name('product_details');
     Route::post('refreshcaptcha', 'MembersController@refreshCaptcha')->name('refreshcaptcha');
     Route::post('checkcaptcha', 'MembersController@checkCaptcha')->name('checkCaptcha');

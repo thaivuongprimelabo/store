@@ -31,6 +31,9 @@ class ApiController extends Controller
         $value = trim($request->value);
         $col = trim($request->col);
         $table = $request->table;
+        if($table == 'postgroups') {
+            $table = Common::POST_GROUPS;
+        }
         $idCheck = $request->id_check;
         $itemName = trans($request->itemName);
         $check = false;

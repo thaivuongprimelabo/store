@@ -6,7 +6,7 @@
 			<div class="col-xs-12 col-sm-4">
 				<div class="blog-item-thumbnail">						
 					<a href="{{ $post->getLink() }}">
-						<img src="{{ $post->getPhoto() }}" alt="{{ $post->getTitle() }}">
+						<img src="{{ $post->getImage() }}" alt="{{ $post->getTitle() }}">
 					</a>
 				</div>
 			</div>

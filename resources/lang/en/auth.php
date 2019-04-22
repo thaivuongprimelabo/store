@@ -500,6 +500,7 @@ $auth = [
                 'post_group_id' => [
                     'type' => 'select',
                     'text' => 'Nhóm',
+                    'empty_text' => '--- Không thuộc nhóm nào ---',
                     'table' => 'POST_GROUPS'
                 ],
                 'status' => [
@@ -517,7 +518,7 @@ $auth = [
             'name' => 'required|max:' . \App\Constants\Common::NAME_MAXLENGTH,
             'description' => 'required',
             'content' => 'required',
-            'post_group_id' => 'required'
+//             'post_group_id' => 'required'
         ]
     ],
     'about' => [
@@ -551,6 +552,10 @@ $auth = [
             'name' => [
                 'text' => 'Tên nhóm',
                 'width' => '20%'
+            ],
+            'parent_postgroup' => [
+                'text' => 'Thuộc nhóm',
+                'width' => '10%'
             ],
             'status' => [
                 'text' => 'Trạng thái',
@@ -592,6 +597,12 @@ $auth = [
                 'type' => 'text',
                 'text' => 'Tên nhóm',
                 'maxlength' => \App\Constants\Common::NAME_MAXLENGTH
+            ],
+            'parent_id' => [
+                'type' => 'select',
+                'text' => 'Chọn loại cha',
+                'empty_text' => '--- Không thuộc loại nào ---',
+                'table' => 'POSTGROUPS_PARENT'
             ],
             'status' => [
                 'type' => 'checkbox',
