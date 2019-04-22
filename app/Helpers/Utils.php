@@ -729,7 +729,12 @@ class Utils {
                             case 'logo':
                             case 'avatar':
                             case 'photo':
-                                $tbody .= '<td><img src="' . self::getImageLink($item->$key) . '" style="max-width:50px;max-height:200px" class="img img-thumbnail" /></td>';
+                                if(!self::blank($item->$key)) {
+                                    $tbody .= '<td><img src="' . self::getImageLink($item->$key) . '" style="max-width:50px;max-height:200px" class="img img-thumbnail" /></td>';
+                                } else {
+                                    $tbody .= '<td></td>';
+                                }
+                                
                                 break;
                                 
                             case 'images':
