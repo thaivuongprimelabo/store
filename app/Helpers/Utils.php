@@ -332,9 +332,6 @@ class Utils {
             case 'BOOKING_STATUS':
                 return BookingStatus::createSelectList($selected);
                 break;
-            case Common::TIMES:
-                $data = Times::select('id', 'name')->get();
-                break;
             case 'ROLE_USERS':
                 return UserRole::createSelectList($selected);
                 break;

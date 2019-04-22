@@ -153,7 +153,8 @@ return [
         'update' => 'Cập nhật',
         'clear' => 'Hủy',
         'order_checking' => 'Kiểm tra',
-        'remove' => 'Xóa'
+        'remove' => 'Xóa',
+        'search' => 'Tìm kiếm'
     ],
     'mail' => [
         'from_name' => 'Hệ thống'

@@ -8,16 +8,16 @@
 		<h2><a href="#" class="title-box">Nhập từ khóa tìm kiếm </a></h2>
 	</div>
 	<div class="col-xs-12">
-		<form action="/search" method="get" class="form-signup">
+		<form action="{{ route('search') }}" method="get" class="form-signup">
 			
 			<fieldset class="form-group">
-				<input type="text" id="keyword_search" name="query" value="" placeholder="Tìm kiếm ..." class="form-control" style="width:300px; float:left;     line-height: 2.1;">
-				<button id="search" type="button" class="btn btn-primary">Tìm kiếm</button>
+				<input type="text" id="keyword_search" name="q" value="" placeholder="Tìm kiếm ..." class="form-control" style="width:300px; float:left;     line-height: 2.1;">
+				<button id="search" type="button" class="btn btn-primary">{{ trans('shop.button.search') }}</button>
 			</fieldset>
 		</form>  
 	</div>
 	<div class="col-xs-12">
-		<h2 class="title-head">Có <span id="result_count">21</span> kết quả tìm kiếm phù hợp</h2>
+		<h2 class="title-head">Có <span id="result_count">0</span> kết quả tìm kiếm phù hợp</h2>
 	</div>
 	<div class="col-xs-12">
 		<div class="products-view-grid products">
