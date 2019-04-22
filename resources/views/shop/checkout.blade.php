@@ -7,7 +7,7 @@
       <!-- CSRF Token -->
       <meta name="csrf-token" content="{{ csrf_token() }}">
       <title>Checkout</title>
-      <link href="{{ url('admin/bower_components/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+      <link rel="stylesheet" href="{{ url('shop/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
       <link href="{{ url('shop/maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css" />
       <link href="{{ url('shop/css/checkout.css') }}" rel="stylesheet" type="text/css" />
    </head>
@@ -246,7 +246,7 @@
          </div>
       </form>
    </body>
-   <script src="{{ url('shop/bizweb.dktcdn.net/100/308/325/themes/665783/assets/jquery-2.2.3.min4d7c.js') }}" type="text/javascript"></script>
+   <script src="{{ url('shop/frontend/100/308/325/themes/665783/assets/jquery-2.2.3.min4d7c.js') }}" type="text/javascript"></script>
    <script src="{{ url('admin/js/jquery.validate.js') }}" type="text/javascript"></script>
    <script src="{{ url('js/custom.shop.js') }}" type="text/javascript"></script>
    <script src="{{ url('shop/maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js') }}"></script>
