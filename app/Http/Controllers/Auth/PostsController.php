@@ -100,6 +100,11 @@ class PostsController extends AppController
             
             if (!$validator->fails()) {
                 $filename = $data->photo;
+                $filename_hidden = $request->photo_hidden;
+                if(Utils::blank($filename_hidden)) {
+                    $filename = null;
+                }
+                
                 $key = 'upload_photo';
                 $demension = $this->config['config'][$key . '_image_size'];
                 Utils::resizeImage($key, $request->$key, $demension, $filename);

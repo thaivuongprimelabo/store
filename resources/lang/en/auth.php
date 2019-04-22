@@ -59,10 +59,7 @@ $auth = [
             'categories' => 'Danh mục loại sản phẩm',
             'vendors' => 'Danh mục nhà cung cấp',
         ],
-        'orders' => [
-            'title' => 'Quản lý đơn hàng',
-            'orders' => 'Danh sách đơn hàng',
-        ],
+        'orders' => 'Quản lý đơn hàng',
         'banners' => 'Quản lý banner',
         'posts' => [
             'title' => 'Quản lý bài viết',
@@ -326,6 +323,7 @@ $auth = [
             ]
         ],
         'rules' => [
+            'upload_banner' => 'required',
             'link' => 'max:' . \App\Constants\Common::LINK_MAXLENGTH,
             'youtube_id' => 'max:' . \App\Constants\Common::LINK_MAXLENGTH
         ]
@@ -664,7 +662,6 @@ $auth = [
             'remove_action' => [
                 'text' => '',
                 'width' => '5%',
-                'hide' => true
             ],
             'edit_action' => [
                 'text' => '',

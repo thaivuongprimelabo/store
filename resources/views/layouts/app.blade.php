@@ -389,6 +389,17 @@
 		return false;
 	});
 
+	$(document).on('click', '.remove-img-simple', function(e) {
+		if(confirmDelete('{{ trans('messages.CONFIRM_DELETE') }}')) {
+			$(this).parent().parent().find('input[type="file"]').val('');
+			$(this).parent().find('.filename_hidden').val('');
+			$(this).parent().find('img').attr('src', '{{ Utils::getImageLink(Common::NO_IMAGE_FOUND) }}');
+			$(this).remove();
+			return true;
+		}
+		return false;
+	});
+
 	$('#add_new_service').click(function(e) {
     	$('#serviceModal').modal();
     });

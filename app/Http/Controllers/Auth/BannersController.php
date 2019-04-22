@@ -102,6 +102,11 @@ class BannersController extends AppController
                 $select_type = Utils::cnvNull($request->select_type, 'use_image');
                 if($select_type == 'use_image') {
                     $filename = $data->banner;
+                    $filename_hidden = $request->banner_hidden;
+                    if(Utils::blank($filename_hidden)) {
+                        $filename = null;
+                    }
+                    
                     $key = 'upload_banner';
                     $demension = $this->config['config'][$key . '_image_size'];
                     Utils::resizeImage($key, $request->$key, $demension, $filename);

@@ -107,6 +107,10 @@ class UsersController extends AppController
                 $data = User::find($request->id);
                 
                 $filename = $data->avatar;
+                $filename_hidden = $request->avatar_hidden;
+                if(Utils::blank($filename_hidden)) {
+                    $filename = null;
+                }
                 $key = 'upload_avatar';
                 $demension = $this->config['config'][$key . '_image_size'];
                 Utils::resizeImage($key, $request->$key, $demension, $filename);
@@ -146,6 +150,10 @@ class UsersController extends AppController
             if (!$validator->fails()) {
                 
                 $filename = $data->avatar;
+                $filename_hidden = $request->avatar_hidden;
+                if(Utils::blank($filename_hidden)) {
+                    $filename = null;
+                }
                 $key = 'upload_avatar';
                 $demension = $this->config['config'][$key . '_image_size'];
                 Utils::resizeImage($key, $request->$key, $demension, $filename);

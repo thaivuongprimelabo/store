@@ -62,8 +62,23 @@ class ConfigController extends AppController
                 exit;
             }
             $web_ico = $data->web_ico;
+            $web_ico_hidden = $request->web_ico_hidden;
             $web_logo = $data->web_logo;
+            $web_logo_hidden = $request->web_logo_hidden;
             $web_banner = $data->web_banner;
+            $web_banner_hidden = $request->web_banner_hidden;
+            
+            if(Utils::blank($web_ico_hidden)) {
+                $web_ico = null;
+            }
+            
+            if(Utils::blank($web_logo_hidden)) {
+                $web_logo = null;
+            }
+            
+            if(Utils::blank($web_banner_hidden)) {
+                $web_banner = null;
+            }
             
             $key = 'upload_web_logo';
             $demension = $data[$key . '_image_size'];

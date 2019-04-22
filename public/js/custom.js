@@ -251,14 +251,16 @@ var getMax = function(element, data) {
 
 var checkUploadFile = function(url, input, selected_msg) {
 	var uploadfile = input;
+	uploadfile.parent().parent().removeClass('has-error');
+	uploadfile.parent().parent().find('span.help-block').html('');
 	var formData = new FormData();
 	if(selected_msg !== undefined) {
-		formData.append('fileUpload[]', input[0].files[0]);
+		formData.append('fileUpload[]', uploadfile[0].files[0]);
 	} else {
-		formData.append('fileUpload', input[0].files[0]);
+		formData.append('fileUpload', uploadfile[0].files[0]);
 	}
 	
-	formData.append('limitUpload', input.attr('data-limit-upload'));
+	formData.append('limitUpload', uploadfile.attr('data-limit-upload'));
 
 	$.ajax({
 	    url: url,
@@ -268,21 +270,21 @@ var checkUploadFile = function(url, input, selected_msg) {
 	    processData: false,
 	    contentType: false,
 	    beforeSend: function() {
-	    	input.parent().find('img').hide();
-	    	input.parent().find('.spinner_preview').show();
+	    	uploadfile.parent().find('img').hide();
+	    	uploadfile.parent().find('.spinner_preview').show();
 	    },
 	    headers: {
 	    	'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 	    },
 	    success: function (res, textStatus, xhr) {
 	    	readURL(uploadfile, selected_msg);
-	    	input.parent().find('.spinner_preview').hide();
-	    	input.parent().find('img').show();
+	    	uploadfile.parent().find('.spinner_preview').hide();
+	    	uploadfile.parent().find('img').show();
 	    },
 	    error: function(jqXHR, textStatus, errorThrown ) {
 	    	errorAlert(jqXHR.responseJSON.error);
-	    	input.parent().find('.spinner_preview').hide();
-	    	input.parent().find('img').show();
+	    	uploadfile.parent().find('.spinner_preview').hide();
+	    	uploadfile.parent().find('img').show();
 	    }
 	});
 }
@@ -294,6 +296,7 @@ var readURL = function readURL(input, selected_msg) {
 		  var reader = new FileReader();
 		  reader.onload = function(e) {
 			  var preview_id = input.attr('data-preview-control');
+			  $('#' + preview_id).parent().prepend('<a href="javascript:void(0)" class="remove-img-simple" style="position:absolute; top:15px; right:10px"><i class="fa fa-trash" style="font-size:18px;"></i></a>');
 			  $('#' + preview_id).attr('src', e.target.result).show();
 		  }
 		  reader.readAsDataURL(input[0].files[0]);

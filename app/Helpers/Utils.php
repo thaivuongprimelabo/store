@@ -1196,20 +1196,28 @@ class Utils {
                 $element_value = !is_null($data) && !Utils::blank($data->$key_data) ? $data->$key_data : '';
                 $image_size = isset($config[$key . '_image_size']) ? $config[$key . '_image_size'] : '100x100';
                 $limit_upload = isset($config[$key . '_maximum_upload']) ? $config[$key . '_maximum_upload'] : '51200';
+                
+                if($key == 'upload_web_ico') {
+                    $image_size = '80x80';
+                }
+                
                 $split = explode('x', $image_size);
                 $element_html .= $label . trans('auth.text_image_small',['limit_upload' => self::formatMemory($limit_upload)]);
                 $preview_control_id = 'preview_' . $key;
+                $element_html .= '<div>';
                 $element_html .= '<input type="file" class="form-control upload-simple" name="' . $key . '" data-preview-control="' . $preview_control_id . '" data-limit-upload="' . $limit_upload . '" />';
                 $style = 'width:' . $split[0] . 'px; height: ' . $split[1] . 'px';
-                $element_html .= '<div class="preview_area">';
+                $element_html .= '<div class="preview_area" style="width:' . $split[0] . 'px;position:relative">';
                 $element_html .= '<span class="spinner_preview" style="display:none"><i class="fa fa-circle-o-notch fa-spin"></i> ' . trans('auth.upload_check_txt') . '</span>';
                 if(!self::blank($element_value)) {
+                    $element_html .= '<a href="javascript:void(0)" class="remove-img-simple" style="position:absolute; top:15px; right:10px"><i class="fa fa-trash" style="font-size:18px;"></i></a>';
                     $element_html .= '<img id="' . $preview_control_id . '" src="' . self::getImageLink($element_value) . '" class="img-thumbnail" style="margin-top:10px;' . $style . '">';
                 } else {
                     $element_html .= '<img id="' . $preview_control_id . '" src="' . self::getImageLink(Common::NO_IMAGE_FOUND) . '" class="img-thumbnail" style="margin-top:10px;' . $style . ';">';
                 }
+                $element_html .= '<input type="hidden" class="filename_hidden" name="' . $key_data . '_hidden" value="' . $element_value . '" />';
                 $element_html .= '</div>';
-                
+                $element_html .= '</div>';
                 break;
                 
             case 'file_multiple':
@@ -1332,7 +1340,7 @@ class Utils {
                         if($k == 'content' || $k == 'description') {
                             $rule_name = 'required_ckeditor';
                         }
-                        if($k == 'role_id' || $k == 'category_id' || $k == 'post_group_id') {
+                        if($k == 'role_id' || $k == 'category_id' || $k == 'post_group_id' || $k == 'upload_banner') {
                             $msg_item = 'validation.required_select';
                         }
                         break;

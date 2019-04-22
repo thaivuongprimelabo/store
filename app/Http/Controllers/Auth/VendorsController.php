@@ -98,6 +98,11 @@ class VendorsController extends AppController
                 $data = Vendor::find($request->id);
                 
                 $filename = $data->logo;
+                $filename_hidden = $request->logo_hidden;
+                if(Utils::blank($filename_hidden)) {
+                    $filename = null;
+                }
+                
                 $key = 'upload_logo';
                 $demension = $this->config['config'][$key . '_image_size'];
                 Utils::resizeImage($key, $request->$key, $demension, $filename);

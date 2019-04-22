@@ -68,8 +68,10 @@
 			<div class="col-xs-12 col-md-3 text-lg-left">
 				<div class="logo inline-block">
 					
-					<a href="/" class="logo-wrapper ">					
-						<img src="{{ Utils::getImageLink($config['web_logo']) }}" alt="logo ">					
+					<a href="/" class="logo-wrapper ">
+						@if(!Utils::blank($config['web_logo']))					
+						<img src="{{ Utils::getImageLink($config['web_logo']) }}" alt="{{ $config['web_logo'] }}">
+						@endif					
 					</a>
 				</div>
 			</div>
