@@ -2,6 +2,8 @@
 
 namespace App\Constants;
 
+use App\Helpers\Utils;
+
 class ContactStatus {
     
     CONST NEW_CONTACT = 0;
@@ -13,7 +15,7 @@ class ContactStatus {
             self::REPLIED_CONTACT => trans('auth.status.replied'),
         ];
 
-        if($key != '') {
+        if(!Utils::blank($key)) {
             return $array[$key];
         }
         

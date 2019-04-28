@@ -96,6 +96,14 @@ class UsersController extends AppController
         
         $data = User::find($request->id);
         
+        if(Auth::user()->role_id == UserRole::MOD && ($data->role_id == UserRole::SUPER_ADMIN || $data->role_id == UserRole::ADMIN)) {
+            return redirect(route('auth_users'));
+        }
+        
+        if(Auth::user()->role_id == UserRole::ADMIN && ($data->role_id == UserRole::SUPER_ADMIN)) {
+            return redirect(route('auth_users'));
+        }
+        
         if($request->isMethod('post')) {
             
             $this->rules['password'] = '';

@@ -2,6 +2,8 @@
 
 namespace App\Constants;
 
+use App\Helpers\Utils;
+
 class ProductType {
     
     CONST IS_NEW = 1;
@@ -16,7 +18,7 @@ class ProductType {
             self::IS_BEST_SELLING => trans('auth.products.form.is_best_selling.text'),
         ];
         
-        if($key != '') {
+        if(!Utils::blank($key)) {
             return $array[$key];
         }
         

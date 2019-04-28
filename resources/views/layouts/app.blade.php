@@ -249,7 +249,7 @@
 	});
 
 	$(document).on('click', '.update-status', function(e) {
-		var table = '{{ isset($name) ? $name : '' }}';
+		var table = $(this).attr('data-key');
 		var data = {
 			type : 'post',
 			async : false,
@@ -284,6 +284,7 @@
     });
 
     $('#save, #save_user').click(function(e) {
+        $(this).button('loading');
     	if($("#submit_form").valid()) {
 
         	var col = 'name';
@@ -304,6 +305,9 @@
         	} else {
         		$("#submit_form").submit();
         	}
+    	} else {
+    		$('html, body').animate({scrollTop: ($('#submit_form').offset().top - 200)}, '2000');
+    		$(this).button('reset');
     	}
     });
 
@@ -368,6 +372,22 @@
 
 	$(document).on('keyup', '#price', function(e) {
 		$('#format_currency strong small i').html(formatCurrency($(this).val(), '.', '.'));
+
+		var price = Number($(this).val());
+		var discount = Number($('#discount').val());
+		if(discount && price) {
+			var discount_money = price - (price * (discount / 100));
+			$('#format_discount strong small i').html(formatCurrency(discount_money, '.', '.'));
+		}
+	});
+
+	$(document).on('mouseup keyup', '#discount', function(e) {
+		var price = Number($('#price').val());
+		var discount = Number($(this).val());
+		if(discount && price) {
+			var discount_money = price - (price * (discount / 100));
+			$('#format_discount strong small i').html(formatCurrency(discount_money, '.', '.'));
+		}
 	});
 
 	$(document).on('click', '.img-wrapper', function(e) {
@@ -380,10 +400,18 @@
 
 	$(document).on('click', '.remove-img', function(e) {
 		if(confirmDelete('{{ trans('messages.CONFIRM_DELETE') }}')) {
+			var filename = $(this).attr('data-filename');
 			$(this).parent().remove();
 			var id = $(this).attr('data-id');
-			var hidden = '<input type="hidden" name="images_del[]" value="' +  id + '" />';
+			var hidden = '';
+			if(id) {
+				hidden = '<input type="hidden" name="images_del[]" value="' +  id + '" />';
+			}
 			$('#preview_list').append(hidden);
+
+			var file_selected = $('#file_selected').val();
+			file_selected = file_selected.replace(filename + ',', '');
+			$('#file_selected').val(file_selected);
 			return true;
 		}
 		return false;

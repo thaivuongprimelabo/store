@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Constants\UploadPath;
+use App\IpAddress;
 class ConfigController extends AppController
 {
     //
@@ -90,7 +91,7 @@ class ConfigController extends AppController
             
             $key = 'upload_web_banner';
             $demension = $data[$key . '_image_size'];
-            Utils::resizeImage($key, $request->$key, $demension, $web_banner);
+            Utils::doUploadSimple($request, $key, $web_banner);
             
             $data->web_title       = Utils::cnvNull($request->web_title, '');
             $data->web_description = Utils::cnvNull($request->web_description, '');
@@ -99,6 +100,9 @@ class ConfigController extends AppController
             $data->web_ico         = $web_ico;
             $data->web_banner      = $web_banner;
             $data->web_email       = Utils::cnvNull($request->web_email, '');
+            $data->limit_product_show         = Utils::cnvNull($request->limit_product_show, 12);
+            $data->limit_product_show_tab     = Utils::cnvNull($request->limit_product_show_tab, 8);
+            $data->limit_post_show     = Utils::cnvNull($request->limit_post_show, 12);
             $data->url_ext         = Utils::cnvNull($request->url_ext, '');
             
             $web_address = $request->web_address;
@@ -164,18 +168,27 @@ class ConfigController extends AppController
     }
     
     /**
-     * manual
+     * ipAddress
      * @param Request $request
      */
-    public function manual(Request $request) {
-        $config = Config::first();
-        if($request->isMethod('post')) {
-            $manual = $request->manual;
-            $config->manual = $manual;
-            $config->save();
-            return redirect(route('auth_manual'))->with('success', trans('messages.UPDATE_SUCCESS'));
+    public function ipAddress(Request $request) {
+        return view('auth.index', $this->ipSearch($request));
+    }
+    
+    /**
+     * ipAddress
+     * @param Request $request
+     */
+    public function ipSearch(Request $request) {
+        return $this->doSearch($request, new IpAddress());
+    }
+    
+    public function ipRemove(Request $request) {
+        $result = ['code' => 404];
+        $ids = $request->ids;
+        if(IpAddress::destroy($ids)) {
+            $result['code'] = 200;
+            return response()->json($result);
         }
-        $manual = $config->manual;
-        return view('auth.config.manual', compact('manual'));
     }
 }

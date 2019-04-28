@@ -229,6 +229,7 @@ var formatCurrency = function (nStr, decSeperate, groupSeperate) {
   	if(nStr == null) {
   		return '0 ' + Constants.CURRENCY;
   	}
+  	nStr = Math.round(Number(nStr));
   	nStr += '';
     x = nStr.split(decSeperate);
     x1 = x[0];
@@ -237,7 +238,7 @@ var formatCurrency = function (nStr, decSeperate, groupSeperate) {
     while (rgx.test(x1)) {
         x1 = x1.replace(rgx, '$1' + groupSeperate + '$2');
     }
-    return x1 + x2;
+    return x1 + x2 + '₫';
 }
 
 var getMax = function(element, data) {
@@ -271,6 +272,8 @@ var checkUploadFile = function(url, input, selected_msg) {
 	    contentType: false,
 	    beforeSend: function() {
 	    	uploadfile.parent().find('img').hide();
+	    	uploadfile.parent().find('.remove-img').hide();
+	    	uploadfile.parent().find('.remove-img-simple').hide();
 	    	uploadfile.parent().find('.spinner_preview').show();
 	    },
 	    headers: {
@@ -280,11 +283,15 @@ var checkUploadFile = function(url, input, selected_msg) {
 	    	readURL(uploadfile, selected_msg);
 	    	uploadfile.parent().find('.spinner_preview').hide();
 	    	uploadfile.parent().find('img').show();
+	    	uploadfile.parent().find('.remove-img').show();
+	    	uploadfile.parent().find('.remove-img-simple').show
 	    },
 	    error: function(jqXHR, textStatus, errorThrown ) {
 	    	errorAlert(jqXHR.responseJSON.error);
 	    	uploadfile.parent().find('.spinner_preview').hide();
 	    	uploadfile.parent().find('img').show();
+	    	uploadfile.parent().find('.remove-img').show();
+	    	uploadfile.parent().find('.remove-img-simple').show();
 	    }
 	});
 }
@@ -324,7 +331,7 @@ var readURL = function readURL(input, selected_msg) {
 			  if(!exists) {
 				  var reader = new FileReader();
 			      reader.onload  = function(e) {
-			    	  var img = '<div class="img-wrapper" data-filename="' + e.target.filename + '" style="display:inline-block; position:relative"><a href="javascript:void(0)" class="remove-img" style="position:absolute; top:15px; right:15px">';
+			    	  var img = '<div class="img-wrapper" data-filename="' + e.target.filename + '" style="display:inline-block; position:relative"><a href="javascript:void(0)" class="remove-img" data-filename="' + e.target.filename + '" style="position:absolute; top:15px; right:15px">';
 			    	  img += '<i class="fa fa-trash" style="font-size:30px;"></i></a>';
 			    	  img += "<img src='" + e.target.result + "'  class='img-thumbnail' style='max-width:110px; max-height:150px;margin-top:10px;margin-right:4px;'>";
 			    	  img += "<input type='hidden' name='upload_images[]' value='" + e.target.filename + "' />";

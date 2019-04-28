@@ -207,6 +207,10 @@ function dl_owl() {
 		var margin=$(this).attr('data-margin');
 		var dot=$(this).attr('data-dot');
 		var nav=$(this).attr('data-nav');
+		var autoWidth = $(this).attr('data-autowidth');
+		if(autoWidth === undefined) {
+			autoWidth = false;
+		}
 		if (typeof margin !== typeof undefined && margin !== false) {    
 		} else{
 			margin = 30;
@@ -253,6 +257,7 @@ function dl_owl() {
 			dots:dot,
 			autoplay:false,
 			autoHeight: false,
+			autoWidth: autoWidth,
 			nav:nav,
 			navText: ["<i class='fa fa-angle-left'></i>","<i class='fa fa-angle-right'></i>"],
 			responsive:{

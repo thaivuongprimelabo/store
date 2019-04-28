@@ -83,6 +83,7 @@ class ApiController extends Controller
                 break;
                 
             case Common::PRODUCTS; // Products table
+            case 'PRODUCT_AVAIL_FLG':
                 $object = Product::find($id);
                 break;
                 
@@ -93,7 +94,12 @@ class ApiController extends Controller
                 break;
         }
         
-        $object->status = $currentStatus == 1 ? '0' : '1';
+        if($table == 'PRODUCT_AVAIL_FLG') {
+            $object->avail_flg = $currentStatus == 1 ? '0' : '1';
+        } else {
+            $object->status = $currentStatus == 1 ? '0' : '1';
+        }
+        
         if($object->save()) {
             $this->output['code'] = 200;
             switch($table) {
@@ -106,9 +112,11 @@ class ApiController extends Controller
                     break;
                     
                 case Common::PRODUCTS; // Posts table
-                    $this->output['data'] = ['status' => $object->status, 'text' => ProductStatus::getData($object->status)];
+                    $this->output['data'] = ['status' => $object->status, 'text' => Status::getData($object->status)];
                     break;
-                
+                case 'PRODUCT_AVAIL_FLG':
+                    $this->output['data'] = ['status' => $object->avail_flg, 'text' => ProductStatus::getData($object->avail_flg)];
+                    break;
                 default:
                     $this->output['data'] = ['status' => $object->status, 'text' => Status::getData($object->status)];
                     break;

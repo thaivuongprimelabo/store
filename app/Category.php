@@ -31,7 +31,7 @@ class Category extends Model
         return $categories;
     }
     
-    public function getProductInCategory($type = '', $get = true) {
+    public function getProductInCategory($type = '', $get = true, $limit_product_show = Common::LIMIT_PRODUCT_SHOW_TAB) {
         
         if(!$get) {
             return [];
@@ -60,7 +60,7 @@ class Category extends Model
         
         $whereIn = 'category_id IN (SELECT id FROM categories c1 WHERE c1.parent_parent_id = ' . $this->id . ') OR category_id = ' . $this->id;
         
-        $products = Product::where($wheres)->whereRaw($whereIn)->orderBy('created_at', 'DESC')->limit(Common::LIMIT_PRODUCT_SHOW_TAB)->get();
+        $products = Product::where($wheres)->whereRaw($whereIn)->orderBy('created_at', 'DESC')->limit($limit_product_show)->get();
         return $products;
     }
     

@@ -1,4 +1,6 @@
 <?php
+use App\Constants\ProductStatus;
+
 $bannerType = [
     'use_image' => [
         'checked' => true,
@@ -69,14 +71,42 @@ $auth = [
         'pages' => 'Quản lý trang nội dung',
         'contacts' => 'Hộp thư liên hệ',
         'users' => 'Quản lý tài khoản',
-        'config' => [
-            
-            'title' => 'Cài đặt',
-            'config' => 'Trang web',
-            'shipfee' => 'Phí ship',
-        ]
+        'shipfee' => 'Phí ship',
+        'config' => 'Cài đặt'
     ],
     'banner_type' => $bannerType,
+    /*------------ Vendor page ------------------- */
+    'ip' => [
+        'list_title' => 'Danh mục ip truy cập',
+        'search_form' => [
+            'ip' => [
+                'type' => 'text',
+                'placeholder' => 'Lọc theo IP'
+            ],
+        ],
+        'table_header' => [
+            'id' => [
+                'text' => 'ID',
+                'width' => '5%'
+            ],
+            'ip' => [
+                'text' => 'Địa chỉ IP',
+                'width' => '30%'
+            ],
+            'location' => [
+                'text' => 'Vị trí',
+                'width' => '30%'
+            ],
+            'created_at' => [
+                'text' => 'Ngày truy cập',
+                'width' => '20%'
+            ],
+            'remove_action' => [
+                'text' => '',
+                'width' => '10%'
+            ]
+        ]
+    ],
     /*------------ Vendor page ------------------- */
     'vendors' => [
         'list_title' => 'Danh mục nhà cung cấp',
@@ -673,13 +703,9 @@ $auth = [
                 'text' => 'ID',
                 'width' => '5%'
             ],
-            'product_image' => [
-                'text' => 'Hình ảnh',
-                'width' => '10%'
-            ],
             'product_name' => [
                 'text' => 'Tên mục',
-                'width' => '15%'
+                'width' => '25%'
             ],
             'qty' => [
                 'text' => 'Số lượng',
@@ -731,6 +757,14 @@ $auth = [
                 'type' => 'label',
                 'text' => 'Địa chỉ giao hàng: '
             ],
+            'customer_province' => [
+                'type' => 'label',
+                'text' => 'Tỉnh/thành phố'
+            ],
+            'customer_district' => [
+                'type' => 'label',
+                'text' => 'Quận/huyện'
+            ],
             'customer_phone' => [
                 'type' => 'label',
                 'text' => 'Số điện thoại: '
@@ -743,13 +777,20 @@ $auth = [
                 'type' => 'label',
                 'text' => 'Ghi chú: '
             ],
+            'created_at' => [
+                'type' => 'label',
+                'text' => 'Ngày đặt hàng'
+            ],
             'status' => [
                 'type' => 'select',
                 'table' => 'STATUS_ORDERS',
                 'text' => 'Trạng thái đơn hàng',
                 'empty_text'
             ]
-        ]
+        ],
+        'subtotal_txt' => 'Tạm tính',
+        'ship_fee_txt' => 'Phí ship',
+        'total_txt' => 'Tổng tiền'
     ],
     'shipfee' => [
         'list_title' => 'Cập nhật phí ship theo tỉnh/thành hoặc quận/huyện'
@@ -822,6 +863,18 @@ $auth = [
                     'type' => 'text',
                     'text' => 'URL Extension',
                     'maxlength' => 15
+                ],
+                'limit_product_show' => [
+                    'type' => 'number',
+                    'text' => 'Số lượng sản phẩm hiển thị (List)'
+                ],
+                'limit_product_show_tab' => [
+                    'type' => 'number',
+                    'text' => 'Số lượng sản phẩm hiển thị (Tab)'
+                ],
+                'limit_post_show' => [
+                    'type' => 'number',
+                    'text' => 'Số lượng bài viết hiển thị (List)'
                 ],
                 'mail_from' => [
                     'type' => 'text',
@@ -963,7 +1016,7 @@ $auth = [
             ],
             'name' => [
                 'text' => 'Tên sản phẩm',
-                'width' => '20%'
+                'width' => '15%'
             ],
             'image' => [
                 'text' => 'Hình ảnh',
@@ -971,10 +1024,6 @@ $auth = [
             ],
             'category' => [
                 'text' => 'Loại SP',
-                'width' => '10%'
-            ],
-            'vendor' => [
-                'text' => 'Nhà cung cấp',
                 'width' => '10%'
             ],
             'price' => [
@@ -985,9 +1034,13 @@ $auth = [
                 'text' => 'Trạng thái',
                 'width' => '10%'
             ],
+            'product_avail_flg' => [
+                'text' => 'Còn/Hết hàng',
+                'width' => '10%'
+            ],
             'created_at' => [
                 'text' => 'Ngày đăng ký',
-                'width' => '10%'
+                'width' => '15%'
             ],
             'remove_action' => [
                 'text' => '',
@@ -1036,7 +1089,7 @@ $auth = [
                     'maxlength' => \App\Constants\Common::PRICE_PRODUCT_MAXLENGTH
                 ],
                 'discount' => [
-                    'type' => 'number',
+                    'type' => 'discount',
                     'text' => 'Tỷ lệ giảm giá (%)',
                     'value' => 0,
                     'maxlength' => \App\Constants\Common::DISCOUNT_MAXLENGTH
@@ -1070,8 +1123,14 @@ $auth = [
                 ],
                 'status' => [
                     'type' => 'checkbox',
+                    'text' => 'Đang hoạt động',
+                    'checked' => true,
+                ],
+                'avail_flg' => [
+                    'type' => 'checkbox',
                     'text' => $product_status['available'],
                     'checked' => true,
+                    'value' => ProductStatus::AVAILABLE
                 ],
                 'is_new' => [
                     'type' => 'checkbox',
@@ -1119,7 +1178,7 @@ $auth = [
             ],
             'name' => [
                 'text' => 'Tên',
-                'width' => '20%'
+                'width' => '10%'
             ],
             'avatar' => [
                 'text' => 'Ảnh đại diện',
@@ -1139,7 +1198,11 @@ $auth = [
             ],
             'created_at' => [
                 'text' => 'Ngày đăng ký',
-                'width' => '10%'
+                'width' => '15%'
+            ],
+            'last_login' => [
+                'text' => 'Lần cuối đăng nhập',
+                'width' => '15%'
             ],
             'remove_action' => [
                 'text' => '',
@@ -1477,8 +1540,9 @@ $auth = [
         'booking_done' => 'Đã hoàn thành'
     ],
     'role' => [
-        'super_admin' => 'Quản trị hệ thống',
-        'admin' => 'Quản trị viên',
+        'super_admin' => 'Kỹ thuật viên',
+        'admin' => 'Quản trị hệ thống',
+        'mod' => 'Quản trị viên',
         'member' => 'Thành viên'
     ],
     'payment_methods' => $paymentMethods,

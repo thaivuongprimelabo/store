@@ -70,3 +70,12 @@ h2.title-head a {
 	float:left;
 	width:160px;
 }
+
+.tab-product {
+	width:80%;
+}
+
+.section-collection ul.tabs.tabs-title li.current {
+    color: #80bb35;
+    font-weight: normal !important;
+}

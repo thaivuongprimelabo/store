@@ -32,8 +32,8 @@
 						<div class="col-xs-12 col-sm-12 col-md-7 details-pro">
 							<h1 class="title-head">{{ $data->getName() }}</h1>
 							<div class="status clearfix">
-								{{ trans('shop.status_txt') }}: 
-								<span class="inventory"><i class="fa fa-check"></i> {{ $data->getStatusName() }}</span>
+								{{ trans('shop.status_txt') }}:
+								<label class="label @if($data->avail_flg == ProductStatus::AVAILABLE){{ 'label-success' }}@else{{ 'label-danger' }}@endif"><i class="fa fa-check"></i>{{ $data->getStatusName() }}</label>
 							</div>
 							<div class="price-box clearfix">
 							@if($data->price > 0 && $data->discount > 0)
@@ -75,10 +75,9 @@
 							</div>
 						</div>
 						<div class="form-product ">
-							@if($data->price > 0)
+							@if($data->price > 0 && $data->avail_flg == ProductStatus::AVAILABLE)
 							<form enctype="multipart/form-data" id="add-to-cart-form" action="?" method="post" class="form-inline margin-bottom-10 dqdt-form">
 								<div class="box-variant clearfix ">
-									<input type="hidden" name="variantId" value="17898174">
 								</div>
 								<div class="form-group form-groupx form-detail-action clearfix ">
 									<label class="f-left">{{ trans('shop.cart.qty_txt') }}: </label>
@@ -129,7 +128,7 @@
 				</div>
 			</div>
 		</div>
-		<aside class="dqdt-sidebar sidebar right left-content col-lg-3">
+		<aside class="dqdt-sidebar sidebar right left-content col-lg-3 aside-vetical-menu">
 			{!! Utils::createSidebarShop('category_list') !!}
             {!! Utils::createSidebarShop('popular_products') !!}
 		</aside>
@@ -152,17 +151,13 @@
     			<div class="product-box">															
     				<div class="product-thumbnail flexbox-grid">	
     					<a href="{{ $product->getLink() }}" title="{{ $product->getName() }}">
-    						<img src="{{ $product->getFirstImage() }}"  data-lazyload="{{ $product->getFirstImage() }}" alt="{{ $product->getName() }}">
+    						<img src="{{ $product->getFirstImage('medium') }}" alt="{{ $product->getName() }}">
     					</a>
     					{!! $product->getDisCount() !!} 	
     					<div class="product-action hidden-md hidden-sm hidden-xs clearfix">
     						<form action="?" method="post" class="variants form-nut-grid margin-bottom-0" enctype="multipart/form-data">
     							<div>
-    								@if($product->price > 0)
-    								<a class="btn-buy btn-cart btn btn-primary left-to add_to_cart" data-qty="1" data-id="{{ $product->id }}" title="{{ trans('shop.cart.order') }}">
-    									<i class="fa fa-shopping-bag"></i>						
-    								</a>
-    								@endif
+    								@include('shop.common.button_add_to_cart')
     								<a href="{{ $product->getLink() }}" class="btn-gray btn_view btn right-to">
     									<i class="fa fa-eye"></i>
     								</a>
@@ -172,21 +167,7 @@
     				</div>
     				<div class="product-info a-center">
     					<h3 class="product-name"><a href="{{ $product->getLink() }}" title="{{ $product->getName() }}">{{ $product->getName() }}</a></h3>
-    					<div class="price-box clearfix">
-    						@if($product->price > 0 && $product->discount > 0)
-    						<div class="special-price">
-    							<span class="price product-price">{{ $product->getPriceDiscount() }}</span>
-    						</div>
-    						
-    						<div class="old-price">
-    							<span class="price product-price-old">{{ $product->getPrice() }}</span>
-    						</div>
-    						@else
-    						<div class="old-price">
-    							<span class="price product-price">{{ $product->getPrice() }}</span>
-    						</div>
-    						@endif											
-    					</div>
+    					@include('shop.common.price_box')
     				</div>
     			</div>
     		</div>

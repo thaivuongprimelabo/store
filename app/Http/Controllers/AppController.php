@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants\Common;
 use App\Helpers\Utils;
 use App\Helpers\Cart;
 use Artesaos\SEOTools\Facades\OpenGraph;
@@ -9,6 +10,7 @@ use Artesaos\SEOTools\Facades\SEOMeta;
 use Illuminate\Http\Request;
 use View;
 use Artesaos\SEOTools\Facades\TwitterCard;
+use App\IpAddress;
 class AppController extends Controller
 {
     public $output = [];
@@ -81,10 +83,14 @@ class AppController extends Controller
 //                     'avatar_image_size' => Utils::cnvNull($config->users_image_size, '100x100'),
                     'bank_info' => Utils::cnvNull($config->bank_info, ''),
                     'cash_info' => Utils::cnvNull($config->cash_info, ''),
-                    
+                    'limit_product_show' => Utils::cnvNull($config->limit_product_show, 10),
+                    'limit_product_show_tab' => Utils::cnvNull($config->limit_product_show_tab, 10),
+                    'limit_post_show' => Utils::cnvNull($config->limit_post_show, 12),
                     'url_ext' => Utils::cnvNull($config->url_ext, '.html'),
                 ],
             ];
+            
+            $this->ipAddressAccess();
             
             if($config->off == 1) {
                 return abort(404);
@@ -95,13 +101,13 @@ class AppController extends Controller
     
     protected function setSEO($data = []) {
         
-        $title = isset($data['title']) ? $data['title'] : 'Index';
-        $summary = isset($data['summary']) ? $data['summary'] : $this->output['config']['web_description'];
-        $section = isset($data['section']) ? $data['section'] : '';
-        $keywords = isset($data['keywords']) ? $data['keywords'] : [$this->output['config']['web_keywords']];
-        $link = isset($data['link']) ? $data['link'] : route('home');
-        $type = isset($data['type']) ? $data['type'] : 'product';
-        $image = isset($data['image']) ? $data['image'] : $this->output['config']['web_logo'];
+        $title = isset($data['title']) && !Utils::blank($data['title']) ? $data['title'] : $this->output['config']['web_name'];
+        $summary = isset($data['summary']) && !Utils::blank($data['summary']) ? $data['summary'] : $this->output['config']['web_description'];
+        $section = isset($data['section']) && !Utils::blank($data['section']) ? $data['section'] : '';
+        $keywords = isset($data['keywords']) && !Utils::blank($data['keywords']) ? $data['keywords'] : [$this->output['config']['web_keywords']];
+        $link = isset($data['link']) && !Utils::blank($data['link']) ? $data['link'] : route('home');
+        $type = isset($data['type']) && !Utils::blank($data['type']) ? $data['type'] : 'product';
+        $image = isset($data['image']) && !Utils::blank($data['image']) && strpos($data['image'], Common::NO_IMAGE_FOUND) === FALSE  ? $data['image'] : Utils::getImageLink($this->output['config']['web_banner']);
         
         SEOMeta::setTitleDefault($this->output['config']['web_name']);
         SEOMeta::setTitle($title);
@@ -127,6 +133,23 @@ class AppController extends Controller
         }
         $html .= '</ul>';
         return $html;
+    }
+    
+    private function ipAddressAccess() {
+        try {
+            $ip = $_SERVER['REMOTE_ADDR'];
+            $details = file_get_contents("http://ipinfo.io/{$ip}/json");
+            $ipAddress = IpAddress::updateOrCreate(
+                ['ip' => $ip],
+                [
+                    'ip' => $ip,
+                    'location' => $details,
+                    'created_at' => date('Y-m-d H:i:s')
+                ]
+            );
+        } catch(\Exception $e) {
+            
+        }
     }
     
 }

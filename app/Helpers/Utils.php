@@ -30,7 +30,7 @@ use Illuminate\Http\UploadedFile;
 
 class Utils {
     
-    public static function getImageLink($image = '', $thumb = '') {
+    public static function getImageLink($image = '') {
         
         if(strpos($image, ',') !== FALSE) {
             $arrImage = explode(',', $image);
@@ -43,9 +43,9 @@ class Utils {
         
         $uploadFolder = UploadPath::UPLOAD;
         if(!self::blank($image)) {
-            if(!self::blank($thumb)) {
-                return url($uploadFolder . $thumb);
-            }
+//             if(!self::blank($thumb)) {
+//                 return url($uploadFolder . $thumb);
+//             }
             return url($uploadFolder . $image);
         } else {
             return '';
@@ -68,7 +68,8 @@ class Utils {
             return $filename;
         }
         
-        $filename = time() . '_' . $file->getClientOriginalName();
+        $ext = pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION);
+        $filename = time() . '_' . str_random(10) . '.' . $ext;
         if($key == 'web_ico') {
             $filename = 'favicon.png';
         }
@@ -153,7 +154,8 @@ class Utils {
             $image_height_resize = $image_height;
         }
         
-        $filename = time() . '_' . $file->getClientOriginalName();
+        $ext = pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION);
+        $filename = time() . '_' . str_random(10) . '.' . $ext;
         $uploadPath = UploadPath::getUploadPath($key);
         $resizePath = $uploadPath . $demension;
         $filePath = UploadPath::getFilePath($key) . $demension . '/' . $filename;
@@ -430,9 +432,6 @@ class Utils {
         foreach($sidebar as $k=>$v) {
             $open = $display = '';
             $roleId = Auth::user()->role_id;
-            if($roleId == Common::MOD && in_array($k, $arrUnaccess)) {
-                continue;
-            }
             
             if(!is_array($v)) {
                 if($currentRoute == 'auth_' . $k) {
@@ -760,15 +759,23 @@ class Utils {
                                 if($item->status == Status::ACTIVE) {
                                     $label = '<span class="label label-success">' . trans('auth.status.active') . '</span>';
                                 }
-                                $tbody .= '<td><a href="javascript:void(0)" class="update-status" data-id="' . $item->id . '" data-status="' . $item->status . '">' . $label . '</a></td>';
+                                $tbody .= '<td><a href="javascript:void(0)" class="update-status" data-key="' . $name . '" data-id="' . $item->id . '" data-status="' . $item->status . '">' . $label . '</a></td>';
                                 break;
                                 
                             case 'product_status':
+                                $label = '<span class="label label-success">' . trans('auth.status.active') . '</span>';
+                                if($item->status == STATUS::UNACTIVE) {
+                                    $label = '<span class="label label-danger">' . trans('auth.status.unactive') . '</span>';
+                                }
+                                $tbody .= '<td><a href="javascript:void(0)" class="update-status"  data-key="' . $name . '" data-id="' . $item->id . '" data-status="' . $item->status . '">' . $label . '</a></td>';
+                                break;
+                                
+                            case 'product_avail_flg':
                                 $label = '<span class="label label-success">' . trans('auth.status.available') . '</span>';
-                                if($item->status == ProductStatus::OUT_OF_STOCK) {
+                                if($item->avail_flg == ProductStatus::OUT_OF_STOCK) {
                                     $label = '<span class="label label-danger">' . trans('auth.status.out_of_stock') . '</span>';
                                 }
-                                $tbody .= '<td><a href="javascript:void(0)" class="update-status" data-id="' . $item->id . '" data-status="' . $item->status . '">' . $label . '</a></td>';
+                                $tbody .= '<td><a href="javascript:void(0)" class="update-status" data-key="PRODUCT_AVAIL_FLG" data-id="' . $item->id . '" data-status="' . $item->avail_flg . '">' . $label . '</a></td>';
                                 break;
                                 
                             case 'role_id':
@@ -779,11 +786,15 @@ class Utils {
                                     $label = '<span class="label label-warning">' . trans('auth.role.admin') . '</span>';
                                 }
                                 
+                                if($item->role_id == UserRole::MOD) {
+                                    $label = '<span class="label label-warning">' . trans('auth.role.mod') . '</span>';
+                                }
+                                
                                 if($item->role_id == UserRole::MEMBERS) {
                                     $label = '<span class="label label-default">' . trans('auth.role.member') . '</span>';
                                 }
                                 
-                                $tbody .= '<td><a href="javascript:void(0)" class="update-status">' . $label . '</a></td>';
+                                $tbody .= '<td><a href="javascript:void(0)">' . $label . '</a></td>';
                                 break;
                                 
                             case 'price':
@@ -794,6 +805,7 @@ class Utils {
                             case 'created_at':
                             case 'updated_at':
                             case 'published_at':
+                            case 'last_login':
                                 $date = self::formatDate($item->$key);
                                 $tbody .= '<td>' . $date . '</td>';
                                 break;
@@ -870,14 +882,15 @@ class Utils {
                 $tfoot .= '</tfoot>';
             }
         }
-        
-        $html .= '<table class="table table-hover" style="table-layout: fixed; word-wrap:break-word;">';
+        $html .= '<div class="table-responsive">';
+        $html .= '<table class="table table-hover" style="word-wrap:break-word;">';
         $html .= $colWidth;
         $html .= $thead;
         
         $html .= $tbody;
         $html .= $tfoot;
         $html .= '</table>';
+        $html .= '</div>';
         
         return $html;
     }
@@ -1133,7 +1146,19 @@ class Utils {
                 $element_html .= '<input type="number" class="form-control" name="' . $key . '" id="' . $key . '" value="' . $element_value . '" placeholder="' . $placeholder . '" ' . $maxlength . ' '. $disable . ' />';
                 $element_html .= '</div>';
                 break;
+            
+            case 'discount':
                 
+                $element_html .= $label;
+                $element_html .= '<div class="input-group"><span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>';
+                $element_html .= '<input type="number" class="form-control" name="' . $key . '" id="' . $key . '" value="' . $element_value . '" placeholder="' . $placeholder . '" ' . $maxlength . ' '. $disable . ' max="100" />';
+                $element_html .= '</div>';
+                $discount_value = '';
+                if(!self::blank($element_value) && $element_value > 0) {
+                    $discount_value = self::formatCurrency($data->price - ($data->price * ($element_value / 100)));
+                }
+                $element_html .= '<span id="format_discount"><strong><small>Giá sau khi giảm: <i>' . $discount_value . '</i></small></strong></span>';
+                break;
             case 'email':
                 
                 $element_html .= $label;
@@ -1194,6 +1219,10 @@ class Utils {
                     $element_value = $payment_methods[$element_value];
                 }
                 
+                if($key == 'created_at') {
+                    $element_value = self::formatDate($element_value);
+                }
+                
                 $element_html .= '<label>' .$text . '</label>&nbsp;&nbsp;&nbsp;';
                 $element_html .= '<span>' . $element_value . '</span>';
                 break;
@@ -1211,7 +1240,7 @@ class Utils {
                 $limit_upload = isset($config[$key . '_maximum_upload']) ? $config[$key . '_maximum_upload'] : '51200';
                 
                 if($key == 'upload_web_ico') {
-                    $image_size = '80x80';
+                    $image_size = '40x40';
                 }
                 
                 $split = explode('x', $image_size);
@@ -1219,11 +1248,11 @@ class Utils {
                 $preview_control_id = 'preview_' . $key;
                 $element_html .= '<div>';
                 $element_html .= '<input type="file" class="form-control upload-simple" name="' . $key . '" data-preview-control="' . $preview_control_id . '" data-limit-upload="' . $limit_upload . '" />';
-                $style = 'width:' . $split[0] . 'px; height: ' . $split[1] . 'px';
+                $style = 'height: ' . $split[1] . 'px';
                 $element_html .= '<div class="preview_area" style="width:' . $split[0] . 'px;position:relative">';
                 $element_html .= '<span class="spinner_preview" style="display:none"><i class="fa fa-circle-o-notch fa-spin"></i> ' . trans('auth.upload_check_txt') . '</span>';
                 if(!self::blank($element_value)) {
-                    $element_html .= '<a href="javascript:void(0)" class="remove-img-simple" style="position:absolute; top:15px; right:10px"><i class="fa fa-trash" style="font-size:18px;"></i></a>';
+                    $element_html .= '<a href="javascript:void(0)" class="remove-img-simple" style="position:absolute; top:15px; right:-18px"><i class="fa fa-trash" style="font-size:18px;"></i></a>';
                     $element_html .= '<img id="' . $preview_control_id . '" src="' . self::getImageLink($element_value) . '" class="img-thumbnail" style="margin-top:10px;' . $style . '">';
                 } else {
                     $element_html .= '<img id="' . $preview_control_id . '" src="' . self::getImageLink(Common::NO_IMAGE_FOUND) . '" class="img-thumbnail" style="margin-top:10px;' . $style . ';">';
@@ -1459,9 +1488,9 @@ class Utils {
         
     }
     
-    public static function createProductTab($title, $type) {
+    public static function createProductTab($title, $type = '', $limit_product = Common::LIMIT_PRODUCT_SHOW_TAB) {
         $html = '';
-        $categories = Category::select('id', 'name', 'name_url')->where('status', Status::ACTIVE)->where('parent_id', 0)->get();
+        $categories = Category::select('id', 'name', 'name_url')->active()->where('parent_id', 0)->get();
         
         
         $route = '';
@@ -1479,9 +1508,9 @@ class Utils {
             $where['is_popular'] = ProductType::IS_POPULAR;
         }
         
-        $all_products = Product::active()->where($where)->orderBy('updated_at', 'DESC')->get();
+        $all_products = Product::active()->where($where)->orderBy('updated_at', 'DESC')->limit($limit_product)->get();
         
-        $html .= view('shop.common.product', compact('categories', 'title', 'type', 'route', 'all_products'))->render();
+        $html .= view('shop.common.product', compact('categories', 'title', 'type', 'route', 'all_products', 'limit_product'))->render();
         return $html;
     }
     

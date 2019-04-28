@@ -114,7 +114,7 @@
                         <a class="previous-link" href="{{ route('cart') }}"> <i
                            class="fa fa-angle-left fa-lg" aria-hidden="true"></i> <span>{{ trans('shop.button.back_to_cart') }}</span>
                         </a> 
-                        <button id="checkout_btn" class="btn btn-primary btn-checkout" data-loading-text="<i class='fa fa-spinner fa-spin '></i> {{ trans('shop.button.checkout_order') }}" type="button">{{ trans('shop.button.checkout_order') }}</button>
+                        <button class="btn btn-primary btn-checkout checkout_btn" data-loading-text="<i class='fa fa-spinner fa-spin '></i> {{ trans('shop.button.checkout_order') }}" type="button">{{ trans('shop.button.checkout_order') }}</button>
                      </div>
                   </div>
                   <div class="form-group has-error">
@@ -238,6 +238,17 @@
                               </div>
                               @endforeach
                            </div>
+                           <div class="section hidden-md hidden-lg">
+                                <div class="form-group clearfix m0">
+                                    <button class="btn btn-primary btn-checkout checkout_btn" data-loading-text="<i class='fa fa-spinner fa-spin '></i> {{ trans('shop.button.checkout_order') }}" type="button">{{ trans('shop.button.checkout_order') }}</button>
+                                </div>
+                                <div class="text-center mt20">
+                                    <a class="previous-link" href="{{ route('cart') }}">
+                                        <i class="fa fa-angle-left fa-lg" aria-hidden="true"></i>
+                                        <span>{{ trans('shop.button.back_to_cart') }}</span>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                      </div>
                   </div>
@@ -333,7 +344,7 @@
 		  	}
 	    });
 
-	    $('#checkout_btn').click(function(e) {
+	    $('.checkout_btn').click(function(e) {
 			if($('#submit_form').valid()) {
 				var data = {
 	        		type : 'post',

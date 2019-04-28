@@ -2,6 +2,8 @@
 
 namespace App\Constants;
 
+use App\Helpers\Utils;
+
 class PostStatus {
     
     CONST NOT_PUBLISHED = 0;
@@ -13,7 +15,7 @@ class PostStatus {
             self::PUBLISHED => trans('auth.status.published'),
         ];
 
-        if($key != '') {
+        if(!Utils::blank($key)) {
             return $array[$key];
         }
         

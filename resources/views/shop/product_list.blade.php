@@ -76,7 +76,8 @@
     		page_name: $('#page_name').val(),
     		view_type: $('#view_type').val(),
     		container: ['#ajax_list', '#ajax_paging'],
-    		spinner: '#ajax_list'
+    		spinner: '#ajax_list',
+    		limit_product: '{{ $config['limit_product_show'] }}'
     	}
     
     	callAjax('{{ route('loadData') }}', data);

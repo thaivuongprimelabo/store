@@ -39,7 +39,6 @@
     	messages: validateObject.messages,
     	errorPlacement: function(error, element) {
     		customErrorValidate(error, element);
-    		$('html, body').animate({scrollTop: ($('#submit_form').offset().top - 200)}, '2000');
 	  	},
     	submitHanlder: function(form) {
     	    form.submit();

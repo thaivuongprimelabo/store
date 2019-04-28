@@ -18,7 +18,7 @@ class Status {
             self::ACTIVE => trans('auth.status.active'),
         ];
         
-        if($key != '') {
+        if(!Utils::blank($key)) {
             return $array[$key];
         }
         

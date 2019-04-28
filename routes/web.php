@@ -99,6 +99,11 @@ Route::group(['prefix' => 'auth', 'namespace' => 'Auth'], function () {
     $this->get('/pages', 'PagesController@index')->name('auth_pages');
     Route::match(['get', 'post'], '/pages/edit/{id}', 'PagesController@edit')->name('auth_pages_edit');
     
+    // IP
+    $this->get('/ip_address', 'ConfigController@ipAddress')->name('auth_ip');
+    Route::match(['get', 'post'], '/ip_address/search', 'ConfigController@ipSearch')->name('auth_ip_search');
+    Route::post('/ip_address/remove', 'ConfigController@ipRemove')->name('auth_ip_remove');
+    
     
     // Registration Routes...
 //     $this->get('/register', 'RegisterController@showRegistrationForm')->name('register');

@@ -28,7 +28,10 @@ class Vendor extends Model
     }
     
     public function getLogo() {
-        return Utils::getImageLink($this->logo);
+        if(!Utils::blank($this->logo)) {
+            return Utils::getImageLink($this->logo);
+        }
+        return Utils::getImageLink(Common::NO_IMAGE_FOUND);
     }
     
     public function scopeActive($query) {

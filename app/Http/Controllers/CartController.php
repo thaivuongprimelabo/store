@@ -174,6 +174,8 @@ class CartController extends AppController
                     'customer_note' => Utils::cnvnull($request->customer_note, ''),
                     'payment_method' => Utils::cnvnull($request->payment_method, ''),
                     'status' => StatusOrders::ORDER_NEW,
+                    'subtotal' => $cart->getSubTotal(),
+                    'ship_fee' => $cart->getShipFee(),
                     'total' => $cart->getTotal(),
                     'created_at' => Carbon::now(),
                     'updated_at' => Carbon::now(),
@@ -192,6 +194,7 @@ class CartController extends AppController
                             'order_id' => $id,
                             'product_id' => $cartItem->getId(),
                             'product_detail_id' => 0,
+                            'name' => $cartItem->getName(),
                             'qty' => $cartItem->getQty(),
                             'price' => $cartItem->getPrice(),
                             'cost' => $cartItem->getCost(),
@@ -208,6 +211,7 @@ class CartController extends AppController
                                 'order_id' => $id,
                                 'product_id' => $cartItem->getId(),
                                 'product_detail_id' => $detail->getId(),
+                                'name' => '<b>' . $detail->getGroupName() . '</b>: ' . $detail->getName(),
                                 'qty' => $detail->getQty(),
                                 'price' => $detail->getPrice(),
                                 'cost' => $detail->getCost(),
@@ -238,12 +242,12 @@ class CartController extends AppController
                 ];
                 
                 $message = Utils::sendMail($config);
-                if(Utils::blank($message)) {
-                    DB::commit();
-                    $result['checkout_result'] = true;
-                } else {
+                if(!Utils::blank($message)) {
                     \Log::error($message);
                 }
+                
+                DB::commit();
+                $result['checkout_result'] = true;
 
                 
             } catch(\Exception $e) {

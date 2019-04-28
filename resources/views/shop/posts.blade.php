@@ -34,7 +34,8 @@
     		id: $('#id').val(),
     		page_name: $('#page_name').val(),
     		container: ['#ajax_list','#ajax_paging'],
-    		spinner: '#ajax_list'
+    		spinner: '#ajax_list',
+    		limit_product: '{{ $config['limit_post_show'] }}'
     	}
     
     	callAjax('{{ route('loadData') }}', data);

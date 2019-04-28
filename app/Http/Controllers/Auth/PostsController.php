@@ -53,7 +53,7 @@ class PostsController extends AppController
                 $filename = '';
                 $key = 'upload_photo';
                 $demension = $this->config['config'][$key . '_image_size'];
-                Utils::resizeImage($key, $request->$key, $demension, $filename);
+                Utils::doUploadSimple($request, $key, $filename);
                 
                 $data = new Post();
                 $data->name              = Utils::cnvNull($request->name, '');
@@ -106,8 +106,7 @@ class PostsController extends AppController
                 }
                 
                 $key = 'upload_photo';
-                $demension = $this->config['config'][$key . '_image_size'];
-                Utils::resizeImage($key, $request->$key, $demension, $filename);
+                Utils::doUploadSimple($request, $key, $filename);
                 
                 $published_at = date('Ymd', strtotime($request->input('published_at', date('Ymd'))));
                 $published_time_at = date('Hi', strtotime($request->input('published_time_at', date('H:i'))));

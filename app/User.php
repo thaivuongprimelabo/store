@@ -34,7 +34,7 @@ class User extends Authenticatable
     ];
     
     public function isAdmin() {
-        if($this->role_id == UserRole::SUPER_ADMIN || $this->role_id == UserRole::ADMIN) {
+        if($this->role_id == UserRole::SUPER_ADMIN || $this->role_id == UserRole::ADMIN || $this->role_id == UserRole::MOD) {
             return true;
         }
         
@@ -42,7 +42,7 @@ class User extends Authenticatable
     }
     
     public function getAvatar() {
-        if(!Utils::blank($this->avatar) && file_exists($this->avatar)) {
+        if(!Utils::blank($this->avatar) && !file_exists($this->avatar)) {
             return Utils::getImageLink($this->avatar);
         }
         return Utils::getImageLink(Common::NO_AVATAR);

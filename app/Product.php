@@ -22,14 +22,20 @@ class Product extends Model
      */
     protected $table = Common::PRODUCTS;
     
-    public function getFirstImage($thumb = 'medium') {
+    public function getFirstImage($thumb = '') {
         $image_product = ImageProduct::select('image','medium','small')->where('product_id', $this->id)->where('is_main', 1)->first();
         if($image_product) {
-            return Utils::getImageLink($image_product->image, $image_product->$thumb);
+            if(!Utils::blank($thumb)) {
+                return Utils::getImageLink($image_product->$thumb);
+            }
+            return Utils::getImageLink($image_product->image);
         }
         
         $image_product = ImageProduct::select('image','medium','small')->where('product_id', $this->id)->first();
         if($image_product) {
+            if(!Utils::blank($thumb)) {
+                return Utils::getImageLink($image_product->$thumb);
+            }
             return Utils::getImageLink($image_product->image, $image_product->$thumb);
         }
         return Utils::getImageLink(Common::NO_IMAGE_FOUND);
@@ -124,7 +130,11 @@ class Product extends Model
     }
     
     public function getSEODescription() {
-        return !Utils::blank($this->seo_description) ? $this->seo_description : $this->summary;
+        $seoDescription = !Utils::blank($this->seo_description) ? $this->seo_description : $this->summary;
+        if(Utils::blank($seoDescription)) {
+            $seoDescription = $this->name; 
+        }
+        return $seoDescription;
     }
     
     public function getSummary() {
@@ -145,7 +155,7 @@ class Product extends Model
     
     public function getStatusName() {
         $status = trans('auth.status.out_of_stock');
-        if($this->status == ProductStatus::AVAILABLE) {
+        if($this->avail_flg == ProductStatus::AVAILABLE) {
             $status = trans('auth.status.available');
         }
         return $status;

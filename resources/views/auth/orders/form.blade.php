@@ -29,36 +29,29 @@
                     			</thead>
                     			<tbody>
                     				@foreach($data->getOrderDetails() as $orderDetail)
-                    				@php
-                    					$product_info = $orderDetail->getProductInfo();
-                    				@endphp
                     				<tr>
-                    					<td>{{ $product_info->id }}</td>
-                        				<td><img src="{{ $product_info->getFirstImage('small') }}" width="55px" /></td>
-                        				<td>{{ $product_info->getName() }}</td>
+                    					<td>{{ $orderDetail->product_id }}</td>
+                        				<td>{!! $orderDetail->name !!}</td>
                         				<td>{{ $orderDetail->qty }}</td>
                         				<td>{{ $orderDetail->getPrice() }}</td>
                         				<td>{{ $orderDetail->getCost() }}</td>
                     				</tr>
-                    				@php
-                    					$product_detail_infos = $orderDetail->getProductDetailList();
-                    				@endphp
-                    				@foreach($product_detail_infos as $product_detail)
-                    				<tr>
-                    					<td></td>
-                        				<td></td>
-                        				<td><b>{{ $product_detail->group_name }}:</b> {{ $product_detail->name }}</td>
-                        				<td>{{ $product_detail->qty }}</td>
-                        				<td>{{ $product_detail->getPrice() }}</td>
-                        				<td>{{ $product_detail->getCost() }}</td>
-                    				</tr>
-                    				@endforeach
                     				@endforeach
                     			</tbody>
                     			<tfoot>
                     				<tr>
-                    					<td colspan="4" align="right">
-                    					<td><b>Tổng cộng</b></td>
+                    					<td colspan="3" align="right">
+                    					<td><b>{{ trans('auth.orders.subtotal_txt') }}</b></td>
+                    					<td>{{ $data->getSubTotal() }}</td>
+                    				</tr>
+                    				<tr>
+                    					<td colspan="3" align="right">
+                    					<td><b>{{ trans('auth.orders.ship_fee_txt') }}</b></td>
+                    					<td>{{ $data->getShipFee() }}</td>
+                    				</tr>
+                    				<tr>
+                    					<td colspan="3" align="right">
+                    					<td><b>{{ trans('auth.orders.total_txt') }}</b></td>
                     					<td>{{ $data->getTotal() }}</td>
                     				</tr>
                     			</tfoot>

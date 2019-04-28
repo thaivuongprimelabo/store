@@ -20,7 +20,7 @@
 				<input type="text" maxlength="12" min="0" class="input-text number-sidebar input_pop"  data-id="{{ $cartItem->getId() }}" value="{{ $cartItem->getQty() }}" size="4">
 				<button class="increase items-count btn-plus btn-plus-item" data-id="{{ $cartItem->getId() }}" type="button">+</button>
 			</div>
-			<a class="button remove-item remove-item-cart" href="javascript:;" data-id="17898174">{{ trans('shop.button.remove') }}</a>
+			<a class="button remove-item remove-item-cart" href="javascript:;" data-id="{{ $cartItem->getId() }}">{{ trans('shop.button.remove') }}</a>
 		</div>
 	</div>
 	@php
@@ -47,7 +47,7 @@
 				<input type="text" maxlength="12" min="0" class="input-text number-sidebar input_pop qty-detail"  data-id="{{ $detail->getId() }}" value="{{ $detail->getQty() }}" size="4">
 				<button class="increase items-count btn-plus btn-plus-detail" data-product-id="{{ $cartItem->getId() }}" data-qty="{{ $cartItem->getQty() }}" data-id="{{ $detail->getId() }}" type="button">+</button>
 			</div>
-			<a class="button remove-item remove-item-cart" href="javascript:;" data-id="17898174">{{ trans('shop.button.remove') }}</a>
+			<a class="button remove-item remove-detail-item" href="javascript:void(0)" data-product-id="{{ $cartItem->getId() }}" data-id="{{ $detail->getId() }}">{{ trans('shop.button.remove') }}</a>
 		</div>
 	</div>
 	@endforeach

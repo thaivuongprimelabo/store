@@ -5,6 +5,7 @@ namespace App;
 use App\Constants\Common;
 use App\Helpers\Utils;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use App\Constants\StatusOrders;
 
 class Order extends Model
@@ -22,14 +23,13 @@ class Order extends Model
     public function getOrderDetails() {
         $orderDetails = OrderDetails::select(
                             'order_details.order_id',
-                            'order_details.product_id',
-                            'order_details.product_detail_id',
+                            DB::raw('(CASE WHEN order_details.product_detail_id = 0 THEN order_details.product_id ELSE \'\' END) AS product_id'),
+                            'order_details.name',
                             'order_details.qty',
                             'order_details.price',
                             'order_details.cost'
                         )
                         ->where('order_details.order_id', $this->id)
-                        ->where('order_details.product_detail_id', 0)
                         ->get();
         
         return $orderDetails;
@@ -37,6 +37,14 @@ class Order extends Model
     
     public function getTotal() {
         return Utils::formatCurrency($this->total);
+    }
+    
+    public function getSubTotal() {
+        return Utils::formatCurrency($this->subtotal);
+    }
+    
+    public function getShipFee() {
+        return Utils::formatCurrency($this->ship_fee);
     }
     
     public function getAddress() {

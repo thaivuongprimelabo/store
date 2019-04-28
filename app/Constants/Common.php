@@ -39,12 +39,13 @@ class Common {
     CONST PRODUCT_DETAILS = 'product_details';
     CONST PRODUCT_DETAIL_GROUPS = 'product_detail_groups';
     CONST POST_GROUPS = 'post_groups';
+    CONST IP_ADDRESS = 'ip_address';
     
     CONST TABLE_LIST = [
         self::USERS, self::VENDORS, self::CATEGORIES, self::BANNERS,
         self::CONTACTS, self::POSTS, self::PRODUCTS,
         self::IMAGES_PRODUCT, self::PAGES, self::ORDERS, self::ORDER_DETAILS,
-        self::PRODUCT_DETAILS, self::PRODUCT_DETAIL_GROUPS, self::POST_GROUPS
+        self::PRODUCT_DETAILS, self::PRODUCT_DETAIL_GROUPS, self::POST_GROUPS, self::IP_ADDRESS
     ];
     
     /** Role **/
@@ -59,7 +60,7 @@ class Common {
     CONST TEMPLATE = 'auth.emails.template';
     
     /** Size */
-    CONST UPLOAD_SIZE_LIMIT = ['51200', '102400', '204800', '307200' ,'512000'];
+    CONST UPLOAD_SIZE_LIMIT = ['51200', '102400', '204800', '307200' ,'512000', '1048576'];
     
     CONST CURRENCY = '₫';
     

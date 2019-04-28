@@ -7,6 +7,7 @@ use App\Product;
 use App\ServiceGroups;
 use App\Size;
 use App\Constants\Common;
+use App\Constants\Status;
 use App\Helpers\Utils;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -18,6 +19,7 @@ use App\Services;
 use App\ProductServiceGroup;
 use App\ProductDetailGroups;
 use App\ProductDetails;
+use App\Constants\ProductStatus;
 
 class productsController extends AppController
 {
@@ -70,13 +72,14 @@ class productsController extends AppController
                     $data = new Product();
                     $data->name          = Utils::cnvNull($request->name, '');
                     $data->name_url      = Utils::createNameUrl(Utils::cnvNull($request->name, ''));
-                    $data->price         = Utils::cnvNull($request->price, '0');
+                    $data->price         = Utils::cnvNull($request->price, trans('auth.price_empty_text'));
                     $data->category_id   = Utils::cnvNull($request->category_id, '0');
                     $data->vendor_id     = Utils::cnvNull($request->vendor_id, '0');
                     $data->discount      = Utils::cnvNull($request->discount, 0);
                     $data->description   = Utils::cnvNull($request->description, '');
                     $data->summary   = Utils::cnvNull($request->summary, '');
-                    $data->status        = Utils::cnvNull($request->status, 0);
+                    $data->status        = Utils::cnvNull($request->status, Status::UNACTIVE);
+                    $data->avail_flg     = Utils::cnvNull($request->avail_flg, ProductStatus::OUT_OF_STOCK);
                     $data->is_new        = Utils::cnvNull($request->is_new, 0);
                     $data->is_popular        = Utils::cnvNull($request->is_popular, 0);
                     $data->is_best_selling   = Utils::cnvNull($request->is_best_selling, 0);
@@ -131,16 +134,16 @@ class productsController extends AppController
             $validator = Validator::make($request->all(), $this->rules);
             
             if (!$validator->fails()) {
-                
                 $data->name          = Utils::cnvNull($request->name, '');
                 $data->name_url      = Utils::createNameUrl(Utils::cnvNull($request->name, ''));
-                $data->price         = Utils::cnvNull($request->price, '0');
+                $data->price         = Utils::cnvNull($request->price, trans('auth.price_empty_text'));
                 $data->category_id   = Utils::cnvNull($request->category_id, '0');
                 $data->vendor_id     = Utils::cnvNull($request->vendor_id, '0');
                 $data->discount      = Utils::cnvNull($request->discount, '');
                 $data->description   = Utils::cnvNull($request->description, '');
                 $data->summary       = Utils::cnvNull($request->summary, '');
-                $data->status        = Utils::cnvNull($request->status, 0);
+                $data->status        = Utils::cnvNull($request->status, Status::UNACTIVE);
+                $data->avail_flg     = Utils::cnvNull($request->avail_flg, ProductStatus::OUT_OF_STOCK);
                 $data->is_new        = Utils::cnvNull($request->is_new, 0);
                 $data->is_popular        = Utils::cnvNull($request->is_popular, 0);
                 $data->is_best_selling   = Utils::cnvNull($request->is_best_selling, 0);

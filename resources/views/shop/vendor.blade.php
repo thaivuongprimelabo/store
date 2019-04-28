@@ -27,7 +27,8 @@
 			page_name: 'vendor-page',
 			slug: current_url[current_url.length - 1].replace('{{ $config['url_ext'] }}', ''),
 			container: '#product_block',
-			paging: '.paging_link'
+			paging: '.paging_link',
+			limit_product: '{{ $config['limit_product_show'] }}'
 		}
 
 		loadProducts('{{ route('loadData') }}', data);

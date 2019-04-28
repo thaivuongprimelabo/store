@@ -44,7 +44,8 @@
 			sort: $('#sort').val(),
 			container: '#product_block',
 			paging: '#paging_link',
-			widget: '#aside'
+			widget: '#aside',
+			limit_product: '{{ $config['limit_product_show'] }}'
 		}
 
 		loadProducts('{{ route('loadData') }}', data);

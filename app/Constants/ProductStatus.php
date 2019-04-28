@@ -2,6 +2,8 @@
 
 namespace App\Constants;
 
+use App\Helpers\Utils;
+
 class ProductStatus {
     
     CONST OUT_OF_STOCK = 0;
@@ -13,7 +15,7 @@ class ProductStatus {
             self::AVAILABLE => trans('auth.status.available'),
         ];
         
-        if($key != '') {
+        if(!Utils::blank($key)) {
             return $array[$key];
         }
         

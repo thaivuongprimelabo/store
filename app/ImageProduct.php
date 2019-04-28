@@ -18,7 +18,10 @@ class ImageProduct extends Model
      */
     protected $table = Common::IMAGES_PRODUCT;
     
-    public function getImageLink($thumb = 'image') {
-        return Utils::getImageLink($this->image, $this->$thumb);
+    public function getImageLink($thumb = '') {
+        if(!Utils::blank($thumb)) {
+            return Utils::getImageLink($this->$thumb);
+        }
+        return Utils::getImageLink($this->image);
     }
 }

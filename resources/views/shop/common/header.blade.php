@@ -65,7 +65,7 @@
 <div class="container">
 	<div class="header-content clearfix a-center">
 		<div class="row">
-			<div class="col-xs-12 col-md-3 text-lg-left">
+			<div class="col-xs-12 col-md-3 text-lg-center">
 				<div class="logo inline-block">
 					
 					<a href="/" class="logo-wrapper ">
@@ -80,7 +80,7 @@
 					@if(!Utils::blank($config['freeship']))
 					<div class="item-policy d-flex">
 						<a href="#" class="policy-icon">
-							<img src="{{ url('shop/frontend/thumb/medium/100/308/325/themes/665783/assets/policy14d7c.png') }}"  alt="DuaLeo-X" >
+							<img src="{{ url('shop/frontend/thumb/medium/100/308/325/themes/665783/assets/policy14d7c.png') }}" >
 						</a>
 						<div class="info a-left policy-content">
 							<a href="#">{{ trans('shop.free_ship_txt') }}</a>
@@ -91,7 +91,7 @@
 					@if(count($hotline))
 					<div class="item-policy d-flex">
 						<a href="#" class="policy-icon">
-							<img src="{{ url('shop/frontend/thumb/medium/100/308/325/themes/665783/assets/policy24d7c.png') }}"  alt="DuaLeo-X" >
+							<img src="{{ url('shop/frontend/thumb/medium/100/308/325/themes/665783/assets/policy24d7c.png') }}" style="height:28px" >
 						</a>
 						<div class="info a-left policy-content">
 							<a href="#">{{ trans('shop.support_txt') }}</a>
@@ -104,7 +104,7 @@
 					@if(!Utils::blank($config['web_working_time']))	
 					<div class="item-policy d-flex">
 						<a href="#" class="policy-icon">
-							<img src="{{ url('shop/frontend/thumb/medium/100/308/325/themes/665783/assets/policy34d7c.png') }}"  alt="DuaLeo-X" >
+							<img src="{{ url('shop/frontend/thumb/medium/100/308/325/themes/665783/assets/policy34d7c.png') }}" style="height:28px" >
 						</a>
 						<div class="info a-left policy-content">
 							<a href="#">{{ trans('shop.working_txt') }}</a>

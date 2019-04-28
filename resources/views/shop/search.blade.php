@@ -34,7 +34,7 @@
 <script type="text/javascript">
     $(document).ready(function() {
         var keyword = location.search.split('=');
-        $('#keyword_search').val(keyword[1]);
+        $('#keyword_search').val(decodeURIComponent(keyword[1]));
         var page_name = 'search-page';
     	var data = {
     		type : 'post',
@@ -43,7 +43,8 @@
     		page_name: page_name,
     		view_type: 'grid',
     		container: ['#ajax_list', '#ajax_paging', '#result_count'],
-    		spinner: '#ajax_list'
+    		spinner: '#ajax_list',
+    		limit_product: '{{ $config['limit_product_show'] }}'
     	}
     
     	callAjax('{{ route('loadData') }}', data);

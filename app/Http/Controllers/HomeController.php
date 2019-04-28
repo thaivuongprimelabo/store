@@ -60,7 +60,7 @@ class HomeController extends AppController
             'keywords' => [$this->output['config']['web_name']],
             'link' => route('home'),
             'type' => 'website',
-            'image' => url($this->output['config']['web_banner'])
+            'image' => Utils::getImageLink($this->output['config']['web_banner'])
         ]);
         
         return view('shop.home', $this->output);
@@ -69,6 +69,11 @@ class HomeController extends AppController
     public function vendor(Request $request) {
         
         $vendor = Vendor::select('id', 'name')->active()->where('name_url', $request->slug)->first();
+        
+        if(!$vendor) {
+            return redirect('/');
+        }
+        
         $this->output['breadcrumbs'] = [
             ['link' => '#', 'text' => $vendor->getName()]
         ];
@@ -83,6 +88,11 @@ class HomeController extends AppController
     
     public function category(Request $request) {
         $category = Category::select('id', 'name')->active()->where('name_url', $request->slug)->first();
+        
+        if(!$category) {
+            return redirect('/');
+        }
+        
         $this->output['breadcrumbs'] = [
             ['link' => '#', 'text' => $category->getName()]
         ];
@@ -111,10 +121,15 @@ class HomeController extends AppController
                         'products.is_popular',
                         'products.discount',
                         'products.status',
+                        'products.avail_flg',
                         'products.seo_keywords',
                         'products.seo_description'
                     )
                     ->where(['products.status' => Status::ACTIVE, 'products.name_url' => $slug])->first();
+        
+        if(!$product) {
+            return redirect('/');
+        }
         
         $this->setSEO([
             'title' => $product->name,
@@ -125,10 +140,6 @@ class HomeController extends AppController
             'type' => 'product',
             'image' => $product->getFirstImage()
         ]);
-        
-        if(!$product) {
-            return redirect('/');
-        }
         
         $this->output['breadcrumbs'] = [
             ['link' => $product->getCategoryLink(), 'text' => $product->getCategoryName()],
@@ -321,19 +332,18 @@ class HomeController extends AppController
                 ];
                 
                 $message = Utils::sendMail($config);
-                if(Utils::blank($message)) {
-                    if($contact->save()) {
-                        $result['#contact_success'] = trans('messages.SEND_CONTACT_SUCCESS');
-                        $result['#captcha_img'] = captcha_img('flat');
-                    } else {
-                        $result['#contact_error'] = trans('messages.ERROR');
-                    }
-                    
-                    DB::commit();
-                    
-                } else {
+                if(!Utils::blank($message)) {
                     \Log::error($message);
                 }
+                
+                if($contact->save()) {
+                    $result['#contact_success'] = trans('messages.SEND_CONTACT_SUCCESS');
+                    $result['#captcha_img'] = captcha_img('flat');
+                } else {
+                    $result['#contact_error'] = trans('messages.ERROR');
+                }
+                
+                DB::commit();
                 
             }  catch(\Exception $e) {
                 $result['#contact_error'] = trans('messages.ERROR');
@@ -383,6 +393,10 @@ class HomeController extends AppController
         
         $post = Post::active()->where('name_url', $slug1)->first();
         
+        if(!$post) {
+            return redirect('/');
+        }
+        
         $this->output['breadcrumbs'] = [
             ['link' => route('posts'), 'text' => trans('shop.main_nav.posts.text')],
             ['link' => '#', 'text' => $post->getTitle()],
@@ -407,6 +421,10 @@ class HomeController extends AppController
         
         $slug = $request->slug;
         $postGroup = PostGroups::select('id', 'name')->active()->where('name_url', $slug)->first();
+        
+        if(!$postGroup) {
+            return redirect('/');
+        }
         
         $this->output['breadcrumbs'] = [
             ['link' => route('posts'), 'text' => trans('shop.main_nav.posts.text')],
@@ -443,6 +461,7 @@ class HomeController extends AppController
             $price_search = $request->price_search;
             $orderBy = 'products.updated_at DESC';
             $keyword = $request->keyword;
+            $limit_product = $request->limit_product ? $request->limit_product : Common::LIMIT_PRODUCT_SHOW;
             
             if(!Utils::blank($sort_by)) {
                 $sort = explode(',', $sort_by);
@@ -461,48 +480,48 @@ class HomeController extends AppController
                 case 'category-page':
 //                     $whereIn = 'category_id = ' . $id;
                     $whereIn = 'category_id IN (SELECT id FROM categories c1 WHERE c1.parent_parent_id = ' . $id . ') OR category_id = ' . $id;
-                    $data = Product::active()->whereRaw($whereIn)->whereRaw($wherePriceSearch)->orderByRaw($orderBy)->paginate(Common::LIMIT_PRODUCT_SHOW);
+                    $data = Product::active()->whereRaw($whereIn)->whereRaw($wherePriceSearch)->orderByRaw($orderBy)->paginate($limit_product);
                     break;
                     
                 case 'new-products-page':
-                    $data = Product::active()->isNew()->whereRaw($wherePriceSearch)->orderByRaw($orderBy)->paginate(Common::LIMIT_PRODUCT_SHOW);
+                    $data = Product::active()->isNew()->whereRaw($wherePriceSearch)->orderByRaw($orderBy)->paginate($limit_product);
                     break;
                     
                 case 'popular-products-page':
-                    $data = Product::active()->isPopular()->whereRaw($wherePriceSearch)->orderByRaw($orderBy)->paginate(Common::LIMIT_PRODUCT_SHOW);
+                    $data = Product::active()->isPopular()->whereRaw($wherePriceSearch)->orderByRaw($orderBy)->paginate($limit_product);
                     break;
                     
                 case 'best-selling-products-page':
-                    $data = Product::active()->isBestSelling()->whereRaw($wherePriceSearch)->orderByRaw($orderBy)->paginate(Common::LIMIT_PRODUCT_SHOW);
+                    $data = Product::active()->isBestSelling()->whereRaw($wherePriceSearch)->orderByRaw($orderBy)->paginate($limit_product);
                     break;
                     
                 case 'all-products-page':
-                    $data = Product::active()->orderByRaw($orderBy)->whereRaw($wherePriceSearch)->orderByRaw($orderBy)->paginate(Common::LIMIT_PRODUCT_SHOW);
+                    $data = Product::active()->orderByRaw($orderBy)->whereRaw($wherePriceSearch)->orderByRaw($orderBy)->paginate($limit_product);
                     break;
                 
                 case 'vendor-page':
-                    $data = Product::active()->where('vendor_id', $id)->whereRaw($wherePriceSearch)->orderByRaw($orderBy)->paginate(Common::LIMIT_PRODUCT_SHOW);
+                    $data = Product::active()->where('vendor_id', $id)->whereRaw($wherePriceSearch)->orderByRaw($orderBy)->paginate($limit_product);
                     break;
                 
                 case 'posts-page':
-                    $data = Post::active()->orderBy('created_at', 'desc')->paginate(Common::LIMIT_POST_SHOW);
+                    $data = Post::active()->orderBy('created_at', 'desc')->paginate($limit_product);
                     $view = 'shop.common.post_ajax';
                     break;
                     
                 case 'posts-group-page':
-                    $data = Post::active()->where('post_group_id', $id)->orderBy('created_at', 'desc')->paginate(Common::LIMIT_POST_SHOW);
+                    $data = Post::active()->where('post_group_id', $id)->orderBy('created_at', 'desc')->paginate($limit_product);
                     $view = 'shop.common.post_ajax';
                     break;
                     
                 case 'search-suggestion-page':
-                    $data = Product::active()->where('name', 'LIKE', '%' . $keyword . '%')->paginate(Common::LIMIT_POST_SHOW);
+                    $data = Product::active()->where('name', 'LIKE', '%' . $keyword . '%')->paginate($limit_product);
                     $view = 'shop.common.search_suggestion';
                     $result['#product_results'] = view($view, compact('data'))->render();
                     return response()->json($result);
                 case 'search-page':
                     $obj = Product::active()->where('name', 'LIKE', '%' . $keyword . '%');
                     $count = $obj->count();
-                    $data = $obj->paginate(Common::LIMIT_POST_SHOW);
+                    $data = $obj->paginate($limit_product);
                     $result['#result_count'] = $count;
                     break;
             }

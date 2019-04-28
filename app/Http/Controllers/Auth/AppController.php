@@ -69,6 +69,9 @@ class AppController extends Controller
                 'upload_avatar_image_size'   => Utils::cnvNull($config->upload_avatar_image_size, '100x100'),
                 'upload_web_banner_image_size'   => Utils::cnvNull($config->upload_web_banner_image_size, '100x100'),
                 
+                'limit_product_show' => Utils::cnvNull($config->limit_product_show, 12),
+                'limit_product_show_tab' => Utils::cnvNull($config->limit_product_show_tab, 8),
+                'limit_post_show' => Utils::cnvNull($config->limit_post_show, 12),
                 'url_ext' => Utils::cnvNull($config->url_ext, '.html'),
             ];
             
@@ -117,10 +120,14 @@ class AppController extends Controller
         }
         
         if($model instanceof User) {
+            $wheres[] = ['id', '!=', Auth::id()];
             switch(Auth::user()->role_id) {
-                case UserRole::SUPER_ADMIN:
                 case UserRole::ADMIN:
                     $wheres[] = ['role_id', '!=', UserRole::SUPER_ADMIN];
+                    break;
+                case UserRole::MOD:
+                    $wheres[] = ['role_id', '!=', UserRole::SUPER_ADMIN];
+                    $wheres[] = ['role_id', '!=', UserRole::ADMIN];
                     break;
             }
             

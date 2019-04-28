@@ -15,7 +15,7 @@
                             <div class="product-mini-item clearfix  ">
                             	<div class="product-img relative">
                             		<a href="{{ $product->getLink() }}">
-                            			<img src="{{ $product->getFirstImage() }}" alt="{{ $product->getName() }}">
+                            			<img src="{{ $product->getFirstImage('medium') }}" alt="{{ $product->getName() }}">
                             		</a>
                             	</div>
                             	<div class="product-info">

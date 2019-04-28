@@ -45,8 +45,14 @@
 				@endforeach
 				<li class="xemthem  nav-item">
 					<i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
-					<a class="nav-link" href="javascript:;">
+					<a class="nav-link" href="javascript:void(0)">
 						<span> Xem thêm</span>			
+					</a> 
+				</li>
+				<li class="thugon  nav-item">
+					<i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
+					<a class="nav-link" href="javascript:void(0)">
+						<span> Rút gọn</span>			
 					</a> 
 				</li>
 			</ul>
