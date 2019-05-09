@@ -16,6 +16,7 @@ use App\Constants\StatusOrders;
 use App\OrderDetails;
 use App\Constants\ProductType;
 use App\ProductDetails;
+use App\Helpers\SendSMS;
 
 class CartController extends AppController
 {
@@ -226,6 +227,12 @@ class CartController extends AppController
                     
                     DB::table(Common::ORDER_DETAILS)->insert($orderDetails);
                 }
+                
+                // Send SMS
+                $sms = new SendSMS();
+                $sms->setTo('+84779924902');
+                $sms->setMessage('[' . $this->output['config']['web_name'] . '] '  . trans('shop.mail_subject.order_success', ['order_id' => $id]));
+                $sms->send();
                 
                 // Config mail
                 $config = [

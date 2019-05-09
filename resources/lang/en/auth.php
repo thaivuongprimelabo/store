@@ -1084,7 +1084,7 @@ $auth = [
                     'maxlength' => \App\Constants\Common::NAME_MAXLENGTH
                 ],
                 'price' => [
-                    'type' => 'text',
+                    'type' => 'currency',
                     'text' => 'Giá bán',
                     'maxlength' => \App\Constants\Common::PRICE_PRODUCT_MAXLENGTH
                 ],
