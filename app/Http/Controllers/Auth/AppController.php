@@ -33,6 +33,12 @@ class AppController extends Controller
         
         $this->middleware(['auth', 'admin'])->except('showLoginForm', 'login');
         
+        $this->middleware(function ($request, $next) {
+            $this->uploadLastLogin();
+            
+            return $next($request);
+        });
+        
         // Config
         $config = Utils::getConfig();
         
@@ -153,6 +159,18 @@ class AppController extends Controller
             return response()->json($this->result);
         } else {
             return compact('data_list', 'data_count', 'paging', 'name');
+        }
+    }
+    
+    private function uploadLastLogin() {
+        $dt = Carbon::createFromFormat('Y-m-d H:i:s',Auth::user()->last_login); //Tạo 1 datetime
+        $now = Carbon::now();
+        
+        $diff = $now->diffInHours($dt);
+        if($diff > 8) {
+            $user = User::find(Auth::id());
+            $user->last_login = date('Y-m-d H:i:s');
+            $user->save();
         }
     }
     

@@ -20,7 +20,7 @@
 	<div class="container">
 		<div>
 			<div class="row">
-				<div class="col-sm-12 col-md-12 a-left">
+				<div class="col-sm-6 col-md-9 a-left">
 					<ul class="list-inline f-left">
 						<li>
 							<i class="fa fa-mobile" style=" font-size: 20px; display: inline-block; position: relative; transform: translateY(2px); "></i> {{ trans('shop.hotline_txt') }}: 
@@ -39,9 +39,9 @@
 						</li>
 					</ul>
 				</div>
-<!-- 				<div class="col-sm-6 col-md-3"> -->
+				<div class="col-sm-6 col-md-3">
 
-					<!-- <ul class="list-inline f-right">
+					 <ul class="list-inline f-right">
 						@if(Auth::check())
 						<li>
 							<a href="{{ route('account_profile') }}"><i class="fa fa-user"></i> {{ Auth::user()->name }}</a> | <a href="{{ route('account_logout') }}">{{ trans('shop.button.logout') }}</a>
@@ -54,10 +54,9 @@
 						<li><a data-toggle="modal" href="{{ route('account_register') }}">{{ trans('shop.button.register') }}</a>
 						</li>
 						@endif
-					</ul> -->
+					</ul>
 
-<!-- 				</div> -->
-
+				</div>
 			</div>
 		</div>
 	</div>

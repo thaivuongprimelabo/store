@@ -91,6 +91,11 @@ class Utils {
                     
                     $filename = '';
                     $file = $files[$i];
+                    
+                    if(is_null($upload_images)) {
+                        break;
+                    }
+                    
                     if(!in_array($file->getClientOriginalName(), $upload_images)) {
                         continue;
                     }
@@ -429,16 +434,30 @@ class Utils {
         $display = '';
         $sidebar = trans('auth.sidebar');
         $html .= '';
+        
+        $count = '<span class="pull-right-container">';
+        $count .= '<small class="label pull-right bg-red">{count}</small>';
+        $count .= '</span>';
         foreach($sidebar as $k=>$v) {
             $open = $display = '';
             $roleId = Auth::user()->role_id;
             
             if(!is_array($v)) {
                 if($currentRoute == 'auth_' . $k) {
-                    $html .= '<li class="active"><a href="' . route('auth_' . $k) . '"><i class="fa fa-files-o"></i><span>' . $v . '</span></a></li>';
+                    $html .= '<li class="active"><a href="' . route('auth_' . $k) . '"><i class="fa fa-files-o"></i><span>' . $v . '</span>';
                 } else {
-                    $html .= '<li><a href="' . route('auth_' . $k) . '"><i class="fa fa-files-o"></i><span>' . $v . '</span></a></li>';
+                    $html .= '<li><a href="' . route('auth_' . $k) . '"><i class="fa fa-files-o"></i><span>' . $v . '</span>';
                 }
+                
+                if($k == 'orders' || $k == 'contacts') {
+                    $cnt = DB::table($k)->where('status', StatusOrders::ORDER_NEW)->orWhere('status', ContactStatus::NEW_CONTACT)->count();
+                    if($cnt) {
+                        $count = str_replace('{count}', $cnt, $count);
+                        $html .= $count;
+                    }
+                }
+                
+                $html .= '</a></li>';
             } else {
                 
                 $key = explode('_', $currentRoute);

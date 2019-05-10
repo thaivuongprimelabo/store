@@ -90,8 +90,6 @@ class AppController extends Controller
                 ],
             ];
             
-            $this->ipAddressAccess();
-            
             if($config->off == 1) {
                 return abort(404);
             }
