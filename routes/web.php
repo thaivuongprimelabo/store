@@ -163,6 +163,10 @@ Route::group(['prefix' => ''], function () {
     Route::post('refreshcaptcha', 'MembersController@refreshCaptcha')->name('refreshcaptcha');
     Route::post('checkcaptcha', 'MembersController@checkCaptcha')->name('checkCaptcha');
     
+    Route::get('/social/facebook/{email?}', 'HomeController@facebook')->name('social_facebook');
+    Route::get('/social/google/{email?}', 'HomeController@google')->name('social_google');
+    Route::get('/social/twitter/{email?}', 'HomeController@twitter')->name('social_twitter');
+    
     Route::get('/offline' . $config['url_ext'], function() {
         exit;
     })->name('offline');

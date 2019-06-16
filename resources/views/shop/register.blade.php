@@ -79,6 +79,7 @@
     							<button type="button" id="clear_btn" class="btn btn-warning" data-loading-text="<i class='fa fa-spinner fa-spin '></i> {{ trans('shop.button.clear') }}">{{ trans('shop.button.clear') }}</button>
     							<a href="{{ route('account_login') }}" class="btn-link-style btn-register" style="margin-left: 20px;text-decoration: underline; ">{{ trans('shop.button.login') }}</a>
     						</div>
+    						{!! Social::getInstance()->view() !!}
     					</div>
 					</form>
 				</div>

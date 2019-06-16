@@ -37,7 +37,7 @@ class AppController extends Controller
             $this->uploadLastLogin();
             
             return $next($request);
-        });
+        })->except('showLoginForm', 'login');
         
         // Config
         $config = Utils::getConfig();
@@ -163,7 +163,7 @@ class AppController extends Controller
     }
     
     private function uploadLastLogin() {
-        $dt = Carbon::createFromFormat('Y-m-d H:i:s',Auth::user()->last_login); //Tạo 1 datetime
+        $dt = Carbon::createFromFormat('Y-m-d H:i:s', Auth::user()->last_login); //Tạo 1 datetime
         $now = Carbon::now();
         
         $diff = $now->diffInHours($dt);

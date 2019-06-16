@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Banner;
@@ -20,6 +21,7 @@ use App\Post;
 use App\Constants\PostStatus;
 use Artesaos\SEOTools\Facades\OpenGraph;
 use Artesaos\SEOTools\Facades\SEOMeta;
+use App\Helpers\Social;
 
 class HomeController extends AppController
 {
@@ -532,6 +534,54 @@ class HomeController extends AppController
         $result['#ajax_paging'] =  $data->links('shop.common.paging', compact('paging'))->toHtml();
         
         return response()->json($result);
+    }
+    
+    public function facebook(Request $request) {
+        
+        if(Utils::blank($request->email)) {
+            Social::getInstance()->facebook();
+        } else {
+            $credential = [
+                'email' => $request->email,
+                'password' => '123456789'
+            ];
+            
+            if (Auth::guard()->attempt($credential)) {
+                return redirect('/');
+            }
+        }
+    }
+    
+    public function google(Request $request) {
+        
+        if(Utils::blank($request->email)) {
+            Social::getInstance()->google();
+        } else {
+            $credential = [
+                'email' => $request->email,
+                'password' => '123456789'
+            ];
+            
+            if (Auth::guard()->attempt($credential)) {
+                return redirect('/');
+            }
+        }
+    }
+    
+    public function twitter(Request $request) {
+        
+        if(Utils::blank($request->email)) {
+            Social::getInstance()->twitter();
+        } else {
+            $credential = [
+                'email' => $request->email,
+                'password' => '123456789'
+            ];
+            
+            if (Auth::guard()->attempt($credential)) {
+                return redirect('/');
+            }
+        }
     }
     
 }

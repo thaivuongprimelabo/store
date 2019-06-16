@@ -489,6 +489,8 @@ return [
         'Twitter'   => Artesaos\SEOTools\Facades\TwitterCard::class,
 
         'SEO' => Artesaos\SEOTools\Facades\SEOTools::class,
+        
+        'Social' => App\Helpers\Social::class,
 
     ],
 
