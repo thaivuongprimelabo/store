@@ -104,6 +104,12 @@ Route::group(['prefix' => 'auth', 'namespace' => 'Auth'], function () {
     Route::match(['get', 'post'], '/ip_address/search', 'ConfigController@ipSearch')->name('auth_ip_search');
     Route::post('/ip_address/remove', 'ConfigController@ipRemove')->name('auth_ip_remove');
     
+    // Booking
+    $this->get('/booking', 'BookingController@index')->name('auth_booking');
+    Route::match(['get', 'post'], '/booking/create', 'BookingController@create')->name('auth_booking_create');
+    Route::match(['get', 'post'], '/booking/edit/{id}', 'BookingController@edit')->name('auth_booking_edit');
+    Route::match(['get', 'post'], '/booking/search', 'BookingController@search')->name('auth_booking_search');
+    Route::post('/booking/remove', 'BookingController@remove')->name('auth_booking_remove');
     
     // Registration Routes...
 //     $this->get('/register', 'RegisterController@showRegistrationForm')->name('register');

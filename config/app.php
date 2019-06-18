@@ -491,6 +491,10 @@ return [
         'SEO' => Artesaos\SEOTools\Facades\SEOTools::class,
         
         'Social' => App\Helpers\Social::class,
+        
+        'FormGenerate' => App\Helpers\FormGenerate::class,
+        
+        'Booking' => App\Helpers\Booking::class
 
     ],
 

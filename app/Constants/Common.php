@@ -40,6 +40,7 @@ class Common {
     CONST PRODUCT_DETAIL_GROUPS = 'product_detail_groups';
     CONST POST_GROUPS = 'post_groups';
     CONST IP_ADDRESS = 'ip_address';
+    CONST SLOTS = 'slots';
     
     CONST TABLE_LIST = [
         self::USERS, self::VENDORS, self::CATEGORIES, self::BANNERS,

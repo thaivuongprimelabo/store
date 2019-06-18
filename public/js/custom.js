@@ -409,5 +409,25 @@ $(document).ready(function() {
 	    }
 		return true;
 	});
+	
+	$.validator.addMethod('required_upload_banner', function(value, element, params) {
+		var select_type = $(params).val();
+		if(select_type === 'use_image') {
+			if (value.length === 0) {
+		        return false;
+		    }
+		}
+		return true;
+	});
+	
+	$.validator.addMethod('required_youtube_id', function(value, element, params) {
+		var select_type = $(params).val();
+		if(select_type === 'use_youtube') {
+			if (value.length === 0) {
+		        return false;
+		    }
+		}
+		return true;
+	});
     
 });

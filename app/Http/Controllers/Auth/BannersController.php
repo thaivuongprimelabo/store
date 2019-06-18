@@ -48,11 +48,20 @@ class BannersController extends AppController
         
         if($request->isMethod('post')) {
             
+            $select_type = Utils::cnvNull($request->select_type, 'use_image');
+            
+            if($select_type == 'use_image') {
+                unset($this->rules['youtube_id']);
+                $this->rules['upload_banner'] = str_replace('required_upload_banner', 'required', str_replace('#select_type', 'true', $this->rules['upload_banner']));
+            } else {
+                unset($this->rules['upload_banner']);
+                $this->rules['youtube_id'] = str_replace('required_youtube_id', 'required', str_replace('#select_type', 'true', $this->rules['youtube_id']));
+            }
+            
             $validator = Validator::make($request->all(), $this->rules);
             
             if (!$validator->fails()) {
                 
-                $select_type = Utils::cnvNull($request->select_type, 'use_image');
                 $data = new Banner();
                 if($select_type == 'use_image') {
                     $filename = '';

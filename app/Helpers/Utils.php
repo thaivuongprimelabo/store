@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Image;
-use App\Booking;
 use App\Category;
 use App\Config;
 use App\Product;
@@ -24,7 +23,6 @@ use App\Vendor;
 use Carbon\Carbon;
 use App\PostGroups;
 use App\Constants\ProductStatus;
-use App\Times;
 use App\Constants\UploadPath;
 use Illuminate\Http\UploadedFile;
 
