@@ -22,6 +22,7 @@ use App\Constants\PostStatus;
 use App\PostGroups;
 use App\Constants\ProductStatus;
 use App\Order;
+use App\Helpers\Booking;
 
 class ApiController extends Controller
 {
@@ -248,6 +249,28 @@ class ApiController extends Controller
         $value = $request->value;
         $orders = Order::where('customer_email', $value)->orWhere('customer_phone', $value)->orderBy('created_at')->get();
         return response()->json(['#order_checking_list' => view('shop.order_checking_list', compact('orders'))->render()]);
+    }
+    
+    /** Booking **/
+    public function createSlot(Request $request) {
+        
+        if($request->ajax()) {
+            $data = [
+                'booking_date' => $request->booking_date,
+                'booking_time' => $request->booking_time,
+                'phone_number' => $request->phone_number,
+                'name'         => $request->name,
+                'note'         => $request->note,
+            ];
+            
+            if(Booking::getInstance()->createSlot($data)) {
+                return response()->json(['code' => 200, 'status' => true, 'message' => trans('messages.CREATE_SUCCESS')]);
+            }
+            
+            return response()->json(['code' => 404, 'status' => false, 'message' => trans('messages.ERROR')]);
+        }
+        
+        return response()->json(['status' => false]);
     }
     
 }

@@ -113,7 +113,7 @@ class AppController extends Controller
             foreach($search_condition as $key=>$con) {
                 $value = $data[$key];
                 if(!Utils::blank($value)) {
-                    if($key == 'name') {
+                    if($key == 'name' || $key == 'customer_name') {
                         $wheres[] = [$key, 'LIKE', '%' . $value . '%'];
                     }elseif($key == 'created_at') { 
                         $value = Carbon::createFromFormat('d/m/Y', $value)->format('Y-m-d');
@@ -163,7 +163,7 @@ class AppController extends Controller
     }
     
     private function uploadLastLogin() {
-        $dt = Carbon::createFromFormat('Y-m-d H:i:s', Auth::user()->last_login); //Tạo 1 datetime
+        $dt = Carbon::createFromFormat('Y-m-d H:i:s',Auth::user()->last_login); //Tạo 1 datetime
         $now = Carbon::now();
         
         $diff = $now->diffInHours($dt);

@@ -216,6 +216,11 @@
       	format: 'dd/mm/yyyy'
     })
     
+    $('.datepicker').datepicker({
+      	autoclose: true,
+      	format: 'dd/mm/yyyy'
+    })
+    
     $('input').iCheck({
       checkboxClass: 'icheckbox_square-blue',
       radioClass: 'iradio_square-blue',

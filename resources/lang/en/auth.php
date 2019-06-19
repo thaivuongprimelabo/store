@@ -703,11 +703,11 @@ $auth = [
                 'type' => 'text',
                 'placeholder' => 'Lọc theo mã đơn hàng'
             ],
-            'name' => [
+            'customer_name' => [
                 'type' => 'text',
                 'placeholder' => 'Lọc theo tên khách hàng'
             ],
-            'phone' => [
+            'customer_phone' => [
                 'type' => 'text',
                 'placeholder' => 'Lọc theo số điện thoại'
             ],
@@ -785,6 +785,14 @@ $auth = [
                     'text' => 'Web name',
                     'maxlength' => 200
                 ],
+                'web_description' => [
+                    'type' => 'textarea',
+                    'text' => 'Web Description'
+                ],
+                'web_keywords' => [
+                    'type' => 'textarea',
+                    'text' => 'Web Keywords'
+                ],
                 'upload_web_logo' => [
                     'type' => 'file_simple',
                     'text' => 'Web logo'
@@ -824,14 +832,6 @@ $auth = [
                 'freeship' => [
                     'type' => 'textarea',
                     'text' => 'Miễn phí vận chuyển',
-                ],
-                'web_description' => [
-                    'type' => 'textarea',
-                    'text' => 'SEO Description'
-                ],
-                'web_keywords' => [
-                    'type' => 'textarea',
-                    'text' => 'SEO Keywords'
                 ],
                 'footer_text' => [
                     'type' => 'editor',
@@ -1089,7 +1089,7 @@ $auth = [
                     'text' => 'Hình sản phẩm',
                 ],
                 'summary' => [
-                    'type' => 'textarea',
+                    'type' => 'editor',
                     'text' => 'Mô tả',
                     'maxlength' => \App\Constants\Common::DESC_MAXLENGTH,
                 ],

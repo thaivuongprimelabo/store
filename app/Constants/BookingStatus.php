@@ -6,17 +6,17 @@ use App\Helpers\Utils;
 
 class BookingStatus {
     
-    CONST CANCEL = 0;
+    CONST AVAILABLE = 0;
     CONST WAITING_CONFIRM = 1;
-    CONST AVAILABLE = 2;
-    CONST DONE = 3;
+    CONST CONFIRMED = 2;
+    CONST CANCEL = 3;
     
     public static function getData($key = '') {
         $array = [
             self::CANCEL => trans('auth.status.booking_cancel'),
             self::WAITING_CONFIRM => trans('auth.status.booking_confirm'),
             self::AVAILABLE => trans('auth.status.booking_available'),
-            self::DONE => trans('auth.status.booking_done')
+            self::CONFIRMED => trans('auth.status.booking_done')
         ];
         
         if($key != '') {
