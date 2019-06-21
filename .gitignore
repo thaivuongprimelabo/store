@@ -1,6 +1,9 @@
 /node_modules
 /public/hot
 /public/storage
+/public/admin/bower_components
+/public/kcfinder
+/.settings
 /storage/*.key
 /vendor
 /.idea
