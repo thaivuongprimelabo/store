@@ -28,4 +28,5 @@ Route::get('/get-select-post', 'ApiController@getSelectPost')->name('getSelectPo
 Route::post('/update-ship-fee', 'ApiController@updateShipFee')->name('updateShipFee');
 Route::post('/order-checking', 'ApiController@orderChecking')->name('orderChecking');
 Route::post('/booking/create-slot', 'ApiController@createSlot')->name('booking.createSlot');
+Route::get('/booking/slot-list', 'ApiController@slotList')->name('booking.slotList');
 

@@ -1514,8 +1514,8 @@ $auth = [
         'available' => $product_status['available'],
         'booking_cancel' => 'Đã hủy',
         'booking_confirm' => 'Đang đợi xác nhận',
-        'booking_available' => 'Đã chốt lịch',
-        'booking_done' => 'Đã hoàn thành'
+        'booking_available' => 'Có thể đăng ký',
+        'booking_done' => 'Đã xác nhận'
     ],
     'role' => [
         'super_admin' => 'Kỹ thuật viên',

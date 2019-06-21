@@ -1,4 +1,4 @@
-var callAjax = function(url, data, page) {
+var callAjax = function(url, data, page, callback) {
 	var output = {};
 	$.ajax({
 	    url: url,
@@ -38,6 +38,9 @@ var callAjax = function(url, data, page) {
 	    			case 'add-size':
 	    			case 'add-color':
 	    				output = res.data;
+	    				break;
+	    			case 'booking.create_slot':
+	    				callback(res);
 	    				break;
 	    			default:
 	    				output = res;

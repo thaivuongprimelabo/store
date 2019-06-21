@@ -16,6 +16,7 @@ use App\Product;
 use App\User;
 use App\Size;
 use App\Helpers\Cart;
+use App\Constants\BookingStatus;
 use App\Constants\Common;
 use App\Constants\ContactStatus;
 use App\Constants\PostStatus;
@@ -252,22 +253,48 @@ class ApiController extends Controller
     }
     
     /** Booking **/
+    public function slotList(Request $request) {
+        
+        $condition = [
+            'prev'          => $request->prev,
+            'next'          => $request->next,
+            'start_date'    => $request->start_date,
+            'end_date'      => $request->end_date
+        ];
+        return response()->json(['status' => true, 'result_data' => Booking::getInstance()->makeList($condition)]);
+    }
+    
     public function createSlot(Request $request) {
         
         if($request->ajax()) {
             $data = [
+                'slot_id'      => $request->slot_id,
                 'booking_date' => $request->booking_date,
                 'booking_time' => $request->booking_time,
                 'phone_number' => $request->phone_number,
                 'name'         => $request->name,
                 'note'         => $request->note,
+                'status'       => $request->status
             ];
             
-            if(Booking::getInstance()->createSlot($data)) {
-                return response()->json(['code' => 200, 'status' => true, 'message' => trans('messages.CREATE_SUCCESS')]);
+            $booking = Booking::getInstance();
+            
+            $slot = $booking->createSlot($data);
+            
+            if($slot) {
+                
+                $condition = [
+                    'prev'          => $request->prev,
+                    'next'          => $request->next,
+                    'start_date'    => $request->start_date,
+                    'end_date'      => $request->end_date
+                ];
+                
+                $bookingList = $booking->makeList($condition);
+                return response()->json(['code' => 200, 'status' => true, 'message' => trans('messages.CREATE_SUCCESS'), 'result_data' => $bookingList]);
             }
             
-            return response()->json(['code' => 404, 'status' => false, 'message' => trans('messages.ERROR')]);
+            return response()->json(['code' => 404, 'status' => false, 'message' => trans('messages.ERROR'), 'result_data' => []]);
         }
         
         return response()->json(['status' => false]);

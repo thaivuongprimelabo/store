@@ -19,11 +19,48 @@ class BookingStatus {
             self::CONFIRMED => trans('auth.status.booking_done')
         ];
         
-        if($key != '') {
-            return $array[$key];
+        if($key !== '') {
+            return isset($array[$key]) ? $array[$key] : '';
         }
         
         return $array;
+    }
+    
+    public static function getLabel($slot) {
+        $label = '';
+            
+        $cssClass = '';
+        $icon = 'fa fa-user';
+        switch($slot['status']) {
+            
+            case self::CANCEL:
+                $cssClass = 'label label-danger';
+                break;
+            
+            case self::AVAILABLE:
+                $cssClass = 'label label-default';
+                break;
+            
+            case self::WAITING_CONFIRM:
+                $cssClass = 'label label-warning';
+                break;
+                
+            case self::CONFIRMED:
+                $cssClass = 'label label-success';
+                break;
+        }
+        
+        if(!empty($cssClass)) {
+            if($slot['id'] != -1) {
+                $text = '<i class="' . $icon . '"></i> ' . str_limit($slot['name'], 14);
+            } else {
+                $icon = 'fa fa-plus';
+                $text = '<i class="' . $icon . '"></i> ' . self::getData($slot['status']);
+            }
+            $label .= '<a href="javascript:void(0)" class="btn-slot" data-slot=\'' . json_encode($slot) . '\'><label class="' . $cssClass . ' booking_label">' . $text . '</label></a>';
+        }
+       
+        return $label;
     }
     
     public static function createSelectList($selected = '') {
