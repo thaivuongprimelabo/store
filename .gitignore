@@ -3,6 +3,8 @@
 /public/storage
 /public/admin/bower_components
 /public/kcfinder
+/public/upload
+/database
 /.settings
 /storage/*.key
 /vendor
