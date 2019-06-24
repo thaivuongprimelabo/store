@@ -19,12 +19,7 @@
             <!-- Box Body -->
             <div class="box-body">
             	<div class="col-md-12">
-            		<div class="col-md-6">
-                    	<button type="button" id="remove" class="btn btn-danger pull-left"><i class="fa fa-trash"></i> {{ trans('auth.button.remove') }}</button>
-                    </div>
-            		<div class="col-md-6">
-                    	<button type="button" id="create_backup" class="btn btn-primary pull-right"  data-loading-text="<i class='fa fa-spinner fa-spin '></i> {{ trans('auth.button.create_backup') }}"><i class="fa fa-database"></i> {{ trans('auth.button.create_backup') }}</button>
-                    </div>
+                    <button type="button" id="create_backup" class="btn btn-primary pull-right"  data-loading-text="<i class='fa fa-spinner fa-spin '></i> {{ trans('auth.button.create_backup') }}"><i class="fa fa-database"></i> {{ trans('auth.button.create_backup') }}</button>
                  </div>
             </div>
           </div>

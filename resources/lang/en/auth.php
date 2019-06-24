@@ -90,6 +90,7 @@ $auth = [
                 'width' => '3%'
             ],
             'name' => [
+                'type' => 'link',
                 'text' => 'Tên tập tin',
                 'width' => '30%'
             ],
@@ -99,10 +100,6 @@ $auth = [
             ],
             'created_at' => [
                 'text' => 'Ngày đăng ký',
-                'width' => '10%'
-            ],
-            'created_user_id' => [
-                'text' => 'Thành viên đăng ký',
                 'width' => '10%'
             ],
             'remove_action' => [

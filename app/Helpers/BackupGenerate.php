@@ -49,9 +49,18 @@ class BackupGenerate {
     /**
      * @return string
      */
-    public function getBackupFolder()
+    public function getBackupFilePath($filename = '')
     {
-        return $this->backupFolder;
+        $path = public_path($this->backupFolder);
+        if(!file_exists($path)) {
+            mkdir($path, 0777);
+        }
+        
+        if(!empty($filename)) {
+            $path = $path . $filename;
+        }
+        
+        return $path;
     }
 
     /**
@@ -72,12 +81,12 @@ class BackupGenerate {
         
         try {
             
-//             if(!file_exists($this->getBackupFolder())) {
-//                 mkdir(storage_path($this->getBackupFolder()));
+//             if(!file_exists($this->getBackupFilePath())) {
+//                 mkdir(storage_path($this->getBackupFilePath()));
 //             }
             
-            $filename = $this->getBackupFolder() . 'backup_' . time() . '.sql';
-            $filepath = public_path($filename);
+            $filename = 'backup_' . time() . '.sql';
+            $filepath = $this->getBackupFilePath($filename);
 //             $username = config('database.connections.mysql.username');
 //             $password = config('database.connections.mysql.password');
 //             $database = config('database.connections.mysql.database');
@@ -107,10 +116,7 @@ class BackupGenerate {
                 
                 $backup = new Backup();
                 $backup->name = $filename;
-                $backup->size = filesize($filename);
-                $backup->created_user_id = Auth::id();
-                $backup->updated_user_id = Auth::id();
-                
+                $backup->size = filesize($filepath);
                 $backup->save();
                 
             }

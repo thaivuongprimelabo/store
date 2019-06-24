@@ -71,7 +71,8 @@ var loadProducts = function(url) {
 }
 
 var search = function(page_number) {
-	var url = $('#search').attr('data-url');
+	// var url = $('#search').attr('data-url');
+	var url = window.location.href + '/search';
 	url = url + '?page=' + page_number;
 	var data = getFormData($('#search_form'));
 	data['type'] = 'post';

@@ -109,17 +109,18 @@ class AppController extends Controller
             
             $data = $request->all();
             $search_condition = trans('auth.' . $name . '.search_form');
-            
-            foreach($search_condition as $key=>$con) {
-                $value = $data[$key];
-                if(!Utils::blank($value)) {
-                    if($key == 'name' || $key == 'customer_name') {
-                        $wheres[] = [$key, 'LIKE', '%' . $value . '%'];
-                    }elseif($key == 'created_at') { 
-                        $value = Carbon::createFromFormat('d/m/Y', $value)->format('Y-m-d');
-                        $wheres[] = [DB::raw('DATE(' . $key . ')'), '=', $value];
-                    }else {
-                        $wheres[] = [$key, '=', $value];
+            if(is_array($search_condition)) {
+                foreach($search_condition as $key=>$con) {
+                    $value = $data[$key];
+                    if(!Utils::blank($value)) {
+                        if($key == 'name' || $key == 'customer_name') {
+                            $wheres[] = [$key, 'LIKE', '%' . $value . '%'];
+                        }elseif($key == 'created_at') { 
+                            $value = Carbon::createFromFormat('d/m/Y', $value)->format('Y-m-d');
+                            $wheres[] = [DB::raw('DATE(' . $key . ')'), '=', $value];
+                        }else {
+                            $wheres[] = [$key, '=', $value];
+                        }
                     }
                 }
             }

@@ -42,4 +42,26 @@ class BackupController extends AppController
         $backup = BackupGenerate::getInstance()->make();
     }
     
+    /**
+     * download
+     * @param Request $request
+     */
+    public function download(Request $request) {
+        $file_download = BackupGenerate::getInstance()->getBackupFilePath($request->file_download);
+        return response()->download($file_download);
+    }
+    
+    /**
+     * remove
+     * @param Request $request
+     */
+    public function remove(Request $request) {
+        $result = ['code' => 404];
+        $ids = $request->ids;
+        if(Backup::destroy($ids)) {
+            $result['code'] = 200;
+            return response()->json($result);
+        }
+    }
+    
 }

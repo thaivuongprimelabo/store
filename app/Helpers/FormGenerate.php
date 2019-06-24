@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use App\Constants\Common;
 use App\Constants\ProductStatus;
 use App\Constants\Status;
 use App\Constants\StatusOrders;
@@ -43,9 +44,7 @@ class FormGenerate {
         if(!is_array($table_info)) {
             return '';
         }
-//         if(!Utils::blank($key)) {
-//             $table_info = trans('auth.' . $name . '.' . $key);
-//         }
+        
         $data_count = $data->count();
         $footers = [];
         if(count($table_info)) {
@@ -77,153 +76,172 @@ class FormGenerate {
                         if(isset($info['tfoot']) == 'tfoot') {
                             continue;
                         }
-                        switch($key) {
-                            case 'parent_cate':
-                            case 'parent_postgroup':
-                                $tbody .= '<td>' . $item->getParentName() . '</td>';
-                                break;
-                            case 'category':
-                                $tbody .= '<td>' . $item->getCategoryName() . '</td>';
-                                break;
-                            case 'vendor':
-                                $tbody .= '<td>' . $item->getVendorName() . '</td>';
-                                break;
-                            case 'banner':
-                                if($item->select_type == 'use_image') {
-                                    $tbody .= '<td><img src="' . Utils::getImageLink($item->$key) . '" style="max-width:150px;max-height:200px" class="img img-thumbnail" /></td>';
-                                } else {
-                                    $tbody .= '<td><img src="http://img.youtube.com/vi/' . $item->youtube_id . '/0.jpg"  style="max-width:150px;max-height:200px" class="img img-thumbnail" /></td>';
-                                }
-                                break;
-                                
-                            case 'logo':
-                            case 'avatar':
-                            case 'photo':
-                                if(!Utils::blank($item->$key)) {
-                                    $tbody .= '<td><img src="' . Utils::getImageLink($item->$key) . '" style="max-width:50px;max-height:200px" class="img img-thumbnail" /></td>';
-                                } else {
-                                    $tbody .= '<td></td>';
-                                }
-                                
+                        
+                        $type = isset($info['type']) ? $info['type'] : '';
+                        $value = isset($item[$key]) ? $item[$key] : '';
+                        
+                        if($key == 'created_at' || $key == 'updated_at') {
+                            $type = 'datetime';
+                        }
+                        
+                        if($key == 'remove_action' || $key == 'edit_action') {
+                            $type = 'link_action';
+                        }
+                        
+                        if(strpos($key, 'status') !== FALSE || $key == 'product_avail_flg' || $key == 'role_id') {
+                            $type = 'label';
+                        }
+                        
+                        if($key == 'photo' || $key == 'logo' || $key == 'banner' || $key == 'image' || $key == 'images' || $key == 'avatar') {
+                            $type = 'image';
+                        }
+                        
+                        $tdElement = '<td>' . $value . '</td>';
+                        switch($type) {
+                            case 'download':
+                                $tdElement = '<td><a href="' . route('auth_backup_download', ['file_download' => $value]) . '">' . $value . '</a></td>';
                                 break;
                                 
-                            case 'images':
+                            case 'link':
+                                $tdElement = '<td><a href="' . $value . '" target="_blank">' . $value . '</a></td>';
+                                break;
+                                
                             case 'image':
-                                $tbody .= '<td><img src="' . $item->getFirstImage('small') . '" style="max-width:50px;max-height:200px" class="img img-thumbnail" /></td>';
-                                break;
-                                
-                            case 'status':
-                                $label = '<span class="label label-danger">' . trans('auth.status.unactive') . '</span>';
-                                if($item->status == Status::ACTIVE) {
-                                    $label = '<span class="label label-success">' . trans('auth.status.active') . '</span>';
+                                if(strlen($value) == 0) {
+                                    $value = Common::NO_IMAGE_FOUND;
                                 }
-                                $tbody .= '<td><a href="javascript:void(0)" class="update-status" data-key="' . $name . '" data-id="' . $item->id . '" data-status="' . $item->status . '">' . $label . '</a></td>';
-                                break;
-                                
-                            case 'product_status':
-                                $label = '<span class="label label-success">' . trans('auth.status.active') . '</span>';
-                                if($item->status == Status::UNACTIVE) {
-                                    $label = '<span class="label label-danger">' . trans('auth.status.unactive') . '</span>';
-                                }
-                                $tbody .= '<td><a href="javascript:void(0)" class="update-status"  data-key="' . $name . '" data-id="' . $item->id . '" data-status="' . $item->status . '">' . $label . '</a></td>';
-                                break;
-                                
-                            case 'product_avail_flg':
-                                $label = '<span class="label label-success">' . trans('auth.status.available') . '</span>';
-                                if($item->avail_flg == ProductStatus::OUT_OF_STOCK) {
-                                    $label = '<span class="label label-danger">' . trans('auth.status.out_of_stock') . '</span>';
-                                }
-                                $tbody .= '<td><a href="javascript:void(0)" class="update-status" data-key="PRODUCT_AVAIL_FLG" data-id="' . $item->id . '" data-status="' . $item->avail_flg . '">' . $label . '</a></td>';
-                                break;
-                                
-                            case 'role_id':
-                                
-                                $label = '<span class="label label-primary">' . trans('auth.role.super_admin') . '</span>';
-                                
-                                if($item->role_id == UserRole::ADMIN) {
-                                    $label = '<span class="label label-warning">' . trans('auth.role.admin') . '</span>';
-                                }
-                                
-                                if($item->role_id == UserRole::MOD) {
-                                    $label = '<span class="label label-warning">' . trans('auth.role.mod') . '</span>';
-                                }
-                                
-                                if($item->role_id == UserRole::MEMBERS) {
-                                    $label = '<span class="label label-default">' . trans('auth.role.member') . '</span>';
-                                }
-                                
-                                $tbody .= '<td><a href="javascript:void(0)">' . $label . '</a></td>';
-                                break;
-                                
-                            case 'price':
-                            case 'cost':
-                                $tbody .= '<td>' . Utils::formatCurrency($item->$key) . '</td>';
-                                break;
-                                
-                            case 'created_at':
-                            case 'updated_at':
-                            case 'published_at':
-                            case 'last_login':
-                                $date = Utils::formatDate($item->$key);
-                                $tbody .= '<td>' . $date . '</td>';
-                                break;
-                            case 'order_status':
-                                $label = '<span class="label label-primary">' . trans('auth.status.order_new') . '</span>';
-                                if($item->status == StatusOrders::ORDER_SHIPPING) {
-                                    $label = '<span class="label label-warning">' . trans('auth.status.order_shipping') . '</span>';
-                                }
-                                if($item->status == StatusOrders::ORDER_DONE) {
-                                    $label = '<span class="label label-success">' . trans('auth.status.order_done') . '</span>';
-                                }
-                                if($item->status == StatusOrders::ORDER_CANCEL) {
-                                    $label = '<span class="label label-danger">' . trans('auth.status.order_cancel') . '</span>';
-                                }
-                                
-                                $tbody .= '<td>' . $label . '</td>';
-                                break;
-                                
-                            case 'contact_status':
-                                $label = '<span class="label label-primary">' . trans('auth.status.new') . '</span>';
-                                if($item->status == Status::ACTIVE) {
-                                    $label = '<span class="label label-success">' . trans('auth.status.replied') . '</span>';
-                                }
-                                $tbody .= '<td><a href="javascript:void(0)" class="update-status" data-id="' . $item->id . '" data-status="' . $item->status . '">' . $label . '</a></td>';
-                                break;
-                                
-                            case 'edit_action':
-                                if(isset($info['hide'])) {
-                                    continue;
-                                }
-                                
-                                $route = 'auth_' . $name . '_edit';
-                                if($routes->hasNamedRoute($route)) {
-                                    $url = route('auth_' . $name . '_edit',['id' => $item->id]);
-                                    $tbody .= '<td align="center"><a href="javascript:void(0)" data-url="' . $url . '" class="edit" title="Edit"><i class="fa fa-edit" aria-hidden="true" style="font-size: 24px"></i></a></td>';
-                                } else {
-                                    $tbody .= '<td></td>';
+                                $tdElement = '<td><img src="' . Utils::getImageLink($value) . '" style="max-width:150px;max-height:200px" class="img img-thumbnail" /></td>';
+                                switch($key) {
+                                    case 'banner':
+                                        if($item['select_type'] == 'use_youtube') {
+                                            $tdElement = '<td><img src="http://img.youtube.com/vi/' . $item->youtube_id . '/0.jpg"  style="max-width:150px;max-height:200px" class="img img-thumbnail" /></td>';
+                                        }
+                                        break;
+                                    case 'image':
+                                    case 'images':
+                                        $tdElement = '<td><img src="' . $item->getFirstImage('small') . '" style="max-width:50px;max-height:200px" class="img img-thumbnail" /></td>';
+                                        break;
                                 }
                                 break;
                                 
-                            case 'remove_action':
-                                if(isset($info['hide'])) {
-                                    continue;
+                            case 'label':
+                                switch($key) {
+                                    case 'status':
+                                        $label = '<span class="label label-danger">' . trans('auth.status.unactive') . '</span>';
+                                        if($item->status == Status::ACTIVE) {
+                                            $label = '<span class="label label-success">' . trans('auth.status.active') . '</span>';
+                                        }
+                                        $tdElement = '<td><a href="javascript:void(0)" class="update-status" data-key="' . $name . '" data-id="' . $item->id . '" data-status="' . $item->status . '">' . $label . '</a></td>';
+                                        break;
+                                    case 'product_status':
+                                        $label = '<span class="label label-success">' . trans('auth.status.active') . '</span>';
+                                        if($item->status == Status::UNACTIVE) {
+                                            $label = '<span class="label label-danger">' . trans('auth.status.unactive') . '</span>';
+                                        }
+                                        $tdElement = '<td><a href="javascript:void(0)" class="update-status"  data-key="' . $name . '" data-id="' . $item->id . '" data-status="' . $item->status . '">' . $label . '</a></td>';
+                                        break;
+                                        
+                                    case 'product_avail_flg':
+                                        $label = '<span class="label label-success">' . trans('auth.status.available') . '</span>';
+                                        if($item->avail_flg == ProductStatus::OUT_OF_STOCK) {
+                                            $label = '<span class="label label-danger">' . trans('auth.status.out_of_stock') . '</span>';
+                                        }
+                                        $tdElement = '<td><a href="javascript:void(0)" class="update-status" data-key="PRODUCT_AVAIL_FLG" data-id="' . $item->id . '" data-status="' . $item->avail_flg . '">' . $label . '</a></td>';
+                                        break;
+                                        
+                                    case 'contact_status':
+                                        $label = '<span class="label label-primary">' . trans('auth.status.new') . '</span>';
+                                        if($item->status == Status::ACTIVE) {
+                                            $label = '<span class="label label-success">' . trans('auth.status.replied') . '</span>';
+                                        }
+                                        $tdElement = '<td><a href="javascript:void(0)" class="update-status" data-id="' . $item->id . '" data-status="' . $item->status . '">' . $label . '</a></td>';
+                                        break;
+                                        
+                                    case 'order_status':
+                                        $label = '<span class="label label-primary">' . trans('auth.status.order_new') . '</span>';
+                                        if($item->status == StatusOrders::ORDER_SHIPPING) {
+                                            $label = '<span class="label label-warning">' . trans('auth.status.order_shipping') . '</span>';
+                                        }
+                                        if($item->status == StatusOrders::ORDER_DONE) {
+                                            $label = '<span class="label label-success">' . trans('auth.status.order_done') . '</span>';
+                                        }
+                                        if($item->status == StatusOrders::ORDER_CANCEL) {
+                                            $label = '<span class="label label-danger">' . trans('auth.status.order_cancel') . '</span>';
+                                        }
+                                        
+                                        $tdElement = '<td>' . $label . '</td>';
+                                        break;
+                                        
+                                    case 'role_id':
+                                        
+                                        $label = '<span class="label label-primary">' . trans('auth.role.super_admin') . '</span>';
+                                        
+                                        if($item->role_id == UserRole::ADMIN) {
+                                            $label = '<span class="label label-warning">' . trans('auth.role.admin') . '</span>';
+                                        }
+                                        
+                                        if($item->role_id == UserRole::MOD) {
+                                            $label = '<span class="label label-warning">' . trans('auth.role.mod') . '</span>';
+                                        }
+                                        
+                                        if($item->role_id == UserRole::MEMBERS) {
+                                            $label = '<span class="label label-default">' . trans('auth.role.member') . '</span>';
+                                        }
+                                        
+                                        $tdElement = '<td><a href="javascript:void(0)">' . $label . '</a></td>';
+                                        break;
+                                        
                                 }
+                                break;
                                 
-                                $route = 'auth_' . $name . '_remove';
-                                if($routes->hasNamedRoute($route)) {
-                                    $url = route('auth_' . $name . '_remove');
-                                    $tbody .= '<td align="center"><a href="javascript:void(0)" data-id="' . $item->id . '" data-url="' . $url . '" class="remove-row" title="Remove"><i class="fa fa-trash" aria-hidden="true" style="font-size: 24px"></i></a></td>';
-                                } else {
-                                    $tbody .= '<td></td>';
+                            case 'currency':
+                                $tdElement = '<td>' . Utils::formatCurrency($value) . '</td>';
+                                break;
+                                
+                            case 'datetime':
+                                $tdElement = '<td>' . Utils::formatDate($value) . '</td>';
+                                break;
+                                
+                            case 'link_action':
+                                switch($key) {
+                                    case 'remove_action':
+                                        $route = 'auth_' . $name . '_remove';
+                                        if($routes->hasNamedRoute($route)) {
+                                            $url = route('auth_' . $name . '_remove');
+                                            $tdElement = '<td align="center"><a href="javascript:void(0)" data-id="' . $item->id . '" data-url="' . $url . '" class="remove-row" title="Remove"><i class="fa fa-trash" aria-hidden="true" style="font-size: 24px"></i></a></td>';
+                                        }
+                                        break;
+                                        
+                                    case 'edit_action':
+                                        $route = 'auth_' . $name . '_edit';
+                                        if($routes->hasNamedRoute($route)) {
+                                            $url = route('auth_' . $name . '_edit',['id' => $item->id]);
+                                            $tdElement = '<td align="center"><a href="javascript:void(0)" data-url="' . $url . '" class="edit" title="Edit"><i class="fa fa-edit" aria-hidden="true" style="font-size: 24px"></i></a></td>';
+                                        }
+                                        break;
                                 }
                                 
                                 break;
                                 
                             default:
-                                $tbody .= '<td>' . $item->$key . '</td>';
+                                switch($key) {
+                                    case 'parent_cate':
+                                    case 'parent_postgroup':
+                                        $tdElement = '<td>' . $item->getParentName() . '</td>';
+                                        break;
+                                    case 'category':
+                                        $tdElement = '<td>' . $item->getCategoryName() . '</td>';
+                                        break;
+                                    case 'vendor':
+                                        $tdElement = '<td>' . $item->getVendorName() . '</td>';
+                                    case 'size':
+                                        $tdElement = '<td>' . Utils::formatMemory($value) . '</td>';
+                                        break;
+                                }
                                 break;
                         }
                         
+                        $tbody .= $tdElement;
                     }
                     
                     $tbody .= '</tr>';
@@ -241,7 +259,7 @@ class FormGenerate {
             }
         }
         
-        return view('auth.common.elements.table_list', compact('colWidth', 'thead', 'tbody', 'tfoot'))->render();
+        return view('helpers.form_generate.table_list', compact('colWidth', 'thead', 'tbody', 'tfoot'))->render();
     }
     
     /**
@@ -357,38 +375,38 @@ class FormGenerate {
         switch($type) {
             
             case 'email':
-                $view = 'auth.common.elements.email';
+                $view = 'helpers.form_generate.email';
                 break;
                 
             case 'password':
-                $view = 'auth.common.elements.password';
+                $view = 'helpers.form_generate.password';
                 break;
-            
+                
             case 'address':
             case 'hotline':
                 $value = explode('|', $value);
                 $arrParams['value']  = $value;
-                $view = 'auth.common.elements.address_hotline';
+                $view = 'helpers.form_generate.address_hotline';
                 break;
-            
+                
             case 'link_to_post':
-                $view = 'auth.common.elements.link_to_post';
+                $view = 'helpers.form_generate.link_to_post';
                 break;
             case 'hidden':
                 $arrParams['id']     = $key;
                 $arrParams['value']  = $value;
-                $view = 'auth.common.elements.hidden';
+                $view = 'helpers.form_generate.hidden';
                 break;
             case 'text':
-                $view = 'auth.common.elements.textbox';
+                $view = 'helpers.form_generate.textbox';
                 if($key == 'youtube_id') {
                     $value = !Utils::blank($value) ? 'https://www.youtube.com/watch?v=' . $value : '';
                 }
                 break;
-            
+                
             case 'currency':
                 $arrParams['value_format'] = Utils::formatCurrency($value);
-                $view = 'auth.common.elements.textbox_currency';
+                $view = 'helpers.form_generate.textbox_currency';
                 break;
                 
             case 'discount':
@@ -398,13 +416,13 @@ class FormGenerate {
                 }
                 
                 $arrParams['discount_value'] = $discount_value;
-                $view = 'auth.common.elements.textbox_discount';
+                $view = 'helpers.form_generate.textbox_discount';
                 break;
                 
             case 'youtube_preview':
                 
                 $arrParams['youtube_id'] = isset($data->youtube_id) ? $data->youtube_id : '';
-                $view = 'auth.common.elements.youtube_preview';
+                $view = 'helpers.form_generate.youtube_preview';
                 break;
                 
             case 'file_simple':
@@ -424,7 +442,7 @@ class FormGenerate {
                 $arrParams['width']               = $width;
                 $arrParams['height']              = $height;
                 
-                $view = 'auth.common.elements.upload_single_file';
+                $view = 'helpers.form_generate.upload_single_file';
                 break;
                 
                 
@@ -435,11 +453,11 @@ class FormGenerate {
                 
                 $arrParams['limit_upload']        = $limit_upload;
                 $arrParams['image_using']         = $image_using;
-                $view = 'auth.common.elements.upload_multiple_file';
+                $view = 'helpers.form_generate.upload_multiple_file';
                 break;
                 
             case 'textarea':
-                $view = 'auth.common.elements.textarea';
+                $view = 'helpers.form_generate.textarea';
                 break;
                 
             case 'editor':
@@ -448,21 +466,21 @@ class FormGenerate {
                 
                 $arrParams['editor_type']        = $editor_type;
                 $arrParams['editor_height']      = $editor_height;
-                $view = 'auth.common.elements.editor';
+                $view = 'helpers.form_generate.editor';
                 break;
                 
             case 'checkbox':
                 if(!$value) {
                     $arrParams['checked'] = '';
                 }
-                $view = 'auth.common.elements.checkbox';
+                $view = 'helpers.form_generate.checkbox';
                 break;
                 
             case 'select':
                 $options = Utils::createSelectList($table, $value);
                 $arrParams['empty_text'] = $empty_text;
                 $arrParams['options']    = $options;
-                $view = 'auth.common.elements.select';
+                $view = 'helpers.form_generate.select';
                 break;
                 
             case 'label':
@@ -478,12 +496,12 @@ class FormGenerate {
                 
                 $arrParams['value']    = $value;
                 
-                $view = 'auth.common.elements.label';
+                $view = 'helpers.form_generate.label';
                 break;
                 
             case 'link':
                 
-                $view = 'auth.common.elements.link';
+                $view = 'helpers.form_generate.link';
                 break;
         }
         
