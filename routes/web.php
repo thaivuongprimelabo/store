@@ -111,6 +111,10 @@ Route::group(['prefix' => 'auth', 'namespace' => 'Auth'], function () {
     Route::match(['get', 'post'], '/booking/search', 'BookingController@search')->name('auth_booking_search');
     Route::post('/booking/remove', 'BookingController@remove')->name('auth_booking_remove');
     
+    // Backup source + database
+    $this->get('/backup', 'BackupController@index')->name('auth_backup');
+    Route::match(['post'], '/backup/create', 'BackupController@create')->name('auth_backup_create');
+    
     // Registration Routes...
 //     $this->get('/register', 'RegisterController@showRegistrationForm')->name('register');
 //     $this->post('/register', 'RegisterController@register');

@@ -494,7 +494,9 @@ return [
         
         'FormGenerate' => App\Helpers\FormGenerate::class,
         
-        'Booking' => App\Helpers\Booking::class
+        'Booking' => App\Helpers\Booking::class,
+        
+        'BackupGenerate' => App\Helpers\BackupGenerate::class
 
     ],
 

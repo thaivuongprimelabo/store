@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use App\Banner;
 use App\Vendor;
 use App\Constants\Status;
+use App\Helpers\BackupGenerate;
 use App\Helpers\Utils;
 use App\Category;
 use App\Color;
@@ -298,6 +299,11 @@ class ApiController extends Controller
         }
         
         return response()->json(['status' => false]);
+    }
+    
+    public function backup(Request $request) {
+        $this->output = BackupGenerate::getInstance()->make();
+        return response()->json($this->output);
     }
     
 }

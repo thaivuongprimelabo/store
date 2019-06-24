@@ -31,15 +31,6 @@ class Booking {
         return self::$instance;
     }
     
-    
-    /**
-     * @return array <multitype:, multitype:>
-     */
-    public function getBookingDate()
-    {
-        return $this->bookingDate;
-    }
-
     /**
      * @return number
      */

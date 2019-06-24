@@ -40,6 +40,7 @@ var callAjax = function(url, data, page, callback) {
 	    				output = res.data;
 	    				break;
 	    			case 'booking.create_slot':
+	    			case 'api.backup':
 	    				callback(res);
 	    				break;
 	    			default:

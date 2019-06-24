@@ -158,7 +158,7 @@ class AppController extends Controller
             $this->result['data'] = view($view, compact('data_list', 'data_count', 'paging', 'name'))->render();
             return response()->json($this->result);
         } else {
-            return compact('data_list', 'data_count', 'paging', 'name');
+            return compact('data_list', 'data_count', 'paging', 'name', 'view');
         }
     }
     

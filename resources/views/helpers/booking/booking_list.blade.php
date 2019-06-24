@@ -112,6 +112,32 @@
 			});
 		}
 
+		var validateModalForm = function() {
+			var name = $('#name').val();
+			var phone_number = $('#phone_number').val();
+			var booking_date = $('#booking_date').val();
+			if(!name.length) {
+				alert('{{ trans('validation.required', ['attribute' => 'Tên khách hàng']) }}');
+				$('#name').focus();
+				return false;
+			}
+
+			if(!phone_number.length) {
+				alert('{{ trans('validation.required', ['attribute' => 'Số điện thoại']) }}');
+				$('#phone_number').focus();
+				return false;
+			}
+
+			if(!booking_date.length) {
+				alert('{{ trans('validation.required', ['attribute' => 'Ngày đặt chỗ']) }}');
+				$('#booking_date').focus();
+				return false;
+			}
+
+			return true;
+			
+		}
+
 		getSlotList(null);
 
 		$(document).on('click', '.btn-next-prev', function(e) {
@@ -159,31 +185,33 @@
 		});
 
 		$(document).on('click', '#slot_submit', function(e) {
-			var slot_id	 	 = $('#slot_id').val();
-			var booking_time = $('#booking_time').val();
-			var booking_date = $('#booking_date').val();
-			var phone_number = $('#phone_number').val();
-			var note 		 = $('#note').val();
-			var name 		 = $('#name').val();
-			var status		 = $('#status').val();
+			if(validateModalForm()) {
+				var slot_id	 	 = $('#slot_id').val();
+				var booking_time = $('#booking_time').val();
+				var booking_date = $('#booking_date').val();
+				var phone_number = $('#phone_number').val();
+				var note 		 = $('#note').val();
+				var name 		 = $('#name').val();
+				var status		 = $('#status').val();
 
-			var data = {
-				type : 'post',
-				async : true,
-				slot_id: slot_id,
-				booking_time: booking_time,
-				booking_date: booking_date,
-				phone_number: phone_number,
-				name: name,
-				note: note,
-				status: status,
-				prev: false,
-				next: false,
-				start_date: $('.btn-next-prev').first().attr('data-start-date'),
-				end_date: $('.btn-next-prev').first().attr('data-end-date'),
+				var data = {
+					type : 'post',
+					async : true,
+					slot_id: slot_id,
+					booking_time: booking_time,
+					booking_date: booking_date,
+					phone_number: phone_number,
+					name: name,
+					note: note,
+					status: status,
+					prev: false,
+					next: false,
+					start_date: $('.btn-next-prev').first().attr('data-start-date'),
+					end_date: $('.btn-next-prev').first().attr('data-end-date'),
+				}
+
+				callAjax('{{ route('booking.createSlot') }}', data, 'booking.create_slot', callback);
 			}
-
-			callAjax('{{ route('booking.createSlot') }}', data, 'booking.create_slot', callback);
 		});
 	});
 </script>

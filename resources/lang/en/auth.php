@@ -73,12 +73,43 @@ $auth = [
         'users' => 'Quản lý tài khoản',
         'shipfee' => 'Phí ship',
         'booking' => 'Quản lý đặt chỗ',
+        'backup' => 'Sao lưu hệ thống',
         'config' => 'Cài đặt'
     ],
     'banner_type' => $bannerType,
     /*------------ Vendor page ------------------- */
     'booking' => [
         'list_title' => 'Danh mục đặt chỗ',
+    ],
+    /*------------ Backup page ------------------- */
+    'backup' => [
+        'list_title' => 'Sao lưu hệ thống',
+        'table_header' => [
+            'id' => [
+                'text' => 'ID',
+                'width' => '3%'
+            ],
+            'name' => [
+                'text' => 'Tên tập tin',
+                'width' => '30%'
+            ],
+            'size' => [
+                'text' => 'Dung lượng',
+                'width' => '10%'
+            ],
+            'created_at' => [
+                'text' => 'Ngày đăng ký',
+                'width' => '10%'
+            ],
+            'created_user_id' => [
+                'text' => 'Thành viên đăng ký',
+                'width' => '10%'
+            ],
+            'remove_action' => [
+                'text' => '',
+                'width' => '5%'
+            ],
+        ],
     ],
     /*------------ Vendor page ------------------- */
     'vendors' => [
@@ -1529,6 +1560,7 @@ $auth = [
         'profile' => 'Thông tin tài khoản',
         'logout' => 'Thoát',
         'create' => 'Đăng ký',
+        'create_backup' => 'Tạo sao lưu',
         'search' => 'Tìm kiếm',
         'submit' => 'Lưu',
         'back' => 'Quay về',
