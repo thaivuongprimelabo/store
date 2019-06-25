@@ -31,11 +31,10 @@ class AppController extends Controller
      */
     public function __construct() {
         
-        $this->middleware(['auth', 'admin'])->except('showLoginForm', 'login');
+        $this->middleware(['auth', 'admin', 'accessByRole'])->except('showLoginForm', 'login');
         
         $this->middleware(function ($request, $next) {
             $this->uploadLastLogin();
-            
             return $next($request);
         })->except('showLoginForm', 'login');
         

@@ -496,7 +496,9 @@ return [
         
         'Booking' => App\Helpers\Booking::class,
         
-        'BackupGenerate' => App\Helpers\BackupGenerate::class
+        'BackupGenerate' => App\Helpers\BackupGenerate::class,
+        
+        'ZipUtils' => App\Helpers\ZipUtils::class
 
     ],
 

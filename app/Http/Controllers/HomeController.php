@@ -57,7 +57,7 @@ class HomeController extends AppController
         $this->output['posts'] = $posts;
         
         $this->setSEO([
-            'title' => trans('shop.main_nav.home.text'),
+            'title' => $this->output['config']['web_description'],
             'summary' => $this->output['config']['web_description'],
             'keywords' => [$this->output['config']['web_name']],
             'link' => route('home'),
@@ -317,10 +317,11 @@ class HomeController extends AppController
                 $contact->updated_at    = date('Y-m-d H:i:s');
                 
                 // Config mail
+                $subject = trans('auth.subject_mail', ['web_name' => $this->output['config']['web_name'], 'title' => trans('shop.mail_subject.contact', ['email' => $request->email])]);
                 $config = [
                     'from' => $this->output['config']['mail_from'],
                     'from_name' => $this->output['config']['mail_name'],
-                    'subject' => '[' . $this->output['config']['web_name'] . '] '  . trans('shop.mail_subject.contact', ['email' => $request->email]),
+                    'subject' => $subject,
                     'msg' => [
                         'contact_name' => $contact->name,
                         'contact_email' => $contact->email,

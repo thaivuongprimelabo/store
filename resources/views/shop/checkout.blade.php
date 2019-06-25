@@ -380,7 +380,7 @@
 			});
 			
 	    	var sub_total = Number($('#sub_total').attr('data-total'));
-	    	if(sub_total > 1000000) {
+	    	if(sub_total > {{ $config['freeship_money'] }}) {
 				return false;
 	    	}
 	    	
@@ -395,7 +395,7 @@
 	    $('#checkout_district').change(function(e) {
 	    	var sub_total = Number($('#sub_total').attr('data-total'));
 
-	    	if(sub_total > 1000000) {
+	    	if(sub_total > {{ $config['freeship_money'] }}) {
 				return false;
 	    	}
 	    	

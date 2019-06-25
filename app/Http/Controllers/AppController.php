@@ -55,6 +55,7 @@ class AppController extends Controller
                     'web_working_time' => Utils::cnvNull($config->web_working_time, ''),
                     'web_address' => Utils::cnvNull($config->web_address, ''),
                     'freeship' => Utils::cnvNull($config->freeship, ''),
+                    'freeship_money' => Utils::cnvNull($config->freeship_money, ''),
                     'web_address_branch' => Utils::cnvNull($config->web_address_branch, ''),
                     'footer_text' => Utils::cnvNull($config->footer_text, ''),
                     'facebook_fanpage' => Utils::cnvNull($config->facebook_fanpage, ''),
@@ -107,8 +108,8 @@ class AppController extends Controller
         $type = isset($data['type']) && !Utils::blank($data['type']) ? $data['type'] : 'product';
         $image = isset($data['image']) && !Utils::blank($data['image']) && strpos($data['image'], Common::NO_IMAGE_FOUND) === FALSE  ? $data['image'] : Utils::getImageLink($this->output['config']['web_banner']);
         
-        SEOMeta::setTitleDefault($this->output['config']['web_name']);
-        SEOMeta::setTitle($title);
+        SEOMeta::setTitleDefault($title);
+        SEOMeta::setTitle($this->output['config']['web_name']);
         SEOMeta::setDescription($summary);
         SEOMeta::addMeta('article:section', $section, 'property');
         SEOMeta::addKeyword($keywords);

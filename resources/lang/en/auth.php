@@ -55,26 +55,34 @@ $auth = [
     'count' => '&nbsp;&nbsp;(Tìm thấy tất cả :count dòng dữ liệu)',
     /*------------ Sidebar ------------------- */
     'sidebar' => [
+        'dashboard' => ['title' => 'Xem trang chính', 'icon' => 'fa fa-dashboard', 'href' => 'home'],
         'products' => [
             'title' => 'Quản lý sản phẩm',
-            'products' => 'Danh mục sản phẩm',
-            'categories' => 'Danh mục loại sản phẩm',
-            'vendors' => 'Danh mục nhà cung cấp',
+            'icon' => 'fa fa-archive',
+            'sub_menu' => [
+                'products' => ['title' => 'Danh mục sản phẩm', 'icon' => 'fa fa-list'],
+                'categories' => ['title' => 'Danh mục loại sản phẩm', 'icon' => 'fa fa-list'],
+                'vendors' => ['title' => 'Danh mục nhà cung cấp', 'icon' => 'fa fa-list'],
+            ]
+            
         ],
-        'orders' => 'Quản lý đơn hàng',
-        'banners' => 'Quản lý banner',
+        'orders' => ['title' => 'Quản lý đơn hàng', 'icon' => 'fa fa-cart-plus'],
+        'banners' => ['title' => 'Quản lý banner', 'icon' => 'fa fa-file-image-o'],
         'posts' => [
             'title' => 'Quản lý bài viết',
-            'posts' => 'Bài viết',
-            'postgroups' => 'Loại bài viết'
+            'icon' => 'fa fa-sticky-note-o',
+            'sub_menu' => [
+                'posts' => ['title' => 'Bài viết', 'icon' => 'fa fa-list'],
+                'postgroups' => ['title' => 'Loại bài viết', 'icon' => 'fa fa-list']
+            ]
         ],
-        'pages' => 'Quản lý trang nội dung',
-        'contacts' => 'Hộp thư liên hệ',
-        'users' => 'Quản lý tài khoản',
-        'shipfee' => 'Phí ship',
-        'booking' => 'Quản lý đặt chỗ',
-        'backup' => 'Sao lưu hệ thống',
-        'config' => 'Cài đặt'
+        'pages' => ['title' => 'Quản lý trang nội dung', 'icon' => 'fa fa-book'],
+        'contacts' => ['title' => 'Hộp thư liên hệ', 'icon' => 'fa fa-envelope-o'],
+        'users' => ['title' => 'Quản lý tài khoản', 'icon' => 'fa fa-user-o'],
+        'shipfee' => ['title' => 'Phí ship', 'icon' => 'fa fa-money'],
+        'booking' => ['title' => 'Quản lý đặt chỗ', 'icon' => 'fa  fa-hand-paper-o'],
+        'backup' => ['title' => 'Sao lưu hệ thống', 'icon' => 'fa fa-database'],
+        'config' => ['title' => 'Cài đặt', 'icon' => 'fa fa-wrench'],
     ],
     'banner_type' => $bannerType,
     /*------------ Vendor page ------------------- */
@@ -90,12 +98,15 @@ $auth = [
                 'width' => '3%'
             ],
             'name' => [
-                'type' => 'link',
                 'text' => 'Tên tập tin',
                 'width' => '30%'
             ],
             'size' => [
                 'text' => 'Dung lượng',
+                'width' => '10%'
+            ],
+            'backup_status' => [
+                'text' => 'Trạng thái',
                 'width' => '10%'
             ],
             'created_at' => [
@@ -286,6 +297,7 @@ $auth = [
                 'width' => '15%'
             ],
             'link' => [
+                'type' => 'link',
                 'text' => 'Đường dẫn',
                 'width' => '20%'
             ],
@@ -757,7 +769,7 @@ $auth = [
             ],
             'customer_email' => [
                 'type' => 'label',
-                'text' => 'E-mail: '
+                'text' => 'E-mail:&nbsp;&nbsp;'
             ],
             'customer_address' => [
                 'type' => 'label',
@@ -806,7 +818,7 @@ $auth = [
         'list_title' => 'Cài đặt hệ thống',
         'edit_title' => 'Cài đặt',
         'tab_form' => [
-            'tab_form_1' => [
+            'web_info' => [
                 'title' => 'Thông tin cơ bản',
                 'web_title' => [
                     'type' => 'text',
@@ -858,8 +870,12 @@ $auth = [
                     'maxlength' => 40
                 ],
                 'freeship' => [
-                    'type' => 'textarea',
+                    'type' => 'text',
                     'text' => 'Miễn phí vận chuyển',
+                ],
+                'freeship_money' => [
+                    'type' => 'currency',
+                    'text' => 'Nhập số tiền (miễn phí vận chuyển)',
                 ],
                 'footer_text' => [
                     'type' => 'editor',
@@ -897,8 +913,8 @@ $auth = [
                     'text' => 'Tắt hệ thống'
                 ]
             ],
-            'tab_form_2' => [
-                'title' => 'Upload settings',
+            'upload_setting' => [
+                'title' => 'Kích thước / dung lượng tập tin',
                 'upload_banner_maximum_upload' => [
                     'type' => 'select',
                     'text' => 'Maximum upload file (Banner) KB',
@@ -973,7 +989,7 @@ $auth = [
                     'text' => 'Kích thước web banner (dài x rộng)'
                 ]
             ],
-            'tab_form_3' => [
+            'payment_method' => [
                 'title' => 'Phương thức thanh toán',
                 'cash_info' => [
                     'type' => 'editor',
@@ -984,7 +1000,7 @@ $auth = [
                     'text' => 'Chuyển khoản ngân hàng'
                 ],
             ],
-            'tab_form_4' => [
+            'social' => [
                 'title' => 'Các mạng xã hội',
                 'facebook_fanpage' => [
                     'type' => 'text',
@@ -1517,7 +1533,7 @@ $auth = [
         ]
     ],
     'product_type' => $productType,
-    'text_image_small' => ' (Tập tin *.jpg, *.jpeg, *.gif, *.png.Tối đa :limit_upload)',
+    'text_image_small' => ' (Tập tin *.jpg, *.jpeg, *.gif, *.png.Tối đa :limit_upload. Kích thước :size)',
     'select_empty_text' => 'Vui lòng chọn',
     'price_empty_text' => 'Liên hệ',
     'preview_image' => 'Hình đang sử dụng:',
@@ -1543,7 +1559,11 @@ $auth = [
         'booking_cancel' => 'Đã hủy',
         'booking_confirm' => 'Đang đợi xác nhận',
         'booking_available' => 'Có thể đăng ký',
-        'booking_done' => 'Đã xác nhận'
+        'booking_done' => 'Đã xác nhận',
+        'backup_success' => 'Hoàn tất',
+        'backup_failed' => 'Thất bại',
+        'backup_failed_mail' => 'Không thể gửi mail',
+        'backup_failed_create_zip' => 'Tạo file zip thất bại'
     ],
     'role' => [
         'super_admin' => 'Kỹ thuật viên',
@@ -1572,7 +1592,8 @@ $auth = [
         'add_service' => 'Đăng ký thông tin',
         'add_item' => 'Thêm',
         'copy_service' => 'Sử dụng dịch vụ của sản phẩm khác'
-    ]
+    ],
+    'subject_mail' => '【:web_name】 :title'
 ];
 
 return $auth;

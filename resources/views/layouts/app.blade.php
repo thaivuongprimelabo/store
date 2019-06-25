@@ -93,7 +93,7 @@
           	<b>C</b>P
           </span>
           <!-- logo for regular state and mobile devices -->
-          <span class="logo-lg">{{ trans('auth.title') }}</span>
+          <span class="logo-lg">{{ $config['web_name'] }}</span>
         </a>
         <!-- Header Navbar: style can be found in header.less -->
         <nav class="navbar navbar-static-top">
@@ -375,14 +375,16 @@
         $('#youtube_preview').html(iframe);
 	});
 
-	$(document).on('mouseup keyup', '#price', function(e) {
-		$('#format_currency').find('i').html(formatCurrency($(this).val(), '.', '.'));
+	$(document).on('keyup', '.textbox_currency', function(e) {
+		$(this).parent().parent().find('.format_currency strong small i').html(formatCurrency($(this).val(), '.', '.'));
 
-		var price = Number($(this).val());
-		var discount = Number($('#discount').val());
-		if(discount && price) {
-			var discount_money = price - (price * (discount / 100));
-			$('#format_discount').find('i').html(formatCurrency(discount_money, '.', '.'));
+		if($('#discount').length) {
+			var price = Number($(this).val());
+			var discount = Number($('#discount').val());
+			if(discount && price) {
+				var discount_money = price - (price * (discount / 100));
+				$('#format_discount strong small i').html(formatCurrency(discount_money, '.', '.'));
+			}
 		}
 	});
 
@@ -391,7 +393,7 @@
 		var discount = Number($(this).val());
 		if(discount && price) {
 			var discount_money = price - (price * (discount / 100));
-			$('#format_discount').find('i').html(formatCurrency(discount_money, '.', '.'));
+			$('#format_discount strong small i').html(formatCurrency(discount_money, '.', '.'));
 		}
 	});
 
@@ -623,7 +625,6 @@
 		var value = $(this).attr('data-value');
 		$(this).parent().parent().find('input').val(value);
 	});
-
   });
 </script>
 @yield('script')

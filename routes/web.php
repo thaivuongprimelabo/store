@@ -118,6 +118,7 @@ Route::group(['prefix' => 'auth', 'namespace' => 'Auth'], function () {
     Route::post('/backup/remove', 'BackupController@remove')->name('auth_backup_remove');
     $this->get('/backup/download/{file_download}', 'BackupController@download')->name('auth_backup_download');
     
+    
     // Registration Routes...
 //     $this->get('/register', 'RegisterController@showRegistrationForm')->name('register');
 //     $this->post('/register', 'RegisterController@register');

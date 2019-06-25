@@ -121,7 +121,6 @@ var getFormData = function($form){
 
 var customErrorValidate = function(error, element) {
 	if(error[0].innerHTML !== '') {
-		console.log(element);
 		if(element[0].className === 'ckeditor valid-text') {
 			element.parent().addClass('has-error');
 			element.parent().find('span.help-block').html(error[0].innerHTML);
@@ -416,6 +415,12 @@ $(document).ready(function() {
 	});
 	
 	$.validator.addMethod('required_upload_banner', function(value, element, params) {
+		
+		var name = element.getAttribute('name');
+		if($('#preview_' + name).attr('src').indexOf('default_img.png') < 0) {
+			return true;
+		}
+		
 		var select_type = $(params).val();
 		if(select_type === 'use_image') {
 			if (value.length === 0) {

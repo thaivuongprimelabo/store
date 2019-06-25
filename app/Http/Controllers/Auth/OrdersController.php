@@ -48,6 +48,11 @@ class OrdersController extends AppController
         $validator = [];
         
         $data = Order::find($request->id);
+        
+        if(!$data) {
+            return redirect(route('auth_orders'));
+        }
+        
         $orderDetails = OrderDetails::select(
                             'order_details.product_id',
                             'order_details.qty',

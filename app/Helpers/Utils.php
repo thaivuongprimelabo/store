@@ -30,6 +30,8 @@ class Utils {
     
     public static function getImageLink($image = '') {
         
+        $uploadFolder = UploadPath::UPLOAD;
+        
         if(strpos($image, ',') !== FALSE) {
             $arrImage = explode(',', $image);
             $image = $arrImage[0];
@@ -39,11 +41,12 @@ class Utils {
             return $image;
         }
         
-        $uploadFolder = UploadPath::UPLOAD;
         if(!self::blank($image)) {
-//             if(!self::blank($thumb)) {
-//                 return url($uploadFolder . $thumb);
-//             }
+            
+            if(!file_exists(public_path($uploadFolder . $image))) {
+                return url($uploadFolder . Common::NO_IMAGE_FOUND);
+            }
+            
             return url($uploadFolder . $image);
         } else {
             return '';
@@ -428,59 +431,81 @@ class Utils {
         $html = '';
         $routes = Route::getRoutes();
         $currentRoute = Route::currentRouteName();
-        $open = '';
-        $display = '';
+        $notAccessByRole = UserRole::notAccessByRole(Auth::user()->role_id);
         $sidebar = trans('auth.sidebar');
-        $html .= '';
-        
-        $count = '<span class="pull-right-container">';
-        $count .= '<small class="label pull-right bg-red">{count}</small>';
-        $count .= '</span>';
+        $html .= '<ul  class="sidebar-menu" data-widget="tree">';
         foreach($sidebar as $k=>$v) {
             $open = $display = '';
             $roleId = Auth::user()->role_id;
-            
-            if(!is_array($v)) {
-                if($currentRoute == 'auth_' . $k) {
-                    $html .= '<li class="active"><a href="' . route('auth_' . $k) . '"><i class="fa fa-files-o"></i><span>' . $v . '</span>';
-                } else {
-                    $html .= '<li><a href="' . route('auth_' . $k) . '"><i class="fa fa-files-o"></i><span>' . $v . '</span>';
+            $active = '';
+            $count = '';
+            if(!isset($v['sub_menu'])) {
+                
+                if($k != 'dashboard' && !$routes->hasNamedRoute('auth_' . $k)) {
+                    continue;
+                }
+                
+                $title = $v['title'];
+                $icon  = $v['icon'];
+                $href = isset($v['href']) ? $v['href'] : 'auth_' . $k;
+                $menuHtml = '';
+                if($currentRoute == $href || strpos($currentRoute, $k) !== FALSE) {
+                    $active = 'active';
                 }
                 
                 if($k == 'orders' || $k == 'contacts') {
                     $cnt = DB::table($k)->where('status', StatusOrders::ORDER_NEW)->orWhere('status', ContactStatus::NEW_CONTACT)->count();
                     if($cnt) {
-                        $count = str_replace('{count}', $cnt, $count);
-                        $html .= $count;
+                        $count .= '<span class="pull-right-container">';
+                        $count .= '<small class="label pull-right bg-red">' . $cnt . '</small>';
+                        $count .= '</span>';
                     }
                 }
                 
-                $html .= '</a></li>';
+                if(isset($v['href'])) {
+                    $menuHtml .= '<li class="' . $active . '"><a href="' . route($href) . '" target="_blank"><i class="' . $icon . '"></i><span>' . $title . '</span></a></li>';
+                } else {
+                    $menuHtml .= '<li class="' . $active . '"><a href="' . route($href) . '"><i class="' . $icon . '"></i><span>' . $title . '</span>' . $count . '</a></li>';
+                }
+                
+                if(in_array('*', $notAccessByRole) || !in_array($k, $notAccessByRole)) {
+                    $html .= $menuHtml;
+                }
+                
             } else {
                 
-                $key = explode('_', $currentRoute);
-                if(key_exists($key[1], $v) || $key[1] == $k) {
-                    $open = 'menu-open';
-                    $display = 'style="display: block;"';
-                }
-                $html .= '<li class="treeview ' . $open . '">';
-                $html .= '<a href="javascript:void(0)"><i class="fa fa-files-o"></i><span>' . $v['title'] . '</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>';
-                $html .= '<ul class="treeview-menu" ' . $display . '>';
-                foreach($v as $kk=>$vv) {
-                    if($routes->hasNamedRoute('auth_' . $kk)) {
-                        if($currentRoute == 'auth_' . $kk) {
-                            $html .= '<li><a href="' . route('auth_' . $kk) . '" style="color:#ffffff"><i class="fa fa-circle-o"></i> ' . $vv . '</a></li>';
-                        } else {
-                            $html .= '<li><a href="' . route('auth_' . $kk) . '"><i class="fa fa-circle-o"></i> ' . $vv . '</a></li>';
-                        }
+                $title = $v['title'];
+                $icon  = $v['icon'];
+                $subMenu = $v['sub_menu'];
+                $subMenuHtml = '';
+                $open = '';
+                $display = '';
+                foreach($subMenu as $r=>$menu) {
+                    $titleSub = $menu['title'];
+                    $iconSub  = $menu['icon'];
+                    $href = isset($menu['href']) ? $menu['href'] : 'auth_' . $r;
+                    $active = '';
+                    if($currentRoute == $href || strpos($currentRoute, $r) !== FALSE) {
+                        $active = 'active';
+                        $open = 'menu-open';
+                        $display = 'style="display: block;"';
+                    }
+                    
+                    if(in_array('*', $notAccessByRole) || !in_array($r, $notAccessByRole)) {
+                        $subMenuHtml .= '<li class="' . $active . '"><a href="' . route($href) . '"><i class="' . $iconSub . '"></i><span>' . $titleSub . '</span></a></li>';
                     }
                 }
+                $html .= '<li class="treeview ' . $open . '">';
+                $html .= '<a href="javascript:void(0)"><i class="' . $icon . '"></i><span>' . $title . '</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>';
+                $html .= '<ul class="treeview-menu" ' . $display . '>';
+                $html .= $subMenuHtml;
                 $html .= '</ul>';
                 $html .= '</li>';
                 
             }
-            
         }
+        
+        $html .= '</ul>';
         
         return $html;
     }
